@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>VarBase</title>
+    <meta charset="utf-8" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+    <div id="app">
+        <template>
+            <v-app>
+                <v-main>
+                    <v-container fluid style="margin: 0px; padding: 0px; width: 100%">
+
+                        <v-row align="start" justify="center">
+                            <v-col cols="12" sm="12" md="10">
+
+                                <div ref="client">
+                                    <v-toolbar color="normal" dark flat>
+                                        <v-toolbar-title>VarBase Params {{verInfo}}</v-toolbar-title>
+                                        <v-spacer></v-spacer>
+                                        <div v-if="loading">
+                                            <v-progress-circular :size="20" :width="7" color="red" indeterminate>
+                                            </v-progress-circular>
+                                        </div>
+                                        <v-spacer></v-spacer>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-btn icon large target="_blank" v-on="on">
+                                                    <v-icon>mdi-code-tags</v-icon>
+                                                </v-btn>
+                                            </template>
+                                            <span>Help</span>
+                                        </v-tooltip>
+                                    </v-toolbar>
+                               
+                                    <div> 
+
+                                        <v-row>
+                                            <v-col cols="12" sm="6">
+                                                <h3 class="red--text">
+                                                    Parametry Opis
+                                                </h3>
+                                            </v-col>
+                                            <v-col cols="12" md="3">
+                                                <v-select
+                                                    v-model="filter.task"
+                                                    :items="result.task"
+                                                    item-value="task"
+                                                    item-text="task"
+                                                    required
+                                                    label="Kod zadania">
+                                                </v-select>
+                                                <!--v-text-field v-model="filter.task" label="Kod zadania"></v-text-field-->
+                                            </v-col>
+                                            <v-col cols="12" md="3">
+                                                <v-select
+                                                    v-model="filter.code"
+                                                    :items="result.desc"
+                                                    item-value="id"
+                                                    item-text="code"
+                                                    required
+                                                    label="Kod parametru">
+                                                </v-select>
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row align="start" justify="center">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <template>
+                                                    <v-data-table v-model="selected.desc" show-select
+                                                        :single-select="singleSelect" 
+                                                        :headers="headers.descs"
+                                                        @click:row="handleDescRowClick"
+                                                        :items="result.desc" :items-per-page="5" class="elevation-1">
+
+                                                        <template v-slot:item.actions="{ item }">
+                                                            <v-tooltip top>
+                                                                <template v-slot:activator="{ on }">
+                                                                    <span v-on="on">
+                                                                        <v-btn class="mx-2" fab dark x-small color="red"
+                                                                            @click="onBtnDeleteDesc(item)">
+                                                                            <v-icon dark>mdi-delete</v-icon>
+                                                                        </v-btn>
+                                                                    </span>
+                                                                </template>
+                                                                <span>Usunąc opis parametru</span>
+                                                            </v-tooltip>
+                                                            <v-tooltip top>
+                                                                <template v-slot:activator="{ on }">
+                                                                    <span v-on="on">
+                                                                        <v-btn class="mx-2" fab dark x-small color="green"
+                                                                            @click="onBtnEditDesc(item)">
+                                                                            <v-icon dark>mdi-pencil</v-icon>
+                                                                        </v-btn>
+                                                                    </span>
+                                                                </template>
+                                                                <span>Edytować opis parametru</span>
+                                                            </v-tooltip>
+                                                            <v-tooltip top>
+                                                                <template v-slot:activator="{ on }">
+                                                                    <span v-on="on">
+                                                                        <v-btn class="mx-2" fab dark x-small color="blue"
+                                                                            @click="onBtnAddVarValueByDesc(item)">
+                                                                            <v-icon dark>mdi-plus</v-icon>
+                                                                        </v-btn>
+                                                                    </span>
+                                                                </template>
+                                                                <span>Dodać wartośc za wybranym opisem</span>
+                                                            </v-tooltip>
+                                                        </template>
+                                                    </v-data-table>
+                                                </template>
+
+                                                <v-btn
+                                                    block
+                                                    color="primary"
+                                                    v-on:click="onBtnCreateVarDesc">
+                                                    Dodać Parametr
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row>
+                                            <v-col cols="12" sm="9">
+                                                <h3 class="red--text">
+                                                    Parametry Wartości
+                                                </h3>
+                                            </v-col>
+                                            <v-col cols="12" md="3">
+                                                <v-text-field 
+                                                @keydown.enter="handleSetFilterOwner"
+                                                @keydown.tab="handleSetFilterOwner"
+                                                v-model="filter.owner" 
+                                                label="Id Właściciel">
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row align="start" justify="center">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <template>
+                                                    <v-data-table v-model="selected.var" show-select
+                                                        :single-select="singleSelect" :headers="headers.vars"
+                                                        @click:row="handleVarRowClick"
+                                                        :items="result.vars" :items-per-page="5" class="elevation-1"
+                                                        >
+                                                        <template v-slot:item.actions="{ item }">
+                                                            <v-tooltip top>
+                                                                <template v-slot:activator="{ on }">
+                                                                    <span v-on="on">
+                                                                        <v-btn class="mx-2" fab dark x-small color="red"
+                                                                            @click="onBtnDeleteVar(item)">
+                                                                            <v-icon dark>mdi-delete</v-icon>
+                                                                        </v-btn>
+                                                                    </span>
+                                                                </template>
+                                                                <span>Usunąć wartość parametru</span>
+                                                            </v-tooltip>
+                                                            <v-tooltip top>
+                                                                <template v-slot:activator="{ on }">
+                                                                    <span v-on="on">
+                                                                        <v-btn class="mx-2" fab dark x-small color="green"
+                                                                            @click="onBtnEditVar(item)">
+                                                                            <v-icon dark>mdi-pencil</v-icon>
+                                                                        </v-btn>
+                                                                    </span>
+                                                                </template>
+                                                                <span>Edytować wartość parametru</span>
+                                                            </v-tooltip>
+
+                                                        </template>
+
+                                                    </v-data-table>
+                                                </template>
+
+                                                <v-btn
+                                                    block
+                                                    color="primary"
+                                                    v-on:click="onBtnAddVarValueByBtn">
+                                                    Dodać wartość
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+                                    </div>
+                    </v-container>
+                </v-main>
+            </v-app>
+
+
+
+            <!-- VARBASE -->
+            <div class="text-center">
+                <v-dialog v-model="dialogAddVarDesc" width="500">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Dodać opis parametru
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="3">
+                                        <v-text-field v-model="editedItem.var.task" label="Task"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="7">
+                                        <v-text-field v-model="editedItem.var.code" label="Kod"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field v-model="editedItem.var.kind" label="Typ"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="10">
+                                        <v-text-field v-model="editedItem.var.info" label="Opis"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field v-model="editedItem.var.status" label="Status"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogAddVarDesc = false">Cofnąć</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="addVarDesc( editedItem.var )">Zapisać</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+            <div class="text-center">
+                <v-dialog v-model="dialogEditVarDesc" width="500">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Zmienić opis parametru </br> {{editedItem.var.code}}
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="3">
+                                        <v-text-field readonly v-model="editedItem.var.task" label="Task"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="7">
+                                        <v-text-field v-model="editedItem.var.code" label="Kod"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field v-model="editedItem.var.kind" label="Typ"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="10">
+                                        <v-text-field v-model="editedItem.var.info" label="Opis"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field v-model="editedItem.var.status" label="Status"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogEditVarDesc = false">Cofnąć</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="saveVarDesc( editedItem.var )">Zapisać</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+
+            <div class="text-center">
+                <v-dialog v-model="dialogAddVarValue" width="600">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Dodać wartośc parametru
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="3">
+                                        <v-text-field v-model="editedItem.var.task" label="Task"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="6">
+                                        <v-select
+                                            v-model="editedItem.var.descriptId"
+                                            :items="result.desc"
+                                            item-value="id"
+                                            item-text="code"
+                                            required
+                                            label="Kod">
+                                        </v-select>
+                                    </v-col>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field v-model="editedItem.var.kind" label="Typ"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="editedItem.var.owner" label="Właściciel"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="editedItem.var.value" label="Wartość"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="editedItem.var.status" label="Status"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogAddVarValue = false">Cofnąć</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="addVarValue( editedItem.var )">Zapisać</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+
+            <div class="text-center">
+                <v-dialog v-model="dialogEditVarValue" width="600">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Zmienić wartość parametru </br> {{editedItem.var.code}}
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="4">
+                                        <v-text-field readonly v-model="editedItem.var.task" label="Task"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="8">
+                                        <v-text-field readonly v-model="editedItem.var.code" label="Kod"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field readonly v-model="editedItem.var.info" label="Info"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="editedItem.var.value" label="Wartość"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="editedItem.var.status" label="Status"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogEditVarValue = false">Cofnąć</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="saveVarData( editedItem.var )">Zapisać</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+
+            <div class="text-center">
+                <v-dialog v-model="dialogConfirm" width="500">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Potwierdź akcję
+                        </v-card-title>
+                        <v-divider></v-divider>
+
+                        <v-card-title class="text-h6">
+                            {{editedItem.actionTitle}}
+                        </v-card-title>
+                        <v-card-text>
+                            {{editedItem.actionInfo}}
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogConfirm = false">Cofnąć</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogConfirmFunction">Zapisać</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+
+        </template>
+    </div>
+
+    <!-- SCRIPTS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+
+    <script>
+
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify({
+                //i18n,
+                theme: {
+                    disable: false,
+                    dark: true,
+                    //themes: { dark },
+                },
+            }
+            ),
+
+            mounted() {
+                this.prepareVarDesc();
+                this.prepareVarTask();
+                this.prepareVarsData();
+            },
+
+            created() {
+                
+            },
+
+            methods: {
+                handleDescRowClick: function (value, row) {
+                    //alert("[handleUserRowClick] ["+this.loading+"]"+JSON.stringify(value) + "\n"+JSON.stringify(row));
+                    row.select(true);                
+                    this.selectedDesc = value;    
+                    if (!this.loading) {
+                        this.prepareVarsData(value);
+                    }
+                },
+                handleVarRowClick: function (value, row) {
+                    //alert("[handleUserRowClick] ["+this.loading+"]"+JSON.stringify(value) + "\n"+JSON.stringify(row));
+                    //row.select(true);                
+                    this.selectedVar = value;                    
+                },
+                handleSetFilterOwner : function (value) {
+                    alert(JSON.stringify(value)+"->"+this.filter.owner);
+                },
+
+                onBtnEditVar: function (item) {
+                    //alert("[onBtnEditVar] for " + JSON.stringify(item));
+                    this.editedItem.var = item;
+                    this.editedItem.var.status = 1;
+                    this.dialogEditVarValue = true;
+                },
+                onBtnDeleteVar: function (item) {
+                    this.editedItem.item = item;
+                    this.editedItem.actionTitle = "Usunęcie wartości";
+                    this.editedItem.actionInfo = `Item ${item.value}`;
+                    this.editedItem.actionFunction = "dialogConfirmFunctionOne";
+                    this.dialogConfirm = true;
+                },
+                onBtnDeleteDesc: function (item) {
+                    this.editedItem.item = item;
+                    this.editedItem.actionTitle = "Usunęcie opisu";
+                    this.editedItem.actionInfo = `Item ${item.id} ${item.code}  ${item.info}`;
+                    this.editedItem.actionFunction = "dialogConfirmFunctionTwo";
+                    this.dialogConfirm = true;
+                },
+                onBtnEditDesc: function (item) {
+                    this.prepareVarDesc();
+                //alert(JSON.stringify(item))
+                    this.editedItem.var = item;
+                    this.dialogEditVarDesc = true;
+                },
+                onBtnCreateVarDesc: function (item) {
+                    //alert("[onBtnEditVar] for " + JSON.stringify(this.selectedDesc));
+                    this.editedItem.item = item;
+                    this.editedItem.var.task = this.selectedDesc.task;
+                    this.editedItem.var.status = 1;
+                    this.editedItem.var.kind = "string";
+                    this.editedItem.var.owner = -1;
+                    this.dialogAddVarDesc = true;
+                },
+                onBtnAddVarValueByBtn: function (item) {
+                    //this.prepareVarDesc();
+                    this.editedItem.var.task = this.selectedDesc.task;
+                    this.editedItem.var.status = 1;
+                    this.editedItem.var.kind = 1;
+                    this.editedItem.var.owner = -1;
+                    this.dialogAddVarValue = true;
+                },
+                onBtnAddVarValueByDesc: function (item) {
+                    //alert(JSON.stringify(item))
+                    this.editedItem.var.task = item.task;
+                    this.editedItem.var.status = 1;
+                    this.editedItem.var.kind = item.kind;
+                    this.editedItem.var.owner = -1;
+                    this.editedItem.var.code = item.code;
+                    this.editedItem.var.descriptId = item.id;
+                    this.dialogAddVarValue = true;
+                },
+                //requests -------------------------------------------------------
+                prepareVarTask : function () {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/desc/task";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;
+                    //alert("[prepareVarDesc]"+realUrl);
+                    const requestOptions = {
+                        method: "GET",
+                        headers: headers
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loading = false;
+                            //alert("[prepareVarDesc]"+result);
+                            const data = JSON.parse(result);
+                            if(data.data) {
+                                this.result.task = data.data;
+                            }
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 get prepareVarTask [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 get prepareVarTask [" + realUrl + "] \n" + error);
+                        });
+                },
+                prepareVarDesc : function () {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/desc/all";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;
+                    //alert("[prepareVarDesc]"+realUrl);
+                    const requestOptions = {
+                        method: "GET",
+                        headers: headers
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loading = false;
+                            //alert("[prepareVarDesc]"+result);
+                            const data = JSON.parse(result);
+                            if(data.data) {
+                                this.result.desc = data.data;
+                            }
+                        //this.prepareVarDesc();
+                        //this.prepareVarsData();
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 get [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 get [" + realUrl + "] \n" + error);
+                        });
+                },                
+                addVarDesc : function (item) {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/desc/add";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;
+
+                    var result = {};
+                    var request = {
+                        "task": item.task,
+                        "code": item.code,
+                        "kind": item.kind,
+                        "info": item.info,
+                        "status": 1
+                    };
+                //alert(realUrl + JSON.stringify(request));
+                    const requestOptions = {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                        //alert(result);
+                        this.loading = this.dialogAddVarDesc = false;
+                        const data = JSON.parse(result);
+                        this.prepareVarDesc();
+                        this.prepareVarsData();
+                        //alert(result);
+                        this.dialogAddVarDesc = false;
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && { m: data.message, e:data.error.message}) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(error) + ' ');
+                                //alert('E1 fetch [' + error + ']  ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {                            
+                            this.loading = this.dialogAddVarDesc = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + JSON.stringify(error));
+                        });
+                },
+                saveVarDesc : function (item) {
+                    this.loading = this.dialogAddVarDesc = false;;
+                    var pathTo = "api//common/varbase/desc";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;
+                    var result = {};
+                    var request = {
+                        "id": item.id,
+                        "code": item.code,
+                        "info": item.info,
+                        "kind": item.kind,
+                        "status": item.status
+                    };
+                //alert(realUrl + JSON.stringify(request));
+                    const requestOptions = {
+                        method: "PUT",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loading = false;
+                            this.dialogEditVarDesc = false
+                            const data = JSON.parse(result);
+                            if(data.result === "error") {
+                                alert("ERROR\n"+result);
+                            } else {
+                                this.prepareVarDesc();
+                                this.prepareVarsData();
+                            }
+                        //alert(result);
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+                },
+                deleteVarDesc : function (item) {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/desc";
+                    //alert(JSON.stringify(item));
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;///+"/"+item.item.id
+                    var result = {};
+                    var request = {
+                        "id": item.item.id
+                    };
+                    //alert(realUrl + JSON.stringify(request) +"\n" + JSON.stringify(item));
+                    const requestOptions = {
+                        method: "DELETE",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loading = false;
+                            this.dialogEditVarValue = false
+                            const data = JSON.parse(result);
+                        //alert(result);
+                        if(data.result === "error") {
+                                alert("ERROR\n"+result);
+                        } else {
+                            this.prepareVarDesc();
+                            this.prepareVarsData();
+                        }
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 delete [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 delete [" + realUrl + "] \n" + error);
+                        });
+                },                              
+                
+                prepareVarsData: function (value) {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/vals";
+                    var headers = this.request.headers;
+                    if(value && value.task) {
+                        pathTo = "api/common/varbase/vals/task?task="+value.task;
+                    }
+                    var realUrl = this.hostName + pathTo;
+                    //alert(realUrl);
+                    var result = {};
+                    const requestOptions = {
+                        method: "GET",
+                        headers: headers,
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loading = false;  
+                            //alert(result);
+                            const data = JSON.parse(result);
+                            this.result.vars = data.data;
+                          
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 get [prepareVarsData][' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 get [prepareVarsData][" + realUrl + "] \n" + error);
+                        });
+                },
+                addVarValue : function (item) {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/vals";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;
+
+                    var result = {};
+                    var request = {
+                        "descriptId":   this.editedItem.var.descriptId,
+                        "code":         this.editedItem.var.code,
+                        "owner":        this.editedItem.var.owner,
+                        "value":        this.editedItem.var.value,
+                        "status": "1"
+                    };
+                //alert(realUrl + JSON.stringify(request));
+                    const requestOptions = {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                        alert("result " + result);
+                            this.loading = false;
+                            this.dialogAddVarValue = false;
+                            const data = JSON.parse(result);
+                            this.prepareVarsData();
+                            if(data.result === "error") {
+                                alert("ERROR\n"+result);
+                            }
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+
+                },                
+                saveVarData : function (item) {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/value";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;                    
+                    var result = {};
+                    var request = {
+                        "id"    : item.id,
+                        "info"  : item.info,
+                        "status"  : item.status,
+                        "value" : item.value
+                    };
+                    alert("[saveVarData] "+realUrl + JSON.stringify(request));
+                //alert(realUrl + JSON.stringify(request));
+                    const requestOptions = {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            //alert("[saveVarData] "+result);
+                            this.loading = false;
+                            this.dialogEditVarValue = false
+                            const data = JSON.parse(result);
+                            //alert(result);
+                            if(data.result === "error") {
+                                alert("ERROR\n"+result);
+                            } else {
+                                this.prepareVarDesc();
+                                this.prepareVarsData();
+                            }
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+                },
+                deleteVarValue : function (item) {
+                    this.loading = true;
+                    var pathTo = "api/common/varbase/vals";
+                    var headers = this.request.headers;
+                    var realUrl = this.hostName + pathTo;
+                    var result = {};
+                    var request = {
+                        "id": item.item.id
+                    };
+                //alert(realUrl + "\n" + JSON.stringify(request) + "\n" + JSON.stringify(item));
+                    const requestOptions = {
+                        method: "DELETE",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loading = false;
+                            this.dialogEditVarValue = false
+                            const data = JSON.parse(result);
+
+                        if(data.result === "error") {
+                            alert("ERROR\n"+result);
+                        }
+                        this.prepareVarsData();
+                            if (!response.ok) {
+                                this.loading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+                },
+                //dialogs --------------------------------------------------
+                dialogConfirmFunctionOne: function () {
+                //alert("dialogConfirmFunctionOne - deleteVarValue");
+                    this.dialogConfirm = false;
+                    this.deleteVarValue(this.editedItem);
+                },
+                dialogConfirmFunctionTwo: function () {
+                    this.dialogConfirm = false;
+                    this.deleteVarDesc(this.editedItem);
+                },
+                dialogConfirmFunction: function () {
+                    //alert("dialogConfirmFunction");
+                    this[this.editedItem.actionFunction]();
+                },
+                //utils --------------------------------------------------
+                localTZDates: function (adate) {
+                    // 2021-03-31T10:46:48.841Z
+                    var tzShift = -2;
+                    var zdate = new Date(adate);
+                    var ldate = new Date(zdate.getTime() - (60000 * (zdate.getTimezoneOffset() + tzShift)));
+                    var ldateTime = ldate.toISOString().replace('Z', '');
+
+                    var ldate = ldateTime.substring(8, 10) + '.' +
+                        ldateTime.substring(5, 7) + '.' +
+                        ldateTime.substring(0, 4)
+
+                    var ltime = ldateTime.substring(11, 13) + ':' +
+                        ldateTime.substring(14, 16) + ':' +
+                        ldateTime.substring(17)
+
+                    var ret = {
+                        zeroDateTime: zdate.toISOString(),
+                        localDate: ldate,
+                        localTime: ltime,
+                        localISODateTime: ldateTime,
+                        localTZDateTime: ldate + "T" + ltime
+                    };
+                    return ret;
+                }
+
+            }, // methods
+            watch: {
+
+            },
+            computed: {
+
+            },
+            // DATA ----------------------------------------------------------------------
+            data() {
+                return {
+
+                    error : "",
+                    loading: false,
+                    dialogAddUser: false,
+
+                    dialogAddVarDesc:  false,
+                    dialogEditVarDesc: false,
+
+                    dialogAddVarValue : false,
+                    dialogEditVarValue: false,
+
+                    dialogConfirm : false,
+
+                    hostName: "http://localhost:1880/",
+
+
+                    singleSelect: true,        
+                    filter : {
+                        code : "",
+                        owner : ""
+                    },          
+
+                    editedItem: {                        
+                        var: {
+                            code: "",
+                            task: "",
+                            name: "",
+                            info: "",
+                            value: "",
+                            status: ""
+                        }
+                    },
+                    selectedDesc: {},
+                    selectedVar: {},
+                    selected: {                      
+                        var: [],
+                        desc: []
+                    },
+             
+                    result: {                       
+                        vars:[],
+                        desc:[]
+                    },
+
+                    request : {
+                        headers : {
+                            "accept": "application/json", 
+                            "Content-Type": "application/json",
+                            "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
+                        }
+                    },
+
+                    headers: {                        
+                        vars: [
+                            { text: 'ID', align: 'start', sortable: false, value: 'id' },
+                            { text: 'Zadanie', value: 'task' },
+                            { text: 'Kod', value: 'code' },
+                            { text: 'Opis', value: 'info' },
+                            { text: 'Właściciel', value: 'ownerid' },
+                            { text: 'Wartość', value: 'value' },
+                            { text: 'Akcja', value: 'actions', sortable: false },
+                        ],
+                        descs: [
+                            { text: 'ID', align: 'start', sortable: false, value: 'id' },
+                            { text: 'Zadanie', value: 'task' },
+                            { text: 'Kod', value: 'code' },
+                            { text: 'Opis', value: 'info' },
+                            { text: 'Typ', value: 'kind' },
+                            { text: 'Stan', value: 'status' },
+                            { text: 'Akcja', value: 'actions', sortable: false },
+                        ]
+                    },
+                   
+                    verDate: "2023-04-09 20:38:15",
+                    verInfo: "ver. 0.0.3"
+                }
+            }
+        })
+    </script>
+</body>
+</html>

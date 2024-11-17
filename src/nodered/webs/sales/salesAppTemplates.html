@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.css" rel="stylesheet" />
+    <!--link href="https://unpkg.com/vue-json-pretty@2.3.0/lib/styles.css" rel="stylesheet" /-->
+    <link href=" https://cdn.jsdelivr.net/npm/vue-json-pretty@2.3.0/lib/styles.min.css " rel="stylesheet">
+
+    <!--style>
+        .theme--light.v-text-field .v-input__control .v-input__slot {
+            density: "compact";
+        }        
+    </style-->
+</head>
+
+<body>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
+    <!--script src="https://unpkg.com/vue-json-pretty@2.3.0/lib/vue-json-pretty.js"></script-->
+    <script src=" https://cdn.jsdelivr.net/npm/vue-json-pretty@2.3.0/lib/vue-json-pretty.min.js "></script>
+
+
+    <div id="app"></div>
+
+    <template id="app-template">
+        <!--script type="text/x-template" id="app-template"-->
+        <v-app>
+            <v-main>
+                <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
+                    <v-row align="start" justify="center">
+
+                        <v-col cols="12" sm="12" md="12">
+                            <v-toolbar color="hheader" dark flat>
+                                <v-toolbar-title>
+                                    {{title}} Very wide header with a small background
+                                </v-toolbar-title>
+                                <div v-if="loadingData">
+                                    <v-progress-circular :size="20" :width="7" color="red" indeterminate>
+                                    </v-progress-circular>
+                                </div>
+                            </v-toolbar>
+                        </v-col>
+
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                            <v-card flat title="Nutrition">
+                                <v-data-table :items="dessertsItems" :headers="headers.dessertsHeader" fluid
+                                    style="width: 100%" class="elevation-1" density="compact" show-select item-key="id">
+                                    <template v-slot:item.actions="{ item }">
+                                        <v-btn class="mx-2" fab dark x-small color="blue"
+                                            @click="showDialogEditItem(item)">
+                                            <v-icon dark>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn class="mx-2" fab dark x-small color="red" @click="itemDelete(item)">
+                                            <v-icon dark>mdi-delete</v-icon>
+                                        </v-btn>
+                                        <v-btn class="mx-2" fab dark x-small color="green" @click="itemPrint(item)">
+                                            <v-icon dark>mdi-printer</v-icon>
+                                        </v-btn>
+                                    </template>
+                                </v-data-table>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                            <v-btn block color="warning" @click="templateAdd">
+                                Manage of Templates
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                            <v-btn block color="primary" @click="increase">
+                                BUTTON {{state.xTimes}}
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-main>
+
+            <v-card class="mx-auto" width="400" append-icon="mdi-human-greeting">
+                <template v-slot:title>
+                    {{title}}
+                </template>
+                <v-card-text>
+                    {{description}} {{state}}
+                </v-card-text>
+            </v-card>
+
+            <!--template>
+            <div>
+                <vue-json-pretty :data="{ key: 'value' }" />
+            </div>
+            </template-->
+        </v-app>
+        <!-- DIALOGS -->
+        <template dialogEditItem>
+            <!--v-row justify="center"-->
+            <v-dialog v-model="dialogEditItem" persistent width="700">
+                <v-card>
+                    <v-card-title class="text-h5">
+                        Add record to ...
+                    </v-card-title>
+                    <v-divider></v-divider>
+
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <!--        -->
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field :disabled="true" dense v-model="editedItem.item.id"
+                                        label="Id"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="7" md="7">
+                                    <v-text-field dense v-model="editedItem.item.name" label="Name"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="3" md="3">
+                                    <v-text-field dense type="number" v-model="editedItem.item.calories"
+                                        label="Calories"></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12" sm="3" md="3">
+                                    <v-text-field dense type="number" v-model="editedItem.item.fat"
+                                        label="Fat"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="3" md="3">
+                                    <v-text-field dense type="number" v-model="editedItem.item.carbs"
+                                        label="Carbs"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="3" md="3">
+                                    <v-text-field dense type="number" v-model="editedItem.item.protein"
+                                        label="Protein"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="3" md="3">
+                                    <v-text-field dense type="number" v-model="editedItem.item.iron"
+                                        label="Iron"></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-col cols="12" sm="6">
+                            <v-btn color="primary" block @click="dialogEditItem = false">Close</v-btn>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                            <v-btn color="warning" block @click="itemUpdate">Save</v-btn>
+                        </v-col>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <!--/v-row-->
+        </template>
+
+        <template dialogContentFile>
+            <v-row justify="center">
+                <v-dialog v-model="dialogContentFile" width="80%">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Content record to ...
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-data-table :items="generatedContentFiles"
+                                            :headers="headers.generatedContentItemsHeader" fluid style="width: 100%"
+                                            class="elevation-1" density="compact" show-select>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-btn class="mx-2" fab dark x-small color="red"
+                                                    @click="generatedContentItemDelete(item)">
+                                                    <v-icon dark>mdi-delete</v-icon>
+                                                </v-btn>
+                                                <v-btn class="mx-2" fab dark x-small color="green"
+                                                    @click="getGeneratedContentFile(item)">
+                                                    <v-icon dark>mdi-download</v-icon>
+                                                </v-btn>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-btn color="primary" block @click="dialogContentFile=false">Close</v-btn>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-btn color="warning" block @click=itemGeneratePayload()>Generate</v-btn>
+                            </v-col>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
+
+        <template dialogPrint>
+            <v-row justify="center">
+                <v-dialog v-model="dialogPrint" width="80%">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            Generate record to ...
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field density="compact" label="Name" v-model="editedItem.item.name"
+                                            required></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="6">
+                                        <v-autocomplete density="compact" v-model="editedItem.template.name"
+                                            :items=templateList item-text="name" :item-title="item => item.name"
+                                            item-value="id" return-object label="Template">
+                                        </v-autocomplete>
+                                    </v-col>
+                                    <v-col cols="12" sm="2" md="2">
+                                        <v-checkbox density="compact" label="PDF"
+                                            v-model="editedItem.template.havePDF"></v-checkbox>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-data-table :items="printItems" :headers="headers.generatedHeader" fluid
+                                            style="width: 100%" class="elevation-1" density="compact" show-select>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-btn class="mx-2" fab dark x-small color="green"
+                                                    @click="getGeneratedJson(item)">
+                                                    <v-icon dark>mdi-json</v-icon>
+                                                </v-btn>
+                                                <v-btn class="mx-2" fab dark x-small color="red"
+                                                    @click="generatedItemDelete(item)">
+                                                    <v-icon dark>mdi-delete</v-icon>
+                                                </v-btn>
+                                                <v-btn class="mx-2" fab dark x-small color="blue"
+                                                    @click="processGenerateFile(item)">
+                                                    <v-icon dark>mdi-printer</v-icon>
+                                                </v-btn>
+                                                <v-btn class="mx-2" fab dark x-small color="green"
+                                                    @click="getGeneratedContentFiles(item)">
+                                                    <v-icon dark>mdi-download</v-icon>
+                                                </v-btn>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-btn color="primary" block @click="dialogPrint=false">Close</v-btn>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-btn color="warning" block @click=itemGeneratePayload()>Generate</v-btn>
+                            </v-col>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
+
+        <template dialogTemplates>
+            <v-row justify="center">
+                <v-dialog v-model="dialogTemplates" width="90%">
+                    <v-card>
+                        <v-card-title class="text-h5">
+                            {{title}} Templates
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field density="compact" label="Code" v-model="editedItem.template.code"
+                                            required></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field density="compact" label="Kind" v-model="editedItem.template.kind"
+                                            required></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="2" md="2">
+                                        <v-checkbox density="compact" label="PDF"></v-checkbox>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" sm="8" md="8">
+                                        <v-text-field density="compact" label="Output file"
+                                            v-model="editedItem.template.output" required></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-data-table :items="templateItems" :headers="headers.templateHeader" fluid
+                                            style="width: 100%" class="elevation-1" density="compact" show-select>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-btn class="mx-2" fab dark x-small color="green"
+                                                    @click="getTemplateContent(item)">
+                                                    <v-icon dark>mdi-archive-arrow-down</v-icon>
+                                                </v-btn>
+                                                <v-btn class="mx-2" fab dark x-small color="blue"
+                                                    @click="templateEdit(item)">
+                                                    <v-icon dark>mdi-pencil</v-icon>
+                                                </v-btn>
+                                                <v-btn class="mx-2" fab dark x-small color="red"
+                                                    @click="templateDelete(item)">
+                                                    <v-icon dark>mdi-delete</v-icon>
+                                                </v-btn>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-file-input v-model="file" show-size label="Template input"></v-file-input>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-col cols="12" sm="6">
+                                <v-btn color="primary" block @click="dialogTemplates = false">Close</v-btn>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-btn color="primary" block @click=templateUpload()>Upload</v-btn>
+                            </v-col>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
+
+        <template showMessageDialog>
+            <v-row justify="center">
+                <v-dialog v-model="showMessageDialog" width="500" persistent>
+                    <v-card>
+                        <!--v-card-title class="text-h5 green darken-4"-->
+                        <v-card-title :class="messageDialog.class">
+                            {{messageDialog.title}}
+                        </v-card-title>
+                        <v-spacer></v-spacer>
+                        <v-divider></v-divider>
+                        <v-card-text></v-card-text>
+                        <v-card-text>
+                            <div v-for="(text, index) in messageDialog.message.split('\n')" :key="index">
+                                {{text}}
+                            </div>
+                            <!--{{messageDialog.message}}-->
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="showMessageDialog = false">
+                                <v-icon dark>mdi-close-outline</v-icon>
+                                Close
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
+
+        <template showJSONDialog>
+            <v-row justify="center">
+                <v-dialog v-model="showJSONDialog" width="80%">
+                    <v-card>
+                        <!--v-card-title class="text-h5 green darken-4"-->
+                        <v-card-title :class="messageDialog.class">
+                            JSON
+                        </v-card-title>
+                        <v-spacer></v-spacer>
+                        <v-divider></v-divider>
+                        <v-card-text>                           
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field density="compact" 
+                                            :disabled="true"
+                                            label="Name" v-model="editedItem.item.name"
+                                            required></v-text-field>
+                                    </v-col>
+                                </v-row>                           
+                        </v-card-text>
+                        <v-card-text>
+                            <!-- :disabled="true" -->
+                            <v-container fluid>
+                            <v-textarea name="input-7-1" 
+                            class="text-sm-body-2"
+                            density="compact" 
+                            variant="filled"  
+                            bg-color="amber-lighten-4"
+                            color="orange orange-darken-4"
+                                counter
+                                label="JSON" auto-grow
+                                v-model="messageDialogMessage">
+                            </v-textarea>
+                        </v-container>
+                        </v-card-text>
+                        <v-card-text>
+                            <!-- vue-json-pretty 
+                            
+                                <div>
+                                    <vue-json-pretty :data="{ key: 'value' }" />
+                                </div>
+                            -->
+                            <!--div class="text-body-2">
+                                <pre>{{messageDialogMessage}}</pre>
+                            </div-->
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="logJSONDialog">
+                                <v-icon dark>mdi-close-outline</v-icon>
+                                Log
+                            </v-btn>
+                            <v-btn color="primary" text @click="showJSONDialog = false">
+                                <v-icon dark>mdi-close-outline</v-icon>
+                                Close
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
+
+        <template showAlert>
+            <div>
+                <v-alert v-model="showAlert" border="start" variant="tonal" closable close-label="Close Alert"
+                    color="deep-purple-accent-4" title="Closable Alert">
+                    Aenean imperdiet. Quisque id odio. Cras dapibus. Pellentesque ut neque. Cras dapibus.
+                    Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam
+                    libero, non adipiscing dolor urna a orci. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam
+                    libero, non adipiscing dolor urna a orci. Curabitur blandit mollis lacus. Curabitur ligula sapien,
+                    tincidunt non, euismod vitae, posuere imperdiet, leo.
+                </v-alert>
+            </div>
+        </template>
+
+        <!--/script-->
+    </template>
+
+
+    <script setup>
+        // https://cumsum.wordpress.com/2020/08/08/vue3-property-xxx-was-accessed-during-render-but-is-not-defined-on-instance/        
+        // https://www.codingbeautydev.com/blog/vuetify-typography
+
+        const { createApp, ref, defineProps, reactive } = Vue
+        const { createVuetify } = Vuetify
+        const { jsonPretty } = VueJsonPretty
+
+        //const jsonpretty = jsonPretty({});  
+        const vuetify = createVuetify({
+            theme: {
+                defaultTheme: 'dark'
+            },
+            defaults: {
+                VSelect: {
+                    density: "compact",
+                },
+                VTextField: {
+                    density: "compact",
+                }
+            }
+        });
+        const app = createApp({
+            template: "#app-template",
+            components: [VueJsonPretty],
+            setup() {
+                const title = Vue.ref('Vuetify 3 ');
+                const description = Vue.ref('Simple Card with params ');
+                const state = Vue.reactive({
+                    xTimes: 0
+                });
+                const messageDialog = Vue.ref({
+                    title: "Header",
+                    message: "Message dialog",
+                    class: "text-h5 green darken-4"
+                });
+                const messageDialogMessage = Vue.ref('Dialog Message');
+                const messageDialogTitle = Vue.ref('Dialog TitleDialog');
+
+                const getBase64Promise = (file) => {
+                    return new Promise((resolve, reject) => {
+                        //console.log('getBase64Promise',file);
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => resolve(reader, file); // reader.result
+                        reader.onerror = (error) => reject(error);
+                    });
+                };
+                const file = ref(null);
+                const editedItem = Vue.reactive({
+                    template: {
+                        name: "",
+                        code: "",
+                        kind: "",
+                        havePDF: true
+                    },
+                    item: {
+                        id: "",
+                        name: "",
+                        calories: "",
+                        fat: "",
+                        carbs: "",
+                        protent: "",
+                        iron: ""
+                    }
+                });
+
+                const dialogs = Vue.ref(
+                    {
+                        dialogContentFile: false,
+                        showJSONDialog: false,
+                        dialogEditItem: false,
+                        dialogTemplates: false
+                    });
+                const dialogContentFile = Vue.ref(false);
+                const showMessageDialog = Vue.ref(false);
+                const showJSONDialog = Vue.ref(false);
+                const dialogEditItem = Vue.ref(false);
+                const dialogTemplates = Vue.ref(false);
+                const loadingData = Vue.ref(false);
+                const showAlert = Vue.ref(false);
+
+                const hostName = Vue.ref('http://localhost:1880');
+                const dialogPrint = Vue.ref(false);
+                const printItems = Vue.ref([]); // reactive
+                const templateItems = Vue.ref([]);
+                const templateList = Vue.ref([]);
+                const dessertsItems = Vue.ref([]);
+                const generatedContentFiles = Vue.ref([]);
+
+                const dessertsItemsOld = Vue.ref([
+                    {
+                        id: 1,
+                        name: 'Frozen Yogurt',
+                        calories: 159,
+                        fat: 6.0,
+                        carbs: 24,
+                        protein: 4.0,
+                        iron: '1',
+                    },
+                    {
+                        id: 2,
+                        name: 'Jelly bean',
+                        calories: 375,
+                        fat: 0.0,
+                        carbs: 94,
+                        protein: 0.0,
+                        iron: '0',
+                    },
+                    {
+                        id: 3,
+                        name: 'KitKat',
+                        calories: 518,
+                        fat: 26.0,
+                        carbs: 65,
+                        protein: 7,
+                        iron: '6',
+                    },
+                    {
+                        id: 4,
+                        name: 'Eclair',
+                        calories: 262,
+                        fat: 16.0,
+                        carbs: 23,
+                        protein: 6.0,
+                        iron: '7',
+                    },
+                    {
+                        id: 5,
+                        name: 'Gingerbread',
+                        calories: 356,
+                        fat: 16.0,
+                        carbs: 49,
+                        protein: 3.9,
+                        iron: '16',
+                    },
+                    {
+                        id: 6,
+                        name: 'Ice cream sandwich',
+                        calories: 237,
+                        fat: 9.0,
+                        carbs: 37,
+                        protein: 4.3,
+                        iron: '1',
+                    },
+                    {
+                        id: 7,
+                        name: 'Lollipop',
+                        calories: 392,
+                        fat: 0.2,
+                        carbs: 98,
+                        protein: 0,
+                        iron: '2',
+                    },
+                    {
+                        id: 8,
+                        name: 'Cupcake',
+                        calories: 305,
+                        fat: 3.7,
+                        carbs: 67,
+                        protein: 4.3,
+                        iron: '8',
+                    },
+                    {
+                        id: 9,
+                        name: 'Honeycomb',
+                        calories: 408,
+                        fat: 3.2,
+                        carbs: 87,
+                        protein: 6.5,
+                        iron: '45',
+                    },
+                    {
+                        id: 10,
+                        name: 'Honey',
+                        calories: 452,
+                        fat: 0,
+                        carbs: 51,
+                        protein: 0,
+                        iron: '22',
+                    },
+                    {
+                        id: 11,
+                        name: 'Pure Yogurt',
+                        calories: 12,
+                        fat: 6.0,
+                        carbs: 24,
+                        protein: 4.0,
+                        iron: '1',
+                    },
+                ]);
+                // https://stackoverflow.com/questions/51527489/change-the-default-width-of-a-vuetifyjs-datatable-cell
+
+                const headers = {
+                    dessertsHeader: [
+                        { title: 'ID', align: 'start', sortable: false, key: 'id' },
+                        { title: 'Name', key: 'name' },
+                        { title: 'Calories', key: 'calories' },
+                        { title: 'Fat', key: 'fat' },
+                        { title: 'Carbs', key: 'carbs' },
+                        { title: 'Protein', key: 'protein' },
+                        { title: 'Iron', key: 'iron' },
+                        { title: 'Actions', key: 'actions', sortable: false, width: '280px' },
+                    ],
+                    templateHeader: [
+                        { title: 'ID', align: 'start', sortable: false, key: 'id' },
+                        { title: 'Code', key: 'code' },
+                        { title: 'Kind', key: 'kind' },
+                        { title: 'Name', key: 'name' },
+                        { title: 'Meta', key: 'meta' },
+                        { title: 'Type', key: 'type' },
+                        { title: 'File', key: 'input_file' },
+                        { title: 'Result', key: 'result_file' },
+                        { title: 'Actions', key: 'actions', sortable: false, width: '210px' },
+                    ],
+                    generatedHeader: [
+                        { title: 'ID', align: 'start', sortable: false, key: 'id' },
+                        { title: 'Name', key: 'generated_name' },
+                        { title: 'Pdf', key: 'have_pdf' },
+                        { title: 'Type', key: 'type' },
+                        { title: 'Template', key: 'template_id' },
+                        { title: 'Owner', key: 'owner_id' },
+                        { title: 'Actions', key: 'actions', sortable: false, width: '210px' },
+                    ],
+                    generatedContentItemsHeader: [
+                        { title: 'ID', align: 'start', sortable: false, key: 'id' },
+                        { title: 'GeneratedId', key: 'generated_id' },
+                        { title: 'Name', key: 'generated_name' },
+                        { title: 'Extention', key: 'extention' },
+                        { title: 'Owner', key: 'owner' },
+                        { title: 'Actions', key: 'actions', sortable: false, width: '210px' },
+                    ]
+                };
+                return {
+                    title
+                    , getBase64Promise
+                    , loadingData
+                    , description
+                    , state
+                    , headers
+                    , dessertsItems
+
+                    , dialogs
+                    , dialogEditItem
+                    , editedItem
+                    , dialogPrint
+                    , printItems
+
+                    , messageDialog
+                    , messageDialogMessage
+                    , messageDialogTitle
+
+                    , showMessageDialog
+                    , showJSONDialog
+                    , dialogTemplates
+                    , templateItems
+
+                    , generatedContentFiles
+                    , templateList
+                    , hostName
+                    , file
+                    , showAlert
+                    , dialogContentFile
+                };
+            },
+            created() {
+                this.prepareFoodsData();
+                this.templatesLoad();
+            },
+            watch: {
+                file: function (newQuestion, oldQuestion) {
+                    console.log("watch", newQuestion, oldQuestion);
+                    console.log("watch", this.file[0].name);
+                    this.editedItem.template.output = this.file[0].name;
+                }
+            },
+            methods: {
+                increase(event) {
+                    this.state.xTimes++
+                    //alert(`Hello ${this.state.xTimes}!`)
+                    // `event` is the native DOM event
+                    if (event) {
+                        //alert(event.target.tagName)
+                    }
+                },
+
+                generatedItemDelete(item) {
+                    alert("[generatedItemDelete] " + JSON.stringify(item));
+                    var url = 'http://localhost:1880' + '/api/sales/generated/owner';
+                    var payload = {
+                        method: 'delete',
+                        id : item.id,
+                        values: {}
+                    };
+                    axios
+                        .post(url, payload)
+                        .then(response => {
+                            console.log(response);
+                            this.prepareUploadData({id:item.owner_id});
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                    });
+                },
+                processGenerateFile(item) {
+                    var url = 'http://localhost:1880' + '/api/sales/generated/generate';
+                    alert("[processGenerateFile] " + url+ " "+ JSON.stringify(item));
+                    console.log("[processGenerateFile] " + JSON.stringify(item));                    
+                    var payload = {
+                        method: 'insert',
+                        values: item
+                    };
+                    axios
+                        .post(url, payload)
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                generatedContentItemDelete(item) {
+                    alert(`[generatedContentItemDelete][${this.dialogs.dialogContentFile}] ${JSON.stringify(item)}`);
+                },
+
+                getGeneratedContentFile(item) {
+                    //alert(`[getGeneratedContentFile] ${JSON.stringify(item)}`);
+                    var ditem = this.generatedContentFiles.find(x => x.id === item.id);
+                    if (ditem) {
+                        var a = document.createElement("a"); //Create <a>
+                        a.href = "data:application/pdf;base64," + ditem.content;
+                        a.download = ditem.generated_name + ".pdf";
+                        a.click();
+                    }
+                },
+                getGeneratedContentFiles(item) {
+                    this.dialogContentFile = true;
+                    //alert(`[getGeneratedContentFiles][${this.dialogs.dialogContentFile}] ${JSON.stringify(item)}`);
+                    this.getGeneratedFiles(item);
+                },
+                getGeneratedFiles(item) {
+                    this.generatedContentFiles = [];
+                    //alert("[getGeneratedFiles] " + JSON.stringify(item));
+                    var url = 'http://localhost:1880' + '/api/sales/generated/content/' + item.id;
+                    axios
+                        .get(url)
+                        .then(response => {
+                            console.log(response);
+                            if (response.data && response.data.data && response.data.data[0]) {
+                                this.generatedContentFiles = response.data.data;
+                                //alert("[getGeneratedFiles] "+response.data.data[0].content);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                getGeneratedJson(item) {
+                    var payloadB64 = btoa(JSON.stringify(item.payload, null, 4));
+                    console.log("[getGeneratedJson] " + JSON.stringify(item), payloadB64);
+
+                    this.messageDialog.title = 'getGeneratedJson';
+                    this.messageDialog.message = JSON.stringify(item.payload, null, 4);
+
+                    this.messageDialogTitle = 'getGeneratedJson';
+                    this.messageDialogMessage = JSON.stringify(item.payload, null, 4);
+
+                    this.showJSONDialog = true;
+                    console.log("[getGeneratedJson] " + this.messageDialog.message);
+
+                    if (item.payload !== "") {
+                        var a = document.createElement("a"); //Create <a>
+                        a.href = "data:application/json;base64," + payloadB64;
+                        a.download = item.generated_name + ".json"; //File name Here
+                        // a.click(); //Downloaded file
+                    } else {
+                        //alert("[getTemplateContent] decContent is empty");
+                        //this.showMessageInfoDialog('getTemplateContent', 'Содержимое decContent отсутствует', 'warning');
+                    }
+                },
+                getTemplateContent(item) {
+                    //alert("[getTemplateContent] "+JSON.stringify(item));
+                    if (item.content !== "") {
+                        var a = document.createElement("a"); //Create <a>
+                        a.href = "data:application/vnd.oasis.opendocument.text;base64," + item.content; //Image Base64 Goes here
+                        a.download = item.input_file; //File name Here
+                        a.click(); //Downloaded file
+                    } else {
+                        //alert("[getTemplateContent] decContent is empty");
+                        //this.showMessageInfoDialog('getTemplateContent', 'Содержимое decContent отсутствует', 'warning');
+                    }
+                },
+
+                nutritionUpdate(event) {
+                    var url = 'http://localhost:1880' + '/api/sales/nutrition';
+                    var payload = {
+                        method: 'update',
+                        id: this.editedItem.item.nutrition_id,
+                        food_id: this.editedItem.item.id,
+
+                        calories: this.editedItem.item.calories,
+                        fat: this.editedItem.item.fat,
+                        carbs: this.editedItem.item.carbs,
+                        protein: this.editedItem.item.protein,
+                        iron: this.editedItem.item.iron
+                    }
+                    axios
+                        .post(url, payload)
+                        .then(response => {
+                            console.log(response);
+                            this.dialogEditItem = false;
+                            this.prepareFoodsData();
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+
+                itemEdit(event) {
+                    alert(`Edit ${event}`);
+                },
+                itemDelete(event) {
+                    //alert(`Delete ${event}`);
+                    this.showAlert = true;
+                },
+                itemUpdate(event) {
+                    //alert(`itemUpdate ${JSON.stringify(this.editedItem.item)}`);
+                    var url = 'http://localhost:1880' + '/api/sales/foods';
+                    var payload = {
+                        method: 'update',
+                        id: this.editedItem.item.id,
+                        name: this.editedItem.item.name
+                    }
+                    axios
+                        .post(url, payload)
+                        .then(response => {
+                            console.log(response);
+                            this.nutritionUpdate(event);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                itemPrint(item) {
+                    this.editedItem.item = item;
+                    this.dialogPrint = true;
+                    this.prepareUploadData(item);
+                },
+                
+                templateEdit(item) { },
+                templateAdd() {
+                    this.dialogTemplates = true;
+                    this.templatesLoad();
+                },
+                templateDelete(item) { },
+                templatesLoad() {
+                    let self = this;
+                    this.templateItems = [];
+                    this.templateList = [];
+                    axios
+                        .get('http://localhost:1880/api/sales/template/all')
+                        .then(response => {
+                            console.log(response.data.data);
+                            if (Array.isArray(response.data.data)) {
+                                this.templateItems = response.data.data;
+                                for (var o of this.templateItems) {
+                                    this.templateList.push(
+                                        {
+                                            id: o.id,
+                                            name: o.name
+                                        }
+                                    );
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                templateUpload() {
+                    if (!this.editedItem.template.code || !this.editedItem.template.kind) {
+                        this.showMessageInfoDialog('Error', 'Not defined template code or template kind', 'error');
+                        return;
+                    }
+                    if (this.file) {
+                        const data_file = { test: "test" };
+                        console.log(this.file[0].name);
+                        var self = this;
+                        var fileB64 = this.getBase64Promise(this.file[0]);
+                        fileB64.then(function (data) {
+                            //console.log(self.file);
+                            let fileMeta = data.result.split(',')[0];
+                            let base64String = data.result.split(',').pop();
+                            data_file.code = self.editedItem.template.code;
+                            data_file.kind = self.editedItem.template.kind;
+                            data_file.fileName = self.file[0].name;
+                            data_file.fileSize = self.file[0].size;
+                            data_file.fileMeta = fileMeta;
+                            data_file.content = base64String;
+                            axios
+                                .post('http://localhost:1880/api/sales/template/upload', data_file)
+                                .then(response => {
+                                    console.log(response);
+                                    self.dialogTemplates = false;
+                                });
+                            return base64String;
+                        });
+                    } else {
+                        this.showMessageInfoDialog('Error', 'No file selected', 'error');
+                    }
+                },
+                
+                itemGeneratePayload() {
+                    //alert(`itemGeneratePayload ${JSON.stringify(this.editedItem.template)}`);
+                    //alert(`itemGeneratePayload ${JSON.stringify(this.editedItem.item)}`);
+                    if (this.editedItem.template.name) {
+                        var date = new Date().toISOString().replace('T', '_').replace('Z', '');
+                        var item = {
+                            id: this.editedItem.item.id,
+                            template_id: this.editedItem.template.name.id,
+                            owner_id: this.editedItem.item.id,
+                            generated_name: `[${this.editedItem.template.name.name}]_${this.editedItem.item.name}-${date}`,
+                            have_pdf: this.editedItem.template.havePDF,
+                            payload: this.prepareTemplatePayload(this.editedItem),
+                            date: date
+                        }
+                        //alert(`itemGeneratePayload ${JSON.stringify(item)}`);                        
+                        this.itemUploadGenerated(item);
+                    } else {
+                        this.showMessageInfoDialog('Error', 'Select a template first.', 'error');
+                    }
+                },
+                itemUploadGenerated(item) {
+                    //https://stackoverflow.com/questions/44617104/passing-parameters-vue-using-promise
+                    var url = 'http://localhost:1880' + '/api/sales/generated/upload';
+                    axios
+                        .post(url, item)
+                        .then(response => {
+                            console.log(response);
+                            this.prepareUploadData(item);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                
+                prepareTemplatePayload(editedItem) {
+                    var data = [];
+                    for (var o in editedItem.item) {
+                        var item = {
+                            "key": o,
+                            "val": editedItem.item[o]
+                        }
+                        data.push(item);
+                    }
+                    console.log(JSON.stringify(editedItem, null, 4));
+                    var ret = {
+                        "templateFile": editedItem.template.name.name,
+                        "outputDocType": "lo",
+                        "outputExt": "pdf",
+                        "CloseOnExit": "true",
+                        "data": data
+                    };
+                    console.log(JSON.stringify(ret, null, 4));
+                    return ret;
+                },
+                prepareUploadData(item) {
+                    console.log(item);
+                    this.printItems = [];
+                    var url = 'http://localhost:1880' + '/api/sales/generated/owner/' + item.id;
+                    axios
+                        .get(url)
+                        .then(response => {
+                            console.log(response);
+                            this.printItems = response.data.data;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                
+                logJSONDialog() {
+                    console.log("[logJSONDialog] " + JSON.stringify(this.messageDialog.message));
+                    console.log("[logJSONDialog] " + JSON.stringify(this.messageDialogMessage));
+                },
+                
+                showDialogEditTemplates(item) {
+                    //alert(`showdialogEditItem ${JSON.stringify(item)}`);
+                    this.editedItem.item = item;
+                    this.dialogEditTemplates = true;
+
+                },
+                showDialogEditItem(item) {
+                    //alert(`showdialogEditItem ${JSON.stringify(item)}`);
+                    this.editedItem.item = item;
+                    this.dialogEditItem = true;
+
+                },
+                showMessageInfoDialog(title, message, type) {
+                    var cssClass = "text-h5 blue darken-4";
+                    this.messageDialog.title = title;
+                    this.messageDialog.message = message;
+                    switch (type) {
+                        case 'error': {
+                            cssClass = "text-h5 red darken-4";
+                        }
+                            break;
+                        case 'info': {
+                            cssClass = "text-h5 green darken-4";
+                        }
+                            break;
+                        case 'warning': {
+                            cssClass = "text-h5 orange darken-4";
+                        }
+                            break;
+                        default: {
+                            cssClass = "text-h5 blue darken-4";
+                        }
+                            break;
+                    }
+                    this.messageDialog.class = cssClass;
+                    this.showMessageDialog = true;
+                },
+                prepareFoodsData() {
+                    this.loadingData = true;
+
+                    var pathTo = "/api/sales/foods/all";
+                    var headers = {
+                        "accept": "application/json", "Content-Type": "application/json",
+                        "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
+                    };
+                    var realUrl = this.hostName + pathTo;
+                    var result = {};
+                    const requestOptions = {
+                        method: "GET",
+                        headers: headers,
+                    };
+                    fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loadingData = false;
+                            const data = JSON.parse(result);
+                            this.dessertsItems = data.data;
+                            console.log(data.data);
+                            if (!response.ok) {
+                                this.loadingData = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loadingData = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+                },
+            }
+        })
+            .component('vue-json-pretty', VueJsonPretty)
+            .use(vuetify)
+            //.use(jsonPretty)
+            .mount("#app");
+
+
+    </script>
+</body>
+
+</html>

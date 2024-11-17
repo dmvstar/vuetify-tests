@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.css" rel="stylesheet" />
+    <!--link href="https://unpkg.com/vue-json-pretty@2.3.0/lib/styles.css" rel="stylesheet" /-->
+    <link href=" https://cdn.jsdelivr.net/npm/vue-json-pretty@2.3.0/lib/styles.min.css " rel="stylesheet">
+</head>
+
+<body>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
+    <!--script src="https://unpkg.com/vue-json-pretty@2.3.0/lib/vue-json-pretty.js"></script-->
+    <script src=" https://cdn.jsdelivr.net/npm/vue-json-pretty@2.3.0/lib/vue-json-pretty.min.js "></script>
+
+
+    <div id="app">
+    </div>
+    <template id="app-template">
+        <!--script type="text/x-template" id="app-template"-->
+        <v-app>
+            <v-main>
+                <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
+                    <v-row align="start" justify="center">
+                        <v-col cols="12" sm="12" md="12">
+                            <template>
+                                <div>
+                                    <vue-json-pretty :data="{ key: 'value' }">
+                                    </vue-json-pretty>
+                                </div>
+                            </template>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-main>
+        </v-app>
+    </template>
+
+
+    <script setup>
+        const { createApp, ref, defineProps, reactive } = Vue
+        const { createVuetify } = Vuetify
+        const { jsonPretty } = VueJsonPretty
+        const vuetify = createVuetify({
+            theme: {
+                defaultTheme: 'dark'
+            },
+            defaults: {
+                VSelect: {
+                    density: "compact",
+                },
+                VTextField: {
+                    density: "compact",
+                }
+            }
+        });
+        const app = createApp({
+            template: "#app-template",
+            components: [VueJsonPretty],
+        })
+            .component('vue-json-pretty', VueJsonPretty)
+            .use(vuetify)
+            .mount("#app");
+    </script>
+
+</body>
