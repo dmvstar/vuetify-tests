@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
-</head>
-
-<body>
-  <div id="app">{{ message }}</div>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
-  <script type="text/x-template" id="app-template">
+  <body>
+    <div id="app">{{ message }}</div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
+    <script type="text/x-template" id="app-template">
       <v-app>
 
         <v-card
@@ -24,12 +29,17 @@
           <v-card-text>
             {{verInfo}}
           </v-card-text>
+        </v-card>
+        <v-card
+          class="mx-auto"
+          width="400"
+          append-icon="mdi-human-greeting"
+        >
+          <template v-slot:title>
+            {{title}}
+          </template>
           <v-card-text>
-            <v-select
-            :items="listItems"
-            density="compact"
-            label="Compact"
-          ></v-select>
+            {{verInfo}}
           </v-card-text>
         </v-card>
 
@@ -40,12 +50,10 @@
               :sort-by="[{ key: 'calories', order: 'asc' }]"
             >
             <template v-slot:header.calories="{ column, isSorted, getSortIcon, toggleSort }">
-                <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                <v-icon >mdi-human-greeting</v-icon>
                 {{ getTitle(column) }}
                 [{{ column.title }}]
-                <template v-if="isSorted(column)">
-                  <v-icon :icon="getSortIcon(column)"></v-icon>
-                </template>                
+                <v-icon :icon="getSortIcon(column)"></v-icon>
             </template>
 
             <template v-slot:header.calories11="{ header }">
@@ -219,164 +227,160 @@
 
       </v-app>
     </script>
-  <script setup>
-    const { createApp, ref, reactive, defineProps } = Vue;
-    const { createVuetify, useTheme, version } = Vuetify;
+    <script setup>
+      const { createApp, ref, reactive, defineProps } = Vue;
+      const { createVuetify, useTheme, version } = Vuetify;
 
-    const vuetify = createVuetify({});
+      const vuetify = createVuetify({});
 
-    const app = createApp({
-      template: "#app-template",
+      const app = createApp({
+        template: "#app-template",
 
-      setup() {
-        const title = Vue.ref("Vuetify 3.0");
-        const verInfo = Vue.ref("ver. 0.0.1");
-        const theme = useTheme();
+        setup() {
+          const title = Vue.ref("Vuetify 3.0");
+          const verInfo = Vue.ref("ver. 0.0.1");
+          const theme = useTheme();
 
-        var dialog = Vue.ref(false);
-        var dialogDelete = Vue.ref(false);
+          var dialog = Vue.ref(false);
+          var dialogDelete = Vue.ref(false);
 
-        var headers = Vue.ref([
-          {
-            title: "Dessert (100g serving)",
-            align: "start",
-            sortable: false,
-            key: "name",
+          var headers = Vue.ref([
+            {
+              title: "Dessert (100g serving)",
+              align: "start",
+              sortable: false,
+              key: "name",
+            },
+            { title: "Calories", key: "calories" },
+            { title: "Fat (g)", key: "fat" },
+            { title: "Carbs (g)", key: "carbs" },
+            { title: "Protein (g)", key: "protein" },
+            { title: "Actions", key: "actions", sortable: false },
+          ]);
+          var items = Vue.ref([]);
+          var desserts = Vue.ref([]);
+          var editedIndex = Vue.ref(-1);
+          var editedItem = Vue.ref({
+            name: "",
+            calories: 0,
+            fat: 0,
+            carbs: 0,
+            protein: 0,
+          });
+          var defaultItem = Vue.ref({
+            name: "",
+            calories: 0,
+            fat: 0,
+            carbs: 0,
+            protein: 0,
+          });
+
+          return {
+            title,
+            verInfo,
+            dialog,
+            dialogDelete,
+            headers,
+            items,
+            desserts,
+          };
+        },
+        created() {
+          console.log("verInfo: ", this.verInfo);
+          this.initialize();
+        },
+
+        methods: {
+          initialize() {
+            this.desserts = [
+              {
+                name: "Frozen Yogurt",
+                calories: 10,
+                fat: 6.0,
+                carbs: 24,
+                protein: 4.0,
+              },
+              {
+                name: "Ice cream sandwich",
+                calories: 237,
+                fat: 9.0,
+                carbs: 37,
+                protein: 4.3,
+              },
+              {
+                name: "Eclair",
+                calories: 262,
+                fat: 16.0,
+                carbs: 23,
+                protein: 6.0,
+              },
+              {
+                name: "Cupcake",
+                calories: 60,
+                fat: 3.7,
+                carbs: 67,
+                protein: 4.3,
+              },
+              {
+                name: "Gingerbread",
+                calories: 356,
+                fat: 16.0,
+                carbs: 49,
+                protein: 3.9,
+              },
+              {
+                name: "Jelly bean",
+                calories: 375,
+                fat: 0.0,
+                carbs: 94,
+                protein: 0.0,
+              },
+              {
+                name: "Lollipop",
+                calories: 392,
+                fat: 0.2,
+                carbs: 98,
+                protein: 0,
+              },
+              {
+                name: "Honeycomb",
+                calories: 408,
+                fat: 3.2,
+                carbs: 87,
+                protein: 6.5,
+              },
+              {
+                name: "Donut",
+                calories: 452,
+                fat: 25.0,
+                carbs: 51,
+                protein: 4.9,
+              },
+              {
+                name: "KitKat",
+                calories: 518,
+                fat: 26.0,
+                carbs: 65,
+                protein: 7,
+              },
+            ];
           },
-          { title: "Calories", key: "calories" },
-          { title: "Fat (g)", key: "fat" },
-          { title: "Carbs (g)", key: "carbs" },
-          { title: "Protein (g)", key: "protein" },
-          { title: "Actions", key: "actions", sortable: false },
-        ]);
-        var items = Vue.ref([]);
-        var desserts = Vue.ref([]);
-        var editedIndex = Vue.ref(-1);
-        var editedItem = Vue.ref({
-          name: "",
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0,
-        });
-        var defaultItem = Vue.ref({
-          name: "",
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0,
-        });
-
-        var listItems = ['Foo', 'Bar', 'Fizz', 'Buzz'];
-
-        return {
-          title,
-          verInfo,
-          dialog,
-          dialogDelete,
-          headers,
-          items,
-          desserts,
-          listItems,
-        };
-      },
-      created() {
-        console.log("verInfo: ", this.verInfo);
-        this.initialize();
-      },
-
-      methods: {
-        initialize() {
-          this.desserts = [
-            {
-              name: "Frozen Yogurt",
-              calories: 10,
-              fat: 6.0,
-              carbs: 24,
-              protein: 4.0,
-            },
-            {
-              name: "Ice cream sandwich",
-              calories: 237,
-              fat: 9.0,
-              carbs: 37,
-              protein: 4.3,
-            },
-            {
-              name: "Eclair",
-              calories: 262,
-              fat: 16.0,
-              carbs: 23,
-              protein: 6.0,
-            },
-            {
-              name: "Cupcake",
-              calories: 60,
-              fat: 3.7,
-              carbs: 67,
-              protein: 4.3,
-            },
-            {
-              name: "Gingerbread",
-              calories: 356,
-              fat: 16.0,
-              carbs: 49,
-              protein: 3.9,
-            },
-            {
-              name: "Jelly bean",
-              calories: 375,
-              fat: 0.0,
-              carbs: 94,
-              protein: 0.0,
-            },
-            {
-              name: "Lollipop",
-              calories: 392,
-              fat: 0.2,
-              carbs: 98,
-              protein: 0,
-            },
-            {
-              name: "Honeycomb",
-              calories: 408,
-              fat: 3.2,
-              carbs: 87,
-              protein: 6.5,
-            },
-            {
-              name: "Donut",
-              calories: 452,
-              fat: 25.0,
-              carbs: 51,
-              protein: 4.9,
-            },
-            {
-              name: "KitKat",
-              calories: 518,
-              fat: 26.0,
-              carbs: 65,
-              protein: 7,
-            },
-          ];
+          deleteItem(item) {},
+          editItem(item) {},
+          getTitle(title) {
+            var ret = "";
+            console.log(title);
+            return ret;
+          },
+          getColor(calories) {
+            if (calories > 100) return "red";
+            else if (calories > 50) return "orange";
+            else return "green";
+          },
         },
-        deleteItem(item) { },
-        editItem(item) { },
-        getTitle(title) {
-          var ret = "";
-          console.log(title);
-          return ret;
-        },
-        getColor(calories) {
-          if (calories > 100) return "red";
-          else if (calories > 50) return "orange";
-          else return "green";
-        },
-      },
-    })
-      .use(vuetify)
-      .mount("#app");
-  </script>
-</body>
-
+      })
+        .use(vuetify)
+        .mount("#app");
+    </script>
+  </body>
 </html>
