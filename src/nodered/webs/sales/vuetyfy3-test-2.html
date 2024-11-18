@@ -5,6 +5,10 @@ https://leafletjs.com/examples/quick-start/
 https://vue2-leaflet.netlify.app/
 https://github.com/vue-leaflet/Vue2Leaflet
 https://www.jsdelivr.com/package/npm/@vue-leaflet/vue-leaflet
+
+https://vuejs.org/guide/components/registration.html#global-registration
+
+
 -->
 <!DOCTYPE html>
 <html>
@@ -201,6 +205,7 @@ https://www.jsdelivr.com/package/npm/@vue-leaflet/vue-leaflet
                   </v-dialog>
                 </v-toolbar>
               </template>
+
               <template v-slot:item.actions="{ item }">
 
                 <v-btn
@@ -234,13 +239,34 @@ https://www.jsdelivr.com/package/npm/@vue-leaflet/vue-leaflet
             </v-data-table>
 
 
+<!--template>
+  <div style="height:600px; width:800px">
+    <l-map>
+    </l-map>
+  </div>
+</template-->
+
+
+<!--template>
+  <div style="height:600px; width:800px">
+    <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
+      <l-tile-layer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        layer-type="base"
+        name="OpenStreetMap"
+      ></l-tile-layer>
+    </l-map>
+  </div>
+</template-->
 
 
       </v-app>
-    </script>
+  </script>
+
   <script setup>
     const { createApp, ref, reactive, defineProps } = Vue;
     const { createVuetify, useTheme, version } = Vuetify;
+    const { LMap, LTileLayer } = leaflet;
 
     const vuetify = createVuetify({});
 
@@ -251,6 +277,11 @@ https://www.jsdelivr.com/package/npm/@vue-leaflet/vue-leaflet
         const title = Vue.ref("Vuetify 3.0 test");
         const verInfo = Vue.ref("ver. 0.0.5");
         const theme = useTheme();
+/*
+        Vue.component('l-map', LMap);
+        Vue.component('l-tile-layer', LTileLayer);
+        Vue.component('l-marker', LMarker);
+*/
 
         var dialog = Vue.ref(false);
         var dialogDelete = Vue.ref(false);
@@ -301,6 +332,10 @@ https://www.jsdelivr.com/package/npm/@vue-leaflet/vue-leaflet
       },
       created() {
         console.log("verInfo: ", this.verInfo);
+
+        console.log("leaflet: ",leaflet);
+        console.log("LMap: ",LMap);
+
         this.initialize();
       },
 
