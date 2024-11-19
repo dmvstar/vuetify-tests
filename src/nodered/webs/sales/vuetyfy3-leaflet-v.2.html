@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
+
+<body>
+    <div id="app"> </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
+
+    <script type="text/x-template" id="app-template">
+        <v-app>
+            <v-app-bar title="App bar"></v-app-bar>
+            <v-navigation-drawer>
+                <v-list>
+                  <v-list-item title="Navigation drawer"></v-list-item>
+                </v-list>
+              </v-navigation-drawer>
+
+              <v-main>
+                <v-container>
+                  <h1>Main Content</h1>
+                  <div>
+                    <v-row justify="center">
+                        <v-col cols="12" md="4" sm="6">
+                          <v-btn color="indigo-darken-3" size="x-large" block>Button</v-btn>
+                        </v-col>
+                    </v-row>    
+                  </div>
+                  <div style="height:600px; width:800px; border:thin">
+                    <l-map>
+                    </l-map>
+                  </div>
+                  <template>
+                  </template>
+                </v-container>
+              </v-main>
+        </v-app>
+        </script>
+
+    <script setup>
+        const { createApp, ref, reactive, defineProps } = Vue;
+        const { createVuetify, useTheme, version } = Vuetify;
+        const { LMap, LTileLayer } = window['vue-leaflet'];
+        const vuetify = createVuetify({});
+
+        const app = createApp({
+            template: "#app-template",
+            setup() {
+                const title = Vue.ref("Vuetify 3.0 leaflet");
+                const verInfo = Vue.ref("ver. 0.0.5");
+                //const theme = useTheme();
+                return {
+                    title,
+                    verInfo,
+                };
+            },
+
+            created() {
+                console.log("verInfo: ", this.verInfo);
+                console.log("leaflet: ", leaflet);
+                this.initialize();
+            },
+
+            methods: {
+                initialize() {
+                },
+                getTitle(title) {
+                    var ret = "";
+                    console.log(title);
+                    return ret;
+                },
+            },
+        })
+            .component('l-map', LMap)
+            .use(vuetify)
+            .mount("#app");
+    </script>
+</body>
+
+</html>
