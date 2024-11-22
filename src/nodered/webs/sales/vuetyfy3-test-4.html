@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Main page NG V3</title>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+    <style>
+        .my-header-style {
+            background: #d01883;
+        }
+
+        .blue-header th {
+            background-color: blue;
+        }
+
+        .v-data-table-header {
+            background-color: red !important;
+        }
+
+        .v-data-table_ {
+            background-color: #578103;
+        }
+
+        .v-data-table-header__content_ {
+            background-color: red !important;
+        }
+
+        .v-table1    thead tr {
+            background-color: #293b05;
+        }
+
+
+        .v-table1 tbody tr td:nth-child(even) {
+            background-color: #2b3f01;
+        }
+
+        .v-table1 tbody tr td:nth-child(odd) {
+            background-color: #578103;
+        }
+    </style>
+    <style>
+        .theme--light.v-data-table {
+            background-color: #06657a;
+        }
+
+        .theme--dark.v-data-table {
+            background-color: #081c12;
+        }
+
+        .theme--dark.v-data-table-header {
+            background-color: red !important;
+        }
+
+        .theme--light.v-data-table-header {
+            background-color: red !important;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <div id="app"></div>
+
+    <template id="app-template">
+        <!--script type="text/x-template" id="app-template"-->
+        <v-app>
+            <v-navigation-drawer v-model="drawer" temporary style="margin: 0px; padding: 10px; width: 40%">
+                Params</br>
+                <v-list>
+                    <v-list-item :prepend-avatar="faceIdUrl" subtitle="avatar4334@gmail.com"
+                        :title="generateName()"></v-list-item>
+                </v-list>
+                Data
+                <v-tooltip top text="Load data....">
+                    <template v-slot:activator="{ props }">
+                        <v-btn block v-bind="props" color="green" v-on:click="btnClearFilters">
+                            <v-icon>mdi-martini</v-icon>
+                            Load Kontrahens
+                        </v-btn>
+                    </template>
+                    <span>Load data from kontrahent list...</span>
+                </v-tooltip>
+                Filteres
+                <v-text-field v-model="search.searchText1" clearable clear-icon="mdi-backspace" label="Text to find"
+                    prepend-icon="mdi-filter">
+                </v-text-field>
+
+                <v-text-field v-model="search.searchText2" clearable clear-icon="mdi-backspace" label="Ident to find"
+                    prepend-icon="mdi-magnify">
+                </v-text-field>
+
+                <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="true">
+                    <template v-slot:activator="{ props }">
+                        <v-text-field v-model="search.selectedDateFrom" label="Date From" prepend-icon="mdi-calendar"
+                            clearable clear-icon="mdi-backspace" v-bind="props">
+                        </v-text-field>
+                    </template>
+                    <v-date-picker v-model="search.selectedDateFromFull"></v-date-picker>
+                </v-menu>
+
+                <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="true">
+                    <template v-slot:activator="{ props }">
+                        <v-text-field v-model="search.selectedDateInto" label="Date Into" prepend-icon="mdi-calendar"
+                            clearable clear-icon="mdi-backspace" v-bind="props">
+                        </v-text-field>
+                    </template>
+                    <v-date-picker v-model="search.selectedDateIntoFull"></v-date-picker>
+                </v-menu>
+
+                <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
+                    :items="data.userStatus" required>
+                </v-select>
+
+                <v-select label="Select mode" prepend-icon="mdi-garage" v-model="search.userMode"
+                    :items="data.userModes" required>
+                </v-select>
+
+                <v-tooltip top text="Appli filteres....">
+                    <template v-slot:activator="{ props }">
+                        <v-btn block v-bind="props" color="primary" v-on:click="btnApplyFilters">
+                            <v-icon>mdi-martini</v-icon>
+                            Appli filteres....
+                        </v-btn>
+                    </template>
+                    <span>Appli filteres....</span>
+                </v-tooltip>
+                <v-divider></v-divider>
+                <v-tooltip top text="Clear filteres....">
+                    <template v-slot:activator="{ props }">
+                        <v-btn block v-bind="props" color="primary" v-on:click="btnClearFilters">
+                            <v-icon>mdi-martini</v-icon>
+                            Clear filteres....
+                        </v-btn>
+                    </template>
+                    <span>Clear filteres....</span>
+                </v-tooltip>
+
+            </v-navigation-drawer>
+            <v-main>
+                <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                            <v-app-bar color="primary" prominent>
+                                <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                                <v-toolbar-title>Main page ver. 0.24.77</v-toolbar-title>
+                                <v-spacer></v-spacer>
+
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn icon large target="_blank" v-bind="props" v-on:click="switchLigthDark">
+                                            <v-icon>mdi-weather-night</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Be on the dark side....</span>
+                                </v-tooltip>
+
+                                <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                                <v-btn icon="mdi-filter" variant="text"></v-btn>
+                                <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+                            </v-app-bar>
+                        </v-col>
+                    </v-row>
+                    <div v-if="search.userMode !== 'O'">
+                        <v-row>
+                            <v-col cols="12" sm="2">
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn block color="primary" v-bind="props" 
+                                            v-on:click="onBtnGetPackets">
+                                            LOAD DATA                                            
+                                        </v-btn>
+                                    </template>
+                                    <span>Load new data from ...</span>
+                                </v-tooltip>
+                            </v-col>
+
+                            <v-col cols="12" sm="8" md="8">
+                                <v-select  v-model="data.result.packet" 
+                                            :items="data.result.packets"
+                                            label="Select a data forom loaded list" 
+                                            required
+                                    item-title1="sessionid" 
+                                    item-value="sessionid">
+
+                                    <template v-slot:selection="{ item, index }">
+                                        Пакет # {{ item.raw.sessionid }} [{{ item.raw.count }}-{{ item.raw.manual }}-{{ item.raw.differ }}] ({{ item.raw.date }})
+                                    </template>
+
+                                    <template v-slot:item="{ props, item }">
+                                        <v-list-item v-bind="props" 
+                                            prepend-icon="mdi-alarm"   
+                                            :title="`# ${item.raw.sessionid} [${item.raw.count}-${item.raw.manual}]`"
+                                            :subtitle="`${item.raw.count} (${item.raw.date})`">
+                                        </v-list-item>
+                                    </template>                               
+                                    
+                                </v-select>
+                            </v-col>    
+                            
+                            <v-col cols="12" sm="2">
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn block color="primary" v-bind="props" 
+                                            v-on:click="onBtnGetDecs">
+                                            FILTER
+                                        </v-btn>
+                                    </template>
+                                    <span>Filter of loaded data</span>
+                                </v-tooltip>
+                            </v-col>
+                        </v-row>    
+                   
+                        VDataTable {{desserts.length}} items
+                        <v-row>
+                            <v-col cols="12">
+                                <v-data-table 
+                                    :items-per-page="25" 
+                                    :headers="headers" 
+                                    :items="desserts" 
+                                    item-value="name"
+                                    :search="search.searchText1" 
+                                    class="elevation-1">
+
+                                    <template v-slot:[`header.name`]="{ column }">
+                                        <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                    </template>
+                                    <template v-slot:[`header.calories`]="{ column }">
+                                        <!--span v-html=column.title></span-->
+                                        <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                    </template>
+
+                                    <template v-slot:item.name="{ item }">
+                                        <div style="white-space: pre-wrap;">{{ item.name }}</div>
+                                    </template>
+                                    <template v-slot:item.calories="{ item }">
+                                        <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
+                                        </div>
+                                    </template>
+                                    <template v-slot:item.actions="{ item }">
+                                        <v-btn density="compact" color="blue" icon="mdi-alarm"></v-btn>
+                                        <v-btn density="compact" color="blue"
+                                            :icon="getDebtStatusIcon(item.fat)"></v-btn>
+                                        <v-btn density="comfortable" color="blue" icon="mdi-file-document"></v-btn>
+                                        <v-btn density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
+                                        <v-btn density="comfortable" color="red" icon="mdi-delete"></v-btn>
+                                    </template>
+
+                                    <!--
+                                        <br>{{ column.title }}<br>
+                                        Calories<br>new line
+                                    -->
+                                    <!--template v-slot:header.name="{ header }">
+                                        <div style="white-space: pre-wrap;">{{ header.name }}</div>
+                                    </template-->
+                                </v-data-table>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="12">
+                                <v-card>
+                                    <v-card-text>
+                                        The navigation drawer will appear from the bottom on smaller
+                                        size screens. {{drawer}}</br>
+                                        search.searchText1={{search.searchText1}}</br>
+                                        search.searchText2={{search.searchText2}}</br>
+                                        search.selectedDateFrom='{{search.selectedDateFrom}}'</br>
+                                        search.selectedDateFromFull='{{search.selectedDateFromFull}}'</br>
+                                        search.selectedDateInto='{{search.selectedDateInto}}'</br>
+                                        desserts.length='{{desserts.length}}'
+                                    </v-card-text>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+
+                    </div>
+                </v-container>
+            </v-main>
+        </v-app>
+    </template>
+
+    <script setup>
+        const { createApp, ref, defineProps, reactive } = Vue;
+        const { createVuetify, useTheme, version } = Vuetify;
+        const vervion = version;
+        const defaults = {
+            global: {
+                //variant: "outlined",
+            },
+            VSelect: {
+                density: "compact",
+            },
+            VTextField: {
+                density: "compact",
+            },
+            VTable: {
+                density: "compact",
+            },
+            VDataTable: {
+                density: "compact",
+            },
+            VDataTableHeaders: {
+                color: "red",
+                density: "compact",
+            },
+        };
+        const vuetify = createVuetify({
+            defaults,
+            theme: {
+                defaultTheme: "dark",
+                /*
+                disable: false,
+                dark: true,
+                options: {
+                        customProperties: true,
+                },
+                */
+            },
+        });
+        const app = createApp({
+            template: "#app-template",
+            setup() {
+                const theme = useTheme();
+                function toggleTheme() {
+                    theme.global.name = theme.global.current.dark ? 'light' : 'dark'
+                };
+
+                const title = Vue.ref("Vuetify 3 ");
+                const description = Vue.ref("Simple Card with params ");
+                const state = Vue.reactive({
+                    xTimes: 0,
+                });
+                const drawer = Vue.ref(false);
+                const faceId = 10;
+                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
+
+                const search = Vue.reactive({
+                    selectedDateFrom1: "",
+                    selectedDateInto1: "",
+                    searchText1: "",
+                    searchText2: "",
+                    selectedDateFromFull: null,
+                    selectedDateFrom: null,
+                    selectedDateFromInto: null,
+                    selectedDateInto: null,
+                    userMode: null,
+                    userState: null
+                });
+
+                const data = Vue.ref({
+                    userModes: ['guest', 'admin', 'test', 'user'],
+                    userStatus: ['acive', 'frozen', 'deleted'],
+                    result: {
+                        packet : null,
+                        packets : [],
+                        decs: [],
+                    },
+                    item: {},
+                });
+
+                const group = Vue.ref({});
+                const messageDialog = Vue.ref({
+                    title: "Header",
+                    message: "Message dialog",
+                    class: "text-h5 green darken-4",
+                });
+                const showMessageDialog = Vue.ref(false);
+                const dialogEditItem = Vue.ref(false);
+                const loadingData = Vue.ref(false);
+                const dialogTemplates = Vue.ref(false);
+
+                const tables = {
+                    decsAdmin: {
+                        headers : [
+                        { title: 'ID\nПакет', align: 'start', key: 'id', sortable: false},
+                        { title: 'ID черги\nID постанови', align: 'start', key: 'sessionid'},
+                        { title: 'Дані боржника', align: 'start', key: 'date'},
+                        { title: 'Операції', align: 'center', key: 'actions', sortable: false },
+                        ]
+                    }
+                }
+
+                const headers = [
+                    { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                    { title: 'Calories\n(100g)', align: 'end', key: 'calories', class: 'my-header-style' },
+                    { title: 'Fat (g)', align: 'end', key: 'fat', class: 'my-header-style' },
+                    { title: 'Carbs (g)', align: 'end', key: 'carbs', class: 'my-header-style' },
+                    { title: 'Protein (g)', align: 'end', key: 'protein', class: 'my-header-style' },
+                    { title: 'Iron (%)', align: 'end', key: 'iron', class: 'my-header-style' },
+                    { title: 'Operations', align: 'center', key: 'actions', sortable: false },
+                ];
+
+                const desserts = [
+                    {
+                        name: 'Frozen Yogurt',
+                        calories: 159,
+                        fat: 6.0,
+                        carbs: 24,
+                        protein: 4.0,
+                        iron: 1,
+                    },
+                    {
+                        name: 'Ice cream \nsand\nwich',
+                        calories: 237,
+                        fat: 9.0,
+                        carbs: 37,
+                        protein: 4.3,
+                        iron: 1,
+                    },
+                    {
+                        name: 'Eclair',
+                        calories: 262,
+                        fat: 16.0,
+                        carbs: 23,
+                        protein: 6.0,
+                        iron: 7,
+                    },
+                    {
+                        name: 'Cupcake',
+                        calories: 305,
+                        fat: 3.7,
+                        carbs: 67,
+                        protein: 4.3,
+                        iron: 8,
+                    },
+                    {
+                        name: 'Gingerbread',
+                        calories: 356,
+                        fat: 16.0,
+                        carbs: 49,
+                        protein: 3.9,
+                        iron: 16,
+                    },
+                    {
+                        name: 'Jelly bean',
+                        calories: 375,
+                        fat: 0.0,
+                        carbs: 94,
+                        protein: 0.0,
+                        iron: 0,
+                    },
+                    {
+                        name: 'Lollipop',
+                        calories: 392,
+                        fat: 0.2,
+                        carbs: 98,
+                        protein: 0,
+                        iron: 2,
+                    },
+                    {
+                        name: 'Honeycomb',
+                        calories: 408,
+                        fat: 3.2,
+                        carbs: 87,
+                        protein: 6.5,
+                        iron: 45,
+                    },
+                    {
+                        name: 'Donut',
+                        calories: 452,
+                        fat: 25.0,
+                        carbs: 51,
+                        protein: 4.9,
+                        iron: 22,
+                    },
+                    {
+                        name: 'KitKat',
+                        calories: 518,
+                        fat: 26.0,
+                        carbs: 65,
+                        protein: 7,
+                        iron: 6,
+                    },
+                ];
+
+                const items = [
+                    { title: "Foo", value: "foo", },
+                    { title: "Bar", value: "bar", },
+                    { title: "Fizz", value: "fizz", },
+                    { title: "Buzz", value: "buzz", },
+                ];
+
+                const dicts = {
+                    debtStatus: [
+                        {
+                            status: "-1",
+                            states: "",
+                            info: "Все",
+                            color: "primary",
+                            icon: "mdi-account"
+                        },
+                        {
+                            status: "0",
+                            states: "0",
+                            info: "Информацію прийнято",
+                            color: "primary",
+                            icon: "mdi-account"
+                        },
+                        {
+                            status: "1",
+                            states: "10,13,15",
+                            info: "Наш, підготовано",
+                            color: "primary",
+                            icon: "mdi-account"
+                        },
+                        {
+                            status: "2",
+                            states: "20,23,24,25,26",
+                            info: "Чужий, підготовано",
+                            color: "primary",
+                            icon: "mdi-account"
+                        },
+                        {
+                            status: "3",
+                            states: "30,33,34,35",
+                            info: "Відповідь відправлено",
+                            color: "primary",
+                            icon: "mdi-account"
+                        },
+                        {
+                            status: "4",
+                            states: "40,41,43,44,45,91,92,97,98,99",
+                            info: "Ручна обробка",
+                            color: "primary",
+                            icon: "mdi-account"
+                        }
+                    ],
+
+                }
+                
+                const request = {
+                        urlMode: "local",
+                        hostName: "http://kv-v-aswp-nr-pp:1880/",
+                        hostNameHost: "kv-v-aswp-nr-pp",
+                        hostNameWS: "kv-v-aswp-nr-pp",
+                        headers: {
+                            "accept": "application/json", "Content-Type": "application/json",
+                            "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
+                        }
+                };
+                
+                return {
+                    version,
+                    theme,
+
+                    title,
+                    faceId,
+                    faceIdUrl,
+
+                    data,
+                    tables,
+
+                    headers,
+                    request,
+                    desserts,
+
+                    loadingData,
+                    description,
+                    state,
+
+                    search,
+
+                    drawer,
+                    group,
+                    items,
+                    dicts
+                };
+                
+
+            },
+            created() {
+                console.log(version);
+                var faceId = Math.floor(10 + Math.random() * 90);
+                this.faceId = faceId;
+                this.faceIdUrl = `https://randomuser.me/api/portraits/men/${faceId}.jpg`;
+                //alert("ok "+faceId+" "+this.faceIdUrl);
+                //alert(document.URL);
+            },
+            mounted(){
+                //alert(document.URL);                
+                if (document.URL.includes('http')) {
+                    /*
+                    this.request.urlMode = 'http';
+                    //alert(this.hostNameHost);
+                    var strt = document.URL.indexOf("//") + 2;
+                    var stop = document.URL.indexOf("/", strt);
+                    this.request.hostNameHost = document.URL.substring(strt, stop);
+                    this.request.hostName = "http://" + this.hostNameHost + "/";
+                    this.request.hostNameWS = "ws://" + this.hostNameHost + "/";
+                    this.request.pageLogin = this.pages.login.pageASWP;
+                    */
+                } else {
+                    this.request.urlMode = 'local';
+                    //this.request.pageLogin = this.pages.login.pageLOCAL;
+                }                
+                //alert("mounted "+this.request.hostNameHost);
+            },
+            watch: {
+                group() {
+                    this.drawer = false;
+                },
+                "search.selectedDateFromFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.search.selectedDateFrom = this.formatDate(newQuestion);
+                },
+                "search.selectedDateIntoFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.search.selectedDateInto = this.formatDate(newQuestion);
+                }
+            },
+            methods: {
+                formatDate(date) {
+                    if (!date) {
+                        return null
+                    }
+                    console.log(date);
+                    const [year, month, day] = date.toISOString().replace('T', '-').split('-');
+                    console.log(date.toISOString());
+                    var ret = `${day}-${month}-${year}`;
+                    console.log(ret);
+                    return ret;
+                },
+                generateName() {
+                    var ret = "Awataros Pedros"
+                    const firstNames = ["Pedros","Ped","Huanos","Domingo","Aloisos"];
+                    const lastNames = ["Awataros","Gudrios","Aliende","Boliwaro"];
+                    var min=0, max;
+                    max = firstNames.length -1;
+                    var firstIndex = Math.floor(Math.random() * (max - min + 1) + min);
+                    max = lastNames.length -1;
+                    var lastIndex = Math.floor(Math.random() * (max - min + 1) + min);
+                    console.log('generateName', firstIndex, lastIndex);
+                    ret = `${firstNames[firstIndex]} ${lastNames[lastIndex]}`; 
+                    return ret;
+                },
+                increase(event) {
+                    this.state.xTimes++;
+                    //alert(`Hello ${this.state.xTimes}!`)
+                    // `event` is the native DOM event
+                    if (event) {
+                        //alert(event.target.tagName)
+                    }
+                },
+                btnApplyFilters() {
+                    this.drawer = false;
+                },
+                btnClearFilters() {
+                    for (var i in this.search) {
+                        this.search[i] = null;
+                    }
+                    //this.drawer = false;
+                },
+                switchLigthDark() {
+                    //console.log(this.$vuetify.theme);
+                    //console.log(this.$vuetify.theme.global);
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';                    
+                    var isDark = this.$vuetify.theme.global.current.dark;
+                    console.log('isDark', isDark);
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                    isDark = !isDark;
+                    console.log('isDark', isDark);
+                    this.$vuetify.theme.global.current.dark = isDark;
+                    this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                },
+
+                getDebtStatusIcon(debtstatus) {
+                    ret = "mdi-account";
+                    let item = this.dicts.debtStatus.find(x => x.status === ("" + debtstatus));
+                    if (item !== undefined) ret = item.icon;
+                    console.log("[getDebtStatusIcon]", ret);
+                    return ret;
+                },
+                
+                onBtnGetPackets: async function (item) {
+                    this.data.result.packets = [];
+                    //alert("[onBtnGetPackets:]");
+                    /*
+                    this.showMessageInfoDialog("onBtnGetDecs",
+                        "filter status="+this.from.status+
+                        " debtState="+this.from.debtState+
+                        " debtState="+this.getDebtStates(this.from.debtState),
+                        "info");
+                    */
+                    await this.exequteGetPackets();
+                },
+                onBtnGetDecs: async function (item) {
+                    if (this.data.result.packet >= 0) {
+                        this.data.result.decs = [];
+                        await this.exequteGetDecsPacket();
+                    }
+                },
+
+                /**
+                 * Get loaded packets - sessions
+                 */
+                 exequteGetPackets: async function () {
+                    this.loadingData = true;
+                    var pathTo = "api/aswp/db/decs/packets";
+                    var headers = this.request.headers;
+                    var realUrl = this.request.hostName + pathTo;
+                    var result = {};
+                    const requestOptions = {
+                        method: "GET",
+                        headers: headers,
+                    };
+                    await fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loadingData = false;
+                            //this.isGetPacket = false;;
+                            const data = JSON.parse(result);
+                            this.data.result.packets = data.data;                            
+                    //alert(JSON.stringify(this.result.packets[0]));
+                            if (this.data.result.packets.length > 0) {
+                                this.data.result.packet = this.data.result.packets[0].sessionid;
+                                var topVal = { "sessionid": 0, "count": "0", "date": "=== ВСІ ===" };
+                                this.data.result.packets.unshift(topVal);
+                                //this.exequteGetDecsPacket();
+                            }
+                            if (!response.ok) {
+                                this.loadingData = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                //this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loadingData = false;
+                            //this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+                    return result;
+                },                  
+                /**
+                 * Get decs in packet
+                 */
+                 exequteGetDecsPacket: async function () {
+                    this.loadingData = true;
+                    this.data.result.decs = [];
+                    var pathTo = "api/aswp/db/decs/bySession";
+                    var headers = this.request.headers;
+                    var realUrl = this.request.hostName + pathTo;
+                    var result = {};
+                    var request = {
+                        sessionId: this.data.result.packet
+                    }
+
+                    //alert(JSON.stringify(request));
+                        const requestOptions = {
+                            method: "POST",
+                            headers: headers,
+                            body: JSON.stringify(request)
+                        };
+
+                        await fetch(realUrl, requestOptions)
+                            .then(async response => {
+                                const result = await response.text();
+                                this.loadingData = false;
+                                const data = JSON.parse(result);
+                        this.data.result.decs = data.data;
+                        console.log(JSON.stringify(this.data.result.decs, null, 4));
+                                if (data.result === "ok") {                                    
+                                    
+                                }
+                                else {
+                                    /*
+                                    this.showMessageInfoDialog("exequteGetPackets",
+                                        data.message +
+                                        " filter status=" + this.from.status +
+                                        " debtState=" + this.from.debtState +
+                                        " debtState=" + this.from.debtState + " debtState=" + this.getDebtStates(this.from.debtState) +
+                                        " search " + this.search.searchText
+                                        , "warning");
+                                    */
+                                }
+                                if (!response.ok) {
+                                    this.loadingData = false;
+                                    // get error message from body or default to response statusText
+                                    const error = (data && data.message) || response.statusText;
+                                    //this.error = error;
+                                    alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                    return Promise.reject(error);
+                                }
+                            })
+                            .catch(error => {
+                                this.loading = false;
+                                this.error = error;
+                                alert("E2 fetch [" + realUrl + "] \n" + error);
+                            });
+
+                 },
+
+                 getDebtorFineData: function (debtorData) {
+                    var data = debtorData[0];
+                    var ret = `РНОККП: ${data.identCode}, Дата народження: ${data.birthDate} ПІБ: ${data.lastName} ${data.firstName} ${data.middleName}`;
+                    return ret;
+                 }   
+            },
+        })
+            .use(vuetify)
+            .mount("#app");
+    </script>
+</body>
+
+</html>
