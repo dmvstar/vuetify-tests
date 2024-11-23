@@ -68,7 +68,7 @@
     <template id="app-template">
         <!--script type="text/x-template" id="app-template"-->
         <v-app>
-            <v-navigation-drawer v-model="drawer" temporary style="margin: 0px; padding: 10px; width: 40%">
+            <v-navigation-drawer v-model="drawerMain" temporary style="margin: 0px; padding: 10px; width: 40%">
                 Params</br>
                 <v-list>
                     <v-list-item :prepend-avatar="faceIdUrl" subtitle="avatar4334@gmail.com"
@@ -79,10 +79,10 @@
                     <template v-slot:activator="{ props }">
                         <v-btn block v-bind="props" color="green" v-on:click="btnClearFilters">
                             <v-icon>mdi-martini</v-icon>
-                            Load Kontrahens
+                            Load New Data
                         </v-btn>
                     </template>
-                    <span>Load data from kontrahent list...</span>
+                    <span>Load data from external list...</span>
                 </v-tooltip>
                 Filteres
                 <v-text-field v-model="search.searchText1" clearable clear-icon="mdi-backspace" label="Text to find"
@@ -140,12 +140,23 @@
                 </v-tooltip>
 
             </v-navigation-drawer>
+
+            <v-navigation-drawer v-model="drawerRight" location="right" temporary style="margin: 0px; padding: 10px; width: 30%">
+                <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
+                :items="data.userStatus" required>
+                </v-select>
+
+                <v-select label="Select mode" prepend-icon="mdi-garage" v-model="search.userMode"
+                :items="data.userModes" required>
+                </v-select>                
+            </v-navigation-drawer>
+
             <v-main>
                 <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
                     <v-row>
                         <v-col cols="12" sm="12" md="12">
                             <v-app-bar color="primary" prominent>
-                                <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                                <v-app-bar-nav-icon variant="text" @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
                                 <v-toolbar-title>Main page ver. 0.24.77</v-toolbar-title>
                                 <v-spacer></v-spacer>
 
@@ -155,12 +166,12 @@
                                             <v-icon>mdi-weather-night</v-icon>
                                         </v-btn>
                                     </template>
-                                    <span>Be on the dark side....</span>
+                                    <span>Be on the dark side of the moon :) ....</span>
                                 </v-tooltip>
 
                                 <v-btn icon="mdi-magnify" variant="text"></v-btn>
                                 <v-btn icon="mdi-filter" variant="text"></v-btn>
-                                <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+                                <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="drawerRight = !drawerRight"   ></v-btn>
                             </v-app-bar>
                         </v-col>
                     </v-row>
@@ -206,10 +217,10 @@
                                     <template v-slot:activator="{ props }">
                                         <v-btn block color="primary" v-bind="props" 
                                             v-on:click="onBtnGetDecs">
-                                            FILTER
+                                            REFRESH
                                         </v-btn>
                                     </template>
-                                    <span>Filter of loaded data</span>
+                                    <span>Refresh of loaded data if modified by another users </span>
                                 </v-tooltip>
                             </v-col>
                         </v-row>    
@@ -242,8 +253,10 @@
                                     </template>
                                     <template v-slot:item.actions="{ item }">
                                         <v-btn density="compact" color="blue" icon="mdi-alarm"></v-btn>
-                                        <v-btn density="compact" color="blue"
-                                            :icon="getDebtStatusIcon(item.fat)"></v-btn>
+                                        <v-btn density="compact" 
+                                            :color="getDebtStatusIconColor(item)"
+                                            :icon="getDebtStatusIcon(item.fat)">
+                                        </v-btn>
                                         <v-btn density="comfortable" color="blue" icon="mdi-file-document"></v-btn>
                                         <v-btn density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
                                         <v-btn density="comfortable" color="red" icon="mdi-delete"></v-btn>
@@ -265,7 +278,7 @@
                                 <v-card>
                                     <v-card-text>
                                         The navigation drawer will appear from the bottom on smaller
-                                        size screens. {{drawer}}</br>
+                                        size screens. {{drawerMain}}</br>
                                         search.searchText1={{search.searchText1}}</br>
                                         search.searchText2={{search.searchText2}}</br>
                                         search.selectedDateFrom='{{search.selectedDateFrom}}'</br>
@@ -334,7 +347,9 @@
                 const state = Vue.reactive({
                     xTimes: 0,
                 });
-                const drawer = Vue.ref(false);
+                const drawerMain = Vue.ref(false);
+                const drawerRight = Vue.ref(false);
+
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
 
@@ -398,6 +413,14 @@
                     {
                         name: 'Frozen Yogurt',
                         calories: 159,
+                        fat: 6.0,
+                        carbs: 24,
+                        protein: 4.0,
+                        iron: 1,
+                    },
+                    {
+                        name: 'Natural Yogurt',
+                        calories: 59,
                         fat: 6.0,
                         carbs: 24,
                         protein: 4.0,
@@ -564,7 +587,9 @@
 
                     search,
 
-                    drawer,
+                    drawerMain,
+                    drawerRight,
+
                     group,
                     items,
                     dicts
@@ -676,6 +701,23 @@
                     console.log("[getDebtStatusIcon]", ret);
                     return ret;
                 },
+
+                getDebtStatusIconColor(item) {
+                    console.log("[getDebtStatusIconColor]", item);
+                    ret = "green";
+                    if(item.calories > 200 && item.calories < 300) {
+                        ret = "yellow";     
+                    }
+                    if(item.calories > 300 && item.calories < 400) {
+                        ret = "pink";     
+                    }
+                    if(item.calories > 400) {
+                        ret = "red";     
+                    }
+                    console.log("[getDebtStatusIconColor]", ret);
+                    return ret;
+                },
+
                 
                 onBtnGetPackets: async function (item) {
                     this.data.result.packets = [];
