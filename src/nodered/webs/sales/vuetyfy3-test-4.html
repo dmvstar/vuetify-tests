@@ -270,14 +270,14 @@
                                     </template>
 
                                     <template v-slot:item.actions="{ item }">
-                                        <v-btn density="compact" color="blue" icon="mdi-alarm"></v-btn>
-                                        <v-btn density="compact" :color="getDebtStatusIconColor(item)"
+                                        <v-btn class="mr-1" density="compact" color="blue" icon="mdi-alarm"></v-btn>
+                                        <v-btn class="mr-1" density="compact" :color="getDebtStatusIconColor(item)"
                                             :icon="getDebtStatusIcon(item.fat)">
                                         </v-btn>
-                                        <v-btn density="comfortable" color="blue" icon="mdi-file-document"></v-btn>
-                                        <v-btn density="comfortable" color="blue" @click="editItem(item)"
+                                        <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"></v-btn>
+                                        <v-btn class="mr-1" density="comfortable" color="blue" @click="editItem(item)"
                                             icon="mdi-pencil"></v-btn>
-                                        <v-btn density="comfortable" color="red" icon="mdi-delete"></v-btn>
+                                        <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"></v-btn>
                                     </template>
 
                                     <!--
