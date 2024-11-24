@@ -256,10 +256,19 @@
                                     <template v-slot:item.name="{ item }">
                                         <div style="white-space: pre-wrap;">{{ item.name }}</div>
                                     </template>
-                                    <template v-slot:item.calories="{ item }">
+                                    <template v-slot:item.calories1="{ item }">
                                         <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
                                         </div>
                                     </template>
+
+                                    <template v-slot:item.calories="{ key, value, item }">
+                                        <div>
+                                            <v-chip :color="getDebtStatusIconColor(item)">
+                                            {{ value }}
+                                            </v-chip>
+                                        </div>                                        
+                                    </template>
+
                                     <template v-slot:item.actions="{ item }">
                                         <v-btn density="compact" color="blue" icon="mdi-alarm"></v-btn>
                                         <v-btn density="compact" :color="getDebtStatusIconColor(item)"
