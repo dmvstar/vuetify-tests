@@ -143,6 +143,7 @@
 
             <v-navigation-drawer v-model="drawerRight" location="right" temporary
                 style="margin: 0px; padding: 10px; width: 30%">
+                Status
                 <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
                     :items="data.userStatus" required>
                 </v-select>
@@ -151,6 +152,32 @@
                     :items="data.userModes" required>
                 </v-select>
             </v-navigation-drawer>
+
+            <v-navigation-drawer v-model="drawerFilters" location="right" temporary
+                style="margin: 0px; padding: 10px; width: 30%">
+                Filteres
+                <v-text-field v-model="search.searchText1" clearable clear-icon="mdi-backspace" label="Text to find"
+                    prepend-icon="mdi-filter">
+                </v-text-field>
+                <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
+                    :items="data.userStatus" required>
+                </v-select>
+
+                <v-select label="Select mode" prepend-icon="mdi-garage" v-model="search.userMode"
+                    :items="data.userModes" required>
+                </v-select>
+                <v-tooltip top text="Clear filteres....">
+                    <template v-slot:activator="{ props }">
+                        <v-btn block v-bind="props" color="primary" v-on:click="btnClearFilters">
+                            <v-icon>mdi-martini</v-icon>
+                            Clear filteres....
+                        </v-btn>
+                    </template>
+                    <span>Clear filteres....</span>
+                </v-tooltip>
+
+            </v-navigation-drawer>
+
 
             <v-main>
                 <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
@@ -172,7 +199,8 @@
                                 </v-tooltip>
 
                                 <v-btn icon="mdi-magnify" variant="text"></v-btn>
-                                <v-btn icon="mdi-filter" variant="text"></v-btn>
+                                <v-btn icon="mdi-filter" variant="text"
+                                    @click.stop="drawerFilters = !drawerFilters"></v-btn>
                                 <v-btn icon="mdi-dots-vertical" variant="text"
                                     @click.stop="drawerRight = !drawerRight"></v-btn>
                             </v-app-bar>
@@ -430,6 +458,7 @@
                 });
                 const drawerMain = Vue.ref(false);
                 const drawerRight = Vue.ref(false);
+                const drawerFilters = Vue.ref(false);
 
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
@@ -684,6 +713,7 @@
 
                     drawerMain,
                     drawerRight,
+                    drawerFilters,
 
                     group,
                     items,
