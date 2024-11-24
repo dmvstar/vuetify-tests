@@ -26,7 +26,7 @@
             background-color: red !important;
         }
 
-        .v-table1    thead tr {
+        .v-table1 thead tr {
             background-color: #293b05;
         }
 
@@ -71,8 +71,8 @@
             <v-navigation-drawer v-model="drawerMain" temporary style="margin: 0px; padding: 10px; width: 40%">
                 Params</br>
                 <v-list>
-                    <v-list-item :prepend-avatar="faceIdUrl" subtitle="avatar4334@gmail.com"
-                        :title="generateName()"></v-list-item>
+                    <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
+                        :title="getGeneratedName()"></v-list-item>
                 </v-list>
                 Data
                 <v-tooltip top text="Load data....">
@@ -141,14 +141,15 @@
 
             </v-navigation-drawer>
 
-            <v-navigation-drawer v-model="drawerRight" location="right" temporary style="margin: 0px; padding: 10px; width: 30%">
+            <v-navigation-drawer v-model="drawerRight" location="right" temporary
+                style="margin: 0px; padding: 10px; width: 30%">
                 <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
-                :items="data.userStatus" required>
+                    :items="data.userStatus" required>
                 </v-select>
 
                 <v-select label="Select mode" prepend-icon="mdi-garage" v-model="search.userMode"
-                :items="data.userModes" required>
-                </v-select>                
+                    :items="data.userModes" required>
+                </v-select>
             </v-navigation-drawer>
 
             <v-main>
@@ -156,8 +157,9 @@
                     <v-row>
                         <v-col cols="12" sm="12" md="12">
                             <v-app-bar color="primary" prominent>
-                                <v-app-bar-nav-icon variant="text" @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
-                                <v-toolbar-title>Main page ver. 0.24.77</v-toolbar-title>
+                                <v-app-bar-nav-icon variant="text"
+                                    @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
+                                <v-toolbar-title>Main page ver. 0.24.78</v-toolbar-title>
                                 <v-spacer></v-spacer>
 
                                 <v-tooltip bottom>
@@ -171,7 +173,8 @@
 
                                 <v-btn icon="mdi-magnify" variant="text"></v-btn>
                                 <v-btn icon="mdi-filter" variant="text"></v-btn>
-                                <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="drawerRight = !drawerRight"   ></v-btn>
+                                <v-btn icon="mdi-dots-vertical" variant="text"
+                                    @click.stop="drawerRight = !drawerRight"></v-btn>
                             </v-app-bar>
                         </v-col>
                     </v-row>
@@ -180,9 +183,8 @@
                             <v-col cols="12" sm="2">
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ props }">
-                                        <v-btn block color="primary" v-bind="props" 
-                                            v-on:click="onBtnGetPackets">
-                                            LOAD DATA                                            
+                                        <v-btn block color="primary" v-bind="props" v-on:click="onBtnGetPackets">
+                                            LOAD DATA
                                         </v-btn>
                                     </template>
                                     <span>Load new data from ...</span>
@@ -190,59 +192,66 @@
                             </v-col>
 
                             <v-col cols="12" sm="8" md="8">
-                                <v-select  v-model="data.result.packet" 
-                                            :items="data.result.packets"
-                                            label="Select a data forom loaded list" 
-                                            required
-                                    item-title1="sessionid" 
+                                <v-select v-model="data.result.packet" :items="data.result.packets"
+                                    label="Select a data forom loaded list" required item-title1="sessionid"
                                     item-value="sessionid">
 
                                     <template v-slot:selection="{ item, index }">
-                                        Пакет # {{ item.raw.sessionid }} [{{ item.raw.count }}-{{ item.raw.manual }}-{{ item.raw.differ }}] ({{ item.raw.date }})
+                                        Пакет # {{ item.raw.sessionid }} [{{ item.raw.count }}-{{ item.raw.manual }}-{{
+                                        item.raw.differ }}] ({{ item.raw.date }})
                                     </template>
 
                                     <template v-slot:item="{ props, item }">
-                                        <v-list-item v-bind="props" 
-                                            prepend-icon="mdi-alarm"   
+                                        <v-list-item v-bind="props" prepend-icon="mdi-alarm"
                                             :title="`# ${item.raw.sessionid} [${item.raw.count}-${item.raw.manual}]`"
                                             :subtitle="`${item.raw.count} (${item.raw.date})`">
                                         </v-list-item>
-                                    </template>                               
-                                    
+                                    </template>
+
                                 </v-select>
-                            </v-col>    
-                            
+                            </v-col>
+
                             <v-col cols="12" sm="2">
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ props }">
-                                        <v-btn block color="primary" v-bind="props" 
-                                            v-on:click="onBtnGetDecs">
+                                        <v-btn block color="primary" v-bind="props" v-on:click="onBtnGetDecs">
                                             REFRESH
                                         </v-btn>
                                     </template>
                                     <span>Refresh of loaded data if modified by another users </span>
                                 </v-tooltip>
                             </v-col>
-                        </v-row>    
-                   
+                        </v-row>
+
                         VDataTable {{desserts.length}} items
                         <v-row>
                             <v-col cols="12">
-                                <v-data-table 
-                                    :items-per-page="25" 
-                                    :headers="headers" 
-                                    :items="desserts" 
-                                    item-value="name"
-                                    :search="search.searchText1" 
-                                    class="elevation-1">
+                                <v-data-table :items-per-page="25" :headers="headers" :items="desserts"
+                                    item-value="name" :search="search.searchText1" class="elevation-1">
 
                                     <template v-slot:[`header.name`]="{ column }">
                                         <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                     </template>
-                                    <template v-slot:[`header.calories`]="{ column }">
+
+                                    <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                        <v-icon color="green-darken-2">mdi-mushroom</v-icon>
                                         <!--span v-html=column.title></span-->
-                                        <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                        {{ getTitle(column) }}
+                                        {{ column.title }}
+                                        <template v-if="isSorted(column)">
+                                            <v-icon :icon="getSortIcon(column)"></v-icon>
+                                        </template>
                                     </template>
+
+                                    <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
+                                        <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                        {{ getTitle(column) }}
+                                        [{{ column.title }}]
+                                        <template v-if="isSorted(column)">
+                                            <v-icon :icon="getSortIcon(column)"></v-icon>
+                                        </template>
+                                    </template>
+
 
                                     <template v-slot:item.name="{ item }">
                                         <div style="white-space: pre-wrap;">{{ item.name }}</div>
@@ -253,12 +262,12 @@
                                     </template>
                                     <template v-slot:item.actions="{ item }">
                                         <v-btn density="compact" color="blue" icon="mdi-alarm"></v-btn>
-                                        <v-btn density="compact" 
-                                            :color="getDebtStatusIconColor(item)"
+                                        <v-btn density="compact" :color="getDebtStatusIconColor(item)"
                                             :icon="getDebtStatusIcon(item.fat)">
                                         </v-btn>
                                         <v-btn density="comfortable" color="blue" icon="mdi-file-document"></v-btn>
-                                        <v-btn density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
+                                        <v-btn density="comfortable" color="blue" @click="editItem(item)"
+                                            icon="mdi-pencil"></v-btn>
                                         <v-btn density="comfortable" color="red" icon="mdi-delete"></v-btn>
                                     </template>
 
@@ -293,7 +302,70 @@
                     </div>
                 </v-container>
             </v-main>
-        </v-app>
+
+            <v-dialog v-model="dialogEditItem" max-width="500px">
+                <template v-slot:activator="{ props }">
+                    <v-btn class="mb-2" color="primary" dark v-bind="props">
+                        New Item
+                    </v-btn>
+                </template>
+                <v-card>
+                    <v-card-title>
+                        <span class="text-h5">{{ formTitle }}</span>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" md="8" sm="6">
+                                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4" sm="6">
+                                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                    <v-col cols="12" md="4" sm="6">
+                                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4" sm="6">
+                                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4" sm="6">
+                                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue-darken-1" variant="text" @click="close">
+                            Cancel
+                        </v-btn>
+                        <v-btn color="blue-darken-1" variant="text" @click="save">
+                            Save
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogDeleteItem" max-width="500px">
+                <v-card>
+                    <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
+                        <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            </v-toolbar>
+    </template>
+
+
+    </v-app>
     </template>
 
     <script setup>
@@ -370,8 +442,8 @@
                     userModes: ['guest', 'admin', 'test', 'user'],
                     userStatus: ['acive', 'frozen', 'deleted'],
                     result: {
-                        packet : null,
-                        packets : [],
+                        packet: null,
+                        packets: [],
                         decs: [],
                     },
                     item: {},
@@ -385,16 +457,20 @@
                 });
                 const showMessageDialog = Vue.ref(false);
                 const dialogEditItem = Vue.ref(false);
+                const dialogDeleteItem = Vue.ref(false);
+
                 const loadingData = Vue.ref(false);
                 const dialogTemplates = Vue.ref(false);
 
+
+
                 const tables = {
                     decsAdmin: {
-                        headers : [
-                        { title: 'ID\nПакет', align: 'start', key: 'id', sortable: false},
-                        { title: 'ID черги\nID постанови', align: 'start', key: 'sessionid'},
-                        { title: 'Дані боржника', align: 'start', key: 'date'},
-                        { title: 'Операції', align: 'center', key: 'actions', sortable: false },
+                        headers: [
+                            { title: 'ID\nПакет', align: 'start', key: 'id', sortable: false },
+                            { title: 'ID черги\nID постанови', align: 'start', key: 'sessionid' },
+                            { title: 'Дані боржника', align: 'start', key: 'date' },
+                            { title: 'Операції', align: 'center', key: 'actions', sortable: false },
                         ]
                     }
                 }
@@ -554,21 +630,28 @@
                     ],
 
                 }
-                
+
                 const request = {
-                        urlMode: "local",
-                        hostName: "http://kv-v-aswp-nr-pp:1880/",
-                        hostNameHost: "kv-v-aswp-nr-pp",
-                        hostNameWS: "kv-v-aswp-nr-pp",
-                        headers: {
-                            "accept": "application/json", "Content-Type": "application/json",
-                            "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
-                        }
+                    urlMode: "local",
+                    hostName: "http://kv-v-aswp-nr-pp:1880/",
+                    hostNameHost: "kv-v-aswp-nr-pp",
+                    hostNameWS: "kv-v-aswp-nr-pp",
+                    headers: {
+                        "accept": "application/json", "Content-Type": "application/json",
+                        "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
+                    }
                 };
-                
+
+                const usersList = {
+                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                }
+
                 return {
                     version,
                     theme,
+
+                    usersList,
 
                     title,
                     faceId,
@@ -585,6 +668,9 @@
                     description,
                     state,
 
+                    dialogEditItem,
+                    dialogDeleteItem,
+
                     search,
 
                     drawerMain,
@@ -594,7 +680,7 @@
                     items,
                     dicts
                 };
-                
+
 
             },
             created() {
@@ -605,8 +691,8 @@
                 //alert("ok "+faceId+" "+this.faceIdUrl);
                 //alert(document.URL);
             },
-            mounted(){
-                //alert(document.URL);                
+            mounted() {
+                //alert(document.URL);
                 if (document.URL.includes('http')) {
                     /*
                     this.request.urlMode = 'http';
@@ -621,7 +707,8 @@
                 } else {
                     this.request.urlMode = 'local';
                     //this.request.pageLogin = this.pages.login.pageLOCAL;
-                }                
+                }
+                this.generateName();
                 //alert("mounted "+this.request.hostNameHost);
             },
             watch: {
@@ -649,17 +736,38 @@
                     console.log(ret);
                     return ret;
                 },
-                generateName() {
+
+                getGeneratedEmailAddress() {
+                    var ret = "awataros.pedros@gmail.com";
+                    if (this.usersList.firstName && this.usersList.lastName) {
+                        ret = `${this.usersList.firstName.toLowerCase()}.${this.usersList.lastName.toLowerCase()}@gmail.com`
+                    };
+                    return ret;
+                },
+
+                getGeneratedName() {
                     var ret = "Awataros Pedros"
-                    const firstNames = ["Pedros","Ped","Huanos","Domingo","Aloisos"];
-                    const lastNames = ["Awataros","Gudrios","Aliende","Boliwaro"];
-                    var min=0, max;
-                    max = firstNames.length -1;
+                    if (this.usersList.firstName && this.usersList.lastName) {
+                        ret = `${this.usersList.firstName} ${this.usersList.lastName}`
+                    };
+                    return ret;
+                },
+                generateName() {
+                    var firstNames = this.usersList.firstNames;
+                    var lastNames = this.usersList.lastNames;
+
+                    var ret = "Awataros Pedros"
+                    var min = 0, max;
+                    max = firstNames.length - 1;
                     var firstIndex = Math.floor(Math.random() * (max - min + 1) + min);
-                    max = lastNames.length -1;
+                    max = lastNames.length - 1;
                     var lastIndex = Math.floor(Math.random() * (max - min + 1) + min);
-                    console.log('generateName', firstIndex, lastIndex);
-                    ret = `${firstNames[firstIndex]} ${lastNames[lastIndex]}`; 
+
+                    this.usersList.firstName = firstNames[firstIndex];
+                    this.usersList.lastName = lastNames[firstIndex];
+                    ret = `${firstNames[firstIndex]} ${lastNames[lastIndex]}`;
+
+                    console.log('generateName', firstIndex, lastIndex, ret);
                     return ret;
                 },
                 increase(event) {
@@ -683,7 +791,7 @@
                     //console.log(this.$vuetify.theme);
                     //console.log(this.$vuetify.theme.global);
                     //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';                    
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';
                     var isDark = this.$vuetify.theme.global.current.dark;
                     console.log('isDark', isDark);
                     console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
@@ -702,23 +810,30 @@
                     return ret;
                 },
 
+                getTitle(column) {
+                    var ret = "";
+                    console.log("[getTitle]", column);
+                    return ret;
+                },
+
+
                 getDebtStatusIconColor(item) {
                     console.log("[getDebtStatusIconColor]", item);
                     ret = "green";
-                    if(item.calories > 200 && item.calories < 300) {
-                        ret = "yellow";     
+                    if (item.calories > 200 && item.calories < 300) {
+                        ret = "yellow";
                     }
-                    if(item.calories > 300 && item.calories < 400) {
-                        ret = "pink";     
+                    if (item.calories > 300 && item.calories < 400) {
+                        ret = "pink";
                     }
-                    if(item.calories > 400) {
-                        ret = "red";     
+                    if (item.calories > 400) {
+                        ret = "red";
                     }
                     console.log("[getDebtStatusIconColor]", ret);
                     return ret;
                 },
 
-                
+
                 onBtnGetPackets: async function (item) {
                     this.data.result.packets = [];
                     //alert("[onBtnGetPackets:]");
@@ -738,10 +853,41 @@
                     }
                 },
 
+                editItem(item) {
+                    this.editedIndex = this.desserts.indexOf(item);
+                    this.editedItem = Object.assign({}, item);
+                    this.formTitle = `Edit Item [${item.name}]`;
+                    this.dialogEditItem = true;
+                },
+
+                close() {
+                    this.dialogEditItem = false
+                    this.$nextTick(() => {
+                        this.editedItem = Object.assign({}, this.defaultItem)
+                        this.editedIndex = -1
+                    })
+                },
+                closeDelete() {
+                    this.dialogDelete = false
+                    this.$nextTick(() => {
+                        this.editedItem = Object.assign({}, this.defaultItem)
+                        this.editedIndex = -1
+                    })
+                },
+                save() {
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+                    } else {
+                        this.desserts.push(this.editedItem)
+                    }
+                    this.close()
+                },
+
+
                 /**
                  * Get loaded packets - sessions
                  */
-                 exequteGetPackets: async function () {
+                exequteGetPackets: async function () {
                     this.loadingData = true;
                     var pathTo = "api/aswp/db/decs/packets";
                     var headers = this.request.headers;
@@ -757,8 +903,8 @@
                             this.loadingData = false;
                             //this.isGetPacket = false;;
                             const data = JSON.parse(result);
-                            this.data.result.packets = data.data;                            
-                    //alert(JSON.stringify(this.result.packets[0]));
+                            this.data.result.packets = data.data;
+                            //alert(JSON.stringify(this.result.packets[0]));
                             if (this.data.result.packets.length > 0) {
                                 this.data.result.packet = this.data.result.packets[0].sessionid;
                                 var topVal = { "sessionid": 0, "count": "0", "date": "=== ВСІ ===" };
@@ -780,11 +926,11 @@
                             alert("E2 fetch [" + realUrl + "] \n" + error);
                         });
                     return result;
-                },                  
+                },
                 /**
                  * Get decs in packet
                  */
-                 exequteGetDecsPacket: async function () {
+                exequteGetDecsPacket: async function () {
                     this.loadingData = true;
                     this.data.result.decs = [];
                     var pathTo = "api/aswp/db/decs/bySession";
@@ -796,55 +942,55 @@
                     }
 
                     //alert(JSON.stringify(request));
-                        const requestOptions = {
-                            method: "POST",
-                            headers: headers,
-                            body: JSON.stringify(request)
-                        };
+                    const requestOptions = {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
 
-                        await fetch(realUrl, requestOptions)
-                            .then(async response => {
-                                const result = await response.text();
+                    await fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.loadingData = false;
+                            const data = JSON.parse(result);
+                            this.data.result.decs = data.data;
+                            console.log(JSON.stringify(this.data.result.decs, null, 4));
+                            if (data.result === "ok") {
+
+                            }
+                            else {
+                                /*
+                                this.showMessageInfoDialog("exequteGetPackets",
+                                    data.message +
+                                    " filter status=" + this.from.status +
+                                    " debtState=" + this.from.debtState +
+                                    " debtState=" + this.from.debtState + " debtState=" + this.getDebtStates(this.from.debtState) +
+                                    " search " + this.search.searchText
+                                    , "warning");
+                                */
+                            }
+                            if (!response.ok) {
                                 this.loadingData = false;
-                                const data = JSON.parse(result);
-                        this.data.result.decs = data.data;
-                        console.log(JSON.stringify(this.data.result.decs, null, 4));
-                                if (data.result === "ok") {                                    
-                                    
-                                }
-                                else {
-                                    /*
-                                    this.showMessageInfoDialog("exequteGetPackets",
-                                        data.message +
-                                        " filter status=" + this.from.status +
-                                        " debtState=" + this.from.debtState +
-                                        " debtState=" + this.from.debtState + " debtState=" + this.getDebtStates(this.from.debtState) +
-                                        " search " + this.search.searchText
-                                        , "warning");
-                                    */
-                                }
-                                if (!response.ok) {
-                                    this.loadingData = false;
-                                    // get error message from body or default to response statusText
-                                    const error = (data && data.message) || response.statusText;
-                                    //this.error = error;
-                                    alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
-                                    return Promise.reject(error);
-                                }
-                            })
-                            .catch(error => {
-                                this.loading = false;
-                                this.error = error;
-                                alert("E2 fetch [" + realUrl + "] \n" + error);
-                            });
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                //this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
 
-                 },
+                },
 
-                 getDebtorFineData: function (debtorData) {
+                getDebtorFineData: function (debtorData) {
                     var data = debtorData[0];
                     var ret = `РНОККП: ${data.identCode}, Дата народження: ${data.birthDate} ПІБ: ${data.lastName} ${data.firstName} ${data.middleName}`;
                     return ret;
-                 }   
+                }
             },
         })
             .use(vuetify)

@@ -30,9 +30,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.cjs.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.es.js"></script>
-  -->  
+  -->
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
-    
+
   <script type="text/x-template" id="app-template">
       <v-app>
 
@@ -106,8 +106,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   <v-spacer></v-spacer>
                   <v-dialog
                     v-model="dialog"
-                    max-width="500px"
-                  >
+                    max-width="500px">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         class="mb-2"
@@ -304,10 +303,10 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
     const app = createApp({
       template: "#app-template",
-      
+
       components: {
         LMap: window.LMap,
-        LTileLayer: window.LTileLayer,      
+        LTileLayer: window.LTileLayer,
       },
       /*
       components: [
