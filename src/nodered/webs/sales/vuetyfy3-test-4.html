@@ -141,19 +141,10 @@
 
             </v-navigation-drawer>
 
-            <v-navigation-drawer v-model="drawerRight" location="right" temporary
-                style="margin: 0px; padding: 10px; width: 30%">
-                Status
-                <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
-                    :items="data.userStatus" required>
-                </v-select>
-
-                <v-select label="Select mode" prepend-icon="mdi-garage" v-model="search.userMode"
-                    :items="data.userModes" required>
-                </v-select>
-            </v-navigation-drawer>
-
-            <v-navigation-drawer v-model="drawerFilters" location="right" temporary
+            <v-navigation-drawer v-model="drawerFilters" 
+                location="right" 
+                temporary
+                :location="$vuetify.display.mobile ? 'bottom' : undefined"
                 style="margin: 0px; padding: 10px; width: 30%">
                 Filteres
                 <v-text-field v-model="search.searchText1" clearable clear-icon="mdi-backspace" label="Text to find"
@@ -178,10 +169,46 @@
 
             </v-navigation-drawer>
 
+            <v-navigation-drawer v-model="drawerRight" location="right" temporary
+                style="margin: 0px; padding: 10px; width: 30%">
+                Status
+                <v-select label="Select status" prepend-icon="mdi-garage" v-model="search.userStatus"
+                    :items="data.userStatus" required>
+                </v-select>
 
+                <v-select label="Select mode" prepend-icon="mdi-garage" v-model="search.userMode"
+                    :items="data.userModes" required>
+                </v-select>
+            </v-navigation-drawer>
+
+
+            <v-layout>
             <v-main>
                 <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
                     <v-row>
+                        
+                            <!--v-app-bar color="primary" prominent>
+                                <v-app-bar-nav-icon variant="text"
+                                    @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
+                                <v-toolbar-title>Main page ver. 0.24.78</v-toolbar-title>
+                                <v-spacer></v-spacer>
+
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn icon large target="_blank" v-bind="props" v-on:click="switchLigthDark">
+                                            <v-icon>mdi-weather-night</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Be on the dark side of the moon :) ....</span>
+                                </v-tooltip>
+
+                                <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                                <v-btn icon="mdi-filter" variant="text"
+                                    @click.stop="drawerFilters = !drawerFilters"></v-btn>
+                                <v-btn icon="mdi-dots-vertical" variant="text"
+                                    @click.stop="drawerRight = !drawerRight"></v-btn>
+                            </v-app-bar-->
+                        
                         <v-col cols="12" sm="12" md="12">
                             <v-app-bar color="primary" prominent>
                                 <v-app-bar-nav-icon variant="text"
@@ -339,7 +366,7 @@
                     </div>
                 </v-container>
             </v-main>
-
+            </v-layout>
             <v-dialog v-model="dialogEditItem" max-width="500px">
                 <template v-slot:activator="{ props }">
                     <v-btn class="mb-2" color="primary" dark v-bind="props">
@@ -398,7 +425,8 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            </v-toolbar>
+
+
     </template>
 
 
