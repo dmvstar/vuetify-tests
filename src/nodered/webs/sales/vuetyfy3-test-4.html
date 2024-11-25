@@ -141,9 +141,7 @@
 
             </v-navigation-drawer>
 
-            <v-navigation-drawer v-model="drawerFilters" 
-                location="right" 
-                temporary
+            <v-navigation-drawer v-model="drawerFilters" location="right" temporary
                 :location="$vuetify.display.mobile ? 'bottom' : undefined"
                 style="margin: 0px; padding: 10px; width: 30%">
                 Filteres
@@ -183,10 +181,10 @@
 
 
             <v-layout>
-            <v-main>
-                <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
-                    <v-row>
-                        
+                <v-main>
+                    <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
+                        <v-row>
+
                             <!--v-app-bar color="primary" prominent>
                                 <v-app-bar-nav-icon variant="text"
                                     @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
@@ -208,164 +206,170 @@
                                 <v-btn icon="mdi-dots-vertical" variant="text"
                                     @click.stop="drawerRight = !drawerRight"></v-btn>
                             </v-app-bar-->
-                        
-                        <v-col cols="12" sm="12" md="12">
-                            <v-app-bar color="primary" prominent>
-                                <v-app-bar-nav-icon variant="text"
-                                    @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
-                                <v-toolbar-title>Main page ver. 0.24.78</v-toolbar-title>
-                                <v-spacer></v-spacer>
 
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn icon large target="_blank" v-bind="props" v-on:click="switchLigthDark">
-                                            <v-icon>mdi-weather-night</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Be on the dark side of the moon :) ....</span>
-                                </v-tooltip>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-app-bar color="primary" prominent>
+                                    <v-app-bar-nav-icon variant="text"
+                                        @click.stop="drawerMain = !drawerMain"></v-app-bar-nav-icon>
+                                    <v-toolbar-title>Main page ver. 0.24.78</v-toolbar-title>
+                                    <v-spacer></v-spacer>
 
-                                <v-btn icon="mdi-magnify" variant="text"></v-btn>
-                                <v-btn icon="mdi-filter" variant="text"
-                                    @click.stop="drawerFilters = !drawerFilters"></v-btn>
-                                <v-btn icon="mdi-dots-vertical" variant="text"
-                                    @click.stop="drawerRight = !drawerRight"></v-btn>
-                            </v-app-bar>
-                        </v-col>
-                    </v-row>
-                    <div v-if="search.userMode !== 'O'">
-                        <v-row>
-                            <v-col cols="12" sm="2">
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn block color="primary" v-bind="props" v-on:click="onBtnGetPackets">
-                                            LOAD DATA
-                                        </v-btn>
-                                    </template>
-                                    <span>Load new data from ...</span>
-                                </v-tooltip>
-                            </v-col>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn icon large target="_blank" v-bind="props"
+                                                v-on:click="switchLigthDark">
+                                                <v-icon>mdi-weather-night</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Be on the dark side of the moon :) ....</span>
+                                    </v-tooltip>
 
-                            <v-col cols="12" sm="8" md="8">
-                                <v-select v-model="data.result.packet" :items="data.result.packets"
-                                    label="Select a data forom loaded list" required item-title1="sessionid"
-                                    item-value="sessionid">
-
-                                    <template v-slot:selection="{ item, index }">
-                                        Пакет # {{ item.raw.sessionid }} [{{ item.raw.count }}-{{ item.raw.manual }}-{{
-                                        item.raw.differ }}] ({{ item.raw.date }})
-                                    </template>
-
-                                    <template v-slot:item="{ props, item }">
-                                        <v-list-item v-bind="props" prepend-icon="mdi-alarm"
-                                            :title="`# ${item.raw.sessionid} [${item.raw.count}-${item.raw.manual}]`"
-                                            :subtitle="`${item.raw.count} (${item.raw.date})`">
-                                        </v-list-item>
-                                    </template>
-
-                                </v-select>
-                            </v-col>
-
-                            <v-col cols="12" sm="2">
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn block color="primary" v-bind="props" v-on:click="onBtnGetDecs">
-                                            REFRESH
-                                        </v-btn>
-                                    </template>
-                                    <span>Refresh of loaded data if modified by another users </span>
-                                </v-tooltip>
+                                    <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                                    <v-btn icon="mdi-filter" variant="text"
+                                        @click.stop="drawerFilters = !drawerFilters"></v-btn>
+                                    <v-btn icon="mdi-dots-vertical" variant="text"
+                                        @click.stop="drawerRight = !drawerRight"></v-btn>
+                                </v-app-bar>
                             </v-col>
                         </v-row>
-
-                        VDataTable {{desserts.length}} items
-                        <v-row>
-                            <v-col cols="12">
-                                <v-data-table :items-per-page="25" :headers="headers" :items="desserts"
-                                    item-value="name" :search="search.searchText1" class="elevation-1">
-
-                                    <template v-slot:[`header.name`]="{ column }">
-                                        <div style="white-space: pre-wrap;">{{ column.title }}</div>
-                                    </template>
-
-                                    <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                        <v-icon color="green-darken-2">mdi-mushroom</v-icon>
-                                        <!--span v-html=column.title></span-->
-                                        {{ getTitle(column) }}
-                                        {{ column.title }}
-                                        <template v-if="isSorted(column)">
-                                            <v-icon :icon="getSortIcon(column)"></v-icon>
+                        <div v-if="search.userMode !== 'O'">
+                            <v-row>
+                                <v-col cols="12" sm="2">
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn block color="primary" v-bind="props" v-on:click="onBtnGetPackets">
+                                                LOAD DATA
+                                            </v-btn>
                                         </template>
-                                    </template>
+                                        <span>Load new data from ...</span>
+                                    </v-tooltip>
+                                </v-col>
 
-                                    <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
-                                        <v-icon color="green-darken-2">mdi-mushroom</v-icon>
-                                        {{ getTitle(column) }}
-                                        [{{ column.title }}]
-                                        <template v-if="isSorted(column)">
-                                            <v-icon :icon="getSortIcon(column)"></v-icon>
+                                <v-col cols="12" sm="8" md="8">
+                                    <v-select v-model="data.result.packet" :items="data.result.packets"
+                                        label="Select a data forom loaded list" required item-title1="sessionid"
+                                        item-value="sessionid">
+
+                                        <template v-slot:selection="{ item, index }">
+                                            Пакет # {{ item.raw.sessionid }} [{{ item.raw.count }}-{{ item.raw.manual
+                                            }}-{{
+                                            item.raw.differ }}] ({{ item.raw.date }})
                                         </template>
-                                    </template>
+
+                                        <template v-slot:item="{ props, item }">
+                                            <v-list-item v-bind="props" prepend-icon="mdi-alarm"
+                                                :title="`# ${item.raw.sessionid} [${item.raw.count}-${item.raw.manual}]`"
+                                                :subtitle="`${item.raw.count} (${item.raw.date})`">
+                                            </v-list-item>
+                                        </template>
+
+                                    </v-select>
+                                </v-col>
+
+                                <v-col cols="12" sm="2">
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn block color="primary" v-bind="props" v-on:click="onBtnGetDecs">
+                                                REFRESH
+                                            </v-btn>
+                                        </template>
+                                        <span>Refresh of loaded data if modified by another users </span>
+                                    </v-tooltip>
+                                </v-col>
+                            </v-row>
+
+                            VDataTable {{desserts.length}} items
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-data-table :items-per-page="25" :headers="headers" :items="desserts"
+                                        item-value="name" :search="search.searchText1" class="elevation-1">
+
+                                        <template v-slot:[`header.name`]="{ column }">
+                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                        </template>
+
+                                        <template
+                                            v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                            <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                            <!--span v-html=column.title></span-->
+                                            {{ getTitle(column) }}
+                                            {{ column.title }}
+                                            <template v-if="isSorted(column)">
+                                                <v-icon :icon="getSortIcon(column)"></v-icon>
+                                            </template>
+                                        </template>
+
+                                        <template
+                                            v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
+                                            <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                            {{ getTitle(column) }}
+                                            [{{ column.title }}]
+                                            <template v-if="isSorted(column)">
+                                                <v-icon :icon="getSortIcon(column)"></v-icon>
+                                            </template>
+                                        </template>
 
 
-                                    <template v-slot:item.name="{ item }">
-                                        <div style="white-space: pre-wrap;">{{ item.name }}</div>
-                                    </template>
-                                    <template v-slot:item.calories1="{ item }">
-                                        <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
-                                        </div>
-                                    </template>
+                                        <template v-slot:item.name="{ item }">
+                                            <div style="white-space: pre-wrap;">{{ item.name }}</div>
+                                        </template>
+                                        <template v-slot:item.calories1="{ item }">
+                                            <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
+                                            </div>
+                                        </template>
 
-                                    <template v-slot:item.calories="{ key, value, item }">
-                                        <div>
-                                            <v-chip :color="getDebtStatusIconColor(item)">
-                                            {{ value }}
-                                            </v-chip>
-                                        </div>                                        
-                                    </template>
+                                        <template v-slot:item.calories="{ key, value, item }">
+                                            <div>
+                                                <v-chip :color="getDebtStatusIconColor(item)">
+                                                    {{ value }}
+                                                </v-chip>
+                                            </div>
+                                        </template>
 
-                                    <template v-slot:item.actions="{ item }">
-                                        <v-btn class="mr-1" density="compact" color="blue" icon="mdi-alarm"></v-btn>
-                                        <v-btn class="mr-1" density="compact" :color="getDebtStatusIconColor(item)"
-                                            :icon="getDebtStatusIcon(item.fat)">
-                                        </v-btn>
-                                        <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"></v-btn>
-                                        <v-btn class="mr-1" density="comfortable" color="blue" @click="editItem(item)"
-                                            icon="mdi-pencil"></v-btn>
-                                        <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"></v-btn>
-                                    </template>
+                                        <template v-slot:item.actions="{ item }">
+                                            <v-btn class="mr-1" density="compact" color="blue" icon="mdi-alarm"></v-btn>
+                                            <v-btn class="mr-1" density="compact" :color="getDebtStatusIconColor(item)"
+                                                :icon="getDebtStatusIcon(item.fat)">
+                                            </v-btn>
+                                            <v-btn class="mr-1" density="comfortable" color="blue"
+                                                icon="mdi-file-document"></v-btn>
+                                            <v-btn class="mr-1" density="comfortable" color="blue"
+                                                @click="editItem(item)" icon="mdi-pencil"></v-btn>
+                                            <v-btn class="mr-1" density="comfortable" color="red"
+                                                icon="mdi-delete"></v-btn>
+                                        </template>
 
-                                    <!--
+                                        <!--
                                         <br>{{ column.title }}<br>
                                         Calories<br>new line
                                     -->
-                                    <!--template v-slot:header.name="{ header }">
+                                        <!--template v-slot:header.name="{ header }">
                                         <div style="white-space: pre-wrap;">{{ header.name }}</div>
                                     </template-->
-                                </v-data-table>
-                            </v-col>
-                        </v-row>
+                                    </v-data-table>
+                                </v-col>
+                            </v-row>
 
-                        <v-row>
-                            <v-col cols="12">
-                                <v-card>
-                                    <v-card-text>
-                                        The navigation drawer will appear from the bottom on smaller
-                                        size screens. {{drawerMain}}</br>
-                                        search.searchText1={{search.searchText1}}</br>
-                                        search.searchText2={{search.searchText2}}</br>
-                                        search.selectedDateFrom='{{search.selectedDateFrom}}'</br>
-                                        search.selectedDateFromFull='{{search.selectedDateFromFull}}'</br>
-                                        search.selectedDateInto='{{search.selectedDateInto}}'</br>
-                                        desserts.length='{{desserts.length}}'
-                                    </v-card-text>
-                                </v-card>
-                            </v-col>
-                        </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-card>
+                                        <v-card-text>
+                                            The navigation drawer will appear from the bottom on smaller
+                                            size screens. {{drawerMain}}</br>
+                                            search.searchText1={{search.searchText1}}</br>
+                                            search.searchText2={{search.searchText2}}</br>
+                                            search.selectedDateFrom='{{search.selectedDateFrom}}'</br>
+                                            search.selectedDateFromFull='{{search.selectedDateFromFull}}'</br>
+                                            search.selectedDateInto='{{search.selectedDateInto}}'</br>
+                                            desserts.length='{{desserts.length}}'
+                                        </v-card-text>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
 
-                    </div>
-                </v-container>
-            </v-main>
+                        </div>
+                    </v-container>
+                </v-main>
             </v-layout>
             <v-dialog v-model="dialogEditItem" max-width="500px">
                 <template v-slot:activator="{ props }">
@@ -389,7 +393,7 @@
                                 </v-col>
                             </v-row>
                             <v-row>
-                                    <v-col cols="12" md="4" sm="6">
+                                <v-col cols="12" md="4" sm="6">
                                     <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="4" sm="6">
