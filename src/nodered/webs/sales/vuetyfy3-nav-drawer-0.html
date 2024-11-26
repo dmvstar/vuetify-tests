@@ -20,7 +20,7 @@
                 <v-app-bar color="primary" prominent>
                     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-                    <v-toolbar-title>My files</v-toolbar-title>
+                    <v-toolbar-title>Drawer example</v-toolbar-title>
 
                     <v-spacer></v-spacer>
 
@@ -33,9 +33,17 @@
                     <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
                 </v-app-bar>
 
-                <v-navigation-drawer v-model="drawer">
-                    <v-btn block>LOAD</v-btn>
+                <v-navigation-drawer temporary  v-model="drawer">
+                    User</br>
+                    <v-list>
+                        <v-list-item :prepend-avatar="faceIdUrl" 
+                            :subtitle="getGeneratedEmailAddress()"
+                            :title="getGeneratedName()">
+                        </v-list-item>
+                    </v-list>
+                    <v-btn  color="green" block>LOAD</v-btn>
                     <v-list :items="items"></v-list>
+                    <v-btn  color="primary" block>LOGOUT</v-btn>
                 </v-navigation-drawer>
 
                 <v-main style="height: 500px;">
@@ -62,6 +70,13 @@
         const app = createApp({
             template: "#app-template",
             setup() {
+                const faceId = 10;
+                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
+
+                const usersList = {
+                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                };
                 var drawer = Vue.ref(false);
                 var group = Vue.ref(null);
                 var items = Vue.ref([
@@ -84,13 +99,20 @@
                 ]);
 
                 return {
+                    faceId,
+                    faceIdUrl,
+
                     drawer,
                     group,
                     items
+                    , usersList
                 }
             },
             created() {
-
+                console.log(version);
+                var faceId = Math.floor(10 + Math.random() * 90);
+                this.faceId = faceId;
+                this.faceIdUrl = `https://randomuser.me/api/portraits/men/${faceId}.jpg`;
             },
             mounted() {
 
@@ -99,6 +121,40 @@
 
             },
             methods: {
+
+                getGeneratedEmailAddress() {
+                    var ret = "awataros.pedros@gmail.com";
+                    if (this.usersList.firstName && this.usersList.lastName) {
+                        ret = `${this.usersList.firstName.toLowerCase()}.${this.usersList.lastName.toLowerCase()}@gmail.com`
+                    };
+                    return ret;
+                },
+
+                getGeneratedName() {
+                    var ret = "Awataros Pedros"
+                    if (this.usersList.firstName && this.usersList.lastName) {
+                        ret = `${this.usersList.firstName} ${this.usersList.lastName}`
+                    };
+                    return ret;
+                },
+                generateName() {
+                    var firstNames = this.usersList.firstNames;
+                    var lastNames = this.usersList.lastNames;
+
+                    var ret = "Awataros Pedros"
+                    var min = 0, max;
+                    max = firstNames.length - 1;
+                    var firstIndex = Math.floor(Math.random() * (max - min + 1) + min);
+                    max = lastNames.length - 1;
+                    var lastIndex = Math.floor(Math.random() * (max - min + 1) + min);
+
+                    this.usersList.firstName = firstNames[firstIndex];
+                    this.usersList.lastName = lastNames[firstIndex];
+                    ret = `${firstNames[firstIndex]} ${lastNames[lastIndex]}`;
+
+                    console.log('generateName', firstIndex, lastIndex, ret);
+                    return ret;
+                },                
 
             }
         })
