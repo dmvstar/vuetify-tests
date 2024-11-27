@@ -14,26 +14,69 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
     <!--script src="https://unpkg.com/vue-json-pretty@2.3.0/lib/vue-json-pretty.js"></script-->
-    <script src=" https://cdn.jsdelivr.net/npm/vue-json-pretty@2.3.0/lib/vue-json-pretty.min.js "></script>
+    <script src=" https://cdn.jsdelivr.net/npm/vue-json-pretty@2.4.0/lib/vue-json-pretty.min.js "></script>
 
 
-    <div id="app">
-    </div>
+    <div id="app"></div>
     <template id="app-template">
         <!--script type="text/x-template" id="app-template"-->
         <v-app>
             <v-main>
                 <v-container class="fill-width" fluid style="margin: 0px; padding: 10px; width: 100%">
-                    <v-row align="start" justify="center">
+                    <v-textarea label="Label"
+                        model-value='{
+                            "status": 200,
+                            "text": "",
+                            "error": null,
+                            "data": [
+                                {
+                                    "news_id": 51184,
+                                    "title": "iPhone X Review: Innovative future with real black technology",
+                                    "source": "Netease phone"
+                                },
+                                {
+                                    "news_id": 51183,
+                                    "title": "Traffic paradise: How to design streets for people and unmanned vehicles in the future?",
+                                    "source": "Netease smart",
+                                    "link": "http://netease.smart/traffic-paradise/1235"
+                                },
+                                {
+                                    "news_id": 51182,
+                                    "title": "Teslamasks American Business Relations: The government does not pay billions to build factories",
+                                    "source": "AI Finance",
+                                    "members": [
+                                        "Daniel",
+                                        "Mike",
+                                        "John"
+                                    ]
+                                }
+                            ]
+                        }'
+                    >
+                    </v-textarea>
+
+                    <vue-json-pretty :data="{ key: 'value' }">
+                    </vue-json-pretty>
+
+
+
+                    <!--v-row align="start" justify="center">
                         <v-col cols="12" sm="12" md="12">
-                            <template>
-                                <div>
+                            2222
                                     <vue-json-pretty :data="{ key: 'value' }">
                                     </vue-json-pretty>
+
+                            <template>
+                                3333
+                                <div>
+                                    123
+                                    <vue-json-pretty :data="{ key: 'value' }">
+                                    </vue-json-pretty>
+                                    123
                                 </div>
                             </template>
                         </v-col>
-                    </v-row>
+                    </v-row-->
                 </v-container>
             </v-main>
         </v-app>
@@ -41,13 +84,15 @@
 
 
     <script setup>
-        const { createApp, ref, defineProps, reactive } = Vue
-        const { createVuetify } = Vuetify
-        const { jsonPretty } = VueJsonPretty
+        const { createApp, ref, defineProps, reactive } = Vue;
+        const { createVuetify, version } = Vuetify;
+        const { jsonPretty } = VueJsonPretty;
         const vuetify = createVuetify({
+            /*
             theme: {
                 defaultTheme: 'dark'
             },
+            */
             defaults: {
                 VSelect: {
                     density: "compact",
@@ -59,7 +104,18 @@
         });
         const app = createApp({
             template: "#app-template",
-            components: [VueJsonPretty],
+            //components: [VueJsonPretty],
+            components: {VueJsonPretty},
+            created() {
+                console.log(version);
+                console.log(VueJsonPretty);
+                var faceId = Math.floor(10 + Math.random() * 90);
+                this.faceId = faceId;
+                this.faceIdUrl = `https://randomuser.me/api/portraits/men/${faceId}.jpg`;
+            },
+            mounted() {
+
+            },
         })
             .component('vue-json-pretty', VueJsonPretty)
             .use(vuetify)
