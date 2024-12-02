@@ -1,0 +1,4 @@
+
+I'm having trouble integrating vue-leaflet into my Vue 3 project.
+After adding the library, I'm encountering an error and the map element is not appearing.
+
