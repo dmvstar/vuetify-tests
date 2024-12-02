@@ -33,16 +33,16 @@
                     <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
                 </v-app-bar>
 
-                <!-- 
-                temporary  
+                <!--
+                temporary
                 -->
-                <v-navigation-drawer 
+                <v-navigation-drawer
                     expand-on-hover
-                    rail                    
+                    rail
                     v-model="drawer">
-                    
+
                     <v-list>
-                        <v-list-item :prepend-avatar="faceIdUrl" 
+                        <v-list-item :prepend-avatar="faceIdUrl"
                             :subtitle="getGeneratedEmailAddress()"
                             :title="getGeneratedName()">
                         </v-list-item>
@@ -53,6 +53,8 @@
                         <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me" value="shared"></v-list-item>
                         <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
                         <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
+                        <v-select density="compact" nav prepend-icon="mdi-account-check">
+                        </v-select>
                     </v-list>
 
                     <!--v-btn  color="green" block>LOAD</v-btn>
@@ -170,7 +172,7 @@
 
                     console.log('generateName', firstIndex, lastIndex, ret);
                     return ret;
-                },                
+                },
 
             }
         })
