@@ -1,6 +1,12 @@
+/**
+ * @WHAT Transform data for Digital from procedure 
+ * @WHERE
+ * @VERSION 
+ * @DATE 2024-12-11 15:23:12
+ */
 //------------------------------------------------
-    //Date manipulation package
-    //adds a leading zero to number < 10
+//Date manipulation package
+//adds a leading zero to number < 10
 function addZero(number) {
     if (number < 10) {
         return '0' + number;
@@ -18,8 +24,8 @@ function addTwoZero(number) {
         return number;
     }
 }
-    //equivalent of toISOString() but for local time
-    //returns "YYYY-MM-DDTHH:MM:SS.sss"
+//equivalent of toISOString() but for local time
+//returns "YYYY-MM-DDTHH:MM:SS.sss"
 //@ts-ignore
 Date.prototype.toLocalString = function () {
     const year = this.getFullYear();
@@ -72,7 +78,7 @@ for (let i = 0; i <  input.length; i++) {
     client.namelat          = input[i]['Client.NameLAT'];
     client.scroogeId        = input[i]['Client.ScroogeId'];
     client.scroogeCode      = input[i]['Client.ScroogeCode'];
-    client.birtday         = input[i]['Client.BirtDay'].toLocalString();
+    client.birtday          = input[i]['Client.BirtDay'].toLocalString();
     client.birthSurname     = input[i]['Client.BirthSurname'];
     client.gender           = input[i]['Client.Gender'];
     client.marriageStatus   = input[i]['Client.MarriageStatus'];
@@ -82,13 +88,13 @@ for (let i = 0; i <  input.length; i++) {
     
     client.identCode = input[i]['Client.IdentCode'] == null ? 6 : input[i]['Client.IdentCode'];
     client.identName        = input[i]['Client.IdentDesc'];
-    client.lastName        = input[i]['Client.LastName'];
+    client.lastName         = input[i]['Client.LastName'];
     client.firstName        = input[i]['Client.FirstName'];
-    client.fatherName        = input[i]['Client.FatherName'];
+    client.fatherName       = input[i]['Client.FatherName'];
     
        client.clientType        = input[i]['Client.Type']=="FIZSPD"?"FOP":input[i]['Client.Type'];
-       client.smStateCode        = input[i]['client.Stan'];
-       client.cliResidencyFlag  = input[i]['client.clresident']=="rez"?1:0;
+       client.smStateCode       = input[i]['client.Stan'];
+       client.cliResidencyFlag   = input[i]['client.clresident']=="rez"?1:0;
     
     var address = {};
     address.typeId          = input[i]['Address.Type'];
@@ -126,10 +132,48 @@ for (let i = 0; i <  input.length; i++) {
         }
     }
 }
+
 msg.time = [];
 
-msg.payload = output.filter(x => x.clientType !== "FOP");
+// 2024-12-11 14:49:44 kula do reident v.2 #3
+var clientCheckListFIZ = output.filter(x => x.clientType == "FIZ");
+var clientCheckListFOP = output.filter(x => x.clientType == "FOP");
 
+var clientCheckList = [];
+var workMode = "FIZ"; // FIZ FOP 
+
+// 1 Have One FIZ && Zero FOP 
+if(clientCheckListFIZ.length > 0  && clientCheckListFOP == 0){
+    clientCheckList = clientCheckListFIZ;
+    workMode = "FIZ";
+}
+
+// 2 Have One FOP && Zero FIZ 
+if(clientCheckListFIZ.length == 0 && clientCheckListFOP >  0){
+    clientCheckList = clientCheckListFOP;
+    workMode = "FOP";
+}
+
+// 3 Have FIZ && FOP
+if(clientCheckListFIZ.length >  0 && clientCheckListFOP >  0){
+    clientCheckList = clientCheckListFIZ;
+    workMode = "FIZ";
+}
+
+// 4 Have Many FIZ -> find ONE isMain == true && isVerified == true
+if(clientCheckList.length > 1 && workMode == "FIZ"){
+    if(clientCheckList.filter(x => x.isMain == true && x.isVerified == true) == 1) {
+        clientCheckList = clientCheckList.filter(x => x.isMain == true && x.isVerified == true);
+    }
+}
+// 5 clientCheckList.length > 1 -> to reident by digitals
+
+msg.payload = clientCheckList;
+
+// 2024-12-09 14:40:57 kula do reident v.2 #1
+//msg.payload = output.filter(x => x.clientType !== "FOP");
+
+// 2024-12-10 14:40:57 kula do reident v.2 #2
 const map = {
     "NEED_UPDATE": "COMPLETE_CLIENT",
     "READY_CLIENT": "COMPLETE_CLIENT",
@@ -143,4 +187,5 @@ for (let client of msg.payload) {
 for (let client of msg.payload){
     msg.time.push(client.birtday)
 }
+
 return msg;
