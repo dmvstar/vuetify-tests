@@ -1,7 +1,7 @@
 /**
  * @WHAT Transform data for Digital from procedure 
- * @WHERE
- * @VERSION 
+ * @WHERE src/nodered/dija/reident2/findPrepareReply-v.11.js
+ * @VERSION v.0.0.11
  * @DATE 2024-12-11 15:23:12
  */
 //------------------------------------------------
@@ -14,7 +14,7 @@ function addZero(number) {
         return number;
     }
 }
-    //adds up to 2 leading zeros to number < 100
+//adds up to 2 leading zeros to number < 100
 function addTwoZero(number) {
     if (number < 10) {
         return '00' + number;
@@ -65,6 +65,8 @@ function indexOfDocument(client, documentTypeCode) {
     return -1;
 }
 
+context.set("counter", 1*(context.get("counter")||0)+1);
+node.status({fill:"blue", shape:"dot", text: context.get("counter")});
 
 
 var input = msg.payload;
@@ -143,26 +145,26 @@ var clientCheckList = [];
 var workMode = "FIZ"; // FIZ FOP 
 
 // 1 Have One FIZ && Zero FOP 
-if(clientCheckListFIZ.length > 0  && clientCheckListFOP == 0){
+if (clientCheckListFIZ.length > 0 && clientCheckListFOP.length == 0){
     clientCheckList = clientCheckListFIZ;
     workMode = "FIZ";
 }
 
 // 2 Have One FOP && Zero FIZ 
-if(clientCheckListFIZ.length == 0 && clientCheckListFOP >  0){
+if (clientCheckListFIZ.length == 0 && clientCheckListFOP.length >  0){
     clientCheckList = clientCheckListFOP;
     workMode = "FOP";
 }
 
 // 3 Have FIZ && FOP
-if(clientCheckListFIZ.length >  0 && clientCheckListFOP >  0){
+if (clientCheckListFIZ.length > 0 && clientCheckListFOP.length >  0){
     clientCheckList = clientCheckListFIZ;
     workMode = "FIZ";
 }
 
 // 4 Have Many FIZ -> find ONE isMain == true && isVerified == true
 if(clientCheckList.length > 1 && workMode == "FIZ"){
-    if(clientCheckList.filter(x => x.isMain == true && x.isVerified == true) == 1) {
+    if (clientCheckList.filter(x => x.isMain == true && x.isVerified == true ).length == 1) {
         clientCheckList = clientCheckList.filter(x => x.isMain == true && x.isVerified == true);
     }
 }
