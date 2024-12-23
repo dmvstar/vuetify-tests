@@ -18,6 +18,39 @@ https://vuejs.org/guide/components/registration.html#global-registration
 <head>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
+  <style>
+    .selected {
+      background-color: red
+    }
+    tr.v-data-table__selected {
+      background: #7d92f5 !important;
+    }
+  </style>
+
+  <style>
+    .theme--light.v-data-table tbody tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, .03);
+    }
+    .theme--dark.v-data-table tbody tr:nth-of-type(even) {
+        background-color: rgba(0, 0, 0, .5);
+    }
+    .theme--light.v-data-table tbody tr.v-data-table__selected {
+        background: #f5c17d70 !important;
+    }
+    .theme--dark.v-data-table tbody tr.v-data-table__selected {
+        background: #a17b4970 !important;
+    }
+    .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
+        background: #a17b49c2 !important;
+    }
+    .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
+        background: #ffd296d2 !important;
+    }
+    .spacer {
+      margin-top: 3em;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -58,10 +91,20 @@ https://vuejs.org/guide/components/registration.html#global-registration
         </v-card>
 
             <v-data-table
+              show-select
+              v-model="selected_desserts"
+              
+              item-key="name"
+              item-value="name"
+
+              @click:row="handleClick"
+              
               :headers="headers"
               :items="desserts"
               :items-per-page=50
               :sort-by="[{ key: 'calories', order: 'asc' }]"
+              
+
             >
             <template v-slot:header.calories="{ column, isSorted, getSortIcon, toggleSort }">
                 <v-icon color="green-darken-2">mdi-mushroom</v-icon>
@@ -274,6 +317,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
           { title: "Actions", key: "actions", sortable: false },
         ]);
         var items = Vue.ref([]);
+        var selected_desserts = Vue.ref([]);
         var desserts = Vue.ref([]);
         var editedIndex = Vue.ref(-1);
         var editedItem = Vue.ref({
@@ -301,6 +345,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
           headers,
           items,
           desserts,
+          selected_desserts,
           listItems,
         };
       },
@@ -396,6 +441,23 @@ https://vuejs.org/guide/components/registration.html#global-registration
           else if (calories > 50) return "orange";
           else return "green";
         },
+        //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
+        //https://codepen.io/Hexodus/pen/ExKGWBe
+        handleClick(event, row) {
+          console.log("Clicked event: ", event);
+          console.log("Clicked item: ", row.item);
+          //this.highlightClickedRow(event);
+          //event.select(true);
+          let selectState = (row.isSelected) ? false : true;
+          console.log("selectState: ", selectState);
+          //row.select(selectState);
+        },
+        
+        highlightClickedRow(event) {
+          const tr = event.target.parentNode;
+          tr.classList.add('highlight');
+        },
+
       },
     })
       .use(vuetify)
