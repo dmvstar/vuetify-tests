@@ -18,6 +18,16 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
         .leaflet-default-icon-path {
             background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png);
         }
+        .leaflet-control-layers-toggle {
+            background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/layers.png);
+            width: 36px;
+            height: 36px;
+        }
+        .leaflet-retina .leaflet-control-layers-toggle {
+	        background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/layers-2x.png);
+	        background-size: 26px 26px;
+	    }
+
     </style>
 </head>
 
@@ -68,6 +78,9 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
 
         const app = createApp({
             template: "#app-template",
+            components:{
+                LMap
+            },
             setup() {
                 const title = Vue.ref("Vuetify 3.0 leaflet");
                 const verInfo = Vue.ref("ver. 0.0.5");
@@ -99,7 +112,7 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
         })
             .use(vuetify)
             .use(leaflet)
-            .component('l-map', LMap)
+            //.component('l-map', LMap)
             .mount("#app");
     </script>
 </body>
