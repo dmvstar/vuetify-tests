@@ -14,6 +14,11 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        .leaflet-default-icon-path {
+            background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png);
+        }
+    </style>
 </head>
 
 <body>
@@ -22,11 +27,13 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
+    <script>
+        //import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
+    </script>
 
     <script type="text/x-template" id="app-template">
         <v-app>
-            <v-app-bar title="App bar"></v-app-bar>            
-
+            <v-app-bar title="App bar"></v-app-bar>
               <v-main>
                 <v-container>
                   <h1>Main Content</h1>
@@ -35,11 +42,11 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
                         <v-col cols="12" md="4" sm="6">
                           <v-btn color="indigo-darken-3" size="x-large" block>Button</v-btn>
                         </v-col>
-                    </v-row>    
+                    </v-row>
                   </div>
                   <div style="height:600px; width:800px; border:thin; align:center">
                     Map Top
-                    <l-map>
+                    <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
                     </l-map>
                     Map End
                   </div>
@@ -48,13 +55,15 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
                 </v-container>
               </v-main>
         </v-app>
-        </script>
+    </script>
 
     <script setup>
+
         const { createApp, ref, reactive, defineProps } = Vue;
         const { createVuetify, useTheme, version } = Vuetify;
         const { LMap, LTileLayer } = window['vue-leaflet'];
-        const vuetify = createVuetify({          
+        //const { LMap, LTileLayer } = 'vue-leaflet';
+        const vuetify = createVuetify({
         });
 
         const app = createApp({
@@ -62,16 +71,19 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
             setup() {
                 const title = Vue.ref("Vuetify 3.0 leaflet");
                 const verInfo = Vue.ref("ver. 0.0.5");
+                var zoom = Vue.ref(2);
                 //const theme = useTheme();
                 return {
                     title,
                     verInfo,
+                    zoom,
                 };
             },
 
             created() {
                 console.log("verInfo: ", this.verInfo);
                 console.log("leaflet: ", leaflet);
+                console.log("LMap: ", LMap);
                 this.initialize();
             },
 
@@ -85,8 +97,9 @@ https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=50.4875898966091&l
                 },
             },
         })
-            .component('l-map', LMap)
             .use(vuetify)
+            .use(leaflet)
+            .component('l-map', LMap)
             .mount("#app");
     </script>
 </body>
