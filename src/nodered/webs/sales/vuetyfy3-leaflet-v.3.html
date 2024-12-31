@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/vue@3.2.33/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+
+<div id="app">
+    <h1>Interactive Map with Image Tiles</h1>
+
+    <div style="height:600px; width:800px">
+        <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]" style="height:100%; width:100%;">
+            <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
+                name="OpenStreetMap"></l-tile-layer>
+        </l-map>
+    </div>
+</div>
+
+
+<script type="module">
+    import * as vueLeafletvueLeaflet from 'https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/+esm'
+    const { LMap, LTileLayer } = vueLeafletvueLeaflet
+
+    const app = Vue.createApp({
+        components: {
+            LMap,
+            LTileLayer
+        },
+        data() {
+            return {
+                zoom: 2,
+            }
+        },
+        computed: {
+        },
+        methods: {
+        },
+        mounted() {
+        }
+    })
+    app.mount('#app')
+</script>
+
+</body>
+
+
+</html>
