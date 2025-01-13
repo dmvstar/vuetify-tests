@@ -68,8 +68,12 @@
     -->
     <script src="https://cdn.jsdelivr.net/npm/vue-sonner@1.3.0/lib/vue-sonner.min.js "></script>
 
+
+    <script src="https://unpkg.com/@chenfengyuan/vue-qrcode@1.0.1/dist/vue-qrcode.min.js"></script>
+    <!--script>Vue.component(VueQrcode.name, VueQrcode);</script-->
+
     <script lang="ts" setup>
-        import { Toaster, toast } from 'vue-sonner'
+        //import{ Toaster, toast } from 'vue-sonner'
     </script>
 
     <div id="app">
@@ -397,6 +401,7 @@
                                             search.selectedDateInto='{{search.selectedDateInto}}'</br>
                                             desserts.length='{{desserts.length}}'
                                         </v-card-text>
+                                        <!--qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></qrcode-->
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -919,7 +924,7 @@
                     ret = "mdi-account";
                     let item = this.dicts.debtStatus.find(x => x.status === ("" + debtstatus));
                     if (item !== undefined) ret = item.icon;
-                    console.log("[getDebtStatusIcon]", ret);
+                    //console.log("[getDebtStatusIcon]", ret);
                     return ret;
                 },
 
@@ -931,7 +936,7 @@
 
 
                 getDebtStatusIconColor(item) {
-                    console.log("[getDebtStatusIconColor]", item);
+                    //console.log("[getDebtStatusIconColor]", item);
                     ret = "green";
                     if (item.calories > 200 && item.calories < 300) {
                         ret = "yellow";
@@ -942,7 +947,7 @@
                     if (item.calories > 400) {
                         ret = "red";
                     }
-                    console.log("[getDebtStatusIconColor]", ret);
+                    //console.log("[getDebtStatusIconColor]", ret);
                     return ret;
                 },
 
@@ -1114,8 +1119,9 @@
                 }
             },
         })
-            .use(vuetify)
-            .mount("#app");
+        .use(vuetify)            
+        .component(VueQrcode.name, VueQrcode)
+        .mount("#app");
     </script>
 </body>
 
