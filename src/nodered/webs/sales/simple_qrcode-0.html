@@ -1,0 +1,67 @@
+
+
+
+
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+<script src="https://unpkg.com/@chenfengyuan/vue-qrcode@1.0.1/dist/vue-qrcode.min.js"></script>
+<script>Vue.component(VueQrcode.name, VueQrcode);</script>
+<script type="module"> 
+  import vueSonner from 'https://cdn.jsdelivr.net/npm/vue-sonner@1.3.0/+esm' 
+</script>
+</head>
+
+
+<body>
+
+<div id="app">
+
+  <template>
+    <v-app>
+      <v-container>
+        <v-dialog v-model="showDialog">
+          <qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></qrcode>
+          <v-btn @click="toggleAlert">Click for Alert</v-btn>
+        </v-dialog>
+        <v-alert v-model="showAlert">I am the alert</v-alert>
+      </v-container>
+    </v-app>
+  </template>  
+
+</div>
+
+<!--div id="app1">
+      <h1>{{ msg }}</h1>
+      <qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></qrcode>
+      <VBtn @click="toast('My first toast')">
+        Give me a toast
+      </VBtn>
+</div-->
+
+<script setup lang="ts">
+  import { VSonner, toast } from 'vuetify-sonner'
+  // Required for snackbar background and text color
+  import 'vuetify-sonner/style.css'
+</script>
+
+<script setup>
+  import { ref } from 'vue'
+  const msg = ref('Hello World!')
+  const showDialog = ref(true)
+  const showAlert = ref(false)
+  const toggleAlert = () => {
+    showAlert.value = !showAlert.value
+  }
+</script>
+
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      msg: "Vue js Hello World - Your First Vue.js App"
+    }
+  });
+</script>
+
+<body>
+  
