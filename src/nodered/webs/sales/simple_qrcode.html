@@ -2,17 +2,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
 <script src="https://unpkg.com/@chenfengyuan/vue-qrcode@1.0.1/dist/vue-qrcode.min.js"></script>
 <script>Vue.component(VueQrcode.name, VueQrcode);</script>
+<script type="module"> 
+  import vueSonner from 'https://cdn.jsdelivr.net/npm/vue-sonner@1.3.0/+esm' 
+</script>
 </head>
 
 
 
 <body>
+
+
 <div id="app">
       <h1>{{ msg }}</h1>
       <qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></qrcode>
+      <VBtn @click="toast('My first toast')">
+        Give me a toast
+      </VBtn>
 </div>
 
-
+<script setup lang="ts">
+  import { VSonner, toast } from 'vuetify-sonner'
+  // Required for snackbar background and text color
+  import 'vuetify-sonner/style.css'
+</script>
 
 <script>
   new Vue({
