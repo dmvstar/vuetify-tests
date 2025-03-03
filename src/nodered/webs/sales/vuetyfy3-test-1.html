@@ -82,11 +82,16 @@ https://vuejs.org/guide/components/registration.html#global-registration
             {{verInfo}}
           </v-card-text>
           <v-card-text>
-            <v-select
+            <v-select            
             :items="listItems"
+            v-model="workModes.loadMode"
             density="compact"
-            label="Compact"
-          ></v-select>
+            label="Mode"
+          >
+          <template #append>
+            <v-btn icon="mdi-briefcase-download"></v-btn>
+          </template>
+          </v-select>
           </v-card-text>
         </v-card>
 
@@ -300,6 +305,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
         const verInfo = Vue.ref("ver. 0.0.1");
         const theme = useTheme();
 
+        var workModes = Vue.ref(
+          {
+            loadMode : "ASWP"
+          }
+        ); 
+        
+
         var dialog = Vue.ref(false);
         var dialogDelete = Vue.ref(false);
 
@@ -335,9 +347,10 @@ https://vuejs.org/guide/components/registration.html#global-registration
           protein: 0,
         });
 
-        var listItems = ['Foo', 'Bar', 'Fizz', 'Buzz'];
+        var listItems = ['ASWP', 'ACCS', 'NONE' ];
 
         return {
+          workModes,
           title,
           verInfo,
           dialog,
