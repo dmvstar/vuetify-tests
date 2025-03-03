@@ -89,7 +89,11 @@ https://vuejs.org/guide/components/registration.html#global-registration
             label="Mode"
           >
           <template #append>
-            <v-btn icon="mdi-briefcase-download"></v-btn>
+            <v-btn id="goGetDecs" icon="mdi-briefcase-download" @click="goGetDecsBySelect" >
+              <template v-slot:default>
+                <v-icon color="success"></v-icon>
+              </template>
+            </v-btn>
           </template>
           </v-select>
           </v-card-text>
@@ -465,6 +469,10 @@ https://vuejs.org/guide/components/registration.html#global-registration
           console.log("selectState: ", selectState);
           //row.select(selectState);
         },
+
+        goGetDecsBySelect(event) {
+          alert(this.workModes.loadMode);
+        },          
         
         highlightClickedRow(event) {
           const tr = event.target.parentNode;
