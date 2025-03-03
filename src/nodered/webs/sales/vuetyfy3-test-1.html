@@ -89,11 +89,19 @@ https://vuejs.org/guide/components/registration.html#global-registration
             label="Mode"
           >
           <template #append>
-            <v-btn id="goGetDecs" icon="mdi-briefcase-download" @click="goGetDecsBySelect" >
-              <template v-slot:default>
-                <v-icon color="success"></v-icon>
+            <v-tooltip text1="Get a new DECS for  {{ workModes.loadMode }}">
+              <template v-slot:activator="{ props }">
+                <v-btn id="ID_goGetDecsBySelect"  v-bind="props" icon="mdi-briefcase-download" @click="goGetDecsBySelect" >
+                  <template v-slot:default>
+                    <v-icon color="success"></v-icon>
+                  </template>
+                </v-btn>
               </template>
-            </v-btn>
+              <span>Get a new DECS for {{ workModes.loadMode }} apps.</span>
+          </v-tooltip>
+
+
+
           </template>
           </v-select>
           </v-card-text>
@@ -306,7 +314,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
       setup() {
         const title = Vue.ref("Vuetify 3.0");
-        const verInfo = Vue.ref("ver. 0.0.1");
+        const verInfo = Vue.ref("ver. 0.0.2");
         const theme = useTheme();
 
         var workModes = Vue.ref(
@@ -480,6 +488,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
         },
 
       },
+    
     })
       .use(vuetify)
       .mount("#app");
