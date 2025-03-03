@@ -69,6 +69,23 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
   <script type="text/x-template" id="app-template">
       <v-app>
+        <v-snackbar
+          :timeout="2000"
+          class="elevation-24"
+          color="primary"          
+          v-model="workModes.snackbar">Get a new DECS for  {{ workModes.loadMode }} apps.
+        <template v-slot:actions>
+        <v-btn
+          color="black"
+          variant="tonal"
+          @click="workModes.snackbar = false; workModes.loading = false"
+        >
+          Close
+        </v-btn>
+      </template>
+      </v-snackbar>
+
+      
 
         <v-card
           class="mx-auto"
@@ -91,16 +108,21 @@ https://vuejs.org/guide/components/registration.html#global-registration
           <template #append>
             <v-tooltip text1="Get a new DECS for  {{ workModes.loadMode }}">
               <template v-slot:activator="{ props }">
-                <v-btn id="ID_goGetDecsBySelect"  v-bind="props" icon="mdi-briefcase-download" @click="goGetDecsBySelect" >
+                <v-btn 
+                  id="ID_goGetDecsBySelect"  
+                  :disabled="workModes.loading"
+                  variant="tonal"
+                  rounded="sm" size="x-large"
+                  v-bind="props" 
+                  icon="mdi-briefcase-download" 
+                  @click="goGetDecsBySelect">
                   <template v-slot:default>
                     <v-icon color="success"></v-icon>
-                  </template>
+                  </template>                  
                 </v-btn>
               </template>
               <span>Get a new DECS for {{ workModes.loadMode }} apps.</span>
           </v-tooltip>
-
-
 
           </template>
           </v-select>
@@ -319,7 +341,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
         var workModes = Vue.ref(
           {
-            loadMode : "ASWP"
+            loadMode : "ASWP",
+            loading : false,
+            snackbar: false
           }
         ); 
         
@@ -377,6 +401,14 @@ https://vuejs.org/guide/components/registration.html#global-registration
       created() {
         console.log("verInfo: ", this.verInfo);
         this.initialize();
+      },
+
+      watch:{
+        "workModes.snackbar"(value){
+            if(value === false){
+              this.workModes.loading = false;            
+          }
+        }
       },
 
       methods: {
@@ -479,7 +511,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
         },
 
         goGetDecsBySelect(event) {
-          alert(this.workModes.loadMode);
+          this.workModes.snackbar = true;
+          this.workModes.loading = true;
+          //alert(this.workModes.loadMode);
         },          
         
         highlightClickedRow(event) {
