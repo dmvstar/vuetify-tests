@@ -70,15 +70,15 @@ https://vuejs.org/guide/components/registration.html#global-registration
   <script type="text/x-template" id="app-template">
       <v-app>
         <v-snackbar
-          :timeout="2000"
+          :timeout=snackBar.timeout
           class="elevation-24"
           color="primary"          
-          v-model="workModes.snackbar">Get a new DECS for  {{ workModes.loadMode }} apps.
+          v-model="snackBar.snackbar">{{ snackBar.title }}
         <template v-slot:actions>
         <v-btn
           color="black"
           variant="tonal"
-          @click="workModes.snackbar = false; workModes.loading = false"
+          @click="snackBar.snackbar = false; workModes.loading = false"
         >
           Close
         </v-btn>
@@ -342,8 +342,14 @@ https://vuejs.org/guide/components/registration.html#global-registration
         var workModes = Vue.ref(
           {
             loadMode : "ASWP",
-            loading : false,
-            snackbar: false
+            loading : false
+          }
+        ); 
+        var snackBar = Vue.ref(
+          {
+            snackbar: false,
+            title : "Get a new DECS for ...",
+            timeout : 2000
           }
         ); 
         
@@ -386,6 +392,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
         var listItems = ['ASWP', 'ACCS', 'NONE' ];
 
         return {
+          snackBar,
           workModes,
           title,
           verInfo,
@@ -406,7 +413,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
       watch:{
         "workModes.snackbar"(value){
             if(value === false){
-              this.workModes.loading = false;            
+              //this.workModes.loading = false;            
           }
         }
       },
@@ -510,9 +517,18 @@ https://vuejs.org/guide/components/registration.html#global-registration
           //row.select(selectState);
         },
 
-        goGetDecsBySelect(event) {
-          this.workModes.snackbar = true;
+        goGetDecsBySelect(event) {          
+          this.snackBar.snackbar = true;
           this.workModes.loading = true;
+          this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
+          this.snackBar.timeout = 3000;
+          setTimeout(()=>{
+            this.workModes.loading = false;
+            this.snackBar.snackbar = true;
+            this.snackBar.title = `Loading new DECS for ${this.workModes.loadMode} apps complete.`;
+            this.snackBar.timeout = 3000;
+          }, 5000);
+          //setTimeout(function () { console.log("Howdy!"); this.workModes.loading = false; }, 7000);
           //alert(this.workModes.loadMode);
         },          
         
