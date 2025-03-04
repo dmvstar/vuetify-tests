@@ -11,68 +11,77 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
 -->
 
-
 <!DOCTYPE html>
 <html>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .selected {
+        background-color: red;
+      }
 
-<head>
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
-  <style>
-    .selected {
-      background-color: red
-    }
-    tr.v-data-table__selected {
-      background: #7d92f5 !important;
-    }
-  </style>
+      tr.v-data-table__selected {
+        background: #7d92f5 !important;
+      }
+    </style>
 
-  <style>
-    .theme--light.v-data-table tbody tr:nth-of-type(even) {
-    background-color: rgba(0, 0, 0, .03);
-    }
-    .theme--dark.v-data-table tbody tr:nth-of-type(even) {
-        background-color: rgba(0, 0, 0, .5);
-    }
-    .theme--light.v-data-table tbody tr.v-data-table__selected {
+    <style>
+      .theme--light.v-data-table tbody tr:nth-of-type(even) {
+        background-color: rgba(0, 0, 0, 0.03);
+      }
+
+      .theme--dark.v-data-table tbody tr:nth-of-type(even) {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .theme--light.v-data-table tbody tr.v-data-table__selected {
         background: #f5c17d70 !important;
-    }
-    .theme--dark.v-data-table tbody tr.v-data-table__selected {
+      }
+
+      .theme--dark.v-data-table tbody tr.v-data-table__selected {
         background: #a17b4970 !important;
-    }
-    .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
+      }
+
+      .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
         background: #a17b49c2 !important;
-    }
-    .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
+      }
+
+      .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
         background: #ffd296d2 !important;
-    }
-    .spacer {
-      margin-top: 3em;
-    }
-  </style>
+      }
 
-</head>
+      .spacer {
+        margin-top: 3em;
+      }
+    </style>
+  </head>
 
-<body>
-  <div id="app">{{ message }}</div>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
+  <body>
+    <div id="app">{{ message }}</div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
 
-  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
+
+    <!--
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.cjs.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.es.js"></script>
-  -->  
+  -->
 
-
-  <script type="text/x-template" id="app-template">
+    <script type="text/x-template" id="app-template">
       <v-app>
         <v-snackbar
           :timeout=snackBar.timeout
           class="elevation-24"
-          color="primary"          
+          color="primary"
           v-model="snackBar.snackbar">{{ snackBar.title }}
         <template v-slot:actions>
         <v-btn
@@ -83,10 +92,8 @@ https://vuejs.org/guide/components/registration.html#global-registration
           Close
         </v-btn>
       </template>
+
       </v-snackbar>
-
-      
-
         <v-card
           class="mx-auto"
           width="400"
@@ -98,32 +105,32 @@ https://vuejs.org/guide/components/registration.html#global-registration
           <v-card-text>
             {{verInfo}}
           </v-card-text>
+
           <v-card-text>
-            <v-select            
+          <v-select
             :items="listItems"
             v-model="workModes.loadMode"
             density="compact"
-            label="Mode"
-          >
+            label="Mode">
+
           <template #append>
-            <v-tooltip text1="Get a new DECS for  {{ workModes.loadMode }}">
+            <v-tooltip>
               <template v-slot:activator="{ props }">
-                <v-btn 
-                  id="ID_goGetDecsBySelect"  
+                <v-btn
+                  id="ID_goGetDecsBySelect"
                   :disabled="workModes.loading"
                   variant="tonal"
                   rounded="sm" size="x-large"
-                  v-bind="props" 
-                  icon="mdi-briefcase-download" 
+                  v-bind="props"
+                  icon="mdi-briefcase-download"
                   @click="goGetDecsBySelect">
                   <template v-slot:default>
                     <v-icon color="success"></v-icon>
-                  </template>                  
+                  </template>
                 </v-btn>
               </template>
               <span>Get a new DECS for {{ workModes.loadMode }} apps.</span>
-          </v-tooltip>
-
+            </v-tooltip>
           </template>
           </v-select>
           </v-card-text>
@@ -132,17 +139,17 @@ https://vuejs.org/guide/components/registration.html#global-registration
             <v-data-table
               show-select
               v-model="selected_desserts"
-              
+
               item-key="name"
               item-value="name"
 
               @click:row="handleClick"
-              
+
               :headers="headers"
               :items="desserts"
               :items-per-page=50
               :sort-by="[{ key: 'calories', order: 'asc' }]"
-              
+
 
             >
             <template v-slot:header.calories="{ column, isSorted, getSortIcon, toggleSort }">
@@ -151,7 +158,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                 [{{ column.title }}]
                 <template v-if="isSorted(column)">
                   <v-icon :icon="getSortIcon(column)"></v-icon>
-                </template>                
+                </template>
             </template>
 
             <template v-slot:header.calories11="{ header }">
@@ -325,224 +332,216 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
       </v-app>
     </script>
-  <script setup>
-    const { createApp, ref, reactive, defineProps } = Vue;
-    const { createVuetify, useTheme, version } = Vuetify;
+    <script setup>
+      const { createApp, ref, reactive, defineProps } = Vue;
+      const { createVuetify, useTheme, version } = Vuetify;
 
-    const vuetify = createVuetify({});
+      const vuetify = createVuetify({});
 
-    const app = createApp({
-      template: "#app-template",
+      const app = createApp({
+        template: "#app-template",
 
-      setup() {
-        const title = Vue.ref("Vuetify 3.0");
-        const verInfo = Vue.ref("ver. 0.0.2");
-        const theme = useTheme();
+        setup() {
+          const title = Vue.ref("Vuetify 3.0");
+          const verInfo = Vue.ref("ver. 0.0.2");
+          const theme = useTheme();
 
-        var workModes = Vue.ref(
-          {
-            loadMode : "ASWP",
-            loading : false
-          }
-        ); 
-        var snackBar = Vue.ref(
-          {
+          var workModes = Vue.ref({
+            loadMode: "ASWP",
+            loading: false,
+          });
+          var snackBar = Vue.ref({
             snackbar: false,
-            title : "Get a new DECS for ...",
-            timeout : 2000
-          }
-        ); 
-        
+            title: "Get a new DECS for ...",
+            timeout: 2000,
+          });
 
-        var dialog = Vue.ref(false);
-        var dialogDelete = Vue.ref(false);
+          var dialog = Vue.ref(false);
+          var dialogDelete = Vue.ref(false);
 
-        var headers = Vue.ref([
-          {
-            title: "Dessert (100g serving)",
-            align: "start",
-            sortable: false,
-            key: "name",
+          var headers = Vue.ref([
+            {
+              title: "Dessert (100g serving)",
+              align: "start",
+              sortable: false,
+              key: "name",
+            },
+            { title: "Calories", key: "calories" },
+            { title: "Fat (g)", key: "fat" },
+            { title: "Carbs (g)", key: "carbs" },
+            { title: "Protein (g)", key: "protein" },
+            { title: "Actions", key: "actions", sortable: false },
+          ]);
+          var items = Vue.ref([]);
+          var selected_desserts = Vue.ref([]);
+          var desserts = Vue.ref([]);
+          var editedIndex = Vue.ref(-1);
+          var editedItem = Vue.ref({
+            name: "",
+            calories: 0,
+            fat: 0,
+            carbs: 0,
+            protein: 0,
+          });
+          var defaultItem = Vue.ref({
+            name: "",
+            calories: 0,
+            fat: 0,
+            carbs: 0,
+            protein: 0,
+          });
+
+          var listItems = ["ASWP", "ACCS", "NONE"];
+
+          return {
+            snackBar,
+            workModes,
+            title,
+            verInfo,
+            dialog,
+            dialogDelete,
+            headers,
+            items,
+            desserts,
+            selected_desserts,
+            listItems,
+          };
+        },
+        created() {
+          console.log("verInfo: ", this.verInfo);
+          this.initialize();
+        },
+
+        watch: {
+          "workModes.snackbar"(value) {
+            if (value === false) {
+              //this.workModes.loading = false;
+            }
           },
-          { title: "Calories", key: "calories" },
-          { title: "Fat (g)", key: "fat" },
-          { title: "Carbs (g)", key: "carbs" },
-          { title: "Protein (g)", key: "protein" },
-          { title: "Actions", key: "actions", sortable: false },
-        ]);
-        var items = Vue.ref([]);
-        var selected_desserts = Vue.ref([]);
-        var desserts = Vue.ref([]);
-        var editedIndex = Vue.ref(-1);
-        var editedItem = Vue.ref({
-          name: "",
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0,
-        });
-        var defaultItem = Vue.ref({
-          name: "",
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0,
-        });
-
-        var listItems = ['ASWP', 'ACCS', 'NONE' ];
-
-        return {
-          snackBar,
-          workModes,
-          title,
-          verInfo,
-          dialog,
-          dialogDelete,
-          headers,
-          items,
-          desserts,
-          selected_desserts,
-          listItems,
-        };
-      },
-      created() {
-        console.log("verInfo: ", this.verInfo);
-        this.initialize();
-      },
-
-      watch:{
-        "workModes.snackbar"(value){
-            if(value === false){
-              //this.workModes.loading = false;            
-          }
-        }
-      },
-
-      methods: {
-        initialize() {
-          this.desserts = [
-            {
-              name: "Frozen Yogurt",
-              calories: 10,
-              fat: 6.0,
-              carbs: 24,
-              protein: 4.0,
-            },
-            {
-              name: "Ice cream sandwich",
-              calories: 237,
-              fat: 9.0,
-              carbs: 37,
-              protein: 4.3,
-            },
-            {
-              name: "Eclair",
-              calories: 262,
-              fat: 16.0,
-              carbs: 23,
-              protein: 6.0,
-            },
-            {
-              name: "Cupcake",
-              calories: 60,
-              fat: 3.7,
-              carbs: 67,
-              protein: 4.3,
-            },
-            {
-              name: "Gingerbread",
-              calories: 356,
-              fat: 16.0,
-              carbs: 49,
-              protein: 3.9,
-            },
-            {
-              name: "Jelly bean",
-              calories: 375,
-              fat: 0.0,
-              carbs: 94,
-              protein: 0.0,
-            },
-            {
-              name: "Lollipop",
-              calories: 392,
-              fat: 0.2,
-              carbs: 98,
-              protein: 0,
-            },
-            {
-              name: "Honeycomb",
-              calories: 408,
-              fat: 3.2,
-              carbs: 87,
-              protein: 6.5,
-            },
-            {
-              name: "Donut",
-              calories: 452,
-              fat: 25.0,
-              carbs: 51,
-              protein: 4.9,
-            },
-            {
-              name: "KitKat",
-              calories: 518,
-              fat: 26.0,
-              carbs: 65,
-              protein: 7,
-            },
-          ];
-        },
-        deleteItem(item) { },
-        editItem(item) { },
-        getTitle(title) {
-          var ret = "";
-          console.log(title);
-          return ret;
-        },
-        getColor(calories) {
-          if (calories > 100) return "red";
-          else if (calories > 50) return "orange";
-          else return "green";
-        },
-        //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
-        //https://codepen.io/Hexodus/pen/ExKGWBe
-        handleClick(event, row) {
-          console.log("Clicked event: ", event);
-          console.log("Clicked item: ", row.item);
-          //this.highlightClickedRow(event);
-          //event.select(true);
-          let selectState = (row.isSelected) ? false : true;
-          console.log("selectState: ", selectState);
-          //row.select(selectState);
         },
 
-        goGetDecsBySelect(event) {          
-          this.snackBar.snackbar = true;
-          this.workModes.loading = true;
-          this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
-          this.snackBar.timeout = 3000;
-          setTimeout(()=>{
-            this.workModes.loading = false;
+        methods: {
+          initialize() {
+            this.desserts = [
+              {
+                name: "Frozen Yogurt",
+                calories: 10,
+                fat: 6.0,
+                carbs: 24,
+                protein: 4.0,
+              },
+              {
+                name: "Ice cream sandwich",
+                calories: 237,
+                fat: 9.0,
+                carbs: 37,
+                protein: 4.3,
+              },
+              {
+                name: "Eclair",
+                calories: 262,
+                fat: 16.0,
+                carbs: 23,
+                protein: 6.0,
+              },
+              {
+                name: "Cupcake",
+                calories: 60,
+                fat: 3.7,
+                carbs: 67,
+                protein: 4.3,
+              },
+              {
+                name: "Gingerbread",
+                calories: 356,
+                fat: 16.0,
+                carbs: 49,
+                protein: 3.9,
+              },
+              {
+                name: "Jelly bean",
+                calories: 375,
+                fat: 0.0,
+                carbs: 94,
+                protein: 0.0,
+              },
+              {
+                name: "Lollipop",
+                calories: 392,
+                fat: 0.2,
+                carbs: 98,
+                protein: 0,
+              },
+              {
+                name: "Honeycomb",
+                calories: 408,
+                fat: 3.2,
+                carbs: 87,
+                protein: 6.5,
+              },
+              {
+                name: "Donut",
+                calories: 452,
+                fat: 25.0,
+                carbs: 51,
+                protein: 4.9,
+              },
+              {
+                name: "KitKat",
+                calories: 518,
+                fat: 26.0,
+                carbs: 65,
+                protein: 7,
+              },
+            ];
+          },
+          deleteItem(item) {},
+          editItem(item) {},
+          getTitle(title) {
+            var ret = "";
+            console.log(title);
+            return ret;
+          },
+          getColor(calories) {
+            if (calories > 100) return "red";
+            else if (calories > 50) return "orange";
+            else return "green";
+          },
+          //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
+          //https://codepen.io/Hexodus/pen/ExKGWBe
+          handleClick(event, row) {
+            console.log("Clicked event: ", event);
+            console.log("Clicked item: ", row.item);
+            //this.highlightClickedRow(event);
+            //event.select(true);
+            let selectState = row.isSelected ? false : true;
+            console.log("selectState: ", selectState);
+            //row.select(selectState);
+          },
+
+          goGetDecsBySelect(event) {
             this.snackBar.snackbar = true;
-            this.snackBar.title = `Loading new DECS for ${this.workModes.loadMode} apps complete.`;
+            this.workModes.loading = true;
+            this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
             this.snackBar.timeout = 3000;
-          }, 5000);
-          //setTimeout(function () { console.log("Howdy!"); this.workModes.loading = false; }, 7000);
-          //alert(this.workModes.loadMode);
-        },          
-        
-        highlightClickedRow(event) {
-          const tr = event.target.parentNode;
-          tr.classList.add('highlight');
+            setTimeout(() => {
+              this.workModes.loading = false;
+              this.snackBar.snackbar = true;
+              this.snackBar.title = `Loading new DECS for ${this.workModes.loadMode} apps complete.`;
+              this.snackBar.timeout = 3000;
+            }, 5000);
+            //setTimeout(function () { console.log("Howdy!"); this.workModes.loading = false; }, 7000);
+            //alert(this.workModes.loadMode);
+          },
+
+          highlightClickedRow(event) {
+            const tr = event.target.parentNode;
+            tr.classList.add("highlight");
+          },
         },
-
-      },
-    
-    })
-      .use(vuetify)
-      .mount("#app");
-  </script>
-</body>
-
+      })
+        .use(vuetify)
+        .mount("#app");
+    </script>
+  </body>
 </html>
