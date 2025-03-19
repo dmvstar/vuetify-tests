@@ -32,11 +32,11 @@
 
                 <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
             </v-app-bar>
-
             <!--
                 temporary
-                -->
-            <v-navigation-drawer expand-on-hover rail v-model="drawer">
+            -->
+            <!--v-navigation-drawer expand-on-hover rail v-model="drawer"-->
+            <v-navigation-drawer temporary style="margin: 0px; padding: 10px; width: 15%" v-model="drawer">
 
                 <v-list>
                     <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
@@ -82,7 +82,7 @@
                         </v-col>
                     </v-row>
                 </div>
-                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3"
+                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" app="true"
                     color="surface-light">
                     <div class="flex-1-0-100 text-center mt-2">
                         {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
