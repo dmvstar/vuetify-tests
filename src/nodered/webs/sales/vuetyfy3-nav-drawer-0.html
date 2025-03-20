@@ -18,7 +18,7 @@
         <!-- <v-card> -->
         <v-layout>
             <v-app-bar color="green" prominent>
-                <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-app-bar-nav-icon variant="text" @click.stop="mainDrawer = !mainDrawer"></v-app-bar-nav-icon>
 
                 <v-toolbar-title>Drawer example</v-toolbar-title>
 
@@ -36,22 +36,67 @@
                 temporary
             -->
             <!--v-navigation-drawer expand-on-hover rail v-model="drawer"-->
-            <v-navigation-drawer temporary style="margin: 0px; padding: 10px; width: 15%" v-model="drawer">
+            <!-- 
+             expand-on-hover temporary style="margin: 0px; padding: 10px; width: 15%" 
+            -->
+            <v-navigation-drawer 
+                rail permanent                 
+                expand-on-hover
+                :rail="mainDrawerRail"
+                @click="mainDrawerRail = false"
+                v-model="mainDrawer">
 
                 <v-list>
                     <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
                         :title="getGeneratedName()">
-                    </v-list-item>
+                        <template v-slot:append>
+                            <v-btn
+                              icon="mdi-chevron-left"
+                              variant="text"
+                              @click.stop="mainDrawerRail = !mainDrawerRail"
+                            ></v-btn>
+                        </template>    
+                    </v-list-item>                    
                 </v-list>
 
+                <v-divider></v-divider>
+
                 <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles"></v-list-item>
-                    <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me"
-                        value="shared"></v-list-item>
-                    <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
-                    <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
-                    <!--v-select density="compact" nav prepend-icon="mdi-account-check">
-                        </v-select-->
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-folder" title="My Files"
+                                value="myfiles"></v-list-item>
+                        </template>
+                        <span>Select My Files</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-multiple" title="Shared with me"
+                                value="shared"></v-list-item>
+                        </template>
+                        <span>Shared info to</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
+                        </template>
+                        <span>Select favorites</span>
+                    </v-tooltip>
+                    <!-- https://stackoverflow.com/questions/62954632/force-collapse-of-all-active-items-in-vuetify-v-list-group -->
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="User" value="user"></v-list-item>
+                        </template>
+                        <span>User actions</span>
+                    </v-tooltip>
+                    <v-list density="compact" nav>
+                        <v-tooltip top>
+                            <template v-slot:activator="{ props }">
+                                <v-list-item v-bind="props" prepend-icon="mdi-logout" title="Logout" value="logout" @click="mainDrawer = false" ></v-list-item>
+                            </template>
+                            <span>Full logout</span>
+                        </v-tooltip>
+                    </v-list>
                 </v-list>
 
                 <!--v-btn  color="green" block>LOAD</v-btn>
@@ -68,17 +113,17 @@
                 <div id="main" class="ma-3">
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="main" block>OK</v-btn>
+                            <v-btn  color="indigo-darken-3" block>OK</v-btn>
                         </v-col>
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="main" block>OK</v-btn>
+                            <v-btn color="green" block>OK</v-btn>
                         </v-col>
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="main" block>OK</v-btn>
+                            <v-btn color="primary" block>OK</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -122,7 +167,8 @@
                     firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
                     lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
                 };
-                var drawer = Vue.ref(false);
+                var mainDrawer = Vue.ref(true);
+                var mainDrawerRail  = Vue.ref(true);
                 var group = Vue.ref(null);
                 var items = Vue.ref([
                     {
@@ -147,7 +193,7 @@
                     faceId,
                     faceIdUrl,
 
-                    drawer,
+                    mainDrawer,mainDrawerRail,
                     group,
                     items
                     , usersList
