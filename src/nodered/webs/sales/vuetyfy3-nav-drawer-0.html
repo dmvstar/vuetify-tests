@@ -37,27 +37,26 @@
             -->
             <!--v-navigation-drawer expand-on-hover rail v-model="drawer"
             rail expand-on-hover
+            @click="mainDrawerRail = false"
             -->
             <!-- 
              expand-on-hover temporary style="margin: 0px; padding: 10px; width: 15%" 
             -->
             <v-navigation-drawer 
-            temporary
-                
+                temporary                
                 permanent                 
                 expand-on-hover
                 rall
-
-                :rail="mainDrawerRail"
-                @click="mainDrawerRail = false"
-                v-model="mainDrawer">
+                :rail="mainDrawerRail"                
+                v-model="mainDrawer"
+            >
 
                 <v-list>
                     <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
                         :title="getGeneratedName()">
                         <template v-slot:append>
                             <v-btn
-                              icon="mdi-chevron-left"
+                              :icon=faceRailIcon 
                               variant="text"
                               @click.stop="mainDrawerRail = !mainDrawerRail"
                             ></v-btn>
@@ -70,8 +69,10 @@
                 <v-list density="compact" nav>
                     <v-tooltip top>
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-folder" title="My Files"
-                                value="myfiles"></v-list-item>
+                            <v-list-item v-bind="props" 
+                                prepend-icon="mdi-folder" title="My Files"
+                                value="myfiles">
+                            </v-list-item>
                         </template>
                         <span>Select My Files</span>
                     </v-tooltip>
@@ -133,7 +134,8 @@
                         </v-col>
                     </v-row>
                 </div>
-                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" app="true"
+                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" 
+                    :app="true"
                     color="surface-light">
                     <div class="flex-1-0-100 text-center mt-2">
                         {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
@@ -174,6 +176,7 @@
                     lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
                 };
                 var mainDrawer = Vue.ref(true);
+                var faceRailIcon = Vue.ref("mdi-chevron-right");
                 var mainDrawerRail  = Vue.ref(true);
                 var group = Vue.ref(null);
                 var items = Vue.ref([
@@ -197,6 +200,7 @@
 
                 return {
                     faceId,
+                    faceRailIcon,
                     faceIdUrl,
 
                     mainDrawer,mainDrawerRail,
@@ -215,7 +219,14 @@
 
             },
             watch: {
-
+                mainDrawerRail : function (newQuestion, oldQuestion) {
+                    console.log("mainDrawerRail", newQuestion, oldQuestion, this.faceRailIcon);
+                    if(newQuestion) {
+                        this.faceRailIcon = "mdi-chevron-right";
+                    } else {
+                        this.faceRailIcon = "mdi-chevron-left";
+                    }                    
+                }
             },
             methods: {
 
