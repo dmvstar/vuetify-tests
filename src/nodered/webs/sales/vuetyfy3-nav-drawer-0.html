@@ -35,13 +35,19 @@
             <!--
                 temporary
             -->
-            <!--v-navigation-drawer expand-on-hover rail v-model="drawer"-->
+            <!--v-navigation-drawer expand-on-hover rail v-model="drawer"
+            rail expand-on-hover
+            -->
             <!-- 
              expand-on-hover temporary style="margin: 0px; padding: 10px; width: 15%" 
             -->
             <v-navigation-drawer 
-                rail permanent                 
+            temporary
+                
+                permanent                 
                 expand-on-hover
+                rall
+
                 :rail="mainDrawerRail"
                 @click="mainDrawerRail = false"
                 v-model="mainDrawer">
