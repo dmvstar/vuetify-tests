@@ -17,12 +17,19 @@
     <template id="app-template">
         <!-- <v-card> -->
         <v-layout>
-            <v-app-bar 
-                density="comfortable"
-                class="text-white"
-                color="green" prominent image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-
+            <v-app-bar density="comfortable" class="text-white" color="green" prominent
+                image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
                 <v-app-bar-nav-icon variant="text" @click.stop="mainDrawer = !mainDrawer"></v-app-bar-nav-icon>
+
+                <!--v-img>
+                    max-height="150"
+                    max-width="250"
+                    src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"                    
+                </v-img-->
+
+                <v-img class="mx-2" src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"  max-width="140"
+                    contain></v-img>
+
 
                 <v-toolbar-title>Drawer example {{appVersion}}</v-toolbar-title>
 
@@ -46,7 +53,9 @@
             <!-- 
              expand-on-hover temporary style="margin: 0px; padding: 10px; width: 15%" 
             -->
-            <v-navigation-drawer temporary permanent expand-on-hover rall :rail="mainDrawerRail" v-model="mainDrawer">
+            <v-navigation-drawer temporary permanent expand-on-hover rall 
+                :width="325"
+                :rail="mainDrawerRail" v-model="mainDrawer">
 
                 <v-list>
                     <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
@@ -108,13 +117,13 @@
 
             </v-navigation-drawer>
 
-            <v-main>                
-                <div id="main" class="ma-3">                    
+            <v-main>
+                <div id="main" class="ma-3">
                     <v-row ma="5">
                         <v-card-title>
                             The navigation drawer will appear from the bottom on smaller size screens.
-                        </v-card-title>                    
-                    </v-row>                    
+                        </v-card-title>
+                    </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
                             <v-btn color="green" block>OK</v-btn>
@@ -123,8 +132,8 @@
                     <v-row ma="5">
                         <v-card-text>
                             VDataTable {{dessertsData.dessertsItems.length}} items
-                        </v-card-text>                    
-                    </v-row>                    
+                        </v-card-text>
+                    </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
@@ -227,7 +236,7 @@
         const app = createApp({
             template: "#app-template",
             setup() {
-                const appVersion  = "v. 0.0.15";
+                const appVersion = "v. 0.0.17";
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
 
