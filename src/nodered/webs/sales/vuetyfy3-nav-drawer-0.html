@@ -94,23 +94,22 @@
                         <span>Select favorites</span>
                     </v-tooltip>
                     <!-- https://stackoverflow.com/questions/62954632/force-collapse-of-all-active-items-in-vuetify-v-list-group -->
-                    <v-tooltip top>
+                    
+                    <!--v-tooltip top>
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="User" :append-icon="getShowUserMenuIcon()"
-                                @click="onShowUserMenu" value="user">
-                                <!--v-list-item v-bind="props" prepend-icon="mdi-fire" title="Hide"
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="User"
+                                :append-icon="getShowUserMenuIcon()" @click="onShowUserMenu" value="user">
+                                <v-list-item v-bind="props" prepend-icon="mdi-fire" title="Hide"
                                     value="hide"></v-list-item>
                                 <v-list-item v-bind="props" prepend-icon="mdi-logout" title="Hide" value="logout"
-                                    @click="mainDrawer = false"></v-list-item-->
-
+                                    @click="mainDrawer = false"></v-list-item>
                             </v-list-item>
                         </template>
                         <span>User actions</span>
                     </v-tooltip>
-                    
                     <v-list density="compact" nav>
                         <v-tooltip top>
-                            <!--v-if="isShowUserMenu == true"-->
+                            // <v-if="isShowUserMenu == true">
                             <template v-slot:activator="{ props }">
                                 <v-list-item v-bind="props" prepend-icon="mdi-fire" title="Hide"
                                     @click="mainDrawer = false" value="hide"></v-list-item>
@@ -119,8 +118,29 @@
                             </template>
                             <span>User actions</span>
                         </v-tooltip>
-                    </v-list>
-                    
+                    </v-list-->
+
+                    <v-list-group value="Users">
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="Users"></v-list-item>
+                        </template>
+                        <v-list density="compact" nav>
+                        <!--
+                            v-for="([title, icon], i) in menuActions.userMenu"
+                            v-for="([title, icon], i) in menuActions.userMenu"
+                            v-for="(item, index) in menuActions.userMenu"
+                            :key="i"
+                            :prepend-icon="icon"
+                            :title="title"
+                            :value="title"
+                        -->
+                        <v-list-item v-for="([title, icon, action], index) in menuActions.userMenu" :key="index"
+                            :prepend-icon="icon" :title="title" :value="title"
+                            @click="onUserMenuClick(action, index)"></v-list-item>
+                        </v-list>
+
+                    </v-list-group>
+
                 </v-list>
 
                 <!--v-btn  color="green" block>LOAD</v-btn>
@@ -398,6 +418,13 @@
                     }
                 );
 
+                const menuActions = {
+                    userMenu: [
+                        ["Hide", "mdi-fire", "hide"],
+                        ["Logout", "mdi-logout", "logout"]
+                    ]
+                }
+
                 const dicts = {
                     debtStatus: [
 
@@ -423,6 +450,7 @@
                     , dessertsData
                     , dicts
                     , searchData
+                    , menuActions
                 }
             },
             created() {
@@ -465,18 +493,29 @@
 
                 onShowUserMenu() {
                     this.isShowUserMenu = !this.isShowUserMenu;
-                    //nextTick();
                 },
 
-                getShowUserMenuIcon(){
+                onUserMenuClick(event, index) {
+                    switch (event) {
+                        case "logout":
+                            console.log(`Execute event ${event}`);
+                            break;
+                        case "hide":
+                            console.log(`Execute event ${event}`);
+                            this.mainDrawer = false;
+                            break;
+                        default:
+                            console.log(`Sorry, we are out of ${event}.`);
+                    }
+                },
+
+                getShowUserMenuIcon() {
                     var ret = "mdi-chevron-down";
-                    
-                    if(this.isShowUserMenu) {
+                    if (this.isShowUserMenu) {
                         ret = "mdi-chevron-up";
                     }
-                    
                     return ret;
-                },                
+                },
 
                 getGeneratedEmailAddress() {
                     var ret = "awataros.pedros@gmail.com";
