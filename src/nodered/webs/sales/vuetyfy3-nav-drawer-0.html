@@ -275,7 +275,7 @@
 
                 const usersList = {
                     firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
-                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                    lastNames:  ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
                 };
                 var mainDrawer = Vue.ref(true);
                 var faceRailIcon = Vue.ref("mdi-chevron-right");
@@ -458,6 +458,7 @@
                 var faceId = Math.floor(10 + Math.random() * 90);
                 this.faceId = faceId;
                 this.faceIdUrl = `https://randomuser.me/api/portraits/men/${faceId}.jpg`;
+                this.generateName();
             },
             mounted() {
 
@@ -564,7 +565,6 @@
                     console.log("[getTitle]", column);
                     return ret;
                 },
-
 
                 getDebtStatusIconColor(item) {
                     //console.log("[getDebtStatusIconColor]", item);
