@@ -24,12 +24,11 @@
                 <!--v-img>
                     max-height="150"
                     max-width="250"
-                    src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"                    
+                    src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
                 </v-img-->
 
-                <v-img class="mx-2" src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"  max-width="140"
-                    contain></v-img>
-
+                <v-img class="mx-2" src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
+                    max-width="140" contain></v-img>
 
                 <v-toolbar-title>Drawer example {{appVersion}}</v-toolbar-title>
 
@@ -41,6 +40,10 @@
                     <v-btn icon="mdi-filter" variant="text"></v-btn>
                 </template>
 
+                <v-btn :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+                    @click="onBtnChangeTheme"></v-btn>
+
+
                 <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
             </v-app-bar>
             <!--
@@ -50,12 +53,11 @@
             rail expand-on-hover
             @click="mainDrawerRail = false"
             -->
-            <!-- 
-             expand-on-hover temporary style="margin: 0px; padding: 10px; width: 15%" 
+            <!--
+             expand-on-hover temporary style="margin: 0px; padding: 10px; width: 15%"
             -->
-            <v-navigation-drawer temporary permanent expand-on-hover rall 
-                :width="325"
-                :rail="mainDrawerRail" v-model="mainDrawer">
+            <v-navigation-drawer temporary permanent expand-on-hover rall :width="325" :rail="mainDrawerRail"
+                v-model="mainDrawer">
 
                 <v-list>
                     <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
@@ -391,16 +393,19 @@
                     ]
                 };
 
+                const theme = ref('light');
+                const isDarkTheme = ref(false);
 
                 return {
-                    appVersion,
-                    faceId,
-                    faceRailIcon,
-                    faceIdUrl,
-
-                    mainDrawer, mainDrawerRail,
-                    group,
-                    items
+                    theme
+                    , isDarkTheme
+                    , appVersion
+                    , faceId
+                    , faceRailIcon
+                    , faceIdUrl
+                    , mainDrawer, mainDrawerRail
+                    , group
+                    , items
                     , usersList
                     , dessertsData
                     , dicts
@@ -427,6 +432,23 @@
                 }
             },
             methods: {
+
+                onBtnChangeTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    this.isDarkTheme = !this.isDarkTheme;
+                    //console.log(this.$vuetify.theme);
+                    //console.log(this.$vuetify.theme.global);
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';
+                    var isDark = this.$vuetify.theme.global.current.dark;
+                    console.log(`isDark=${isDark}, isDarkTheme= ${this.isDarkTheme}`);
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                    isDark = !isDark;
+                    console.log('isDark', isDark);
+                    //this.$vuetify.theme.global.current.dark = isDark;
+                    this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                },
 
                 getGeneratedEmailAddress() {
                     var ret = "awataros.pedros@gmail.com";
