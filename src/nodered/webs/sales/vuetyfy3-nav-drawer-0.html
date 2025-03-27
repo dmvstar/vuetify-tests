@@ -96,20 +96,31 @@
                     <!-- https://stackoverflow.com/questions/62954632/force-collapse-of-all-active-items-in-vuetify-v-list-group -->
                     <v-tooltip top>
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="User"
-                                value="user"></v-list-item>
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="User" :append-icon="getShowUserMenuIcon()"
+                                @click="onShowUserMenu" value="user">
+                                <!--v-list-item v-bind="props" prepend-icon="mdi-fire" title="Hide"
+                                    value="hide"></v-list-item>
+                                <v-list-item v-bind="props" prepend-icon="mdi-logout" title="Hide" value="logout"
+                                    @click="mainDrawer = false"></v-list-item-->
+
+                            </v-list-item>
                         </template>
                         <span>User actions</span>
                     </v-tooltip>
+                    
                     <v-list density="compact" nav>
                         <v-tooltip top>
+                            <!--v-if="isShowUserMenu == true"-->
                             <template v-slot:activator="{ props }">
-                                <v-list-item v-bind="props" prepend-icon="mdi-logout" title="Logout" value="logout"
-                                    @click="mainDrawer = false"></v-list-item>
+                                <v-list-item v-bind="props" prepend-icon="mdi-fire" title="Hide"
+                                    @click="mainDrawer = false" value="hide"></v-list-item>
+                                <v-list-item v-bind="props" prepend-icon="mdi-logout" title="Logout"
+                                    value="logout"></v-list-item>
                             </template>
-                            <span>Full logout</span>
+                            <span>User actions</span>
                         </v-tooltip>
                     </v-list>
+                    
                 </v-list>
 
                 <!--v-btn  color="green" block>LOAD</v-btn>
@@ -395,10 +406,12 @@
 
                 const theme = ref('light');
                 const isDarkTheme = ref(false);
+                const isShowUserMenu = ref(false);
 
                 return {
                     theme
                     , isDarkTheme
+                    , isShowUserMenu
                     , appVersion
                     , faceId
                     , faceRailIcon
@@ -449,6 +462,21 @@
                     this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
                     console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
                 },
+
+                onShowUserMenu() {
+                    this.isShowUserMenu = !this.isShowUserMenu;
+                    //nextTick();
+                },
+
+                getShowUserMenuIcon(){
+                    var ret = "mdi-chevron-down";
+                    
+                    if(this.isShowUserMenu) {
+                        ret = "mdi-chevron-up";
+                    }
+                    
+                    return ret;
+                },                
 
                 getGeneratedEmailAddress() {
                     var ret = "awataros.pedros@gmail.com";
