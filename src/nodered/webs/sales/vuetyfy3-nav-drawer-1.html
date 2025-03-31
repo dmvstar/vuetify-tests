@@ -101,8 +101,27 @@
 
             <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
                 <v-list density="compact" nav>
-                    <!--v-list-item v-bind="props" prepend-icon="mdi-folder" title="My Files" value="myfiles">
-                    </v-list-item-->
+                    <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles">
+                    </v-list-item>
+
+                    <v-menu v-model="searchData.dateFromDateMenu" :close-on-content-click="true">
+                        <template v-slot:activator="{ props }">
+                            <v-text-field v-model="searchData.selectedDateFrom" label="Date From" prepend-icon="mdi-calendar"
+                                clearable clear-icon="mdi-backspace" v-bind="props">
+                            </v-text-field>
+                        </template>
+                        <v-date-picker v-model="searchData.selectedDateFromFull"></v-date-picker>
+                    </v-menu>
+    
+                    <v-menu v-model="searchData.dateIntoDateMenu" :close-on-content-click="true">
+                        <template v-slot:activator="{ props }">
+                            <v-text-field v-model="searchData.selectedDateInto" label="Date Into" prepend-icon="mdi-calendar"
+                                clearable clear-icon="mdi-backspace" v-bind="props">
+                            </v-text-field>
+                        </template>
+                        <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                    </v-menu>
+
                 </v-list>
             </v-navigation-drawer>
 
@@ -128,7 +147,7 @@
                             <v-menu transition="scale-transition">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="secondary" v-bind="props" append-icon="mdi-chevron-down">
-                                        Operations for selection...
+                                        Operations ...
                                     </v-btn>
                                 </template>
                                 <v-list>
@@ -202,8 +221,7 @@
                                     <!--v-btn block color="blue">Operations</v-btn-->
                                     <v-menu transition="scale-transition">
                                         <template v-slot:activator="{ props }">
-                                            <v-btn color="primary" v-bind="props" append-icon="mdi-chevron-down">
-                                                Operations...
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"  append-icon="mdi-chevron-down">                                                
                                             </v-btn>
                                         </template>
                                         <v-list>
@@ -288,10 +306,12 @@
                 ]);
 
                 const searchData = Vue.reactive({
-                    selectedDateFrom1: "",
+                    selectedDateFrom1: "",                    
                     selectedDateInto1: "",
                     searchText1: "",
                     searchText2: "",
+                    dateFromDateMenu:null,
+                    dateIntoDateMenu:null,
                     selectedDateFromFull: null,
                     selectedDateFrom: null,
                     selectedDateFromInto: null,
@@ -310,7 +330,7 @@
                             { title: 'Carbs (g)', align: 'end', key: 'carbs', class: 'my-header-style' },
                             { title: 'Protein (g)', align: 'end', key: 'protein', class: 'my-header-style' },
                             { title: 'Iron (%)', align: 'end', key: 'iron', class: 'my-header-style' },
-                            { title: 'Actions', align: 'center', key: 'actions', sortable: false, width: '15%' },
+                            { title: 'Actions', align: 'center', key: 'actions', sortable: false, width: '20%' },
                             { title: 'Operations', align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
                         dessertsItems: [
@@ -466,9 +486,28 @@
                     } else {
                         this.faceRailIcon = "mdi-chevron-left";
                     }
+                },
+                "searchData.selectedDateFromFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.searchData.selectedDateFrom = this.formatDate(newQuestion);
+                },
+                "searchData.selectedDateIntoFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.searchData.selectedDateInto = this.formatDate(newQuestion);
                 }
             },
             methods: {
+                formatDate(date) {
+                    if (!date) {
+                        return null
+                    }
+                    console.log(date);
+                    const [year, month, day] = date.toISOString().replace('T', '-').split('-');
+                    console.log(date.toISOString());
+                    var ret = `${day}-${month}-${year}`;
+                    console.log(ret);
+                    return ret;
+                },
 
                 onBtnChangeTheme() {
                     this.theme = this.theme === 'light' ? 'dark' : 'light';
