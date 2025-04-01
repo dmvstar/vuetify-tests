@@ -581,18 +581,28 @@
                 },
 
                 onReorderColumnsClick(where, index){
-                    console.log(where, index, this.dessertsData.dessertsHeaders[index].title);
-                    if(where == 'UP' && index > 0) {
-                        var element_old = this.dessertsData.dessertsHeaders[index-1];
-                        var element_new = this.dessertsData.dessertsHeaders[index];
-                        this.dessertsData.dessertsHeaders[index]   = element_old;
-                        this.dessertsData.dessertsHeaders[index-1] = element_new;
+                    var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
+                    if(isSortableCurr==undefined) {isSortableCurr = true;}
+                    console.log(where, index, this.dessertsData.dessertsHeaders[index].title, isSortableCurr, this.dessertsData.dessertsHeaders[index].sortable);
+                    if(where == 'UP' && index > 0 && isSortableCurr) {
+                        var isSortablePrev = this.dessertsData.dessertsHeaders[index-1].sortable;
+                        if(isSortablePrev==undefined) {isSortablePrev = true;}
+                        if(isSortablePrev) {
+                            var element_old = this.dessertsData.dessertsHeaders[index-1];
+                            var element_new = this.dessertsData.dessertsHeaders[index];
+                            this.dessertsData.dessertsHeaders[index]   = element_old;
+                            this.dessertsData.dessertsHeaders[index-1] = element_new;
+                        }
                     }
-                    if(where == 'DN' && index < this.dessertsData.dessertsHeaders.length) {
-                        var element_old = this.dessertsData.dessertsHeaders[index+1];
-                        var element_new = this.dessertsData.dessertsHeaders[index];
-                        this.dessertsData.dessertsHeaders[index]   = element_old;
-                        this.dessertsData.dessertsHeaders[index+1] = element_new;
+                    if(where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
+                        var isSortableNext = this.dessertsData.dessertsHeaders[index+1].sortable;
+                        if(isSortableNext==undefined) {isSortableNext = true;}
+                        if(isSortableNext) {
+                            var element_old = this.dessertsData.dessertsHeaders[index+1];
+                            var element_new = this.dessertsData.dessertsHeaders[index];
+                            this.dessertsData.dessertsHeaders[index]   = element_old;
+                            this.dessertsData.dessertsHeaders[index+1] = element_new;
+                        }
                     }
                 },
 
