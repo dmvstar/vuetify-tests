@@ -154,6 +154,20 @@
                                     <v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"
                                         :key="index" :prepend-icon="icon" :title="title" :value="title"
                                         @click="onUserMenuClick(action, index)">
+                                        <template v-slot:append>
+                                            <v-btn
+                                              color="grey-lighten-1"
+                                              icon="mdi-chevron-up"
+                                              variant="text"
+                                            ></v-btn>
+                                            <v-btn
+                                              color="grey-lighten-1"
+                                              icon="mdi-chevron-down"
+                                              variant="text"
+                                            ></v-btn>
+                                          </template>
+                                        <!--v-icon icon="mdi-chevron-up"></v-icon>
+                                        <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
                                 </v-list>
                             </v-menu>
@@ -228,7 +242,7 @@
                                             <v-list-item
                                                 v-for="([title, icon, action], index) in menuActions.actionsList"
                                                 :key="index" :prepend-icon="icon" :title="title" :value="title"
-                                                @click="onUserMenuClick(action, index)">
+                                                @click="onUserMenuClick(action, index)">                                                
                                             </v-list-item>
                                         </v-list>
                                     </v-menu>
