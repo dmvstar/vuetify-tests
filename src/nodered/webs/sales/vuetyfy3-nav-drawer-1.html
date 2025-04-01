@@ -138,10 +138,43 @@
                         </v-col>
                     </v-row>
                     <v-row ma="2">
-                        <v-col cols="10">
+                        <v-col cols="8">
                             <v-card-text>
                                 VDataTable {{dessertsData.dessertsItems.length}} items
                             </v-card-text>
+                        </v-col>
+                        <v-col cols="2"  align="right">
+                            <v-menu transition="scale-transition" :close-on-content-click="false">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
+                                        Columns Order ...
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
+                                    <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
+                                    <v-list-item v-for="({title}, index) in dessertsData.dessertsHeaders"
+                                        :key="index"  :title="title" :value="title"
+                                        >
+                                        <template v-slot:append>
+                                            <v-btn
+                                              color="grey-lighten-1"
+                                              icon="mdi-chevron-up"
+                                              variant="text"
+                                              @click="onReorderColumnsClick('UP', index)"
+                                            ></v-btn>
+                                            <v-btn
+                                              color="grey-lighten-1"
+                                              icon="mdi-chevron-down"
+                                              variant="text"
+                                              @click="onReorderColumnsClick('DN', index)"
+                                            ></v-btn>
+                                          </template>
+                                        <!--v-icon icon="mdi-chevron-up"></v-icon>
+                                        <v-icon icon="mdi-chevron-down"></v-icon-->
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
                         </v-col>
                         <v-col cols="2"  align="center">
                             <v-menu transition="scale-transition" :close-on-content-click="false">
@@ -154,7 +187,7 @@
                                     <v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"
                                         :key="index" :prepend-icon="icon" :title="title" :value="title"
                                         @click="onUserMenuClick(action, index)">
-                                        <template v-slot:append>
+                                        <!--template v-slot:append>
                                             <v-btn
                                               color="grey-lighten-1"
                                               icon="mdi-chevron-up"
@@ -165,7 +198,7 @@
                                               icon="mdi-chevron-down"
                                               variant="text"
                                             ></v-btn>
-                                          </template>
+                                          </template-->
                                         <!--v-icon icon="mdi-chevron-up"></v-icon>
                                         <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
@@ -286,7 +319,7 @@
         const app = createApp({
             template: "#app-template",
             setup() {
-                const appVersion = "v. 0.0.25";
+                const appVersion = "v. 0.0.27 (2025-04-01 15:56:08)";
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
 
@@ -542,6 +575,9 @@
 
                 onShowUserMenu() {
                     this.isShowUserMenu = !this.isShowUserMenu;
+                },
+                onReorderColumnsClick(where, index){
+                    console.log(where, index);
                 },
 
                 onUserMenuClick(event, index) {
