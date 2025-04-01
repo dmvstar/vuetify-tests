@@ -144,7 +144,7 @@
                             </v-card-text>
                         </v-col>
                         <v-col cols="2"  align="center">
-                            <v-menu transition="scale-transition">
+                            <v-menu transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="secondary" v-bind="props" append-icon="mdi-chevron-down">
                                         Operations ...
