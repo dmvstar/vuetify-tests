@@ -39,10 +39,10 @@
                 <v-tooltip top>
                     <template v-slot:activator="{ props }">
                         <v-btn v-bind="props" :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
-                            @click="onBtnChangeTheme"></v-btn>                        
+                            @click="onBtnChangeTheme"></v-btn>
                     </template>
                     <span>Be on the dark side ...</span>
-                </v-tooltip>                
+                </v-tooltip>
 
 
                 <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
@@ -104,18 +104,18 @@
                     <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles">
                     </v-list-item>
 
-                    <v-menu v-model="searchData.dateFromDateMenu" :close-on-content-click="true">
+                    <v-menu density="compact" v-model="searchData.dateFromDateMenu" :close-on-content-click="true">
                         <template v-slot:activator="{ props }">
-                            <v-text-field v-model="searchData.selectedDateFrom" label="Date From" prepend-icon="mdi-calendar"
+                            <v-text-field density="compact" v-model="searchData.selectedDateFrom" label="Date From" prepend-icon="mdi-calendar"
                                 clearable clear-icon="mdi-backspace" v-bind="props">
                             </v-text-field>
                         </template>
                         <v-date-picker v-model="searchData.selectedDateFromFull"></v-date-picker>
                     </v-menu>
-    
-                    <v-menu v-model="searchData.dateIntoDateMenu" :close-on-content-click="true">
+
+                    <v-menu density="compact" v-model="searchData.dateIntoDateMenu" :close-on-content-click="true">
                         <template v-slot:activator="{ props }">
-                            <v-text-field v-model="searchData.selectedDateInto" label="Date Into" prepend-icon="mdi-calendar"
+                            <v-text-field density="compact" v-model="searchData.selectedDateInto" label="Date Into" prepend-icon="mdi-calendar"
                                 clearable clear-icon="mdi-backspace" v-bind="props">
                             </v-text-field>
                         </template>
@@ -144,7 +144,9 @@
                             </v-card-text>
                         </v-col>
                         <v-col cols="2"  align="right">
-                            <v-menu transition="scale-transition" :close-on-content-click="false">
+                            <v-menu 
+                                density="compact"
+                                transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
                                         Columns Order ...
@@ -155,6 +157,7 @@
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
                                     <v-list-item v-for="({title}, index) in dessertsData.dessertsHeaders"
                                         :key="index"  :title="title" :value="title"
+                                        density="compact"
                                         >
                                         <template v-slot:append>
                                             <v-btn
@@ -268,14 +271,14 @@
                                     <!--v-btn block color="blue">Operations</v-btn-->
                                     <v-menu transition="scale-transition">
                                         <template v-slot:activator="{ props }">
-                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"  append-icon="mdi-chevron-down">                                                
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"  append-icon="mdi-chevron-down">
                                             </v-btn>
                                         </template>
                                         <v-list>
                                             <v-list-item
                                                 v-for="([title, icon, action], index) in menuActions.actionsList"
                                                 :key="index" :prepend-icon="icon" :title="title" :value="title"
-                                                @click="onUserMenuClick(action, index)">                                                
+                                                @click="onUserMenuClick(action, index)">
                                             </v-list-item>
                                         </v-list>
                                     </v-menu>
@@ -353,7 +356,7 @@
                 ]);
 
                 const searchData = Vue.reactive({
-                    selectedDateFrom1: "",                    
+                    selectedDateFrom1: "",
                     selectedDateInto1: "",
                     searchText1: "",
                     searchText2: "",
@@ -576,8 +579,25 @@
                 onShowUserMenu() {
                     this.isShowUserMenu = !this.isShowUserMenu;
                 },
+
                 onReorderColumnsClick(where, index){
-                    console.log(where, index);
+                    console.log(where, index, this.dessertsData.dessertsHeaders[index].title);
+                    if(where == 'UP' && index > 0) {
+                        var element_old = this.dessertsData.dessertsHeaders[index-1];
+                        var element_new = this.dessertsData.dessertsHeaders[index];
+                        this.dessertsData.dessertsHeaders[index]   = element_old;
+                        this.dessertsData.dessertsHeaders[index-1] = element_new;
+                    }
+                    if(where == 'DN' && index < this.dessertsData.dessertsHeaders.length) {
+                        var element_old = this.dessertsData.dessertsHeaders[index+1];
+                        var element_new = this.dessertsData.dessertsHeaders[index];
+                        this.dessertsData.dessertsHeaders[index]   = element_old;
+                        this.dessertsData.dessertsHeaders[index+1] = element_new;
+                    }
+                },
+
+                getReorderColumnsStatus(event, index) {
+
                 },
 
                 onUserMenuClick(event, index) {
