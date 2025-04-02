@@ -106,8 +106,8 @@
 
                     <v-menu density="compact" v-model="searchData.dateFromDateMenu" :close-on-content-click="true">
                         <template v-slot:activator="{ props }">
-                            <v-text-field density="compact" v-model="searchData.selectedDateFrom" label="Date From" prepend-icon="mdi-calendar"
-                                clearable clear-icon="mdi-backspace" v-bind="props">
+                            <v-text-field density="compact" v-model="searchData.selectedDateFrom" label="Date From"
+                                prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace" v-bind="props">
                             </v-text-field>
                         </template>
                         <v-date-picker v-model="searchData.selectedDateFromFull"></v-date-picker>
@@ -115,8 +115,8 @@
 
                     <v-menu density="compact" v-model="searchData.dateIntoDateMenu" :close-on-content-click="true">
                         <template v-slot:activator="{ props }">
-                            <v-text-field density="compact" v-model="searchData.selectedDateInto" label="Date Into" prepend-icon="mdi-calendar"
-                                clearable clear-icon="mdi-backspace" v-bind="props">
+                            <v-text-field density="compact" v-model="searchData.selectedDateInto" label="Date Into"
+                                prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace" v-bind="props">
                             </v-text-field>
                         </template>
                         <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
@@ -143,10 +143,8 @@
                                 VDataTable {{dessertsData.dessertsItems.length}} items
                             </v-card-text>
                         </v-col>
-                        <v-col cols="2"  align="right">
-                            <v-menu 
-                                density="compact"
-                                transition="scale-transition" :close-on-content-click="false">
+                        <v-col cols="2" align="right">
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
                                         Columns Order ...
@@ -155,31 +153,22 @@
                                 <v-list>
                                     <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
-                                    <v-list-item v-for="({title}, index) in dessertsData.dessertsHeaders"
-                                        :key="index"  :title="title" :value="title" :disabled="checkReorderColumnsDisabled(index)"
-                                        density="compact"
-                                        >
+                                    <v-list-item v-for="({title}, index) in dessertsData.dessertsHeaders" :key="index"
+                                        :title="title" :value="title" :disabled="checkReorderColumnsDisabled(index)"
+                                        density="compact">
                                         <template v-slot:append>
-                                            <v-btn
-                                              color="grey-lighten-1"
-                                              icon="mdi-chevron-up"
-                                              variant="text"
-                                              @click="onReorderColumnsClick('UP', index)"
-                                            ></v-btn>
-                                            <v-btn
-                                              color="grey-lighten-1"
-                                              icon="mdi-chevron-down"
-                                              variant="text"
-                                              @click="onReorderColumnsClick('DN', index)"
-                                            ></v-btn>
-                                          </template>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-up" variant="text"
+                                                @click="onReorderColumnsClick('UP', index)"></v-btn>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-down" variant="text"
+                                                @click="onReorderColumnsClick('DN', index)"></v-btn>
+                                        </template>
                                         <!--v-icon icon="mdi-chevron-up"></v-icon>
                                         <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
                                 </v-list>
                             </v-menu>
                         </v-col>
-                        <v-col cols="2"  align="center">
+                        <v-col cols="2" align="center">
                             <v-menu transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="secondary" v-bind="props" append-icon="mdi-chevron-down">
@@ -271,7 +260,8 @@
                                     <!--v-btn block color="blue">Operations</v-btn-->
                                     <v-menu transition="scale-transition">
                                         <template v-slot:activator="{ props }">
-                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"  append-icon="mdi-chevron-down">
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"
+                                                append-icon="mdi-chevron-down">
                                             </v-btn>
                                         </template>
                                         <v-list>
@@ -360,8 +350,8 @@
                     selectedDateInto1: "",
                     searchText1: "",
                     searchText2: "",
-                    dateFromDateMenu:null,
-                    dateIntoDateMenu:null,
+                    dateFromDateMenu: null,
+                    dateIntoDateMenu: null,
                     selectedDateFromFull: null,
                     selectedDateFrom: null,
                     selectedDateFromInto: null,
@@ -575,41 +565,39 @@
                     this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
                     console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
                 },
-
                 onShowUserMenu() {
                     this.isShowUserMenu = !this.isShowUserMenu;
                 },
-                checkReorderColumnsDisabled(index){
-                    ret = false;                    
+                checkReorderColumnsDisabled(index) {
+                    ret = false;
                     var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
-                    if(isSortableCurr==undefined) {isSortableCurr = true;}
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
                     ret = !isSortableCurr;
                     //console.log(index,   this.dessertsData.dessertsHeaders[index].title, ret);
                     return ret;
                 },
-
-                onReorderColumnsClick(where, index){
+                onReorderColumnsClick(where, index) {
                     var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
-                    if(isSortableCurr==undefined) {isSortableCurr = true;}
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
                     //console.log(where, index, this.dessertsData.dessertsHeaders[index].title, isSortableCurr, this.dessertsData.dessertsHeaders[index].sortable);
-                    if(where == 'UP' && index > 0 && isSortableCurr) {
-                        var isSortablePrev = this.dessertsData.dessertsHeaders[index-1].sortable;
-                        if(isSortablePrev==undefined) {isSortablePrev = true;}
-                        if(isSortablePrev) {
-                            var element_old = this.dessertsData.dessertsHeaders[index-1];
+                    if (where == 'UP' && index > 0 && isSortableCurr) {
+                        var isSortablePrev = this.dessertsData.dessertsHeaders[index - 1].sortable;
+                        if (isSortablePrev == undefined) { isSortablePrev = true; }
+                        if (isSortablePrev) {
+                            var element_old = this.dessertsData.dessertsHeaders[index - 1];
                             var element_new = this.dessertsData.dessertsHeaders[index];
-                            this.dessertsData.dessertsHeaders[index]   = element_old;
-                            this.dessertsData.dessertsHeaders[index-1] = element_new;
+                            this.dessertsData.dessertsHeaders[index] = element_old;
+                            this.dessertsData.dessertsHeaders[index - 1] = element_new;
                         }
                     }
-                    if(where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
-                        var isSortableNext = this.dessertsData.dessertsHeaders[index+1].sortable;
-                        if(isSortableNext==undefined) {isSortableNext = true;}
-                        if(isSortableNext) {
-                            var element_old = this.dessertsData.dessertsHeaders[index+1];
+                    if (where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
+                        var isSortableNext = this.dessertsData.dessertsHeaders[index + 1].sortable;
+                        if (isSortableNext == undefined) { isSortableNext = true; }
+                        if (isSortableNext) {
+                            var element_old = this.dessertsData.dessertsHeaders[index + 1];
                             var element_new = this.dessertsData.dessertsHeaders[index];
-                            this.dessertsData.dessertsHeaders[index]   = element_old;
-                            this.dessertsData.dessertsHeaders[index+1] = element_new;
+                            this.dessertsData.dessertsHeaders[index] = element_old;
+                            this.dessertsData.dessertsHeaders[index + 1] = element_new;
                         }
                     }
                 },
