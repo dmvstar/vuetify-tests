@@ -32,11 +32,11 @@
                     <v-card outlined color="transparent">
                         <template v-slot:title>
                             Drawer example
-                        </template>                
-                        <template v-slot:subtitle>
-                           {{appAuthor}} {{appVersion}}
                         </template>
-                      </v-card>
+                        <template v-slot:subtitle>
+                            {{appAuthor}} {{appVersion}}
+                        </template>
+                    </v-card>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <template v-if="$vuetify.display.mdAndUp">
@@ -109,10 +109,22 @@
             </v-navigation-drawer>
 
             <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
-                <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles">
-                    </v-list-item>
 
+                <!--v-list density="compact" nav-->
+                <v-row ma="10">
+                    <v-col ma="10">Filteres</v-col>
+                </v-row>
+                <v-row ma="10">
+                    <v-col ma="10">
+                        <v-text-field density="compact" v-model="searchData.searchText" label="Search text"
+                            prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
+                        </v-text-field>
+                    </v-col>
+                </v-row>
+
+
+                <v-row ma="10">
+                    <v-col ma="10">
                     <v-menu density="compact" v-model="searchData.dateFromDateMenu" :close-on-content-click="true">
                         <template v-slot:activator="{ props }">
                             <v-text-field density="compact" v-model="searchData.selectedDateFrom" label="Date From"
@@ -121,7 +133,10 @@
                         </template>
                         <v-date-picker v-model="searchData.selectedDateFromFull"></v-date-picker>
                     </v-menu>
-
+                </v-col>
+                </v-row>
+                <v-row ma="10">
+                    <v-col ma="10">
                     <v-menu density="compact" v-model="searchData.dateIntoDateMenu" :close-on-content-click="true">
                         <template v-slot:activator="{ props }">
                             <v-text-field density="compact" v-model="searchData.selectedDateInto" label="Date Into"
@@ -130,8 +145,19 @@
                         </template>
                         <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
                     </v-menu>
-
-                </v-list>
+                </v-col>
+                </v-row>
+                <!--/v-list-->
+                <v-row ma="10">
+                    <v-col ma="10">
+                    <v-btn color="green" block>Apply</v-btn>
+                </v-col>
+                </v-row>
+                <v-row ma="10">
+                    <v-col ma="10">
+                    <v-btn color="orange" block>Clear</v-btn>
+                </v-col>
+                </v-row>
             </v-navigation-drawer>
 
             <v-main>
@@ -162,12 +188,9 @@
                                 <v-list>
                                     <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
-                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders" :key="index"
-                                        :title="title" 
-                                        :subtitle="subtitle" 
-                                        :value="title" 
-                                        :disabled="checkReorderColumnsDisabled(index)"
-                                        density="compact">
+                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"
+                                        :key="index" :title="title" :subtitle="subtitle" :value="title"
+                                        :disabled="checkReorderColumnsDisabled(index)" density="compact">
                                         <template v-slot:append>
                                             <v-btn color="grey-lighten-1" icon="mdi-chevron-up" variant="text"
                                                 @click="onReorderColumnsClick('UP', index)"></v-btn>
@@ -377,14 +400,14 @@
                 var dessertsData = Vue.ref(
                     {
                         dessertsHeaders: [
-                            { title: 'Dessert (100g serving)', subtitle:"Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
-                            { title: 'Calories\n(100g)', subtitle:"Total Calories",align: 'end', key: 'calories', class: 'my-header-style' },
-                            { title: 'Fat (g)', subtitle:"Fat in dessert",align: 'end', key: 'fat', class: 'my-header-style' },
-                            { title: 'Carbs (g)', subtitle:"Carbs in dessert",align: 'end', key: 'carbs', class: 'my-header-style' },
-                            { title: 'Protein (g)', subtitle:"Protein in dessert",align: 'end', key: 'protein', class: 'my-header-style' },
-                            { title: 'Iron (%)', subtitle:"Iron in dessert",align: 'end', key: 'iron', class: 'my-header-style' },
-                            { title: 'Actions', subtitle:"Actions buttons",align: 'center', key: 'actions', sortable: false, width: '20%' },
-                            { title: 'Operations', subtitle:"Operation for item",align: 'center', key: 'operations', sortable: false, width: '5%' },
+                            { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Fat (g)', subtitle: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'Iron (%)', subtitle: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
                         dessertsItems: [
                             {
