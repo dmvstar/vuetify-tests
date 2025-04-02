@@ -169,8 +169,11 @@
                         </v-card-title>
                     </v-row>
                     <v-row ma="10">
-                        <v-col cols="12" sm="12" ma="10">
+                        <v-col cols="6" sm="6" ma="10">
                             <v-btn color="green" block>OK</v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="6" ma="10">
+                            <v-btn color="orange" block>NO</v-btn>
                         </v-col>
                     </v-row>
                     <v-row ma="2">
@@ -313,11 +316,9 @@
                             </v-data-table>
                         </v-col>
                     </v-row>
-
-
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="primary" block>NO</v-btn>
+                            <v-btn color="primary" block>Refresh</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -348,7 +349,7 @@
         const app = createApp({
             template: "#app-template",
             setup() {
-                const appVersion = "v. 0.0.29 (2025-04-01 23:29:35)";
+                const appVersion = "v. 0.0.32 (2025-04-02 18:19:12)";
                 const appAuthor = "StarDust";
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
@@ -363,24 +364,7 @@
                 var faceRailIcon = Vue.ref("mdi-chevron-right");
                 var mainDrawerRail = Vue.ref(true);
                 var group = Vue.ref(null);
-                var items = Vue.ref([
-                    {
-                        title: 'Foo',
-                        value: 'foo',
-                    },
-                    {
-                        title: 'Bar',
-                        value: 'bar',
-                    },
-                    {
-                        title: 'Fizz',
-                        value: 'fizz',
-                    },
-                    {
-                        title: 'Buzz',
-                        value: 'buzz',
-                    },
-                ]);
+                
 
                 const searchData = Vue.reactive({
                     selectedDateFrom1: "",
@@ -536,7 +520,7 @@
                     , faceIdUrl
                     , mainDrawer, mainDrawerRail, secondDrawer
                     , group
-                    , items
+                    
                     , usersList
                     , dessertsData
                     , dicts
