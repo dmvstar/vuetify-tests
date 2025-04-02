@@ -156,7 +156,7 @@
                                     <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
                                     <v-list-item v-for="({title}, index) in dessertsData.dessertsHeaders"
-                                        :key="index"  :title="title" :value="title"
+                                        :key="index"  :title="title" :value="title" :disabled="checkReorderColumnsDisabled(index)"
                                         density="compact"
                                         >
                                         <template v-slot:append>
@@ -579,11 +579,19 @@
                 onShowUserMenu() {
                     this.isShowUserMenu = !this.isShowUserMenu;
                 },
+                checkReorderColumnsDisabled(index){
+                    ret = false;                    
+                    var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
+                    if(isSortableCurr==undefined) {isSortableCurr = true;}
+                    ret = !isSortableCurr;
+                    //console.log(index,   this.dessertsData.dessertsHeaders[index].title, ret);
+                    return ret;
+                },
 
                 onReorderColumnsClick(where, index){
                     var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
                     if(isSortableCurr==undefined) {isSortableCurr = true;}
-                    console.log(where, index, this.dessertsData.dessertsHeaders[index].title, isSortableCurr, this.dessertsData.dessertsHeaders[index].sortable);
+                    //console.log(where, index, this.dessertsData.dessertsHeaders[index].title, isSortableCurr, this.dessertsData.dessertsHeaders[index].sortable);
                     if(where == 'UP' && index > 0 && isSortableCurr) {
                         var isSortablePrev = this.dessertsData.dessertsHeaders[index-1].sortable;
                         if(isSortablePrev==undefined) {isSortablePrev = true;}
