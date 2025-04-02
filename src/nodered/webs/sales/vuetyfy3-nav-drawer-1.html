@@ -107,53 +107,58 @@
             </v-navigation-drawer>
 
             <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
-
-                <!--v-list density="compact" nav-->
-                <v-row ma="10">
-                    <v-col ma="10">Filteres</v-col>
-                </v-row>
-                <v-row ma="10">
-                    <v-col ma="10">
-                        <v-text-field density="compact" v-model="searchData.searchText" label="Search text"
-                            prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row ma="10">
-                    <v-col ma="10">
-                        <v-menu density="compact" v-model="searchData.dateFromDateMenu" :close-on-content-click="true">
-                            <template v-slot:activator="{ props }">
-                                <v-text-field density="compact" v-model="searchData.selectedDateFrom" label="Date From"
-                                    prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace" v-bind="props">
-                                </v-text-field>
-                            </template>
-                            <v-date-picker v-model="searchData.selectedDateFromFull"></v-date-picker>
-                        </v-menu>
-                    </v-col>
-                </v-row>
-                <v-row ma="10">
-                    <v-col ma="10">
-                        <v-menu density="compact" v-model="searchData.dateIntoDateMenu" :close-on-content-click="true">
-                            <template v-slot:activator="{ props }">
-                                <v-text-field density="compact" v-model="searchData.selectedDateInto" label="Date Into"
-                                    prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace" v-bind="props">
-                                </v-text-field>
-                            </template>
-                            <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
-                        </v-menu>
-                    </v-col>
-                </v-row>
-                <!--/v-list-->
-                <v-row ma="10">
-                    <v-col ma="10">
-                        <v-btn color="green" block>Apply</v-btn>
-                    </v-col>
-                </v-row>
-                <v-row ma="10">
-                    <v-col ma="10">
-                        <v-btn color="orange" block>Clear</v-btn>
-                    </v-col>
-                </v-row>
+                <div id="second-driwer" class="ma-3">
+                    <!--v-list density="compact" nav-->
+                    <v-row ma="10">
+                        <v-col ma="10">Filteres</v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-text-field density="compact" v-model="searchData.searchText" label="Search text"
+                                prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                :close-on-content-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateFrom"
+                                        label="Date From" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="searchData.selectedDateFromFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
+                                :close-on-content-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateInto"
+                                        label="Date Into" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <!--/v-list-->
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="green" block>Apply</v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="orange" block>Clear</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
             </v-navigation-drawer>
 
             <v-main>
