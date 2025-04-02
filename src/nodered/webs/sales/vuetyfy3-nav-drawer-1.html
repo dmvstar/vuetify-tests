@@ -153,8 +153,11 @@
                                 <v-list>
                                     <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
-                                    <v-list-item v-for="({title}, index) in dessertsData.dessertsHeaders" :key="index"
-                                        :title="title" :value="title" :disabled="checkReorderColumnsDisabled(index)"
+                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders" :key="index"
+                                        :title="title" 
+                                        :subtitle="subtitle" 
+                                        :value="title" 
+                                        :disabled="checkReorderColumnsDisabled(index)"
                                         density="compact">
                                         <template v-slot:append>
                                             <v-btn color="grey-lighten-1" icon="mdi-chevron-up" variant="text"
@@ -364,14 +367,14 @@
                 var dessertsData = Vue.ref(
                     {
                         dessertsHeaders: [
-                            { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
-                            { title: 'Calories\n(100g)', align: 'end', key: 'calories', class: 'my-header-style' },
-                            { title: 'Fat (g)', align: 'end', key: 'fat', class: 'my-header-style' },
-                            { title: 'Carbs (g)', align: 'end', key: 'carbs', class: 'my-header-style' },
-                            { title: 'Protein (g)', align: 'end', key: 'protein', class: 'my-header-style' },
-                            { title: 'Iron (%)', align: 'end', key: 'iron', class: 'my-header-style' },
-                            { title: 'Actions', align: 'center', key: 'actions', sortable: false, width: '20%' },
-                            { title: 'Operations', align: 'center', key: 'operations', sortable: false, width: '5%' },
+                            { title: 'Dessert (100g serving)', subtitle:"Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories\n(100g)', subtitle:"Total Calories",align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Fat (g)', subtitle:"Fat in dessert",align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'Carbs (g)', subtitle:"Carbs in dessert",align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'Protein (g)', subtitle:"Protein in dessert",align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'Iron (%)', subtitle:"Iron in dessert",align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle:"Actions buttons",align: 'center', key: 'actions', sortable: false, width: '20%' },
+                            { title: 'Operations', subtitle:"Operation for item",align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
                         dessertsItems: [
                             {
