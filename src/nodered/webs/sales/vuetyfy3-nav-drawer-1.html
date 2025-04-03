@@ -208,7 +208,8 @@
                             </v-menu>
                         </v-col>
                         <v-col cols="2" align="center">
-                            <v-menu transition="scale-transition" :close-on-content-click="false">
+                            <!--:close-on-content-click="false"-->
+                            <v-menu transition="scale-transition">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="secondary" v-bind="props" append-icon="mdi-chevron-down">
                                         Operations ...
@@ -217,7 +218,7 @@
                                 <v-list>
                                     <v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"
                                         :key="index" :prepend-icon="icon" :title="title" :value="title"
-                                        @click="onUserMenuClick(action, index)">
+                                        @click="onOperationClick(action, index)">
                                         <!--template v-slot:append>
                                             <v-btn
                                               color="grey-lighten-1"
@@ -241,6 +242,7 @@
                         <v-col cols="12" sm="12" ma="10">
 
                             <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
+                                v-model="dessertsData.selectedItems"
                                 :items="dessertsData.dessertsItems" item-value="name" :search="searchData.searchText1"
                                 show-select class="elevation-1">
 
@@ -349,7 +351,7 @@
         const app = createApp({
             template: "#app-template",
             setup() {
-                const appVersion = "v. 0.0.32 (2025-04-02 18:19:12)";
+                const appVersion = "v. 0.0.34 (2025-04-03 22:03:07)";
                 const appAuthor = "StarDust";
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
@@ -394,6 +396,7 @@
                             { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
+                        selectedItems: [],
                         dessertsItems: [
                             {
                                 name: 'Frozen Yogurt',
@@ -626,7 +629,9 @@
                 getReorderColumnsStatus(event, index) {
 
                 },
-
+                onOperationClick(event, index) {
+                    console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);                    
+                },
                 onUserMenuClick(event, index) {
                     switch (event) {
                         case "logout":
