@@ -6,6 +6,22 @@
     <link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+
+    <style>
+        .theme--light.v-data-table tbody tr.v-data-table__selected {
+            background: #f5c17d70 !important;
+        }
+        .theme--dark.v-data-table tbody tr.v-data-table__selected {
+            background: #a17b4970 !important;
+        }
+        .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
+            background: #a17b49c2 !important;
+        }
+        .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
+            background: #ffd296d2 !important;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -243,8 +259,14 @@
 
                             <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
                                 v-model="dessertsData.selectedItems"
-                                :items="dessertsData.dessertsItems" item-value="name" :search="searchData.searchText1"
-                                show-select class="elevation-1">
+                                :items="dessertsData.dessertsItems" 
+                                item-value="name" 
+                                item-key="name" 
+                                :search="searchData.searchText1"
+                                class="elevation-1"
+                                @click:row="dessertsDataHandleClick"
+                                show-select 
+                                class="elevation-1">
 
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
@@ -320,7 +342,9 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="primary" block>Refresh</v-btn>
+                            <v-btn color="primary" 
+                            @click="onButtonRefresh(event)"
+                            block>Refresh</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -366,7 +390,7 @@
                 var faceRailIcon = Vue.ref("mdi-chevron-right");
                 var mainDrawerRail = Vue.ref(true);
                 var group = Vue.ref(null);
-                
+
 
                 const searchData = Vue.reactive({
                     selectedDateFrom1: "",
@@ -396,6 +420,7 @@
                             { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
+                        selectedRows:[],
                         selectedItems: [],
                         dessertsItems: [
                             {
@@ -523,7 +548,7 @@
                     , faceIdUrl
                     , mainDrawer, mainDrawerRail, secondDrawer
                     , group
-                    
+
                     , usersList
                     , dessertsData
                     , dicts
@@ -626,12 +651,15 @@
                     }
                 },
 
-                getReorderColumnsStatus(event, index) {
-
-                },
                 onOperationClick(event, index) {
-                    console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);                    
+                    console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
                 },
+
+                onButtonRefresh(event) {
+                    console.log(this.dessertsData.selectedItems.length);
+                    console.log(this.dessertsData.selectedItems);
+                },
+
                 onUserMenuClick(event, index) {
                     switch (event) {
                         case "logout":
@@ -644,6 +672,34 @@
                         default:
                             console.log(`Sorry, we are out of ${event}.`);
                     }
+                },
+
+                dessertsDataHandleClick(event, row){
+                    //https://codepen.io/Hexodus/pen/ExKGWBe
+                    let selectState = (row.isSelected()) ? false : true;
+                    console.log(`[dessertsDataHandleClick] event ${JSON.stringify(event)}`);
+                    console.log(`[dessertsDataHandleClick] row  ${JSON.stringify(row)}`);
+                    console.log(row);
+                    //this.dessertsData.selectedItems.push(row);                    
+                    //row.select(true);
+                    //row.toggleSelect(row);
+                    console.log(this.dessertsData.selectedItems.length);
+                    console.log(this.dessertsData.selectedItems);
+                    this.toggleSelection(row.item.name);
+                },
+
+                toggleSelection(keyID) {
+                if (this.dessertsData.selectedItems.includes(keyID)) {
+                    this.dessertsData.selectedItems = this.dessertsData.selectedItems.filter(
+                        selectedKeyID => selectedKeyID !== keyID
+                    );
+                } else {
+                    this.dessertsData.selectedItems.push(keyID);
+                }
+                },
+
+                getReorderColumnsStatus(event, index) {
+
                 },
 
                 getShowUserMenuIcon() {
