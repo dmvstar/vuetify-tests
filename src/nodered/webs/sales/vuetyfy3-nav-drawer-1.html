@@ -8,18 +8,51 @@
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
 
     <style>
+        
         .theme--light.v-data-table tbody tr.v-data-table__selected {
             background: #f5c17d70 !important;
         }
+
+        .theme--light.v-data-table tbody tr.v-data-table__selected {
+            background: #f5c17d70 !important;
+        }
+
         .theme--dark.v-data-table tbody tr.v-data-table__selected {
             background: #a17b4970 !important;
         }
+
         .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
             background: #a17b49c2 !important;
         }
+
         .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
             background: #ffd296d2 !important;
         }
+
+        /*
+        .v-data-table .v-table__wrapper>table>thead>tr>td,
+        .v-data-table .v-table__wrapper>table>thead>tr th,
+        .v-data-table .v-table__wrapper>table tbody>tr>td,
+        .v-data-table .v-table__wrapper>table tbody>tr th {
+            background-color: #f9f5e3 !important;
+        }
+
+        .v-data-table .v-table__wrapper>table>thead>tr>th,
+        .v-data-table .v-table__wrapper>table tbody>tr>th {
+            background-color: #D14081 !important;
+        }
+
+        .v-data-table-header__content {
+            background-color: #D14081 !important;
+            color: #CCF5AC;
+            font-weight: bold;
+        }
+
+        .v-data-table .v-table__wrapper>table tbody>tr:nth-of-type(even)>td,
+        .v-data-table .v-table__wrapper>table tbody>tr:nth-of-type(even) th {
+            background-color: #e4e0d0 !important;
+        }
+        */    
     </style>
 
 </head>
@@ -258,15 +291,9 @@
                         <v-col cols="12" sm="12" ma="10">
 
                             <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
-                                v-model="dessertsData.selectedItems"
-                                :items="dessertsData.dessertsItems" 
-                                item-value="name" 
-                                item-key="name" 
-                                :search="searchData.searchText1"
-                                class="elevation-1"
-                                @click:row="dessertsDataHandleClick"
-                                show-select 
-                                class="elevation-1">
+                                v-model="dessertsData.selectedItems" :items="dessertsData.dessertsItems"
+                                item-value="name" item-key="name" :search="searchData.searchText1" class="elevation-1"
+                                @click:row="dessertsDataHandleClick" show-select class="elevation-1">
 
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
@@ -342,9 +369,7 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="primary" 
-                            @click="onButtonRefresh(event)"
-                            block>Refresh</v-btn>
+                            <v-btn color="primary" @click="onButtonRefresh(event)" block>Refresh</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -420,7 +445,7 @@
                             { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
-                        selectedRows:[],
+                        selectedRows: [],
                         selectedItems: [],
                         dessertsItems: [
                             {
@@ -674,7 +699,7 @@
                     }
                 },
 
-                dessertsDataHandleClick(event, row){
+                dessertsDataHandleClick(event, row) {
                     //https://codepen.io/Hexodus/pen/ExKGWBe
                     let selectState = (row.isSelected()) ? false : true;
                     console.log(`[dessertsDataHandleClick] event ${JSON.stringify(event)}`);
@@ -689,13 +714,13 @@
                 },
 
                 toggleSelection(keyID) {
-                if (this.dessertsData.selectedItems.includes(keyID)) {
-                    this.dessertsData.selectedItems = this.dessertsData.selectedItems.filter(
-                        selectedKeyID => selectedKeyID !== keyID
-                    );
-                } else {
-                    this.dessertsData.selectedItems.push(keyID);
-                }
+                    if (this.dessertsData.selectedItems.includes(keyID)) {
+                        this.dessertsData.selectedItems = this.dessertsData.selectedItems.filter(
+                            selectedKeyID => selectedKeyID !== keyID
+                        );
+                    } else {
+                        this.dessertsData.selectedItems.push(keyID);
+                    }
                 },
 
                 getReorderColumnsStatus(event, index) {
