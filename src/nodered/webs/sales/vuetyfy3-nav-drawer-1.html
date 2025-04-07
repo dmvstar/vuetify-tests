@@ -8,53 +8,45 @@
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
 
     <style>
-        
-        .theme--light.v-data-table tbody tr.v-data-table__selected {
+        .v-theme--light.v-table tbody tr.v-data-table__selected {
             background: #f5c17d70 !important;
         }
-
-        .theme--light.v-data-table tbody tr.v-data-table__selected {
-            background: #f5c17d70 !important;
+        .v-theme--light.v-table tbody tr.v-data-table__selected:hover {
+            background: #ffd296d2 !important;
         }
-
-        .theme--dark.v-data-table tbody tr.v-data-table__selected {
+        .v-theme--dark.v-table tbody tr.v-data-table__selected {
             background: #a17b4970 !important;
         }
-
-        .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
+        .v-theme--dark.v-table tbody tr.v-data-table__selected:hover {
             background: #a17b49c2 !important;
         }
 
-        .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
-            background: #ffd296d2 !important;
+        .v-theme--light.v-data-table thead {
+            background-color: #bb996dc2;
         }
-
+        .v-theme--light.v-data-table tbody tr:nth-child(even) {
+            background-color: #f4e1c8c2;
+        }
+        .v-theme--dark.v-data-table thead {
+            background-color: #101010c2;
+        }
+        .v-theme--dark.v-data-table tbody tr:nth-child(even) {
+            background-color: #363636c2;
+        }
         /*
-        .v-data-table .v-table__wrapper>table>thead>tr>td,
-        .v-data-table .v-table__wrapper>table>thead>tr th,
-        .v-data-table .v-table__wrapper>table tbody>tr>td,
-        .v-data-table .v-table__wrapper>table tbody>tr th {
-            background-color: #f9f5e3 !important;
+        .v-theme--light.v-table tbody tr td:nth-child(even) {
+            background-color: #a17b49c2;
         }
-
-        .v-data-table .v-table__wrapper>table>thead>tr>th,
-        .v-data-table .v-table__wrapper>table tbody>tr>th {
-            background-color: #D14081 !important;
+        .v-theme--light.v-table tbody tr td:nth-child(odd) {
+            background-color: #ffd296d2;
         }
-
         .v-data-table-header__content {
             background-color: #D14081 !important;
             color: #CCF5AC;
             font-weight: bold;
         }
-
-        .v-data-table .v-table__wrapper>table tbody>tr:nth-of-type(even)>td,
-        .v-data-table .v-table__wrapper>table tbody>tr:nth-of-type(even) th {
-            background-color: #e4e0d0 !important;
-        }
-        */    
+        */
     </style>
-
 </head>
 
 <body>
@@ -590,7 +582,10 @@
                 this.generateName();
             },
             mounted() {
-
+                var dessertsHeaders = localStorage.getItem('dessertsHeaders');
+                if(dessertsHeaders) {
+                    this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
+                }
             },
             watch: {
                 mainDrawerRail: function (newQuestion, oldQuestion) {
@@ -674,6 +669,7 @@
                             this.dessertsData.dessertsHeaders[index + 1] = element_new;
                         }
                     }
+                    localStorage.setItem('dessertsHeaders', JSON.stringify(this.dessertsData.dessertsHeaders));
                 },
 
                 onOperationClick(event, index) {
