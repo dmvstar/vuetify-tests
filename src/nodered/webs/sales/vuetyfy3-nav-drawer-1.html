@@ -4,15 +4,16 @@
 <head>
     <title>Vuetify Drawer example NG V3</title>
     <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
-    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
 
     <style>
-
         .v-data-table__tr:has(input[type='checkbox']:checked) {
             background: #f5c17d70 !important;
         }
+
         /* Vuetify2
         .v-theme--light.v-table tbody tr.v-data-table__selected {
             background: #f5c17d70 !important;
@@ -31,15 +32,19 @@
         .v-theme--light.v-data-table thead {
             background-color: #bb996dc2;
         }
+
         .v-theme--light.v-data-table tbody tr:nth-child(even) {
             background-color: #f4e1c8c2;
         }
+
         .v-theme--dark.v-data-table thead {
             background-color: #101010c2;
         }
+
         .v-theme--dark.v-data-table tbody tr:nth-child(even) {
             background-color: #363636c2;
         }
+
         /*
         .v-theme--light.v-table tbody tr td:nth-child(even) {
             background-color: #a17b49c2;
@@ -317,7 +322,6 @@
                                     </template>
                                 </template>
 
-
                                 <template v-slot:item.name="{ item }">
                                     <div style="white-space: pre-wrap;">{{ item.name }}</div>
                                 </template>
@@ -335,14 +339,18 @@
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
-                                        :icon="getDebtStatusIcon(item.fat)">
+                                        :icon="getDebtStatusIcon(item.fat)"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')">
                                     </v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue"
-                                        icon="mdi-file-document"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"
+                                        @click="onBtnActionsEditClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                 </template>
 
                                 <template v-slot:item.operations="{ item }">
@@ -381,6 +389,54 @@
             </v-main>
 
         </v-layout>
+
+
+        <v-dialog v-model="dessertsData.dialogEdit" max-width="500px">
+            <template v-slot:activator="{ props }">
+                <v-btn class="mb-2" color="primary" dark v-bind="props">
+                    New Item
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-title>
+                    <span class="text-h5">Edit item [{{ dessertsData.editedItem.name }}]</span>
+                </v-card-title>
+
+                <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" md="8" sm="6">
+                                <v-text-field v-model="dessertsData.editedItem.name" label="Dessert name"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field v-model="dessertsData.editedItem.calories" label="Calories"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field v-model="dessertsData.editedItem.fat" label="Fat (g)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field v-model="dessertsData.editedItem.carbs" label="Carbs (g)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field v-model="dessertsData.editedItem.protein" label="Protein (g)"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
         <!-- </v-card> -->
     </template>
 
@@ -434,6 +490,8 @@
 
                 var dessertsData = Vue.ref(
                     {
+                        isDessertsDataHandleClick: true,
+                        editedItem : {},
                         dessertsHeaders: [
                             { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
                             { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
@@ -590,7 +648,7 @@
             },
             mounted() {
                 var dessertsHeaders = localStorage.getItem('dessertsHeaders');
-                if(dessertsHeaders) {
+                if (dessertsHeaders) {
                     this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
                 }
             },
@@ -623,6 +681,18 @@
                     var ret = `${day}-${month}-${year}`;
                     console.log(ret);
                     return ret;
+                },
+
+                onBtnActionsStubClick(item, column) {
+                    console.log(`[onBtnActionsStubClick] ${JSON.stringify(item)}, ${column}`);
+                    this.dessertsData.isDessertsDataHandleClick = false;
+                },
+
+                onBtnActionsEditClick(item, column) {
+                    console.log(`[onBtnActionsEditClick] ${JSON.stringify(item)}, ${column}`);
+                    this.dessertsData.isDessertsDataHandleClick = false;
+                    this.dessertsData.dialogEdit = true;
+                    this.dessertsData.editedItem = item;
                 },
 
                 onBtnChangeTheme() {
@@ -703,6 +773,10 @@
                 },
 
                 dessertsDataHandleClick(event, row) {
+                    if(!this.dessertsData.isDessertsDataHandleClick){
+                        this.dessertsData.isDessertsDataHandleClick = true;
+                        return;
+                    }
                     //https://codepen.io/Hexodus/pen/ExKGWBe
                     let selectState = (row.isSelected()) ? false : true;
                     console.log(`[dessertsDataHandleClick] event ${JSON.stringify(event)}`);
