@@ -446,199 +446,14 @@
 
 
         const vuetify = createVuetify({
-            /*
+            
             theme: {
                 defaultTheme: "dark",
-            },
-            */
+            }
+            
         });
         const app = createApp({
             template: "#app-template",
-            setup() {
-                const appVersion = "v. 0.0.34 (2025-04-03 22:03:07)";
-                const appAuthor = "StarDust";
-                const faceId = 10;
-                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
-
-                const usersList = {
-                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
-                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
-                };
-                var mainDrawer = Vue.ref(true);
-                var secondDrawer = Vue.ref(false);
-
-                var faceRailIcon = Vue.ref("mdi-chevron-right");
-                var mainDrawerRail = Vue.ref(true);
-                var group = Vue.ref(null);
-
-
-                const searchData = Vue.reactive({
-                    selectedDateFrom1: "",
-                    selectedDateInto1: "",
-                    searchText1: "",
-                    searchText2: "",
-                    dateFromDateMenu: null,
-                    dateIntoDateMenu: null,
-                    selectedDateFromFull: null,
-                    selectedDateFrom: null,
-                    selectedDateFromInto: null,
-                    selectedDateInto: null,
-                    userMode: null,
-                    userState: null
-                });
-
-
-                var dessertsData = Vue.ref(
-                    {
-                        isDessertsDataHandleClick: true,
-                        editedItem : {},
-                        dessertsHeaders: [
-                            { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
-                            { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
-                            { title: 'Fat (g)', subtitle: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
-                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
-                            { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
-                            { title: 'Iron (%)', subtitle: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
-                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
-                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
-                        ],
-                        selectedRows: [],
-                        selectedItems: [],
-                        dessertsItems: [
-                            {
-                                name: 'Frozen Yogurt',
-                                calories: 159,
-                                fat: 6.0,
-                                carbs: 24,
-                                protein: 4.0,
-                                iron: 1,
-                            },
-                            {
-                                name: 'Natural Yogurt',
-                                calories: 59,
-                                fat: 6.0,
-                                carbs: 24,
-                                protein: 4.0,
-                                iron: 1,
-                            },
-                            {
-                                name: 'Ice cream \nsand\nwich',
-                                calories: 237,
-                                fat: 9.0,
-                                carbs: 37,
-                                protein: 4.3,
-                                iron: 1,
-                            },
-                            {
-                                name: 'Eclair',
-                                calories: 262,
-                                fat: 16.0,
-                                carbs: 23,
-                                protein: 6.0,
-                                iron: 7,
-                            },
-                            {
-                                name: 'Cupcake',
-                                calories: 305,
-                                fat: 3.7,
-                                carbs: 67,
-                                protein: 4.3,
-                                iron: 8,
-                            },
-                            {
-                                name: 'Gingerbread',
-                                calories: 356,
-                                fat: 16.0,
-                                carbs: 49,
-                                protein: 3.9,
-                                iron: 16,
-                            },
-                            {
-                                name: 'Jelly bean',
-                                calories: 375,
-                                fat: 0.0,
-                                carbs: 94,
-                                protein: 0.0,
-                                iron: 0,
-                            },
-                            {
-                                name: 'Lollipop',
-                                calories: 392,
-                                fat: 0.2,
-                                carbs: 98,
-                                protein: 0,
-                                iron: 2,
-                            },
-                            {
-                                name: 'Honeycomb',
-                                calories: 408,
-                                fat: 3.2,
-                                carbs: 87,
-                                protein: 6.5,
-                                iron: 45,
-                            },
-                            {
-                                name: 'Donut',
-                                calories: 452,
-                                fat: 25.0,
-                                carbs: 51,
-                                protein: 4.9,
-                                iron: 22,
-                            },
-                            {
-                                name: 'KitKat',
-                                calories: 518,
-                                fat: 26.0,
-                                carbs: 65,
-                                protein: 7,
-                                iron: 6,
-                            },
-                        ]
-                    }
-                );
-
-                const menuActions = {
-                    userMenu: [
-                        ["Hide", "mdi-fire", "hide"],
-                        ["Logout", "mdi-logout", "logout"]
-                    ],
-                    actionsList: [
-                        ["Print Report", "mdi-printer", "print_rep"],
-                        ["Print Barcode", "mdi-barcode", "print_bar"],
-                        ["Print QRCode", "mdi-qrcode", "print_qr"]
-                    ]
-                };
-
-                const dicts = {
-                    debtStatus: [
-
-                    ]
-                };
-
-                const theme = ref('light');
-                const isDarkTheme = ref(false);
-
-                const isShowUserMenu = ref(false);
-
-                return {
-                    theme
-                    , isDarkTheme
-                    , isShowUserMenu
-                    , appVersion, appAuthor
-                    , faceId
-                    , faceRailIcon
-                    , faceIdUrl
-                    , mainDrawer, mainDrawerRail, secondDrawer
-                    , group
-
-                    , usersList
-                    , dessertsData
-                    , dicts
-                    , searchData
-                    , menuActions
-
-                }
-            },
             created() {
                 console.log(version);
                 var faceId = Math.floor(10 + Math.random() * 90);
@@ -876,7 +691,202 @@
                     return ret;
                 },
 
-            }
+            },
+            setup() {
+                const faceId = 10;
+                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
+                const usersList = {
+                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                };
+                var faceInfo = Vue.ref({
+                    faceId : 10,
+                    faceIdUrl : "https://randomuser.me/api/portraits/men/22.jpg",
+                    usersList : {
+                        firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                        lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                    }
+                });
+                var mainDrawer = Vue.ref(true);
+                var secondDrawer = Vue.ref(false);
+
+                var faceRailIcon = Vue.ref("mdi-chevron-right");
+                var mainDrawerRail = Vue.ref(true);
+                var group = Vue.ref(null);
+
+                const searchData = Vue.reactive({
+                    selectedDateFrom1: "",
+                    selectedDateInto1: "",
+                    searchText1: "",
+                    searchText2: "",
+                    dateFromDateMenu: null,
+                    dateIntoDateMenu: null,
+                    selectedDateFromFull: null,
+                    selectedDateFrom: null,
+                    selectedDateFromInto: null,
+                    selectedDateInto: null,
+                    userMode: null,
+                    userState: null
+                });
+
+
+                var dessertsData = Vue.ref(
+                    {
+                        isDessertsDataHandleClick: true,
+                        editedItem : {},
+                        dessertsHeaders: [
+                            { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Fat (g)', subtitle: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'Iron (%)', subtitle: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
+                        ],
+                        selectedRows: [],
+                        selectedItems: [],
+                        dessertsItems: [
+                            {
+                                name: 'Frozen Yogurt',
+                                calories: 159,
+                                fat: 6.0,
+                                carbs: 24,
+                                protein: 4.0,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Natural Yogurt',
+                                calories: 59,
+                                fat: 6.0,
+                                carbs: 24,
+                                protein: 4.0,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Ice cream \nsand\nwich',
+                                calories: 237,
+                                fat: 9.0,
+                                carbs: 37,
+                                protein: 4.3,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Eclair',
+                                calories: 262,
+                                fat: 16.0,
+                                carbs: 23,
+                                protein: 6.0,
+                                iron: 7,
+                            },
+                            {
+                                name: 'Cupcake',
+                                calories: 305,
+                                fat: 3.7,
+                                carbs: 67,
+                                protein: 4.3,
+                                iron: 8,
+                            },
+                            {
+                                name: 'Gingerbread',
+                                calories: 356,
+                                fat: 16.0,
+                                carbs: 49,
+                                protein: 3.9,
+                                iron: 16,
+                            },
+                            {
+                                name: 'Jelly bean',
+                                calories: 375,
+                                fat: 0.0,
+                                carbs: 94,
+                                protein: 0.0,
+                                iron: 0,
+                            },
+                            {
+                                name: 'Lollipop',
+                                calories: 392,
+                                fat: 0.2,
+                                carbs: 98,
+                                protein: 0,
+                                iron: 2,
+                            },
+                            {
+                                name: 'Honeycomb',
+                                calories: 408,
+                                fat: 3.2,
+                                carbs: 87,
+                                protein: 6.5,
+                                iron: 45,
+                            },
+                            {
+                                name: 'Donut',
+                                calories: 452,
+                                fat: 25.0,
+                                carbs: 51,
+                                protein: 4.9,
+                                iron: 22,
+                            },
+                            {
+                                name: 'KitKat',
+                                calories: 518,
+                                fat: 26.0,
+                                carbs: 65,
+                                protein: 7,
+                                iron: 6,
+                            },
+                        ]
+                    }
+                );
+
+                const menuActions = {
+                    userMenu: [
+                        ["Hide", "mdi-fire", "hide"],
+                        ["Logout", "mdi-logout", "logout"]
+                    ],
+                    actionsList: [
+                        ["Print Report", "mdi-printer", "print_rep"],
+                        ["Print Barcode", "mdi-barcode", "print_bar"],
+                        ["Print QRCode", "mdi-qrcode", "print_qr"]
+                    ]
+                };
+
+                const dicts = {
+                    debtStatus: [
+
+                    ]
+                };
+
+                const theme = ref('light');
+                const isDarkTheme = ref(true);
+
+                const isShowUserMenu = ref(false);
+
+                const appVersion = "v. 0.0.35 (2025-04-08 14:47:27)";
+                const appAuthor = "StarDust";
+
+                return {
+                    isDarkTheme
+                    , isShowUserMenu
+                    , appVersion, appAuthor
+                    , faceId
+                    , faceRailIcon
+                    , faceIdUrl
+                    , mainDrawer, mainDrawerRail, secondDrawer
+                    , group
+
+                    , usersList
+                    , dessertsData
+                    , dicts
+                    , searchData
+                    , menuActions
+                }
+
+                
+
+            },
+            
+        
         })
             .use(vuetify)
             .mount("#app");
