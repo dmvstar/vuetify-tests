@@ -4,12 +4,12 @@
 <head>
     <title>Vuetify Data table style example NG V3</title>
     <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
-    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128.png" />    
+    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
 
     <style>
-        
+
         .v-data-table__tr:has(input[type='checkbox']:checked) {
             background: #f5c17d70 !important;
         }
@@ -41,7 +41,7 @@
         .v-theme--dark.v-data-table tbody tr:nth-child(even) {
             background-color: #363636c2;
         }
-        
+
     </style>
 </head>
 
@@ -256,7 +256,7 @@
                 var mainDrawer = Vue.ref(true);
                 var secondDrawer = Vue.ref(false);
 
-                var faceRailIcon = Vue.ref("mdi-chevron-right");               
+                var faceRailIcon = Vue.ref("mdi-chevron-right");
 
 
                 const searchData = Vue.reactive({
@@ -412,7 +412,7 @@
                     , appVersion, appAuthor
                     , faceId
                     , faceRailIcon
-                    , faceIdUrl                   
+                    , faceIdUrl
 
                     , usersList
                     , dessertsData
@@ -541,7 +541,7 @@
                     } else {
                         this.dessertsData.selectedItems.push(keyID);
                     }
-                },                                  
+                },
 
                 getDebtStatusIcon(debtstatus) {
                     ret = "mdi-account";
