@@ -113,10 +113,10 @@
                 v-model="mainDrawer">
 
                 <v-list>
-                    <v-list-item :prepend-avatar="faceIdUrl" :subtitle="getGeneratedEmailAddress()"
+                    <v-list-item :prepend-avatar="faceInfo.faceIdUrl" :subtitle="getGeneratedEmailAddress()"
                         :title="getGeneratedName()">
                         <template v-slot:append>
-                            <v-btn :icon=faceRailIcon variant="text"
+                            <v-btn :icon=faceInfo.faceRailIcon variant="text"
                                 @click.stop="mainDrawerRail = !mainDrawerRail"></v-btn>
                         </template>
                     </v-list-item>
@@ -414,21 +414,21 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12" md="8" sm="6">
-                                <v-text-field v-model="dessertsData.editedItem.name" label="Dessert name"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.name" label="Dessert name"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field v-model="dessertsData.editedItem.calories" label="Calories"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.calories" label="Calories"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field v-model="dessertsData.editedItem.fat" label="Fat (g)"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.fat" label="Fat (g)"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field v-model="dessertsData.editedItem.carbs" label="Carbs (g)"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs" label="Carbs (g)"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field v-model="dessertsData.editedItem.protein" label="Protein (g)"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.protein" label="Protein (g)"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -478,24 +478,24 @@
             },
             watch: {
                 mainDrawerRail: function (newQuestion, oldQuestion) {
-                    console.log("mainDrawerRail", newQuestion, oldQuestion, this.faceRailIcon);
+                    console.log("mainDrawerRail", newQuestion, oldQuestion, this.faceInfo.faceRailIcon);
                     if (newQuestion) {
-                        this.faceRailIcon = "mdi-chevron-right";
+                        this.faceInfo.faceRailIcon = "mdi-chevron-right";
                     } else {
-                        this.faceRailIcon = "mdi-chevron-left";
+                        this.faceInfo.faceRailIcon = "mdi-chevron-left";
                     }
                 },
                 "searchData.selectedDateFromFull": function (newQuestion, oldQuestion) {
-                    //alert(newQuestion);                    
+                    //alert(newQuestion);
                     this.searchData.selectedDateFrom = this.formatDate(newQuestion);
                     this.searchData.dateFromDateMenu = false;
-                    this.searchData.dateIntoDateMenu = false;                    
+                    this.searchData.dateIntoDateMenu = false;
                 },
                 "searchData.selectedDateIntoFull": function (newQuestion, oldQuestion) {
                     //alert(newQuestion);
                     this.searchData.selectedDateInto = this.formatDate(newQuestion);
                     this.searchData.dateFromDateMenu = false;
-                    this.searchData.dateIntoDateMenu = false;                    
+                    this.searchData.dateIntoDateMenu = false;
                 }
             },
             methods: {
@@ -511,8 +511,16 @@
                         date.getDate()<10?'0'+date.getDate():date.getDate()
                     ];
                     //date.toISOString().replace('T', '-').split('-');
-                    console.log(date.toISOString());
+                    //console.log(date.toISOString());
                     var ret = `${day}-${month}-${year}`;
+                    //console.log(ret);
+                    return ret;
+                },
+
+                parseDate(dateStrDDMMYYYY){
+                    var ret = new Date();
+                    var parDate = dateStrDDMMYYYY.split('-');
+                    ret = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
                     console.log(ret);
                     return ret;
                 },
@@ -551,16 +559,18 @@
                     if(searchData){
                         var parDate = [];
                         this.searchData.searchText = searchDataObj.searchText;
-                        
+
                         this.searchData.selectedDateFrom = searchDataObj.selectedDateFrom;
                         this.searchData.dateFromDateMenu = searchDataObj.dateFromDateMenu;
-                        parDate = searchDataObj.selectedDateFrom.split('-');
-                        this.searchData.selectedDateFromFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
-                        
+                        this.searchData.selectedDateFromFull = this.parseDate(searchDataObj.selectedDateFrom);
+                        //parDate = searchDataObj.selectedDateFrom.split('-');
+                        //this.searchData.selectedDateFromFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+
                         this.searchData.selectedDateInto = searchDataObj.selectedDateInto;
                         this.searchData.dateIntoDateMenu = searchDataObj.dateIntoDateMenu;
-                        parDate = searchDataObj.selectedDateInto.split('-');                        
-                        this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                        this.searchData.selectedDateIntoFull = this.parseDate(searchDataObj.selectedDateInto);
+                        //parDate = searchDataObj.selectedDateInto.split('-');
+                        //this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
                     }
                 },
 
@@ -683,22 +693,22 @@
 
                 getGeneratedEmailAddress() {
                     var ret = "awataros.pedros@gmail.com";
-                    if (this.usersList.firstName && this.usersList.lastName) {
-                        ret = `${this.usersList.firstName.toLowerCase()}.${this.usersList.lastName.toLowerCase()}@gmail.com`
+                    if (this.faceInfo.usersList.firstName && this.faceInfo.usersList.lastName) {
+                        ret = `${this.faceInfo.usersList.firstName.toLowerCase()}.${this.faceInfo.usersList.lastName.toLowerCase()}@gmail.com`
                     };
                     return ret;
                 },
 
                 getGeneratedName() {
                     var ret = "Awataros Pedros"
-                    if (this.usersList.firstName && this.usersList.lastName) {
-                        ret = `${this.usersList.firstName} ${this.usersList.lastName}`
+                    if (this.faceInfo.usersList.firstName && this.faceInfo.usersList.lastName) {
+                        ret = `${this.faceInfo.usersList.firstName} ${this.faceInfo.usersList.lastName}`
                     };
                     return ret;
                 },
                 generateName() {
-                    var firstNames = this.usersList.firstNames;
-                    var lastNames = this.usersList.lastNames;
+                    var firstNames = this.faceInfo.usersList.firstNames;
+                    var lastNames = this.faceInfo.usersList.lastNames;
 
                     var ret = "Awataros Pedros"
                     var min = 0, max;
@@ -707,8 +717,8 @@
                     max = lastNames.length - 1;
                     var lastIndex = Math.floor(Math.random() * (max - min + 1) + min);
 
-                    this.usersList.firstName = firstNames[firstIndex];
-                    this.usersList.lastName = lastNames[firstIndex];
+                    this.faceInfo.usersList.firstName = firstNames[firstIndex];
+                    this.faceInfo.usersList.lastName = lastNames[firstIndex];
                     ret = `${firstNames[firstIndex]} ${lastNames[lastIndex]}`;
 
                     console.log('generateName', firstIndex, lastIndex, ret);
@@ -746,16 +756,12 @@
                 },
 
             },
-            setup() {
-                const faceId = 10;
-                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
-                const usersList = {
-                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
-                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
-                };
+            setup() {               
+                               
                 var faceInfo = Vue.ref({
                     faceId : 10,
                     faceIdUrl : "https://randomuser.me/api/portraits/men/22.jpg",
+                    faceRailIcon :"mdi-chevron-right",
                     usersList : {
                         firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
                         lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
@@ -764,7 +770,6 @@
                 var mainDrawer = Vue.ref(true);
                 var secondDrawer = Vue.ref(false);
 
-                var faceRailIcon = Vue.ref("mdi-chevron-right");
                 var mainDrawerRail = Vue.ref(true);
                 var group = Vue.ref(null);
 
@@ -913,31 +918,24 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.37 (2025-04-09 11:30:08)";
+                const appVersion = "v. 0.0.39 (2025-04-09 22:02:42)";
                 const appAuthor = "StarDust";
 
                 return {
                     isDarkTheme
                     , isShowUserMenu
                     , appVersion, appAuthor
-                    , faceId
-                    , faceRailIcon
-                    , faceIdUrl
+                    , faceInfo
+
                     , mainDrawer, mainDrawerRail, secondDrawer
                     , group
 
-                    , usersList
                     , dessertsData
                     , dicts
                     , searchData
                     , menuActions
                 }
-
-
-
             },
-
-
         })
             .use(vuetify)
             .mount("#app");
