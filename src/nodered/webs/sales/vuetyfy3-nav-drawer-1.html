@@ -163,7 +163,11 @@
                 <div id="second-driwer" class="ma-3">
                     <!--v-list density="compact" nav-->
                     <v-row ma="10">
-                        <v-col ma="10">Filteres</v-col>
+
+                        <v-col ma="10">
+                            <v-icon icon="mdi-radar"></v-icon>
+                            Filteres
+                        </v-col>
                     </v-row>
                     <v-row ma="10">
                         <v-col ma="10">
@@ -175,7 +179,9 @@
                     <v-row ma="10">
                         <v-col ma="10">
                             <v-menu density="compact" v-model="searchData.dateFromDateMenu"
-                                :close-on-content-click="true">
+                                :close-on-content-click="false"
+                                :close-on-click="true"
+                                >
                                 <template v-slot:activator="{ props }">
                                     <v-text-field density="compact" v-model="searchData.selectedDateFrom"
                                         label="Date From" prepend-icon="mdi-calendar" clearable
@@ -189,7 +195,9 @@
                     <v-row ma="10">
                         <v-col ma="10">
                             <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
-                                :close-on-content-click="true">
+                                :close-on-content-click="false"
+                                :close-on-click="true"
+                                >
                                 <template v-slot:activator="{ props }">
                                     <v-text-field density="compact" v-model="searchData.selectedDateInto"
                                         label="Date Into" prepend-icon="mdi-calendar" clearable
@@ -203,12 +211,12 @@
                     <!--/v-list-->
                     <v-row ma="10">
                         <v-col ma="10">
-                            <v-btn color="green" block>Apply</v-btn>
+                            <v-btn color="green" block @click="onBtnApplyFilters">Apply</v-btn>
                         </v-col>
                     </v-row>
                     <v-row ma="10">
                         <v-col ma="10">
-                            <v-btn color="orange" block>Clear</v-btn>
+                            <v-btn color="orange" block @click="onBtnClearFilters">Clear</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -296,7 +304,7 @@
 
                             <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
                                 v-model="dessertsData.selectedItems" :items="dessertsData.dessertsItems"
-                                item-value="name" item-key="name" :search="searchData.searchText1" class="elevation-1"
+                                item-value="name" item-key="name" :search="searchData.searchText" class="elevation-1"
                                 @click:row="dessertsDataHandleClick" show-select class="elevation-1">
 
                                 <template v-slot:[`header.name`]="{ column }">
@@ -392,11 +400,11 @@
 
 
         <v-dialog v-model="dessertsData.dialogEdit" max-width="500px">
-            <template v-slot:activator="{ props }">
+            <!--template v-slot:activator="{ props }">
                 <v-btn class="mb-2" color="primary" dark v-bind="props">
                     New Item
                 </v-btn>
-            </template>
+            </template-->
             <v-card>
                 <v-card-title>
                     <span class="text-h5">Edit item [{{ dessertsData.editedItem.name }}]</span>
@@ -446,11 +454,11 @@
 
 
         const vuetify = createVuetify({
-            
+
             theme: {
                 defaultTheme: "dark",
             }
-            
+
         });
         const app = createApp({
             template: "#app-template",
@@ -466,6 +474,7 @@
                 if (dessertsHeaders) {
                     this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
                 }
+                this.loadFilters();
             },
             watch: {
                 mainDrawerRail: function (newQuestion, oldQuestion) {
@@ -477,12 +486,16 @@
                     }
                 },
                 "searchData.selectedDateFromFull": function (newQuestion, oldQuestion) {
-                    //alert(newQuestion);
+                    //alert(newQuestion);                    
                     this.searchData.selectedDateFrom = this.formatDate(newQuestion);
+                    this.searchData.dateFromDateMenu = false;
+                    this.searchData.dateIntoDateMenu = false;                    
                 },
                 "searchData.selectedDateIntoFull": function (newQuestion, oldQuestion) {
                     //alert(newQuestion);
                     this.searchData.selectedDateInto = this.formatDate(newQuestion);
+                    this.searchData.dateFromDateMenu = false;
+                    this.searchData.dateIntoDateMenu = false;                    
                 }
             },
             methods: {
@@ -491,7 +504,13 @@
                         return null
                     }
                     console.log(date);
-                    const [year, month, day] = date.toISOString().replace('T', '-').split('-');
+                    console.log(date.getDate());
+                    const [year, month, day] = [
+                        date.getFullYear(),
+                        date.getMonth()<10?'0'+(date.getMonth()+1):date.getMonth()+1,
+                        date.getDate()<10?'0'+date.getDate():date.getDate()
+                    ];
+                    //date.toISOString().replace('T', '-').split('-');
                     console.log(date.toISOString());
                     var ret = `${day}-${month}-${year}`;
                     console.log(ret);
@@ -508,6 +527,41 @@
                     this.dessertsData.isDessertsDataHandleClick = false;
                     this.dessertsData.dialogEdit = true;
                     this.dessertsData.editedItem = item;
+                },
+
+                onBtnApplyFilters(){
+                    this.saveFilters();
+                },
+                onBtnClearFilters(){
+                    for (var i in this.searchData) {
+                        this.searchData[i] = null;
+                    }
+                    this.saveFilters();
+                },
+
+                saveFilters(){
+                    console.log(this.searchData);
+                    localStorage.setItem('searchData', JSON.stringify(this.searchData));
+                },
+                loadFilters(){
+                    var searchData = localStorage.getItem('searchData');
+                    var searchDataObj = JSON.parse(searchData);
+                    console.log(`[loadFilters] ${searchData}`);
+                    console.log(searchDataObj);
+                    if(searchData){
+                        var parDate = [];
+                        this.searchData.searchText = searchDataObj.searchText;
+                        
+                        this.searchData.selectedDateFrom = searchDataObj.selectedDateFrom;
+                        this.searchData.dateFromDateMenu = searchDataObj.dateFromDateMenu;
+                        parDate = searchDataObj.selectedDateFrom.split('-');
+                        this.searchData.selectedDateFromFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                        
+                        this.searchData.selectedDateInto = searchDataObj.selectedDateInto;
+                        this.searchData.dateIntoDateMenu = searchDataObj.dateIntoDateMenu;
+                        parDate = searchDataObj.selectedDateInto.split('-');                        
+                        this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    }
                 },
 
                 onBtnChangeTheme() {
@@ -715,10 +769,7 @@
                 var group = Vue.ref(null);
 
                 const searchData = Vue.reactive({
-                    selectedDateFrom1: "",
-                    selectedDateInto1: "",
-                    searchText1: "",
-                    searchText2: "",
+                    searchText: null,
                     dateFromDateMenu: null,
                     dateIntoDateMenu: null,
                     selectedDateFromFull: null,
@@ -862,7 +913,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.35 (2025-04-08 14:47:27)";
+                const appVersion = "v. 0.0.37 (2025-04-09 11:30:08)";
                 const appAuthor = "StarDust";
 
                 return {
@@ -882,11 +933,11 @@
                     , menuActions
                 }
 
-                
+
 
             },
-            
-        
+
+
         })
             .use(vuetify)
             .mount("#app");
