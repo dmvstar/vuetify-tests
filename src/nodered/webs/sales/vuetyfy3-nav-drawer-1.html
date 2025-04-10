@@ -179,9 +179,7 @@
                     <v-row ma="10">
                         <v-col ma="10">
                             <v-menu density="compact" v-model="searchData.dateFromDateMenu"
-                                :close-on-content-click="false"
-                                :close-on-click="true"
-                                >
+                                :close-on-content-click="false" :close-on-click="true">
                                 <template v-slot:activator="{ props }">
                                     <v-text-field density="compact" v-model="searchData.selectedDateFrom"
                                         label="Date From" prepend-icon="mdi-calendar" clearable
@@ -195,9 +193,7 @@
                     <v-row ma="10">
                         <v-col ma="10">
                             <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
-                                :close-on-content-click="false"
-                                :close-on-click="true"
-                                >
+                                :close-on-content-click="false" :close-on-click="true">
                                 <template v-slot:activator="{ props }">
                                     <v-text-field density="compact" v-model="searchData.selectedDateInto"
                                         label="Date Into" prepend-icon="mdi-calendar" clearable
@@ -414,21 +410,26 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12" md="8" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.name" label="Dessert name"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.name"
+                                    label="Dessert name"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.calories" label="Calories"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.calories"
+                                    label="Calories"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.fat" label="Fat (g)"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.fat"
+                                    label="Fat (g)"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs" label="Carbs (g)"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs"
+                                    label="Carbs (g)"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.protein" label="Protein (g)"></v-text-field>
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.protein"
+                                    label="Protein (g)"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -470,10 +471,7 @@
                 this.generateName();
             },
             mounted() {
-                var dessertsHeaders = localStorage.getItem('dessertsHeaders');
-                if (dessertsHeaders) {
-                    this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
-                }
+                this.loadDessertsHeadersOrder();
                 this.loadFilters();
             },
             watch: {
@@ -507,8 +505,8 @@
                     console.log(date.getDate());
                     const [year, month, day] = [
                         date.getFullYear(),
-                        date.getMonth()<10?'0'+(date.getMonth()+1):date.getMonth()+1,
-                        date.getDate()<10?'0'+date.getDate():date.getDate()
+                        date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1,
+                        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
                     ];
                     //date.toISOString().replace('T', '-').split('-');
                     //console.log(date.toISOString());
@@ -517,7 +515,7 @@
                     return ret;
                 },
 
-                parseDate(dateStrDDMMYYYY){
+                parseDate(dateStrDDMMYYYY) {
                     var ret = new Date();
                     var parDate = dateStrDDMMYYYY.split('-');
                     ret = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
@@ -537,26 +535,26 @@
                     this.dessertsData.editedItem = item;
                 },
 
-                onBtnApplyFilters(){
+                onBtnApplyFilters() {
                     this.saveFilters();
                 },
-                onBtnClearFilters(){
+                onBtnClearFilters() {
                     for (var i in this.searchData) {
                         this.searchData[i] = null;
                     }
                     this.saveFilters();
                 },
 
-                saveFilters(){
+                saveFilters() {
                     console.log(this.searchData);
                     localStorage.setItem('searchData', JSON.stringify(this.searchData));
                 },
-                loadFilters(){
+                loadFilters() {
                     var searchData = localStorage.getItem('searchData');
                     var searchDataObj = JSON.parse(searchData);
                     console.log(`[loadFilters] ${searchData}`);
                     console.log(searchDataObj);
-                    if(searchData){
+                    if (searchData) {
                         var parDate = [];
                         this.searchData.searchText = searchDataObj.searchText;
 
@@ -625,7 +623,45 @@
                             this.dessertsData.dessertsHeaders[index + 1] = element_new;
                         }
                     }
-                    localStorage.setItem('dessertsHeaders', JSON.stringify(this.dessertsData.dessertsHeaders));
+                    this.saveDessertsHeadersOrder();
+                },
+
+                saveDessertsHeadersOrder() {
+                    var dessertsHeadersOrder = this.dessertsData.dessertsHeaders.map(obj => obj['key']);
+                    console.log(dessertsHeadersOrder);
+                    localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
+                },
+
+                loadDessertsHeadersOrder() {
+                    var dessertsHeadersOrder = localStorage.getItem('dessertsHeadersOrder');
+                    if (dessertsHeadersOrder) {
+                        dessertsHeadersOrder = JSON.parse(dessertsHeadersOrder)
+                        console.log(dessertsHeadersOrder);
+                        this.sortObjectsByKeyOrder(this.dessertsData.dessertsHeaders, 'key', dessertsHeadersOrder);
+                        //this.dessertsData.dessertsHeaders
+                        //this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
+                    }
+                },
+
+                sortObjectsByKeyOrder(objects, key, orderArray) {
+                    // Create a map of the orderArray for efficient lookup.
+                    const orderMap = new Map(orderArray.map((value, index) => [value, index]));
+                    // Sort the objects based on the orderArray.
+                    
+                    objects.sort((a, b) => {
+                        const aIndex = orderMap.get(a[key]);
+                        const bIndex = orderMap.get(b[key]);
+                        // Handle cases where the key is not found in the orderArray.
+                        if (aIndex === undefined) {
+                            return bIndex === undefined ? 0 : 1; // Put undefined at the end.
+                        }
+                        if (bIndex === undefined) {
+                            return -1; // Put undefined at the end.
+                        }
+                        return aIndex - bIndex;
+                    });
+                    
+                    return objects;
                 },
 
                 onOperationClick(event, index) {
@@ -652,7 +688,7 @@
                 },
 
                 dessertsDataHandleClick(event, row) {
-                    if(!this.dessertsData.isDessertsDataHandleClick){
+                    if (!this.dessertsData.isDessertsDataHandleClick) {
                         this.dessertsData.isDessertsDataHandleClick = true;
                         return;
                     }
@@ -756,13 +792,13 @@
                 },
 
             },
-            setup() {               
-                               
+            setup() {
+
                 var faceInfo = Vue.ref({
-                    faceId : 10,
-                    faceIdUrl : "https://randomuser.me/api/portraits/men/22.jpg",
-                    faceRailIcon :"mdi-chevron-right",
-                    usersList : {
+                    faceId: 10,
+                    faceIdUrl: "https://randomuser.me/api/portraits/men/22.jpg",
+                    faceRailIcon: "mdi-chevron-right",
+                    usersList: {
                         firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
                         lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
                     }
@@ -789,10 +825,11 @@
                 var dessertsData = Vue.ref(
                     {
                         isDessertsDataHandleClick: true,
-                        editedItem : {},
+                        editedItem: {},
                         dessertsHeaders: [
                             { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
                             { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Carbo ex. (eg)', subtitle: "Carbohydrate exchange rate", align: 'end', key: 'carboex', class: 'my-header-style' },
                             { title: 'Fat (g)', subtitle: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
                             { title: 'Carbs (g)', subtitle: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
                             { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
@@ -806,6 +843,7 @@
                             {
                                 name: 'Frozen Yogurt',
                                 calories: 159,
+                                carboex: 2.0,
                                 fat: 6.0,
                                 carbs: 24,
                                 protein: 4.0,
@@ -814,6 +852,7 @@
                             {
                                 name: 'Natural Yogurt',
                                 calories: 59,
+                                carboex: 2.0,
                                 fat: 6.0,
                                 carbs: 24,
                                 protein: 4.0,
@@ -822,6 +861,7 @@
                             {
                                 name: 'Ice cream \nsand\nwich',
                                 calories: 237,
+                                carboex: 3.5,
                                 fat: 9.0,
                                 carbs: 37,
                                 protein: 4.3,
@@ -830,6 +870,7 @@
                             {
                                 name: 'Eclair',
                                 calories: 262,
+                                carboex: 2.5,
                                 fat: 16.0,
                                 carbs: 23,
                                 protein: 6.0,
@@ -838,6 +879,7 @@
                             {
                                 name: 'Cupcake',
                                 calories: 305,
+                                carboex: 6.5,
                                 fat: 3.7,
                                 carbs: 67,
                                 protein: 4.3,
@@ -846,6 +888,7 @@
                             {
                                 name: 'Gingerbread',
                                 calories: 356,
+                                carboex: 4.4,
                                 fat: 16.0,
                                 carbs: 49,
                                 protein: 3.9,
@@ -854,6 +897,7 @@
                             {
                                 name: 'Jelly bean',
                                 calories: 375,
+                                carboex: 8.7,
                                 fat: 0.0,
                                 carbs: 94,
                                 protein: 0.0,
@@ -862,6 +906,7 @@
                             {
                                 name: 'Lollipop',
                                 calories: 392,
+                                carboex: 8.5,
                                 fat: 0.2,
                                 carbs: 98,
                                 protein: 0,
@@ -870,6 +915,7 @@
                             {
                                 name: 'Honeycomb',
                                 calories: 408,
+                                carboex: 8.1,
                                 fat: 3.2,
                                 carbs: 87,
                                 protein: 6.5,
@@ -878,6 +924,7 @@
                             {
                                 name: 'Donut',
                                 calories: 452,
+                                carboex: 4.7,
                                 fat: 25.0,
                                 carbs: 51,
                                 protein: 4.9,
@@ -886,6 +933,7 @@
                             {
                                 name: 'KitKat',
                                 calories: 518,
+                                carboex: 5.8,
                                 fat: 26.0,
                                 carbs: 65,
                                 protein: 7,
