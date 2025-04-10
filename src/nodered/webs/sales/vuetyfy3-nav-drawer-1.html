@@ -261,6 +261,11 @@
                                         <!--v-icon icon="mdi-chevron-up"></v-icon>
                                         <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
+                                    <v-list-item>
+                                        <v-btn :disabled="statesButtons.isDisabledSaveColumnOrder" color="primary" prepend-icon="mdi-content-save-settings" block @click="saveDessertsHeadersOrder()">
+                                            Save order
+                                        </v-btn>
+                                    </v-list-item>
                                 </v-list>
                             </v-menu>
                         </v-col>
@@ -611,6 +616,7 @@
                             var element_new = this.dessertsData.dessertsHeaders[index];
                             this.dessertsData.dessertsHeaders[index] = element_old;
                             this.dessertsData.dessertsHeaders[index - 1] = element_new;
+                            this.statesButtons.isDisabledSaveColumnOrder = false;
                         }
                     }
                     if (where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
@@ -621,15 +627,16 @@
                             var element_new = this.dessertsData.dessertsHeaders[index];
                             this.dessertsData.dessertsHeaders[index] = element_old;
                             this.dessertsData.dessertsHeaders[index + 1] = element_new;
+                            this.statesButtons.isDisabledSaveColumnOrder = false;
                         }
-                    }
-                    this.saveDessertsHeadersOrder();
+                    }                    
                 },
 
                 saveDessertsHeadersOrder() {
                     var dessertsHeadersOrder = this.dessertsData.dessertsHeaders.map(obj => obj['key']);
                     console.log(dessertsHeadersOrder);
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
+                    this.statesButtons.isDisabledSaveColumnOrder = true;
                 },
 
                 loadDessertsHeadersOrder() {
@@ -961,6 +968,10 @@
                     ]
                 };
 
+                const statesButtons = {
+                    isDisabledSaveColumnOrder : true
+                };
+
                 const theme = ref('light');
                 const isDarkTheme = ref(true);
 
@@ -977,6 +988,7 @@
 
                     , mainDrawer, mainDrawerRail, secondDrawer
                     , group
+                    , statesButtons
 
                     , dessertsData
                     , dicts
