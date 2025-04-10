@@ -240,7 +240,10 @@
                             </v-card-text>
                         </v-col>
                         <v-col cols="2" align="right">
-                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
+                            <!--v-model="statesButtons.isColumnOrderMenuShow"-->
+                            <v-menu        
+                                @input="saveDessertsHeadersOrder"                         
+                                density="compact" transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
                                         Columns Order ...
@@ -632,11 +635,13 @@
                     }                    
                 },
 
-                saveDessertsHeadersOrder() {
+                saveDessertsHeadersOrder(input) {
+                    console.log(input);
                     var dessertsHeadersOrder = this.dessertsData.dessertsHeaders.map(obj => obj['key']);
                     console.log(dessertsHeadersOrder);
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
                     this.statesButtons.isDisabledSaveColumnOrder = true;
+                    this.statesButtons.isColumnOrderMenuShow = false;
                 },
 
                 loadDessertsHeadersOrder() {
@@ -969,7 +974,8 @@
                 };
 
                 const statesButtons = {
-                    isDisabledSaveColumnOrder : true
+                    isDisabledSaveColumnOrder : true,
+                    isColumnOrderMenuShow : false
                 };
 
                 const theme = ref('light');
