@@ -242,13 +242,9 @@
                         <v-col cols="2" align="right">
                             <!--v-model="statesButtons.isColumnOrderMenuShow"-->
                             <!--:click="statesButtons.isColumnOrderMenuShow=true"-->
-                            <v-menu        
-                                @input="saveDessertsHeadersOrder"                         
-                                density="compact" 
-                                transition="scale-transition"                                 
-                                :close-on-content-click="false">
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
-                                    <v-btn color="green" v-bind="props"                                         
+                                    <v-btn color="green" v-bind="props" @click="onReorderMenuClick"
                                         append-icon="mdi-chevron-down">
                                         Columns Order ...
                                     </v-btn>
@@ -269,9 +265,8 @@
                                         <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
                                     <v-list-item>
-                                        <v-btn :disabled="statesButtons.isDisabledSaveColumnOrder" 
-                                            color="primary" 
-                                            prepend-icon="mdi-content-save-settings" block 
+                                        <v-btn :disabled="statesButtons.isDisabledSaveColumnOrder" color="primary"
+                                            prepend-icon="mdi-content-save-settings" block
                                             @click="saveDessertsHeadersOrder()">
                                             Save order
                                         </v-btn>
@@ -614,6 +609,9 @@
                     //console.log(index,   this.dessertsData.dessertsHeaders[index].title, ret);
                     return ret;
                 },
+                onReorderMenuClick(event) {
+                    console.log('[onReorderMenuClick]', event);
+                },
                 onReorderColumnsClick(where, index) {
                     var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
                     if (isSortableCurr == undefined) { isSortableCurr = true; }
@@ -639,16 +637,16 @@
                             this.dessertsData.dessertsHeaders[index + 1] = element_new;
                             this.statesButtons.isDisabledSaveColumnOrder = false;
                         }
-                    }                    
-                    console.log('[onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow , this.statesButtons.isDisabledSaveColumnOrder);
+                    }
+                    console.log('[onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow, this.statesButtons.isDisabledSaveColumnOrder);
                 },
 
-                saveDessertsHeadersOrder() {                    
+                saveDessertsHeadersOrder() {
                     var dessertsHeadersOrder = this.dessertsData.dessertsHeaders.map(obj => obj['key']);
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
                     this.statesButtons.isDisabledSaveColumnOrder = true;
                     this.statesButtons.isColumnOrderMenuShow = false;
-                    console.log('[saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow , dessertsHeadersOrder);
+                    console.log('[saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder);
                 },
 
                 loadDessertsHeadersOrder() {
@@ -666,7 +664,7 @@
                     // Create a map of the orderArray for efficient lookup.
                     const orderMap = new Map(orderArray.map((value, index) => [value, index]));
                     // Sort the objects based on the orderArray.
-                    
+
                     objects.sort((a, b) => {
                         const aIndex = orderMap.get(a[key]);
                         const bIndex = orderMap.get(b[key]);
@@ -679,7 +677,7 @@
                         }
                         return aIndex - bIndex;
                     });
-                    
+
                     return objects;
                 },
 
@@ -981,8 +979,8 @@
                 };
 
                 const statesButtons = {
-                    isDisabledSaveColumnOrder : true,
-                    isColumnOrderMenuShow : false
+                    isDisabledSaveColumnOrder: true,
+                    isColumnOrderMenuShow: false
                 };
 
                 const theme = ref('light');
@@ -990,7 +988,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.39 (2025-04-09 22:02:42)";
+                const appVersion = "v. 0.0.41 (2025-04-10 23:07:52)";
                 const appAuthor = "StarDust";
 
                 return {
