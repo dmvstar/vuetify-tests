@@ -241,11 +241,15 @@
                         </v-col>
                         <v-col cols="2" align="right">
                             <!--v-model="statesButtons.isColumnOrderMenuShow"-->
+                            <!--:click="statesButtons.isColumnOrderMenuShow=true"-->
                             <v-menu        
                                 @input="saveDessertsHeadersOrder"                         
-                                density="compact" transition="scale-transition" :close-on-content-click="false">
+                                density="compact" 
+                                transition="scale-transition"                                 
+                                :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
-                                    <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
+                                    <v-btn color="green" v-bind="props"                                         
+                                        append-icon="mdi-chevron-down">
                                         Columns Order ...
                                     </v-btn>
                                 </template>
@@ -265,7 +269,10 @@
                                         <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
                                     <v-list-item>
-                                        <v-btn :disabled="statesButtons.isDisabledSaveColumnOrder" color="primary" prepend-icon="mdi-content-save-settings" block @click="saveDessertsHeadersOrder()">
+                                        <v-btn :disabled="statesButtons.isDisabledSaveColumnOrder" 
+                                            color="primary" 
+                                            prepend-icon="mdi-content-save-settings" block 
+                                            @click="saveDessertsHeadersOrder()">
                                             Save order
                                         </v-btn>
                                     </v-list-item>
@@ -633,15 +640,15 @@
                             this.statesButtons.isDisabledSaveColumnOrder = false;
                         }
                     }                    
+                    console.log('[onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow , this.statesButtons.isDisabledSaveColumnOrder);
                 },
 
-                saveDessertsHeadersOrder(input) {
-                    console.log(input);
+                saveDessertsHeadersOrder() {                    
                     var dessertsHeadersOrder = this.dessertsData.dessertsHeaders.map(obj => obj['key']);
-                    console.log(dessertsHeadersOrder);
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
                     this.statesButtons.isDisabledSaveColumnOrder = true;
                     this.statesButtons.isColumnOrderMenuShow = false;
+                    console.log('[saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow , dessertsHeadersOrder);
                 },
 
                 loadDessertsHeadersOrder() {
