@@ -242,9 +242,7 @@
                         <v-col cols="2" align="right">
                             <!--v-model="statesButtons.isColumnOrderMenuShow"-->
                             <!--:click="statesButtons.isColumnOrderMenuShow=true"-->
-                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false"
-
-                                >
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" @click="onReorderMenuClick"
                                         append-icon="mdi-chevron-down">
@@ -268,9 +266,7 @@
                                     </v-list-item>
                                     <v-list-item>
                                         <!--:disabled="statesButtons.isDisabledSaveColumnOrder" -->
-                                        <v-btn 
-                                            color="primary"
-                                            prepend-icon="mdi-content-save-settings" block
+                                        <v-btn color="primary" prepend-icon="mdi-content-save-settings" block
                                             @click="saveDessertsHeadersOrder()">
                                             Save order
                                         </v-btn>
@@ -318,17 +314,35 @@
                                 @click:row="dessertsDataHandleClick" show-select class="elevation-1">
 
                                 <template v-slot:[`header.name`]="{ column }">
-                                    <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>                                            
+                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                    </v-card>
                                 </template>
 
                                 <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-icon color="green-darken-2">mdi-mushroom</v-icon>
                                     <!--span v-html=column.title></span-->
+                                    <!--
                                     {{ getTitle(column) }}
                                     {{ column.title }}
-                                    <template v-if="isSorted(column)">
-                                        <v-icon :icon="getSortIcon(column)"></v-icon>
-                                    </template>
+                                    -->
+                                    <v-card outlined color="transparent">
+
+                                        <template v-slot:title>
+                                            <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                            {{ column.title }}
+                                            <template v-if="isSorted(column)">
+                                                <v-icon :icon="getSortIcon(column)"></v-icon>
+                                            </template>
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                    </v-card>
                                 </template>
 
                                 <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
@@ -339,6 +353,28 @@
                                         <v-icon :icon="getSortIcon(column)"></v-icon>
                                     </template>
                                 </template>
+
+                                <template v-slot:[`header.actions`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>                                            
+                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                    </v-card>
+                                </template>
+                                <template v-slot:[`header.operations`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>                                            
+                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                    </v-card>
+                                </template>
+
 
                                 <template v-slot:item.name="{ item }">
                                     <div style="white-space: pre-wrap;">{{ item.name }}</div>
@@ -654,7 +690,7 @@
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
                     this.statesButtons.isDisabledSaveColumnOrder = true;
                     this.statesButtons.isColumnOrderMenuShow = false;
-                    console.log('1 [saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder,this.dessertsData.selectedOrderListItem);
+                    console.log('1 [saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder, this.dessertsData.selectedOrderListItem);
                     console.log('2 [saveDessertsHeadersOrder]', JSON.stringify(this.dessertsData.selectedOrderListItem));
                     //this.dessertsData.selectedOrderListItem = ["Carbs (g)"];
                     console.log('3 [saveDessertsHeadersOrder]', JSON.stringify(this.dessertsData.selectedOrderListItem));
@@ -860,7 +896,7 @@
                     {
                         isDessertsDataHandleClick: true,
                         editedItem: {},
-                        selectedOrderListItem : null,
+                        selectedOrderListItem: [],
                         dessertsHeaders: [
                             { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
                             { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
@@ -870,7 +906,7 @@
                             { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
                             { title: 'Iron (%)', subtitle: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
                             { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
-                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
                         selectedRows: [],
                         selectedItems: [],
