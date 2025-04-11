@@ -243,7 +243,7 @@
                             <!--v-model="statesButtons.isColumnOrderMenuShow"-->
                             <!--:click="statesButtons.isColumnOrderMenuShow=true"-->
                             <v-menu density="compact" transition="scale-transition" :close-on-content-click="false"
-                                
+
                                 >
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" @click="onReorderMenuClick"
@@ -254,7 +254,7 @@
                                 <v-list v-model:selected="dessertsData.selectedOrderListItem">
                                     <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
-                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"                                        
+                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"
                                         :key="index" :title="title" :subtitle="subtitle" :value="title"
                                         :disabled="checkReorderColumnsDisabled(index)" density="compact">
                                         <template v-slot:append>
@@ -267,7 +267,9 @@
                                         <v-icon icon="mdi-chevron-down"></v-icon-->
                                     </v-list-item>
                                     <v-list-item>
-                                        <v-btn :disabled="statesButtons.isDisabledSaveColumnOrder" color="primary"
+                                        <!--:disabled="statesButtons.isDisabledSaveColumnOrder" -->
+                                        <v-btn 
+                                            color="primary"
                                             prepend-icon="mdi-content-save-settings" block
                                             @click="saveDessertsHeadersOrder()">
                                             Save order
@@ -627,6 +629,7 @@
                             this.dessertsData.dessertsHeaders[index] = element_old;
                             this.dessertsData.dessertsHeaders[index - 1] = element_new;
                             this.statesButtons.isDisabledSaveColumnOrder = false;
+                            this.dessertsData.selectedOrderListItem = [element_new.title];
                         }
                     }
                     if (where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
@@ -638,9 +641,12 @@
                             this.dessertsData.dessertsHeaders[index] = element_old;
                             this.dessertsData.dessertsHeaders[index + 1] = element_new;
                             this.statesButtons.isDisabledSaveColumnOrder = false;
+                            this.dessertsData.selectedOrderListItem = [element_new.title];
                         }
                     }
-                    console.log('[onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow, this.statesButtons.isDisabledSaveColumnOrder, this.dessertsData.selectedOrderListItem);
+                    console.log('1 [onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow, this.statesButtons.isDisabledSaveColumnOrder);
+                    console.log('2 [onReorderColumnsClick]', JSON.stringify(this.dessertsData.selectedOrderListItem));
+                    console.log('3 [onReorderColumnsClick]', JSON.stringify(element_new));
                 },
 
                 saveDessertsHeadersOrder() {
@@ -648,7 +654,10 @@
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
                     this.statesButtons.isDisabledSaveColumnOrder = true;
                     this.statesButtons.isColumnOrderMenuShow = false;
-                    console.log('[saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder,this.dessertsData.selectedOrderListItem);
+                    console.log('1 [saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder,this.dessertsData.selectedOrderListItem);
+                    console.log('2 [saveDessertsHeadersOrder]', JSON.stringify(this.dessertsData.selectedOrderListItem));
+                    //this.dessertsData.selectedOrderListItem = ["Carbs (g)"];
+                    console.log('3 [saveDessertsHeadersOrder]', JSON.stringify(this.dessertsData.selectedOrderListItem));
                 },
 
                 loadDessertsHeadersOrder() {
@@ -687,7 +696,7 @@
                     console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
                 },
 
-                onBtnMainNoClick(event) {                    
+                onBtnMainNoClick(event) {
                     console.log(`1 [onBtnMainNoClick] ${event} ${this.statesButtons.isColumnOrderMenuShow}`);
                     this.statesButtons.isColumnOrderMenuShow = true;
                     console.log(`2 [onBtnMainNoClick] ${event} ${this.statesButtons.isColumnOrderMenuShow}`);
@@ -796,7 +805,7 @@
 
                 getTitle(column) {
                     var ret = "";
-                    console.log("[getTitle]", column);
+                    //console.log("[getTitle]", column);
                     return ret;
                 },
 
