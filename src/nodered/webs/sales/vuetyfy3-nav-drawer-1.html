@@ -313,16 +313,21 @@
                                 item-value="name" item-key="name" :search="searchData.searchText" class="elevation-1"
                                 @click:row="dessertsDataHandleClick" show-select class="elevation-1">
 
-                                <template v-slot:[`header.name`]="{ column }">
+                                <!--HEADER SLOTS-->
+                                <template v-slot:[`header.name`]="{ column }" v-slot:activator="{ props }">
                                     <v-card outlined color="transparent">
-                                        <template v-slot:title>                                            
+                                        <template v-slot:title>
                                             <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                         </template>
                                         <template v-slot:subtitle>
                                             {{ column.subtitle }}
                                         </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
                                     </v-card>
                                 </template>
+
 
                                 <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
                                     <!--span v-html=column.title></span-->
@@ -331,7 +336,6 @@
                                     {{ column.title }}
                                     -->
                                     <v-card outlined color="transparent">
-
                                         <template v-slot:title>
                                             <v-icon color="green-darken-2">mdi-mushroom</v-icon>
                                             {{ column.title }}
@@ -342,9 +346,11 @@
                                         <template v-slot:subtitle>
                                             {{ column.subtitle }}
                                         </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
                                     </v-card>
                                 </template>
-
                                 <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
                                     <v-icon color="green-darken-2">mdi-mushroom</v-icon>
                                     {{ getTitle(column) }}
@@ -353,29 +359,100 @@
                                         <v-icon :icon="getSortIcon(column)"></v-icon>
                                     </template>
                                 </template>
-
-                                <template v-slot:[`header.actions`]="{ column }">
+                                <template v-slot:[`header.carboex`]="{ column }">
                                     <v-card outlined color="transparent">
-                                        <template v-slot:title>                                            
+                                        <template v-slot:title>
                                             <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                         </template>
                                         <template v-slot:subtitle>
                                             {{ column.subtitle }}
                                         </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+                                    </v-card>
+                                </template>
+                                <template v-slot:[`header.fat`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>
+                                            {{ column.title }}
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+                                    </v-card>
+                                </template>
+                                <template v-slot:[`header.carbs`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>
+                                            {{ column.title }}
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+                                    </v-card>
+                                </template>
+                                <template v-slot:[`header.iron`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>
+                                            {{ column.title }}
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+                                    </v-card>
+                                </template>
+                                <template v-slot:[`header.protein`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>
+                                            {{ column.title }}
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+                                    </v-card>
+                                </template>
+
+                                <template v-slot:[`header.actions`]="{ column }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>
+                                            {{ column.title }}
+                                        </template>
+                                        <template v-slot:subtitle>
+                                            {{ column.subtitle }}
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
                                     </v-card>
                                 </template>
                                 <template v-slot:[`header.operations`]="{ column }">
                                     <v-card outlined color="transparent">
-                                        <template v-slot:title>                                            
-                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                        <template v-slot:title>
+                                            {{ column.title }}
                                         </template>
                                         <template v-slot:subtitle>
                                             {{ column.subtitle }}
                                         </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
                                     </v-card>
                                 </template>
 
-
+                                <!--ITEMS SLOTS-->
                                 <template v-slot:item.name="{ item }">
                                     <div style="white-space: pre-wrap;">{{ item.name }}</div>
                                 </template>
@@ -898,15 +975,15 @@
                         editedItem: {},
                         selectedOrderListItem: [],
                         dessertsHeaders: [
-                            { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
-                            { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
-                            { title: 'Carbo ex. (eg)', subtitle: "Carbohydrate exchange rate", align: 'end', key: 'carboex', class: 'my-header-style' },
-                            { title: 'Fat (g)', subtitle: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
-                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
-                            { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
-                            { title: 'Iron (%)', subtitle: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
-                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
-                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
+                            { title: 'Dessert (100g)', subtitle: "Dessert info (100g serving)", hint: "Dessert information for serving (100g serving)", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories\n(100g)', subtitle: "Total Calories", hint: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Carbo ex. (eg)', subtitle: "Carbohydrate exchange rate", hint: "Carbohydrate exchange rate", align: 'end', key: 'carboex', class: 'my-header-style' },
+                            { title: 'Fat (g)', subtitle: "Fat in dessert", hint: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", hint: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'Protein (g)', subtitle: "Protein in dessert", hint: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'Iron (%)', subtitle: "Iron in dessert", hint: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '15%' },
+                            { title: 'Operations', subtitle: "Operation for item", hint: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
                         selectedRows: [],
                         selectedItems: [],

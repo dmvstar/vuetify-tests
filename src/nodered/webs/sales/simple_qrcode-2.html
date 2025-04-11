@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Vuetify example NG V3</title>
+  <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
+  <link rel="shortcut icon" type="image/png"
+    href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+  <script>Vue.component(VueQrcode.name, VueQrcode);</script>
+</head>
+
+
+
+<body>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <div id="app"></div>
+
+  <template id="app-template">
+    
+        <qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></qrcode>
+        <v-btn @click="toggleAlert">Click Me</v-btn>
+    
+  </template>
+</body>
+</div>
+
+<script setup>
+  const { createApp, ref, reactive, defineProps } = Vue;
+  const { createVuetify, useTheme, version } = Vuetify;
+
+  const vuetify = createVuetify({});
+
+  const app = createApp({
+    template: "#app-template",
+
+    setup() {
+      const title = Vue.ref("Vuetify 3.0");
+    }
+  })
+    .use(vuetify)
+    .mount("#app");
+
+</script>
+
+<body>
