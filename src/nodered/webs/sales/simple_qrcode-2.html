@@ -7,11 +7,9 @@
   <link rel="shortcut icon" type="image/png"
     href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
-  <script>Vue.component(VueQrcode.name, VueQrcode);</script>
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />  
+  <script src="https://unpkg.com/@chenfengyuan/vue-qrcode@1.0.1/dist/vue-qrcode.min.js"></script>  
 </head>
-
-
 
 <body>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -20,16 +18,35 @@
 
   <div id="app"></div>
 
-  <template id="app-template">
+  <!--template id="app-template">
     
         <qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></qrcode>
-        <v-btn @click="toggleAlert">Click Me</v-btn>
     
+  </template-->
+
+  <template type="text/x-template" id="app-template">
+    <v-responsive class="border rounded" max-height="300">
+      <v-app>
+        <v-app-bar title="App bar"></v-app-bar>
+
+        <v-main>
+          <v-container>
+            <h1>Main Content</h1>
+            
+            <v-btn block>Click Me</v-btn>
+          </v-container>
+        </v-main>
+      </v-app>
+    </v-responsive>
   </template>
+
+  <v-qrcode value="https://queue-r.glitch.me" :options="{ width: 200 }"></v-qrcode>
+
 </body>
 </div>
 
 <script setup>
+
   const { createApp, ref, reactive, defineProps } = Vue;
   const { createVuetify, useTheme, version } = Vuetify;
 
@@ -43,6 +60,7 @@
     }
   })
     .use(vuetify)
+    .component('v-qrcode', window.VueQrcode)
     .mount("#app");
 
 </script>

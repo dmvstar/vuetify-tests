@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue-QRCode with Vuetify 3 (CDN)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/@chenfengyuan/vue-qrcode@1.0.1/dist/vue-qrcode.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-main>
+                <v-container>
+                    <v-row justify="center">
+                        <v-col cols="12" md="6">
+                            <v-card>
+                                <v-card-title>Generate QR Code</v-card-title>
+                                <v-card-text>
+                                    <v-text-field
+                                        v-model="qrText"
+                                        label="Enter Text"
+                                    ></v-text-field>
+                                    <qrcode-vue :value="qrText" :size="200"></qrcode-vue>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+        const { createVuetify, VApp, VMain, VContainer, VRow, VCol, VCard, VCardTitle, VCardText, VTextField } = Vuetify;
+
+        const vuetify = createVuetify();
+
+        const app = createApp({
+            components: {
+                QrcodeVue: VueQrcode.default, // Register vue-qrcode component
+                VApp,
+                VMain,
+                VContainer,
+                VRow,
+                VCol,
+                VCard,
+                VCardTitle,
+                VCardText,
+                VTextField
+            },
+            setup() {
+                const qrText = ref('Hello, QR Code!');
+                return {
+                    qrText,
+                };
+            },
+        });
+
+        app.use(vuetify);
+        app.mount('#app');
+    </script>
+</body>
+</html>
