@@ -227,10 +227,10 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="6" sm="6" ma="10">
-                            <v-btn color="green" block>OK</v-btn>
+                            <v-btn id="btn-main-ok" color="green" block>OK</v-btn>
                         </v-col>
                         <v-col cols="6" sm="6" ma="10">
-                            <v-btn color="orange" block>NO</v-btn>
+                            <v-btn id="btn-main-no" color="orange" block @click="onBtnMainNoClick">NO</v-btn>
                         </v-col>
                     </v-row>
                     <v-row ma="2">
@@ -242,17 +242,19 @@
                         <v-col cols="2" align="right">
                             <!--v-model="statesButtons.isColumnOrderMenuShow"-->
                             <!--:click="statesButtons.isColumnOrderMenuShow=true"-->
-                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false"
+                                
+                                >
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" @click="onReorderMenuClick"
                                         append-icon="mdi-chevron-down">
                                         Columns Order ...
                                     </v-btn>
                                 </template>
-                                <v-list>
+                                <v-list v-model:selected="dessertsData.selectedOrderListItem">
                                     <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
                                     <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
-                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"
+                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"                                        
                                         :key="index" :title="title" :subtitle="subtitle" :value="title"
                                         :disabled="checkReorderColumnsDisabled(index)" density="compact">
                                         <template v-slot:append>
@@ -390,7 +392,7 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="primary" @click="onButtonRefresh(event)" block>Refresh</v-btn>
+                            <v-btn color="primary" @click="onBtnRefresh(event)" block>Refresh</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -638,7 +640,7 @@
                             this.statesButtons.isDisabledSaveColumnOrder = false;
                         }
                     }
-                    console.log('[onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow, this.statesButtons.isDisabledSaveColumnOrder);
+                    console.log('[onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow, this.statesButtons.isDisabledSaveColumnOrder, this.dessertsData.selectedOrderListItem);
                 },
 
                 saveDessertsHeadersOrder() {
@@ -646,7 +648,7 @@
                     localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
                     this.statesButtons.isDisabledSaveColumnOrder = true;
                     this.statesButtons.isColumnOrderMenuShow = false;
-                    console.log('[saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder);
+                    console.log('[saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder,this.dessertsData.selectedOrderListItem);
                 },
 
                 loadDessertsHeadersOrder() {
@@ -685,7 +687,13 @@
                     console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
                 },
 
-                onButtonRefresh(event) {
+                onBtnMainNoClick(event) {                    
+                    console.log(`1 [onBtnMainNoClick] ${event} ${this.statesButtons.isColumnOrderMenuShow}`);
+                    this.statesButtons.isColumnOrderMenuShow = true;
+                    console.log(`2 [onBtnMainNoClick] ${event} ${this.statesButtons.isColumnOrderMenuShow}`);
+                },
+
+                onBtnRefresh(event) {
                     console.log(this.dessertsData.selectedItems.length);
                     console.log(this.dessertsData.selectedItems);
                 },
@@ -843,6 +851,7 @@
                     {
                         isDessertsDataHandleClick: true,
                         editedItem: {},
+                        selectedOrderListItem : null,
                         dessertsHeaders: [
                             { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
                             { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
