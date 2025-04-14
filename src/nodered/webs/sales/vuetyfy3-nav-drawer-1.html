@@ -835,6 +835,7 @@
                 },
 
                 handleDessertsDataSingleClick(event, row) {
+                    // code for v-data-table handle double click before single click 
                     const now = new Date().getTime();
                     var lastClickTime = this.dessertsData.lastClickTime;
                     const doubleClickThreshold = 500; // Adjust this value (milliseconds)
@@ -851,7 +852,7 @@
                             this.dessertsData.isDessertsDataHandleClick = true;
                             return;
                         }
-                        //https://codepen.io/Hexodus/pen/ExKGWBe
+                        //https://codepen.io/Hexodus/pen/ExKGWBe                        
                         //let selectState = (row.isSelected()) ? false : true;
                         //console.log(`[handleDessertsDataSingleClick] event ${JSON.stringify(event)}`);
                         //console.log(event);
