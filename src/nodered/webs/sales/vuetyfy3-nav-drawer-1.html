@@ -317,9 +317,10 @@
                                 <template v-slot:[`header.name`]="{ column }" v-slot:activator="{ props }">
                                     <v-card outlined color="transparent">
                                         <template v-slot:title>
-                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
+                                                }}</div>
                                         </template>
-                                        <template v-slot:subtitle>
+                                        <template v-slot:subtitle class="text-subtitle-2">
                                             {{ column.subtitle }}
                                         </template>
                                         <v-tooltip activator="parent" location="top">
@@ -336,244 +337,242 @@
                                     {{ column.title }}
                                     -->
                                     <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            <v-icon color="green-darken-2">mdi-mushroom</v-icon>
-                                            {{ column.title }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
+                                        <template v-slot:title class="text-subtitle-1">
+                                            <div class="text-subtitle-1">
+                                                <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                                {{ column.title }}
+                                                <template v-if="isSorted(column)">
+                                                    <v-icon :icon="getSortIcon(column)"></v-icon>
+                                            </div>
                                         </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
                                 </template>
-                                <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-icon color="green-darken-2">mdi-mushroom</v-icon>
-                                    {{ getTitle(column) }}
-                                    [{{ column.title }}]
-                                    <template v-if="isSorted(column)">
-                                        <v-icon :icon="getSortIcon(column)"></v-icon>
-                                    </template>
+                                <template v-slot:subtitle>
+                                    {{ column.subtitle }}
                                 </template>
-                                <template v-slot:[`header.carboex`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            <div style="white-space: pre-wrap;">{{ column.title }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.fat`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            {{ column.title }}
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.carbs`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            {{ column.title }}
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.iron`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            {{ column.title }}
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.protein`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            {{ column.title }}
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
+                                <v-tooltip activator="parent" location="top">
+                                    {{ column.hint }}
+                                </v-tooltip>
+                                </v-card>
+    </template>
+    <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
+        <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+        {{ getTitle(column) }}
+        [{{ column.title }}]
+        <template v-if="isSorted(column)">
+            <v-icon :icon="getSortIcon(column)"></v-icon>
+        </template>
+    </template>
+    <template v-slot:[`header.carboex`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
+    <template v-slot:[`header.fat`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
+    <template v-slot:[`header.carbs`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
+    <template v-slot:[`header.iron`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
+    <template v-slot:[`header.protein`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
 
-                                <template v-slot:[`header.actions`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            {{ column.title }}
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.operations`]="{ column }">
-                                    <v-card outlined color="transparent">
-                                        <template v-slot:title>
-                                            {{ column.title }}
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
+    <template v-slot:[`header.actions`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
+    <template v-slot:[`header.operations`]="{ column }">
+        <v-card outlined color="transparent">
+            <template v-slot:title>
+                <div class="text-subtitle-1">{{ column.title }}</div>
+            </template>
+            <template v-slot:subtitle>
+                {{ column.subtitle }}
+            </template>
+            <v-tooltip activator="parent" location="top">
+                {{ column.hint }}
+            </v-tooltip>
+        </v-card>
+    </template>
 
-                                <!--ITEMS SLOTS-->
-                                <template v-slot:item.name="{ item }">
-                                    <div style="white-space: pre-wrap;">{{ item.name }}</div>
-                                </template>
-                                <template v-slot:item.calories1="{ item }">
-                                    <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
-                                    </div>
-                                </template>
+    <!--ITEMS SLOTS-->
+    <template v-slot:item.name="{ item }">
+        <div style="white-space: pre-wrap;">{{ item.name }}</div>
+    </template>
+    <template v-slot:item.calories1="{ item }">
+        <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
+        </div>
+    </template>
 
-                                <template v-slot:item.calories="{ key, value, item }">
-                                    <div>
-                                        <v-chip :color="getDebtStatusIconColor(item)">
-                                            {{ value }}
-                                        </v-chip>
-                                    </div>
-                                </template>
+    <template v-slot:item.calories="{ key, value, item }">
+        <div>
+            <v-chip :color="getDebtStatusIconColor(item)">
+                {{ value }}
+            </v-chip>
+        </div>
+    </template>
 
-                                <template v-slot:item.actions="{ item }">
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
-                                        :icon="getDebtStatusIcon(item.fat)"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')">
-                                    </v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"
-                                        @click="onBtnActionsEditClick(item, 'ACTIONS')"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
-                                </template>
+    <template v-slot:item.actions="{ item }">
+        <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
+            @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+        <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
+            :icon="getDebtStatusIcon(item.fat)" @click="onBtnActionsStubClick(item, 'ACTIONS')">
+        </v-btn>
+        <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"
+            @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+        <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"
+            @click="onBtnActionsEditClick(item, 'ACTIONS')"></v-btn>
+        <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"
+            @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+    </template>
 
-                                <template v-slot:item.operations="{ item }">
-                                    <!--v-btn block color="blue">Operations</v-btn-->
-                                    <v-menu transition="scale-transition">
-                                        <template v-slot:activator="{ props }">
-                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"
-                                                append-icon="mdi-chevron-down">
-                                            </v-btn>
-                                        </template>
-                                        <v-list>
-                                            <v-list-item
-                                                v-for="([title, icon, action], index) in menuActions.actionsList"
-                                                :key="index" :prepend-icon="icon" :title="title" :value="title"
-                                                @click="onUserMenuClick(action, index)">
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-menu>
-                                </template>
+    <template v-slot:item.operations="{ item }">
+        <!--v-btn block color="blue">Operations</v-btn-->
+        <v-menu transition="scale-transition">
+            <template v-slot:activator="{ props }">
+                <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings" append-icon="mdi-chevron-down">
+                </v-btn>
+            </template>
+            <v-list>
+                <v-list-item v-for="([title, icon, action], index) in menuActions.actionsList" :key="index"
+                    :prepend-icon="icon" :title="title" :value="title" @click="onUserMenuClick(action, index)">
+                </v-list-item>
+            </v-list>
+        </v-menu>
+    </template>
 
-                            </v-data-table>
-                        </v-col>
-                    </v-row>
-                    <v-row ma="10">
-                        <v-col cols="12" sm="12" ma="10">
-                            <v-btn color="primary" @click="onBtnRefresh(event)" block>Refresh</v-btn>
-                        </v-col>
-                    </v-row>
-                </div>
-                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
-                    color="surface-light">
-                    <div class="flex-1-0-100 text-center mt-2">
-                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
-                    </div>
-                </v-footer>
-            </v-main>
+    </v-data-table>
+    </v-col>
+    </v-row>
+    <v-row ma="10">
+        <v-col cols="12" sm="12" ma="10">
+            <v-btn color="primary" @click="onBtnRefresh(event)" block>Refresh</v-btn>
+        </v-col>
+    </v-row>
+    </div>
+    <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
+        color="surface-light">
+        <div class="flex-1-0-100 text-center mt-2">
+            {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+        </div>
+    </v-footer>
+    </v-main>
 
-        </v-layout>
+    </v-layout>
 
 
-        <v-dialog v-model="dessertsData.dialogEdit" max-width="500px">
-            <!--template v-slot:activator="{ props }">
+    <v-dialog v-model="dessertsData.dialogEdit" max-width="500px">
+        <!--template v-slot:activator="{ props }">
                 <v-btn class="mb-2" color="primary" dark v-bind="props">
                     New Item
                 </v-btn>
             </template-->
-            <v-card>
-                <v-card-title>
-                    <span class="text-h5">Edit item [{{ dessertsData.editedItem.name }}]</span>
-                </v-card-title>
+        <v-card>
+            <v-card-title>
+                <span class="text-h5">Edit item [{{ dessertsData.editedItem.name }}]</span>
+            </v-card-title>
 
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" md="8" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.name"
-                                    label="Dessert name"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.calories"
-                                    label="Calories"></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.fat"
-                                    label="Fat (g)"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs"
-                                    label="Carbs (g)"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.protein"
-                                    label="Protein (g)"></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-card-text>
+            <v-card-text>
+                <v-container>
+                    <v-row>
+                        <v-col cols="12" md="8" sm="6">
+                            <v-text-field density="compact" v-model="dessertsData.editedItem.name"
+                                label="Dessert name"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4" sm="6">
+                            <v-text-field density="compact" v-model="dessertsData.editedItem.calories"
+                                label="Calories"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="4" sm="6">
+                            <v-text-field density="compact" v-model="dessertsData.editedItem.fat"
+                                label="Fat (g)"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4" sm="6">
+                            <v-text-field density="compact" v-model="dessertsData.editedItem.carbs"
+                                label="Carbs (g)"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4" sm="6">
+                            <v-text-field density="compact" v-model="dessertsData.editedItem.protein"
+                                label="Protein (g)"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card-text>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
-                        Cancel
-                    </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
-                        Save
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <!-- </v-card> -->
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
+                    Cancel
+                </v-btn>
+                <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
+                    Save
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <!-- </v-card> -->
     </template>
 
     <script setup>
