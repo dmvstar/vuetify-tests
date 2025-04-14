@@ -845,7 +845,8 @@
                         this.dessertsData.lastClickTime = now;
                         return;
                     }
-                    if ((now - lastClickTime) > doubleClickThreshold) {
+                    //if ((now - lastClickTime) > doubleClickThreshold) 
+                    {
                         console.log(`2 [handleDessertsDataSingleClick] lastClickTime ${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
                         // Single click logic here
                         if (!this.dessertsData.isDessertsDataHandleClick) {
@@ -859,7 +860,7 @@
                         //console.log(`[handleDessertsDataSingleClick] row  ${JSON.stringify(row)}`);
                         //console.log(this.dessertsData.selectedItems.length);
                         //console.log(this.dessertsData.selectedItems);
-                        //this.toggleSelection(row.item.name);
+                        this.toggleSelection(row.item.name);
                     }
                     if (event.ctrlKey) {
                         this.toggleSelection(row.item.name);
@@ -871,8 +872,8 @@
                     //console.log(`3 [handleDessertsDataDoubleClick] event ${JSON.stringify(event)}`);
                     //console.log(event);
                     //this.toggleSelection(row.item.name);
-                    this.dessertsData.editedItem = row.item;
-                    this.dessertsData.dialogEdit = true;                    
+                    //this.dessertsData.editedItem = row.item;
+                    //this.dessertsData.dialogEdit = true;                    
                     this.dessertsData.lastClickTime = 0; //reset lastClickTime to prevent Single click logic running.
                 },
 
@@ -1007,7 +1008,7 @@
                             { title: 'Carbs (g)', subtitle: "Carbs in dessert", hint: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
                             { title: 'Protein (g)', subtitle: "Protein in dessert", hint: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
                             { title: 'Iron (%)', subtitle: "Iron in dessert", hint: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
-                            { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '15%' },
+                            { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '20%' },
                             { title: 'Operations', subtitle: "Operation for item", hint: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
                         selectedRows: [],
