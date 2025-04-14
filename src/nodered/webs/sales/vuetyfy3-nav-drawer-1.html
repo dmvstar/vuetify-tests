@@ -840,10 +840,10 @@
                     const now = new Date().getTime();
                     var lastClickTime = this.dessertsData.lastClickTime;
                     const doubleClickThreshold = 500; // Adjust this value (milliseconds)
-                    console.log(`1 [handleDessertsDataSingleClick] lastClickTime ${lastClickTime}=${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
+                    //console.log(`1 [handleDessertsDataSingleClick] lastClickTime ${lastClickTime}=${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
                     //lastClickTime > 0 &&
                     if ((now - lastClickTime) > doubleClickThreshold) {
-                        console.log(`2 [handleDessertsDataSingleClick] lastClickTime ${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
+                        //console.log(`2 [handleDessertsDataSingleClick] lastClickTime ${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
                         // Single click logic here
                         if (!this.dessertsData.isDessertsDataHandleClick) {
                             this.dessertsData.isDessertsDataHandleClick = true;
@@ -855,7 +855,7 @@
                         //console.log(event);
                         //console.log(`[handleDessertsDataSingleClick] row  ${JSON.stringify(row)}`);
                         //console.log(this.dessertsData.selectedItems.length);
-                        //console.log(this.dessertsData.selectedItems);                        
+                        //console.log(this.dessertsData.selectedItems);
                         if(event.ctrlKey) {
                             this.toggleSelection(row.item.name);
                         }
@@ -864,7 +864,7 @@
                 },
 
                 handleDessertsDataDoubleClick(event, row) {
-                    console.log(`3 [handleDessertsDataDoubleClick] event ${JSON.stringify(event)}`);
+                    //console.log(`3 [handleDessertsDataDoubleClick] event ${JSON.stringify(event)}`);
                     //console.log(event);
                     //this.toggleSelection(row.item.name);
                     this.dessertsData.lastClickTime = 0; //reset lastClickTime to prevent Single click logic running.
