@@ -841,10 +841,12 @@
                     const doubleClickThreshold = 500; // Adjust this value (milliseconds)
                     console.log(`1 [handleDessertsDataSingleClick] lastClickTime ${lastClickTime}=${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
                     //lastClickTime > 0 &&
+                    /*
                     if (lastClickTime == 0) {
                         this.dessertsData.lastClickTime = now;
                         return;
                     }
+                    */
                     //if ((now - lastClickTime) > doubleClickThreshold) 
                     {
                         console.log(`2 [handleDessertsDataSingleClick] lastClickTime ${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
