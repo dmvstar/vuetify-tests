@@ -6,7 +6,7 @@
     <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
     <link rel="shortcut icon" type="image/png"
         href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
 
     <style>
@@ -309,6 +309,8 @@
                                 density="comfortable" v-model="dessertsData.selectedItems"
                                 :items="dessertsData.dessertsItems" item-value="name" item-key="name"
                                 :search="searchData.searchText" class="elevation-1"
+                                sort-asc-icon="mdi-sort-ascending"
+                                sort-desc-icon="mdi-sort-descending"
                                 @click:row="handleDessertsDataSingleClick" @dblclick:row="handleDessertsDataDoubleClick"
                                 show-select class="elevation-1">
 
@@ -320,15 +322,15 @@
                                             <div class="text-subtitle-1" style="white-space: pre-wrap;">
                                                 <template v-if="column.sortable">
                                                     <template v-if="isSorted(column)">
-                                                        <v-icon :icon="getSortIcon(column)"></v-icon>
+                                                        <v-icon size="x-small" :icon="getSortIcon(column, toggleSort)"></v-icon>
                                                     </template>
                                                     <template v-else>
-                                                        <v-icon color="#808080" icon="mdi-arrow-up-down"></v-icon>
+                                                        <v-icon size="x-small" color="#808080" icon="mdi-sort"></v-icon>
                                                     </template>
                                                 </template>
                                                 {{column.title}}
                                                 <template v-if="column.icon">
-                                                    <v-icon color="green-darken-2">{{column.icon}}</v-icon>
+                                                    <v-icon size="x-small" color="green-darken-2">{{column.icon}}</v-icon>
                                                 </template>
                                             </div>
                                         </template>
@@ -404,7 +406,7 @@
                 <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
                     color="surface-light">
                     <div class="flex-1-0-100 text-center mt-2">
-                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong> {{appAuthor}} {{appVersion}}
                     </div>
                 </v-footer>
             </v-main>
@@ -836,6 +838,13 @@
                 getTitle(column) {
                     var ret = "";
                     //console.log("[getTitle]", column);
+                    return ret;
+                },
+
+                getSortIconLocal(column, toggleSort){   
+                    var ret = 'mdi-sort-variant-off'
+                    console.log("[getSortIconLocal]", column, toggleSort);
+                    console.log("[getSortIconLocal]", toggleSort.key);
                     return ret;
                 },
 
