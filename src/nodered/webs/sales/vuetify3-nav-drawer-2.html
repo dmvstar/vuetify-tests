@@ -313,28 +313,42 @@
                                 show-select class="elevation-1">
 
                                 <!--HEADER SLOTS-->
-                                <!--template v-for="header in dessertsData.dessertsHeaders"
-                                    #[`header.${header.name}`]="{ header }">
-                                    <v-card outlined color="transparent">
+                                <template v-for="header in dessertsData.dessertsHeaders"
+                                    #[`header.${header.key}`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-card outlined color="transparent" variant="flat">
                                         <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{
-                                                header.title}}</div>
+                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">
+                                                <template v-if="column.sortable">
+                                                    <template v-if="isSorted(column)">
+                                                        <v-icon :icon="getSortIcon(column)"></v-icon>
+                                                    </template>
+                                                    <template v-else>
+                                                        <v-icon color="#808080" icon="mdi-arrow-up-down"></v-icon>
+                                                    </template>
+                                                </template>
+                                                {{column.title}}
+                                                <template v-if="column.icon">
+                                                    <v-icon color="green-darken-2">{{column.icon}}</v-icon>
+                                                </template>
+                                            </div>
                                         </template>
                                         <template v-slot:subtitle class="text-subtitle-2">
-                                            {{ header.subtitle }}
+                                            {{ column.subtitle }}
+
                                         </template>
                                         <v-tooltip activator="parent" location="top">
-                                            {{ header.hint }}
+                                            {{ column.hint }}
                                         </v-tooltip>
+
                                     </v-card>
-                                </template-->
+                                </template>
 
                                 <!--span v-html=column.title></span-->
                                 <!--
                                     {{ getTitle(column) }}
                                     {{ column.title }}
                                 -->
-
+                                <!--
                                 <template v-slot:[`header.name`]="{ column, isSorted, getSortIcon, toggleSort }"
                                     v-slot:activator="{ props }">
                                     <v-card outlined color="transparent" variant="flat">
@@ -363,6 +377,9 @@
                                             {{ column.subtitle }}
                                             <template v-if="isSorted(column)">
                                                 <v-icon :icon="getSortIcon(column)"></v-icon>
+                                            </template>
+                                            <template v-else>
+                                                <v-icon color="#808080" icon="mdi-arrow-up-down"></v-icon>
                                             </template>
                                         </template>
                                         <v-tooltip activator="parent" location="top">
@@ -484,7 +501,7 @@
                                         </v-tooltip>
                                     </v-card>
                                 </template>
-
+-->
 
                                 <!--ITEMS SLOTS-->
                                 <template v-slot:item.name="{ item }">
@@ -1037,8 +1054,8 @@
                         editedItem: {},
                         selectedOrderListItem: [],
                         dessertsHeaders: [
-                            { title: 'Dessert (100g)', subtitle: "Dessert info (100g serving)", hint: "Dessert information for serving (100g serving)", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
-                            { title: 'Calories\n(100g)', subtitle: "Total Calories", hint: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Dessert (100g)', subtitle: "Dessert info (100g serving)", hint: "Dessert information for serving (100g serving)", align: 'start', sortable: true, orderable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories \n(100g)', subtitle: "Total Calories", hint: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style', icon: 'mdi-mushroom' },
                             { title: 'Carbo ex. (eg)', subtitle: "Carbohydrate exchange rate", hint: "Carbohydrate exchange rate", align: 'end', key: 'carboex', class: 'my-header-style' },
                             { title: 'Fat (g)', subtitle: "Fat in dessert", hint: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
                             { title: 'Carbs (g)', subtitle: "Carbs in dessert", hint: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
