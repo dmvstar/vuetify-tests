@@ -342,167 +342,6 @@
 
                                     </v-card>
                                 </template>
-
-                                <!--span v-html=column.title></span-->
-                                <!--
-                                    {{ getTitle(column) }}
-                                    {{ column.title }}
-                                -->
-                                <!--
-                                <template v-slot:[`header.name`]="{ column, isSorted, getSortIcon, toggleSort }"
-                                    v-slot:activator="{ props }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle class="text-subtitle-2">
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-
-                                <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1">
-                                                <v-icon color="green-darken-2">mdi-mushroom</v-icon>
-                                                {{ column.title }}
-                                            </div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
-                                            <template v-else>
-                                                <v-icon color="#808080" icon="mdi-arrow-up-down"></v-icon>
-                                            </template>
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-
-                                <template v-slot:[`header.carboex`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.fat`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.carbs`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.iron`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.protein`]="{ column, isSorted, getSortIcon, toggleSort }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                            <template v-if="isSorted(column)">
-                                                <v-icon :icon="getSortIcon(column)"></v-icon>
-                                            </template>
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-
-                                <template v-slot:[`header.actions`]="{ column }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{ column.title
-                                                }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
-                                <template v-slot:[`header.operations`]="{ column }">
-                                    <v-card outlined color="transparent" variant="flat">
-                                        <template v-slot:title>
-                                            <div class="text-subtitle-1">{{ column.title }}</div>
-                                        </template>
-                                        <template v-slot:subtitle>
-                                            {{ column.subtitle }}
-                                        </template>
-                                        <v-tooltip activator="parent" location="top">
-                                            {{ column.hint }}
-                                        </v-tooltip>
-                                    </v-card>
-                                </template>
--->
-
                                 <!--ITEMS SLOTS-->
                                 <template v-slot:item.name="{ item }">
                                     <div style="white-space: pre-wrap;">{{ item.name }}</div>
@@ -635,7 +474,7 @@
         const vuetify = createVuetify({
 
             theme: {
-                //defaultTheme: "dark",
+                defaultTheme: "dark",
             }
 
         });
@@ -1198,7 +1037,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.41 (2025-04-10 23:07:52)";
+                const appVersion = "v. 0.0.45 (2025-04-15 12:10:03)";
                 const appAuthor = "StarDust";
 
                 return {
