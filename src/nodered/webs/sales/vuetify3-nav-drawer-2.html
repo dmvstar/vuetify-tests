@@ -380,7 +380,8 @@
                                     <!--v-btn block color="blue">Operations</v-btn-->
                                     <v-menu transition="scale-transition">
                                         <template v-slot:activator="{ props }">
-                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"
+                                            <v-btn color="primary" v-bind="props" 
+                                                prepend-icon="mdi-cog-outline"
                                                 append-icon="mdi-chevron-down">
                                             </v-btn>
                                         </template>
@@ -420,35 +421,45 @@
                     New Item
                 </v-btn>
             </template-->
-            <v-card>
+            <v-card density="compact" border="border-thin">
                 <v-card-title>
-                    <span class="text-h5">Edit item [{{ dessertsData.editedItem.name }}]</span>
+                    <span class="text-h5" color="red-lighten-2" >Edit item [{{ dessertsData.editedItem.name }}]</span>
                 </v-card-title>
 
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col cols="12" md="8" sm="6">
+                            <v-col cols="12" md="12" sm="6">
                                 <v-text-field density="compact" v-model="dessertsData.editedItem.name"
                                     label="Dessert name"></v-text-field>
                             </v-col>
+                        </v-row>
+                        <v-row>
                             <v-col cols="12" md="4" sm="6">
                                 <v-text-field density="compact" v-model="dessertsData.editedItem.calories"
                                     label="Calories"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbex"
+                                    label="Carbo exchange (eg)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs"
+                                    label="Carbs (g)"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="4" sm="6">
                                 <v-text-field density="compact" v-model="dessertsData.editedItem.fat"
                                     label="Fat (g)"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="4" sm="6">
-                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs"
-                                    label="Carbs (g)"></v-text-field>
-                            </v-col>
+                            </v-col>                            
                             <v-col cols="12" md="4" sm="6">
                                 <v-text-field density="compact" v-model="dessertsData.editedItem.protein"
                                     label="Protein (g)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.iron"
+                                    label="Iron (%)"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
