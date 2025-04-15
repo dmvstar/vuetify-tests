@@ -300,6 +300,28 @@
                                 show-select class="elevation-1">
 
                                 <!--HEADER SLOTS-->
+                                <!--template v-for="header in dessertsData.dessertsHeaders"
+                                    #[`header.${header.name}`]="{ header }">
+                                    <v-card outlined color="transparent">
+                                        <template v-slot:title>
+                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">{{
+                                                header.title}}</div>
+                                        </template>
+                                        <template v-slot:subtitle class="text-subtitle-2">
+                                            {{ header.subtitle }}
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ header.hint }}
+                                        </v-tooltip>
+                                    </v-card>
+                                </template-->
+
+                                <!--span v-html=column.title></span-->
+                                <!--
+                                    {{ getTitle(column) }}
+                                    {{ column.title }}
+                                -->
+                                
                                 <template v-slot:[`header.name`]="{ column }" v-slot:activator="{ props }">
                                     <v-card outlined color="transparent">
                                         <template v-slot:title>
@@ -315,16 +337,11 @@
                                     </v-card>
                                 </template>
 
-                                <!--span v-html=column.title></span-->
-                                    <!--
-                                    {{ getTitle(column) }}
-                                    {{ column.title }}
-                                    -->
-                                <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">                                    
+                                <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
                                     <v-card color="transparent">
                                         <template v-slot:title>
                                             <div class="text-subtitle-1">{{ column.title
-                                            }}</div>
+                                                }}</div>
                                         </template>
                                         <template v-slot:subtitle>
                                             {{ column.subtitle }}
@@ -433,6 +450,7 @@
                                         </v-tooltip>
                                     </v-card>
                                 </template>
+                                
 
                                 <!--ITEMS SLOTS-->
                                 <template v-slot:item.name="{ item }">
