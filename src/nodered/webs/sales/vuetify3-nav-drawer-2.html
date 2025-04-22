@@ -280,7 +280,7 @@
                                     </v-btn>
                                 </template>
                                 <v-list>
-                                    <v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"
+                                    <v-list-item v-for="([title, icon, action], index) in menuActions.operationsList"
                                         :key="index" :prepend-icon="icon" :title="title" :value="title"
                                         @click="onOperationClick(action, index)">
                                         <!--template v-slot:append>
@@ -710,6 +710,7 @@
 
                 onOperationClick(event, index) {
                     console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
+                    this.dessertsData.dialogActionCSV = true;
                 },
 
                 onBtnMainNoClick(event) {
@@ -908,6 +909,8 @@
 
                 var dessertsData = Vue.ref(
                     {
+                        dialogEdit:false,
+                        dialogActionCSV:false,
                         lastClickTime: 0,
                         isDessertsDataHandleClick: true,
                         editedItem: {},
@@ -1037,9 +1040,15 @@
                     actionsList: [
                         ["Print Report", "mdi-printer", "print_rep"],
                         ["Print Barcode", "mdi-barcode", "print_bar"],
+                        ["Print QRCode", "mdi-qrcode", "print_qr"]
+                    ],
+                    operationsList: [
+                        ["Print Report", "mdi-printer", "print_rep"],
+                        ["Print Barcode", "mdi-barcode", "print_bar"],
                         ["Print QRCode", "mdi-qrcode", "print_qr"],
                         ["Download CSV", "mdi-download", "download_csv"]
                     ]
+
                 };
 
                 const dicts = {
@@ -1058,7 +1067,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.45 (2025-04-15 12:10:03)";
+                const appVersion = "v. 0.0.47 (2025-04-22 11:52:32)";
                 const appAuthor = "StarDust";
 
                 return {
