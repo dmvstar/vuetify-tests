@@ -308,11 +308,9 @@
                             <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
                                 density="comfortable" v-model="dessertsData.selectedItems"
                                 :items="dessertsData.dessertsItems" item-value="name" item-key="name"
-                                :search="searchData.searchText" class="elevation-1"
-                                sort-asc-icon="mdi-sort-ascending"
-                                sort-desc-icon="mdi-sort-descending"
-                                @click:row="handleDessertsDataSingleClick" @dblclick:row="handleDessertsDataDoubleClick"
-                                show-select class="elevation-1">
+                                :search="searchData.searchText" class="elevation-1" sort-asc-icon="mdi-sort-ascending"
+                                sort-desc-icon="mdi-sort-descending" @click:row="handleDessertsDataSingleClick"
+                                @dblclick:row="handleDessertsDataDoubleClick" show-select class="elevation-1">
 
                                 <!--HEADER SLOTS-->
                                 <template v-for="header in dessertsData.dessertsHeaders"
@@ -322,7 +320,8 @@
                                             <div class="text-subtitle-1" style="white-space: pre-wrap;">
                                                 <template v-if="column.sortable">
                                                     <template v-if="isSorted(column)">
-                                                        <v-icon size="x-small" :icon="getSortIcon(column, toggleSort)"></v-icon>
+                                                        <v-icon size="x-small"
+                                                            :icon="getSortIcon(column, toggleSort)"></v-icon>
                                                     </template>
                                                     <template v-else>
                                                         <v-icon size="x-small" color="#808080" icon="mdi-sort"></v-icon>
@@ -330,7 +329,8 @@
                                                 </template>
                                                 {{column.title}}
                                                 <template v-if="column.icon">
-                                                    <v-icon size="x-small" color="green-darken-2">{{column.icon}}</v-icon>
+                                                    <v-icon size="x-small"
+                                                        color="green-darken-2">{{column.icon}}</v-icon>
                                                 </template>
                                             </div>
                                         </template>
@@ -380,8 +380,7 @@
                                     <!--v-btn block color="blue">Operations</v-btn-->
                                     <v-menu transition="scale-transition">
                                         <template v-slot:activator="{ props }">
-                                            <v-btn color="primary" v-bind="props" 
-                                                prepend-icon="mdi-cog-outline"
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-cog-outline"
                                                 append-icon="mdi-chevron-down">
                                             </v-btn>
                                         </template>
@@ -423,7 +422,7 @@
             </template-->
             <v-card density="compact" border="border-thin">
                 <v-card-title>
-                    <span class="text-h5" color="red-lighten-2" >Edit item [{{ dessertsData.editedItem.name }}]</span>
+                    <span class="text-h5" color="red-lighten-2">Edit item [{{ dessertsData.editedItem.name }}]</span>
                 </v-card-title>
 
                 <v-card-text>
@@ -452,7 +451,7 @@
                             <v-col cols="12" md="4" sm="6">
                                 <v-text-field density="compact" v-model="dessertsData.editedItem.fat"
                                     label="Fat (g)"></v-text-field>
-                            </v-col>                            
+                            </v-col>
                             <v-col cols="12" md="4" sm="6">
                                 <v-text-field density="compact" v-model="dessertsData.editedItem.protein"
                                     label="Protein (g)"></v-text-field>
@@ -476,6 +475,37 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog v-model="dessertsData.dialogAction" max-width="500px">
+            <v-card density="compact" border="border-thin">
+                <v-card-title>
+                    <div :class="dessertsData.dialogTitleClass">
+                        Operations [{{ menuActions.operationSelected }}] for [{{ dessertsData.selectedItems.length }}]
+                        items.
+                    </div>
+                </v-card-title>
+                <v-card-text>
+                    {{ dessertsData.dialogInfo }}
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" md="12" sm="6">
+                                {{ dessertsData.dialogMessage }}
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogAction = false">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogAction = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
         <!-- </v-card> -->
     </template>
 
@@ -710,7 +740,15 @@
 
                 onOperationClick(event, index) {
                     console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
-                    this.dessertsData.dialogActionCSV = true;
+                    this.menuActions.operationSelected = event;
+                    this.dessertsData.dialogAction = true;
+                    this.dessertsData.dialogInfo = "";
+                    if (this.dessertsData.selectedItems.length == 0) {
+                        this.dessertsData.dialogInfo = "You must select at least one item for operations."
+                    } else {
+                        this.dessertsData.dialogInfo = `Selected a ${this.dessertsData.selectedItems.length} item(s) for operations.`;
+                    }
+                    this.dessertsData.dialogMessage = "";
                 },
 
                 onBtnMainNoClick(event) {
@@ -853,7 +891,7 @@
                     return ret;
                 },
 
-                getSortIconLocal(column, toggleSort){   
+                getSortIconLocal(column, toggleSort) {
                     var ret = 'mdi-sort-variant-off'
                     console.log("[getSortIconLocal]", column, toggleSort);
                     console.log("[getSortIconLocal]", toggleSort.key);
@@ -909,8 +947,11 @@
 
                 var dessertsData = Vue.ref(
                     {
-                        dialogEdit:false,
-                        dialogActionCSV:false,
+                        dialogEdit: false,
+                        dialogAction: false,
+                        dialogTitleClass: "text-green-darken-3 font-weight-bold",
+                        dialogInfo: "",
+                        dialogMessage: "",
                         lastClickTime: 0,
                         isDessertsDataHandleClick: true,
                         editedItem: {},
@@ -922,7 +963,7 @@
                             { title: 'Fat (g)', subtitle: "Fat in dessert", hint: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
                             { title: 'Carbs (g)', subtitle: "Carbs in dessert", hint: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
                             { title: 'Protein (g)', subtitle: "Protein in dessert", hint: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
-                            { title: 'Iron (%)', subtitle: "Iron in dessert", hint: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style'},
+                            { title: 'Iron (%)', subtitle: "Iron in dessert", hint: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
                             { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '15%' },
                             { title: 'Operations', subtitle: "Operation for item", hint: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
@@ -1037,11 +1078,13 @@
                         ["Hide", "mdi-fire", "hide"],
                         ["Logout", "mdi-logout", "logout"]
                     ],
+                    actionSelected: null,
                     actionsList: [
                         ["Print Report", "mdi-printer", "print_rep"],
                         ["Print Barcode", "mdi-barcode", "print_bar"],
                         ["Print QRCode", "mdi-qrcode", "print_qr"]
                     ],
+                    operationSelected: null,
                     operationsList: [
                         ["Print Report", "mdi-printer", "print_rep"],
                         ["Print Barcode", "mdi-barcode", "print_bar"],
@@ -1067,9 +1110,8 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.47 (2025-04-22 11:52:32)";
+                const appVersion = "v. 0.0.48 (2025-04-22 12:03:34)";
                 const appAuthor = "StarDust";
-
                 return {
                     isDarkTheme
                     , isShowUserMenu
