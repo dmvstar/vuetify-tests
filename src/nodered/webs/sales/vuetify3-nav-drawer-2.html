@@ -424,7 +424,7 @@
                 <v-card-title>
                     <span class="text-h5" color="red-lighten-2">Edit item [{{ dessertsData.editedItem.name }}]</span>
                 </v-card-title>
-
+                <v-divider class="border-opacity-100"></v-divider>
                 <v-card-text>
                     <v-container>
                         <v-row>
@@ -484,6 +484,7 @@
                         items.
                     </div>
                 </v-card-title>
+                <v-divider class="border-opacity-100"></v-divider>
                 <v-card-text>
                     <div :class="dessertsData.dialogTextClass">
                         {{ dessertsData.dialogInfo }}
@@ -506,6 +507,7 @@
         :subtitle="item.subtitle"
         :title="item.title"
         :value="item.value"
+        active-class="text-pink"
       >
         <template v-slot:prepend="{ isSelected, select }">
           <v-list-item-action start>
