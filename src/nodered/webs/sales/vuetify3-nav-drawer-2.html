@@ -76,10 +76,10 @@
                     max-width="250"
                     src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
                 </v-img-->
-                <v-img class="mx-2" 
+                <v-img class="mx-2"
                     src="https://raw.githubusercontent.com/dmvstar/vuetify-tests/refs/heads/main/src/nodered/webs/sales/assets/Stardust-v.2-2.png"
-                    src0="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
-                    max-width="180" contain></v-img>
+                    src0="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png" max-width="180"
+                    contain></v-img>
                 <v-toolbar-title>
                     <v-card outlined color="transparent">
                         <template v-slot:title>
@@ -364,6 +364,14 @@
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
+                                    <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                        :close-on-content-click="false" :close-on-click="true">
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
+                                                @click="onBtnActionsStubClick(item, 'ACTIONS')" v-bind="props">
+                                            </v-btn>
+                                        </template>
+                                    </v-menu>
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
