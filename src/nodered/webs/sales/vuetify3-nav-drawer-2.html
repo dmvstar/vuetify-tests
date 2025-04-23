@@ -415,11 +415,6 @@
 
 
         <v-dialog v-model="dessertsData.dialogEdit" max-width="500px">
-            <!--template v-slot:activator="{ props }">
-                <v-btn class="mb-2" color="primary" dark v-bind="props">
-                    New Item
-                </v-btn>
-            </template-->
             <v-card density="compact" border="border-thin">
                 <v-card-title>
                     <span class="text-h5" color="red-lighten-2">Edit item [{{ dessertsData.editedItem.name }}]</span>
@@ -495,27 +490,19 @@
                                 {{ dessertsData.dialogMessage }}
                             </v-col>
                         </v-row>
-                        <v-list
-      v-model:selected="dessertsData.settingsSelection"
-      lines="three"
-      select-strategy="leaf"
-    >
-      <v-list-subheader>General</v-list-subheader>
-      <v-list-item
-        v-for="item in dessertsData.settingsItems"
-        :key="item.value"
-        :subtitle="item.subtitle"
-        :title="item.title"
-        :value="item.value"
-        active-class="text-pink"
-      >
-        <template v-slot:prepend="{ isSelected, select }">
-          <v-list-item-action start>
-            <v-checkbox-btn :model-value="isSelected" @update:model-value="select"></v-checkbox-btn>
-          </v-list-item-action>
-        </template>
-      </v-list-item>
-    </v-list>
+                        <v-list v-model:selected="dessertsData.settingsSelection" lines="three" select-strategy="leaf">
+                            <v-list-subheader>General</v-list-subheader>
+                            <v-list-item v-for="item in dessertsData.settingsItems" :key="item.value"
+                                :subtitle="item.subtitle" :title="item.title" :value="item.value"
+                                active-class="text-pink">
+                                <template v-slot:prepend="{ isSelected, select }">
+                                    <v-list-item-action start>
+                                        <v-checkbox-btn :model-value="isSelected"
+                                            @update:model-value="select"></v-checkbox-btn>
+                                    </v-list-item-action>
+                                </template>
+                            </v-list-item>
+                        </v-list>
 
 
                     </v-container>
@@ -786,7 +773,7 @@
                         this.dessertsData.dialogMessage = "Making operation for selected items."
                     }
                     console.log(`[onOperationClick]`, this.dialogTitleClass);
-                    
+
                 },
 
                 onBtnMainNoClick(event) {
