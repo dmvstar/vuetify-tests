@@ -494,6 +494,28 @@
                                 {{ dessertsData.dialogMessage }}
                             </v-col>
                         </v-row>
+                        <v-list
+      v-model:selected="dessertsData.settingsSelection"
+      lines="three"
+      select-strategy="leaf"
+    >
+      <v-list-subheader>General</v-list-subheader>
+      <v-list-item
+        v-for="item in dessertsData.settingsItems"
+        :key="item.value"
+        :subtitle="item.subtitle"
+        :title="item.title"
+        :value="item.value"
+      >
+        <template v-slot:prepend="{ isSelected, select }">
+          <v-list-item-action start>
+            <v-checkbox-btn :model-value="isSelected" @update:model-value="select"></v-checkbox-btn>
+          </v-list-item-action>
+        </template>
+      </v-list-item>
+    </v-list>
+
+
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
@@ -1089,7 +1111,13 @@
                                 protein: 7,
                                 iron: 6,
                             },
-                        ]
+                        ],
+                        settingsItems: [
+                            { value: 'notifications', title: 'Notifications', subtitle: 'Notify me about updates to apps or games that I downloaded' },
+                            { value: 'sound', title: 'Sound', subtitle: 'Auto-update apps at any time. Data charges may apply' },
+                            { value: 'widgets', title: 'Auto-add widgets', subtitle: 'Automatically add home screen widgets when downloads complete' },
+                        ],
+                        settingsSelection: []
                     }
                 );
 
@@ -1130,7 +1158,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.49 (2025-04-22 15:34:55)";
+                const appVersion = "v. 0.0.51 (2025-04-23 10:20:43)";
                 const appAuthor = "StarDust";
                 return {
                     isDarkTheme
