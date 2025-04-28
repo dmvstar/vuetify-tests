@@ -364,13 +364,14 @@
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
-                                    <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                    <v-menu density="compact" v-model="searchData.dateFromDateMenu1"
                                         :close-on-content-click="false" :close-on-click="true">
                                         <template v-slot:activator="{ props }">
                                             <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
                                                 @click="onBtnActionsStubClick(item, 'ACTIONS')" v-bind="props">
                                             </v-btn>
                                         </template>
+                                        <v-date-picker v-model="searchData.selectedDateFromFull1"></v-date-picker>
                                     </v-menu>
                                     <!--v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn-->
