@@ -1,0 +1,3 @@
+C:\home\apps\imagemagick\magick.exe p_BB.png i_HomeB.png -composite output1.png
+C:\home\apps\imagemagick\magick output1.png -fill "#ec4899" +opaque "#0000FF"
+

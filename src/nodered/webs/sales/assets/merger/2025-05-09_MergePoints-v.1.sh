@@ -6,9 +6,11 @@ IMAGES=('arrow_DN.png' 'arrow_UP.png' 'i_HomeB.png' 'p_BB.png');
 PIESKA='p_BB.png';
 IMAGES=('arrow_DN.png' 'arrow_UP.png' 'i_HomeB.png');
 
+#magick p_BB.png i_HomeB.png -composite output1.png
 #mogrify -path /fullpath2/tmp2 -format png -fill "#BFBFBF" -opaque "#C0C0C0" *.png
 #merge 
-#convert * -fill ${color} +opaque ${CFROM}
+#magick output1.png -fill ${color} +opaque ${CFROM}
+#magick output1.png -fill "#ec4899" +opaque "#0000FF"
 for color in "${COLORS[@]}"; do
     for image in "${IMAGES[@]}"; do
         f_image=$(basename ${image} .png);
