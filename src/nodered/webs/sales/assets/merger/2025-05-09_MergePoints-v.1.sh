@@ -11,11 +11,18 @@ IMAGES=('arrow_DN.png' 'arrow_UP.png' 'i_HomeB.png');
 #merge 
 #magick output1.png -fill ${color} +opaque ${CFROM}
 #magick output1.png -fill "#ec4899" +opaque "#0000FF"
-for color in "${COLORS[@]}"; do
-    for image in "${IMAGES[@]}"; do
-        f_image=$(basename ${image} .png);
-        f_PIESKA=$(basename ${PIESKA} .png);
-        O_Image="${f_PIESKA}_${f_image}_${color}.png";
-        echo "Convert To ${O_Image}";
+
+for image in "${IMAGES[@]}"; do        
+    f_PIESKA=$(basename ${PIESKA} .png);
+    f_image=$(basename ${image} .png);    
+    N_Image="out/${f_PIESKA}_${f_image}.png";
+    echo "Prepare ${N_Image}";
+    magick ${PIESKA} ${image} -composite out/${f_PIESKA}_${f_image}.png
+    for color in "${COLORS[@]}"; do
+        f_color=$(echo ${color} | sed 's:#::g');
+        O_Image="out/${f_PIESKA}_${f_image}_${f_color}.png";
+        echo "  Full color To ${O_Image}";
+        #magick ${N_Image} -fill "${color}" -opaque "${CFROM}" ${O_Image}
+        magick ${N_Image} -fill "${color}" -opaque "${CFROM}" ${O_Image}
     done    
 done
