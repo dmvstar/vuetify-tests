@@ -7,8 +7,8 @@ COLORS=('3b82f6' '22c55e' 'eab308' '06b6d4' 'ec4899' '6366f1' '14b8a6' 'f97316' 
 DIR_IN="in/pins"
 DIR_OUT="out"
 
-PIESKA='p_BB.png';   PIESKA_36='p_BB_x36.png';
-PIESKA_O='p.png'; PIESKA_O_36='p_x36.png';
+PIESKA='p_BB.png';   PIESKA_36='p_BB.x36.png';
+PIESKA_O='p.png'; PIESKA_O_36='p.x36.png';
 
 POINTS_COLORS=('00ff00' 'ff0000' '0000ff' 'ffff00');
 POINTS=('pt-0000ff.png');
@@ -29,7 +29,7 @@ for point in "pt_0000ff.png"; do
     f_POINT=$(basename ${point} .png);    
     for color in "${POINTS_COLORS[@]}"; do
         fc_POINT="out/pt-${color}.png"
-        fc_POINT_32="out/pt-${color}_32.png"
+        fc_POINT_32="out/pt-${color}.32.png"
         echo "  Prepare point ${fc_POINT}";
         magick ${DIR_IN}/points/${point} -fill "#${color}" -opaque "${CFROM}" ${fc_POINT}
         magick ${fc_POINT} -resize 32x ${fc_POINT_32}
@@ -49,9 +49,9 @@ for image in "${IMAGES[@]}"; do
     for color in "${COLORS[@]}"; do
         f_color=$(echo ${color} | sed 's:#::g');
         O_Image="out/${f_PIESKA}.${f_image}.${f_color}.pt-000000.png";
-        S_Image="out/${f_PIESKA}.${f_image}.${f_color}.pt-000000_x32.png";
+        S_Image="out/${f_PIESKA}.${f_image}.${f_color}.pt-000000.x32.png";
         O_Image="out/p_${f_image}.${f_color}.pt-000000.png";
-        S_Image="out/p_${f_image}.${f_color}.pt-000000_x32.png";
+        S_Image="out/p_${f_image}.${f_color}.pt-000000.x32.png";
         echo "  Full color To ${O_Image}";
         magick ${N_Image} -fill "#${color}" -opaque "${CFROM}" ${O_Image}
         #resize
@@ -61,9 +61,9 @@ for image in "${IMAGES[@]}"; do
             f_POINT=$(basename ${point} .png);
             f_POINT_32=${f_POINT}"_x32.png";
             P_Image="out/${f_PIESKA}.${f_image}.${f_color}.${f_POINT}.png";
-            P_Image_32="out/${f_PIESKA}.${f_image}.${f_color}.${f_POINT}_x32.png";
+            P_Image_32="out/${f_PIESKA}.${f_image}.${f_color}.${f_POINT}.x32.png";
             P_Image="out/p_${f_image}-${f_color}.${f_POINT}.png";
-            P_Image_32="out/p_${f_image}-${f_color}.${f_POINT}_x32.png";
+            P_Image_32="out/p_${f_image}-${f_color}.${f_POINT}.x32.png";
             echo "          Add point ${point} To ${P_Image}";
             magick out/${point} ${O_Image} -composite ${P_Image}
             #resize
