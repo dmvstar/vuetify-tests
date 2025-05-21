@@ -48,10 +48,10 @@ for image in "${IMAGES[@]}"; do
 
     for color in "${COLORS[@]}"; do
         f_color=$(echo ${color} | sed 's:#::g');
-        O_Image="out/${f_PIESKA}.${f_image}.${f_color}.pt-000000.png";
-        S_Image="out/${f_PIESKA}.${f_image}.${f_color}.pt-000000.x32.png";
-        O_Image="out/p_${f_image}.${f_color}.pt-000000.png";
-        S_Image="out/p_${f_image}.${f_color}.pt-000000.x32.png";
+        O_Image="out/${f_PIESKA}.${f_image}-${f_color}.pt-000000.png";
+        S_Image="out/${f_PIESKA}.${f_image}-${f_color}.pt-000000.x32.png";
+        O_Image="out/p_${f_image}-${f_color}.pt-000000.png";
+        S_Image="out/p_${f_image}-${f_color}.pt-000000.x32.png";
         echo "  Full color To ${O_Image}";
         magick ${N_Image} -fill "#${color}" -opaque "${CFROM}" ${O_Image}
         #resize
@@ -60,7 +60,7 @@ for image in "${IMAGES[@]}"; do
         for point in "${POINTS[@]}"; do
             f_POINT=$(basename ${point} .png);
             f_POINT_32=${f_POINT}"_x32.png";
-            P_Image="out/${f_PIESKA}.${f_image}.${f_color}.${f_POINT}.png";
+            P_Image="out/${f_PIESKA}.${f_image}-${f_color}.${f_POINT}.png";
             P_Image_32="out/${f_PIESKA}.${f_image}.${f_color}.${f_POINT}.x32.png";
             P_Image="out/p_${f_image}-${f_color}.${f_POINT}.png";
             P_Image_32="out/p_${f_image}-${f_color}.${f_POINT}.x32.png";
