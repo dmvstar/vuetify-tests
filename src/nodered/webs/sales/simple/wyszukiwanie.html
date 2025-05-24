@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Wyszukiwanie Zleceń Transportowych</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container class="py-8">
+          <v-row justify="center">
+            <v-col cols="12" md="8" lg="6">
+              <v-card class="pa-6 elevation-3">
+                <v-card-title class="headline text-h5 mb-4">
+                  Wyszukiwanie Zleceń Transportowych
+                </v-card-title>
+                <v-card-text>
+                  <p class="subtitle-1 mb-4">
+                    Wpisz numer zlecenia, numer zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
+                  </p>
+
+                  <v-text-field
+                    v-model="searchText"
+                    label="Wpisz numer zlecenia / zewnętrzny / artykułu"
+                    outlined
+                    clearable
+                    dense
+                    prepend-inner-icon="mdi-magnify"
+                    @keyup.enter="performSearch"
+                  ></v-text-field>
+
+                  <div class="text-caption grey--text text--darken-1 mb-4">
+                    Szukaj po: Numerze Zlecenia | Numerze Zewnętrznym | Numerze Artykułu
+                  </div>
+
+                  <v-btn
+                    color="primary"
+                    block
+                    large
+                    @click="performSearch"
+                    :loading="loading"
+                    :disabled="loading || !searchText"
+                  >
+                    Szukaj
+                  </v-btn>
+
+                </v-card-text>
+
+                <v-divider class="my-6"></v-divider>
+
+                <v-card-actions>
+                  <div class="text-caption grey--text text--darken-2">
+                    <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+                    W przypadku problemów, skontaktuj się z nami:<br>
+                    📧 **support@twojafirma.pl**<br>
+                    ☎ **+48 123 456 789**
+                  </div>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          searchText: '',
+          loading: false,
+        };
+      },
+      methods: {
+        async performSearch() {
+          if (!this.searchText) {
+            alert('Proszę wprowadzić wartość do wyszukiwania.');
+            return;
+          }
+
+          this.loading = true;
+
+          try {
+            console.log('Rozpoczynam wyszukiwanie dla:', this.searchText);
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            console.log('Wyszukiwanie zakończone dla:', this.searchText);
+
+            // Tutaj możesz dodać logikę po wyszukaniu, np.
+            // przekierowanie na inną stronę, wyświetlenie pojedynczego wyniku,
+            // lub wywołanie API, które następnie otworzy detale zlecenia.
+
+          } catch (error) {
+            console.error("Błąd podczas wyszukiwania:", error);
+            alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+          } finally {
+            this.loading = false;
+          }
+        },
+      },
+    });
+  </script>
+</body>
+</html>
