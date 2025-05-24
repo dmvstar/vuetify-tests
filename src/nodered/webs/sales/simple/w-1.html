@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,7 +8,24 @@
 
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
+    #app {
+      
+      background-image: url('https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg'); 
+      background-size: cover;
+      background-position: center;
+      
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* Upewnia się, że tło pokrywa całą wysokość viewportu */
+    }
+    </style>
 </head>
+
 <body>
   <div id="app">
     <v-app>
@@ -24,41 +42,31 @@
                     Wpisz numer zlecenia, numer zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
                   </p>
 
-                  <v-text-field
-                    v-model="searchText"
-                    label="Wpisz numer zlecenia / zewnętrzny / artykułu"
-                    outlined
-                    clearable
-                    dense
-                    prepend-inner-icon="mdi-magnify"
-                    @keyup.enter="performSearch"
-                  ></v-text-field>
+                  <v-text-field v-model="searchText" label="Wpisz numer zlecenia / zewnętrzny / artykułu" outlined
+                    clearable dense prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"></v-text-field>
 
                   <div class="text-caption grey--text text--darken-1 mb-4">
                     Szukaj po: Numerze Zlecenia | Numerze Zewnętrznym | Numerze Artykułu
                   </div>
 
-                  <v-btn
-                    color="primary"
-                    block
-                    large
-                    @click="performSearch"
-                    :loading="loading"
-                    :disabled="loading || !searchText"
-                  >
+                  <v-btn color="primary" block large @click="performSearch" :loading="loading"
+                    :disabled="loading || !searchText">
                     Szukaj
                   </v-btn>
 
                 </v-card-text>
 
                 <v-divider class="my-6"></v-divider>
-
                 <v-card-actions>
                   <div class="text-caption grey--text text--darken-2">
                     <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
-                    W przypadku problemów, skontaktuj się z nami:<br>
-                    📧 **support@twojafirma.pl**<br>
-                    ☎ **+48 123 456 789**
+                    <div class="font-italic grey--text text--darken-1 mb-2">
+                      W przypadku problemów, skontaktuj się z nami:<br>
+                      <v-icon size="x-small">mdi-email</v-icon>
+                      support@twojafirma.pl<br>
+                      <v-icon size="x-small">mdi-phone</v-icon>
+                      +48 123 456 789
+                    </div>
                   </div>
                 </v-card-actions>
               </v-card>
@@ -111,4 +119,5 @@
     });
   </script>
 </body>
+
 </html>

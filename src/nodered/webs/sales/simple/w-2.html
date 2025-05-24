@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>Wyszukiwanie Zleceń Transportowych TMS</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
+    #app {
+      background-image: url('https://truckers-world.eu/uk/wp-content/uploads/sites/11/2022/05/1920x1200.jpg'); /* Zastąp 'https://source.unsplash.com/random/1920x1080/?logistics,warehouse' adresem URL swojego obrazka */
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* Upewnia się, że tło pokrywa całą wysokość viewportu */
+    }
+    .main-card {
+      background-color: rgba(255, 255, 255, 0.9); /* Lekko przezroczyste tło dla lepszej czytelności */
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 100%;
+    }
+    .footer-text {
+      margin-top: 20px;
+      text-align: center;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container fluid class="fill-height">
+          <v-row justify="center" align="center">
+            <v-col cols="12" sm="10" md="8" lg="6">
+              <v-card class="main-card elevation-12">
+                <v-card-title class="text-h4 text-center d-block">
+                  Wyszukiwanie Zleceń Transportowych
+                </v-card-title>
+                <v-card-text>
+                  <p class="text-subtitle-1 text-center mb-6">
+                    Wpisz numer zlecenia, numer zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
+                  </p>
+                  <v-text-field
+                    v-model="searchText"
+                    label="Numer zlecenia, zewnętrzny lub artykułu"
+                    outlined
+                    clearable
+                    prepend-inner-icon="mdi-magnify"
+                    @keyup.enter="performSearch"
+                  ></v-text-field>
+                  <v-btn
+                    color="primary"
+                    block
+                    large
+                    @click="performSearch"
+                  >
+                    Szukaj
+                  </v-btn>
+                </v-card-text>
+                <v-card-actions class="justify-center">
+                  <div class="footer-text">
+                    <p>
+                      <strong>Kontakt / Pomoc:</strong><br>
+                      W przypadku problemów, skontaktuj się z nami:<br>
+                      <a href="mailto:support@twojafirma.pl">support@twojafirma.pl</a><br>
+                      +48 123 456 789
+                    </p>
+                  </div>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: () => ({
+        searchText: '',
+      }),
+      methods: {
+        performSearch() {
+          if (this.searchText) {
+            alert(`Wyszukiwanie dla: ${this.searchText}`);
+            // Tutaj możesz dodać logikę do wyszukiwania w systemie TMS
+            // np. wywołanie API, przekierowanie do innej strony itp.
+          } else {
+            alert('Proszę wprowadzić numer zlecenia, zewnętrzny lub artykułu.');
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>
