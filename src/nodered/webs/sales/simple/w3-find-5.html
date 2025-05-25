@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyszukiwanie Zleceń Transportowych</title>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            /* Zapobiega przewijaniu tła */
+        }
+
+        #app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-image: url('https://picsum.photos/1920/1080?random=1');
+            background-image: url('https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg');
+            /* Przykładowy obrazek w tle */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            /* Kolor tekstu na tle */
+            position: relative;
+            /* Potrzebne dla pozycjonowania przycisku logowania */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Lekkie przyciemnienie tła dla lepszej czytelności tekstu */
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            /* Treść nad overlayem */
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .login-button-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 3;
+            /* Przycisk logowania na wierzchu */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="overlay"></div>
+        <div class="login-button-container">
+            <v-btn color="primary" @click="login">
+                Zaloguj się
+            </v-btn>
+        </div>
+
+        <div class="content-wrapper">
+            <h1 class="text-h3 mb-6">Śledzenie Zleceń Transportowych</h1>
+            <div class="text-blue-grey-lighten-2 text-subtitle-1 font-italic grey--text text--blue-grey-darken-1 blue-grey-darken-1  mb-4">Wpisz numer zlecenia, numer zewnętrzny lub numer artykułu,
+                aby szybko odnaleźć szczegóły przesyłki.
+            </div>
+            <v-text-field label0="Wyszukaj..." variant="solo-filled" clearable
+                label="Wpisz numer zlecenia / zewnętrzny / artykułu" outlined clearable dense
+                prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText" density="comfortable"
+                bg-color="white"></v-text-field>
+            <div class="text-caption grey--text text--darken-1 mb-4">
+                Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
+            </div>
+            <!--v-btn color="secondary" size="large" class="mt-4" @click="performSearch">
+                Wyszukaj
+            </v-btn-->
+            <v-btn color="primary" block large @click="performSearch" :loading="loading"
+                    :disabled="loading || !searchText">
+                    Wyszukaj
+            </v-btn>
+        </div>
+        <div class="text-caption grey--text text--darken-2">
+            <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+            <div class="font-italic grey--text text--darken-1 mb-2">
+                W przypadku problemów, skontaktuj się z nami:<br>
+                <v-icon color="blue" size="small">mdi-email</v-icon>
+                support@twojafirma.pl<br>
+                <v-icon color="red" size="small">mdi-phone</v-icon>
+                +48 123 456 789
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.x/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.js"></script>
+
+    <script>
+        const { createApp, ref } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const vuetify = createVuetify();
+
+        createApp({
+            setup() {
+                const searchText = ref('');
+                var loading = Vue.ref(false);
+
+                /*
+                const performSearch = () => {
+                    //alert(`Wyszukuję: ${searchText.value}`);
+                    // Tutaj możesz dodać logikę wyszukiwania, np. przekierowanie, zapytanie API          
+                };
+                */
+
+                const login = () => {
+                    alert('Przekierowanie do strony logowania...');
+                    // Tutaj możesz dodać logikę logowania, np. otwarcie modala, przekierowanie
+                };
+
+                return {
+                    searchText,
+                    //performSearch,
+                    loading,
+                    login
+                };
+            },
+            methods: {
+                async performSearch() {
+                    if (!this.searchText) {
+                        alert('Proszę wprowadzić wartość do wyszukiwania.');
+                        return;
+                    }
+
+                    this.loading = true;
+
+                    try {
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.searchText);
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        console.log('Wyszukiwanie zakończone dla:', this.searchText);
+
+                        // Tutaj możesz dodać logikę po wyszukaniu, np.
+                        // przekierowanie na inną stronę, wyświetlenie pojedynczego wyniku,
+                        // lub wywołanie API, które następnie otworzy detale zlecenia.
+
+                    } catch (error) {
+                        console.error("Błąd podczas wyszukiwania:", error);
+                        alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                goToLogin() {
+                    alert('Przekierowanie do strony logowania...');
+                    // Przykład przekierowania: window.location.href = '/login';
+                },
+            }
+        })
+            .use(vuetify)
+            .mount('#app');
+    </script>
+</body>
+
+</html>
