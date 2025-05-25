@@ -14,25 +14,17 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
-            /* Zapobiega przewijaniu tła */
         }
 
         #app {
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background-image: url('https://picsum.photos/1920/1080?random=1');
             background-image: url('https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg');
-            /* Przykładowy obrazek w tle */
             background-size: cover;
             background-position: center;
             color: white;
-            /* Kolor tekstu na tle */
             position: relative;
-            /* Potrzebne dla pozycjonowania przycisku logowania */
         }
 
         .overlay {
@@ -42,17 +34,26 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            /* Lekkie przyciemnienie tła dla lepszej czytelności tekstu */
             z-index: 1;
         }
 
-        .content-wrapper {
+        .main-content {
+            flex-grow: 1;
+            /* Pozwala zawartości zająć dostępną przestrzeń */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             position: relative;
             z-index: 2;
-            /* Treść nad overlayem */
             padding: 20px;
+        }
+
+        .content-wrapper {
             max-width: 800px;
             width: 100%;
+            padding: 20px;
         }
 
         .login-button-container {
@@ -60,48 +61,58 @@
             top: 20px;
             right: 20px;
             z-index: 3;
-            /* Przycisk logowania na wierzchu */
+        }
+
+        /* Dodatkowy styl dla tekstu pod nagłówkiem, jeśli jest potrzebny */
+        .v-app-bar-title .v-toolbar-title__placeholder {
+            color: white !important;
+            /* Upewnij się, że tekst nagłówka jest biały */
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <div class="overlay"></div>
-        <div class="login-button-container">
-            <v-btn color="primary" @click="login">
-                Zaloguj się
-            </v-btn>
+        <div class="overlay">
+                <v-app-bar app dark color="rgba(0,0,0,0.7)" flat>
+                    <v-app-bar-title>Platforma WebLogic: Optymalizacja i śledzenie zleceń
+                        transportowych</v-app-bar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" @click="login">
+                        Zaloguj się
+                    </v-btn>
+                </v-app-bar>
         </div>
 
-        <div class="content-wrapper">
-            <h1 class="text-h4 mb-6">Śledzenie Zleceń Transportowych</h1>
-            <div class="text-blue-grey-lighten-2 text-subtitle-1 font-italic grey--text text--blue-grey-darken-1 blue-grey-darken-1  mb-4">Wpisz numer zlecenia, numer zewnętrzny lub numer artykułu,
-                aby szybko odnaleźć szczegóły przesyłki.
+        <div class="main-content">
+            <div>
+            
             </div>
-            <v-text-field label0="Wyszukaj..." variant="solo-filled" clearable
-                label="Wpisz numer zlecenia / zewnętrzny / artykułu" outlined clearable dense
-                prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText" density="comfortable"
-                bg-color="white"></v-text-field>
-            <div class="text-caption grey--text text--darken-1 mb-4">
-                Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
-            </div>
-            <!--v-btn color="secondary" size="large" class="mt-4" @click="performSearch">
-                Wyszukaj
-            </v-btn-->
-            <v-btn color="primary" block large @click="performSearch" :loading="loading"
+            <div class="content-wrapper">
+                <h1 class="text-h3 mb-6">Śledzenie Zleceń Transportowych</h1>
+                <div class="text-blue-grey-lighten-2 text-subtitle-1 font-italic mb-4">Wpisz numer zlecenia, numer
+                    zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
+                </div>
+                <v-text-field label="Wpisz numer zlecenia / zewnętrzny / artykułu" variant="solo-filled" clearable
+                    prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText"
+                    density="comfortable" bg-color="white"></v-text-field>
+                <div class="text-caption grey--text text--darken-1 mb-4">
+                    Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
+                </div>
+                <v-btn color="primary" block large @click="performSearch" :loading="loading"
                     :disabled="loading || !searchText">
                     Wyszukaj
-            </v-btn>
-        </div>
-        <div class="text-caption grey--text text--darken-2">
-            <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
-            <div class="font-italic grey--text text--darken-1 mb-2">
-                W przypadku problemów, skontaktuj się z nami:<br>
-                <v-icon color="blue" size="small">mdi-email</v-icon>
-                support@twojafirma.pl<br>
-                <v-icon color="red" size="small">mdi-phone</v-icon>
-                +48 123 456 789
+                </v-btn>
+            </div>
+            <div class="text-caption grey--text text--darken-2 mt-auto pb-4">
+                <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+                <div class="font-italic grey--text text--darken-1 mb-2">
+                    W przypadku problemów, skontaktuj się z nami:<br>
+                    <v-icon color="blue" size="small">mdi-email</v-icon>
+                    support@twojafirma.pl<br>
+                    <v-icon color="red" size="small">mdi-phone</v-icon>
+                    +48 123 456 789
+                </div>
             </div>
         </div>
     </div>
@@ -118,14 +129,7 @@
         createApp({
             setup() {
                 const searchText = ref('');
-                var loading = Vue.ref(false);
-
-                /*
-                const performSearch = () => {
-                    //alert(`Wyszukuję: ${searchText.value}`);
-                    // Tutaj możesz dodać logikę wyszukiwania, np. przekierowanie, zapytanie API          
-                };
-                */
+                const loading = ref(false); // Poprawiona deklaracja loading
 
                 const login = () => {
                     alert('Przekierowanie do strony logowania...');
@@ -134,9 +138,8 @@
 
                 return {
                     searchText,
-                    //performSearch,
                     loading,
-                    login
+                    login,
                 };
             },
             methods: {
@@ -150,11 +153,12 @@
 
                     try {
                         console.log('Rozpoczynam wyszukiwanie dla:', this.searchText);
+                        // Symulacja opóźnienia sieciowego
                         await new Promise(resolve => setTimeout(resolve, 1500));
                         console.log('Wyszukiwanie zakończone dla:', this.searchText);
 
-                        // Tutaj możesz dodać logikę po wyszukaniu, np.
-                        // przekierowanie na inną stronę, wyświetlenie pojedynczego wyniku,
+                        // Tutaj dodaj logikę po wyszukaniu, np.
+                        // przekierowanie na inną stronę, wyświetlenie wyników,
                         // lub wywołanie API, które następnie otworzy detale zlecenia.
 
                     } catch (error) {
@@ -163,10 +167,6 @@
                     } finally {
                         this.loading = false;
                     }
-                },
-                goToLogin() {
-                    alert('Przekierowanie do strony logowania...');
-                    // Przykład przekierowania: window.location.href = '/login';
                 },
             }
         })

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pl">
+<!--
+https://vuetifyjs.com/en/styles/colors/#material-colors
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyszukiwanie Zleceń Transportowych</title>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Zapobiega przewijaniu całej strony */
+        }
+
+        #app {
+            height: 100%;
+            /* Kolor tekstu na tle powinien być biały */
+            color: white;
+            /* Usunięto background-image i pseudo-element ::before stąd */
+        }
+
+        /* Półprzezroczysty overlay (teraz w v-app) */
+        /* Ten styl NIE jest już potrzebny, bo będzie bezpośrednio w v-app jako styl */
+        /* #app::before { ... } */
+
+        /* Upewnij się, że element v-app (i jego wewnętrzny .v-application__wrap)
+           zajmują całą dostępną przestrzeń i są przezroczyste */
+        .v-application,
+        .v-application__wrap {
+            height: 100% !important;
+            background-color: transparent !important; /* To jest klucz! */
+            position: relative; /* Ważne dla pozycjonowania tła i overlayu wewnątrz v-app */
+        }
+
+        /* Aby pasek aplikacji również był półprzezroczysty, jeśli nie jest już taki */
+        .v-app-bar {
+            background-color: rgba(0, 0, 0, 0.7) !important; /* Półprzezroczyste tło paska */
+        }
+
+        /* Wyśrodkowanie głównej zawartości wewnątrz v-main */
+        .centered-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .content-card {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.15); /* Półprzezroczyste białe tło dla czytelności */
+            border-radius: 8px;
+        }
+
+        /* Upewnij się, że tekst nagłówka w v-app-bar jest biały */
+        .v-app-bar-title .v-toolbar-title__placeholder {
+            color: white !important;
+        }
+
+        /* Styl dla tekstu na tle, aby był czytelny */
+        .text-on-background {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Ikony kontaktowe */
+        .v-icon {
+            color: inherit; /* Dziedziczy kolor z rodzica */
+        }
+        .text-on-background .mdi-email {
+            color: #2196F3 !important; /* Niebieski dla emaila */
+        }
+        .text-on-background .mdi-phone {
+            color: #F44336 !important; /* Czerwony dla telefonu */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <v-app :style="{
+            backgroundImage: 'url(\'https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg\')',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            position: 'relative'
+        }">
+            <div :style="{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                zIndex: 0 // Pod resztą komponentów Vuetify
+            }"></div>
+
+            <v-app-bar app dark color="rgba(0,0,0,0.7)" flat>
+                <v-app-bar-title>Platforma WebLogic: Optymalizacja i śledzenie zleceń transportowych</v-app-bar-title>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="login">
+                    Zaloguj się
+                </v-btn>
+            </v-app-bar>
+
+            <v-main style="position: relative; z-index: 1;">
+                <div class="centered-content">
+                    <div class="content-card">
+                        <h1 class="text-h4 mb-6 text-on-background">Śledzenie Zleceń Transportowych</h1>
+                        <div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer zlecenia, numer
+                            zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
+                        </div>
+                        <v-text-field
+                            label="Wpisz numer zlecenia / zewnętrzny / artykułu"
+                            variant="solo-filled"
+                            clearable
+                            prepend-inner-icon="mdi-magnify"
+                            @keyup.enter="performSearch"
+                            v-model="searchText"
+                            density="comfortable"
+                            bg-color="white"
+                        ></v-text-field>
+                        <div class="text-caption mb-4 text-on-background">
+                            Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
+                        </div>
+                        <v-btn
+                            color="primary"
+                            block
+                            large
+                            @click="performSearch"
+                            :loading="loading"
+                            :disabled="loading || !searchText"
+                        >
+                            Wyszukaj
+                        </v-btn>
+                    </div>
+                    <div class="text-caption mt-auto pb-4 text-on-background">
+                        <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+                        <div class="font-italic mb-2">
+                            W przypadku problemów, skontaktuj się z nami:<br>
+                            <v-icon size="small" class="mdi-email"></v-icon>
+                            support@twojafirma.pl<br>
+                            <v-icon size="small" class="mdi-phone"></v-icon>
+                            +48 123 456 789
+                        </div>
+                    </div>
+                </div>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.x/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.js"></script>
+
+    <script>
+        const { createApp, ref } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const vuetify = createVuetify();
+
+        createApp({
+            setup() {
+                const searchText = ref('');
+                const loading = ref(false);
+
+                const login = () => {
+                    alert('Przekierowanie do strony logowania...');
+                    // Tutaj możesz dodać logikę logowania, np. otwarcie modala, przekierowanie
+                };
+
+                return {
+                    searchText,
+                    loading,
+                    login,
+                };
+            },
+            methods: {
+                async performSearch() {
+                    if (!this.searchText) {
+                        alert('Proszę wprowadzić wartość do wyszukiwania.');
+                        return;
+                    }
+
+                    this.loading = true;
+
+                    try {
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.searchText);
+                        // Symulacja opóźnienia sieciowego
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        console.log('Wyszukiwanie zakończone dla:', this.searchText);
+
+                        // Tutaj dodaj logikę po wyszukaniu, np.
+                        // przekierowanie na inną stronę, wyświetlenie wyników,
+                        // lub wywołanie API, które następnie otworzy detale zlecenia.
+
+                    } catch (error) {
+                        console.error("Błąd podczas wyszukiwania:", error);
+                        alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+            }
+        })
+        .use(vuetify)
+        .mount('#app');
+    </script>
+</body>
+
+</html>
