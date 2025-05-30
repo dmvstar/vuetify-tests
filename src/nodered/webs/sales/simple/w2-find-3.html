@@ -24,6 +24,11 @@
       min-height: 100vh; /* Upewnia się, że tło pokrywa całą wysokość viewportu */
     }
     </style>
+    <style scoped>
+      .my-rounded-card {
+        border-radius: 50px !important; /* Apply the desired radius */
+      }
+    </style>
 </head>
 
 <body>
@@ -46,9 +51,12 @@
         <v-container class="py-8">
           <v-row justify="center">
             <v-col cols="12" md="8" lg="6">
-              <v-card class="pa-3 elevation-3">
+              <v-card class="pa-2 elevation-3 my-rounded-card">
                 <!--v-card-title class="headline text-h5 mb-4 blue darken-4"-->
-                <v-card-title class="headline text-h5 mb-4 disabled darken-4">
+                <v-card-subtitle class="text-right headline text-h6 mb-4 disabled primary--text" style="text-decoration: underline;">
+                  Zaloguj się
+                </v-card-subtitle>                
+                <v-card-title class="headline text-h5 mb-4 disabled darken-4 d-flex justify-center">
                   Śledzenie Zleceń Transportowych
                 </v-card-title>
                 <v-card-text>
@@ -59,9 +67,9 @@
                   <v-text-field v-model="searchText" label="Wpisz numer zlecenia / zewnętrzny / artykułu" outlined
                     clearable dense prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"></v-text-field>
 
-                  <div class="text-caption grey--text text--darken-1 mb-4">
+                  <!--div class="text-caption grey--text text--darken-1 mb-4">
                     Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
-                  </div>
+                  </div-->
 
                   <v-btn color="primary" block large @click="performSearch" :loading="loading"
                     :disabled="loading || !searchText">
@@ -71,18 +79,25 @@
                 </v-card-text>
 
                 <v-divider class="my-6"></v-divider>
-                <v-card-actions>
+                <v-card-text>
                   <div class="text-caption grey--text text--darken-2">
-                    <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
-                    <div class="font-italic grey--text text--darken-1 mb-2">
-                      W przypadku problemów, skontaktuj się z nami:<br>
-                      <v-icon color="blue" size="small">mdi-email</v-icon>
-                      support@twojafirma.pl<br>
-                      <v-icon color="red" size="small">mdi-phone</v-icon>
+                    <div class="d-flex justify-center mb-2">
+                      W przypadku problemów, skontaktuj się z nami:
+                    </div>
+                    <div class="d-flex justify-center align-center">
+                      <v-icon color="blue" size="small" class="mr-1">mdi-email</v-icon>
+                      support@twojafirma.pl
+                    </div>
+                    <div class="d-flex justify-center align-center">
+                      <v-icon color="red" size="small" class="mr-1">mdi-phone</v-icon>
                       +48 123 456 789
                     </div>
+                    <div class="d-flex justify-center align-center">
+                      <v-icon color="green" size="small" class="mr-1">mdi-web</v-icon>                      
+                      <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">www.google.com</a>
+                    </div>
                   </div>
-                </v-card-actions>
+                </v-card-text>
               </v-card>
             </v-col>
           </v-row>
