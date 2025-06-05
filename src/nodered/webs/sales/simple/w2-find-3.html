@@ -8,27 +8,31 @@
 
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <style>
-    body, html {
+  <style>
+    body,
+    html {
       height: 100%;
       margin: 0;
     }
+
     #app {
-      
-      background-image: url('https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg'); 
+
+      background-image: url('https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg');
       background-size: cover;
       background-position: center;
-      
+
       justify-content: center;
       align-items: center;
-      min-height: 100vh; /* Upewnia się, że tło pokrywa całą wysokość viewportu */
+      min-height: 100vh;
+      /* Upewnia się, że tło pokrywa całą wysokość viewportu */
     }
-    </style>
-    <style scoped>
-      .my-rounded-card {
-        border-radius: 50px !important; /* Apply the desired radius */
-      }
-    </style>
+  </style>
+  <style scoped>
+    .my-rounded-card {
+      border-radius: 50px !important;
+      /* Apply the desired radius */
+    }
+  </style>
 </head>
 
 <body>
@@ -48,19 +52,23 @@
         </v-btn>
       </v-app-bar>
       <v-main>
+        <v-alert color="green" icon="mdi-material-design" theme="dark" border closable="true" v-if="showMainAlert">
+          Przekierowanie do strony logowania...
+        </v-alert>
         <v-container class="py-8">
           <v-row justify="center">
             <v-col cols="12" md="8" lg="6">
               <v-card class="pa-2 elevation-3 my-rounded-card">
                 <!--v-card-title class="headline text-h5 mb-4 blue darken-4"-->
-                <v-card-subtitle class="text-right headline text-h6 mb-4 disabled primary--text" style="text-decoration: underline;">
-                  
-                    <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
-                    <!--v-btn variant="plain"  @click="goToLogin">
+                <v-card-subtitle class="text-right headline text-h6 mb-4 disabled primary--text"
+                  style="text-decoration: underline;">
+
+                  <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
+                  <!--v-btn variant="plain"  @click="goToLogin">
                       Zaloguj się
                     </v-btn-->
-                  
-                </v-card-subtitle>                
+
+                </v-card-subtitle>
                 <v-card-title class="headline text-h5 mb-4 disabled darken-4 d-flex justify-center">
                   Śledzenie Zleceń Transportowych
                 </v-card-title>
@@ -98,7 +106,7 @@
                       +48 123 456 789
                     </div>
                     <div class="d-flex justify-center align-center">
-                      <v-icon color="green" size="small" class="mr-1">mdi-web</v-icon>                      
+                      <v-icon color="green" size="small" class="mr-1">mdi-web</v-icon>
                       <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">www.google.com</a>
                     </div>
                   </div>
@@ -122,6 +130,7 @@
         return {
           searchText: '',
           loading: false,
+          showMainAlert: false,
         };
       },
       methods: {
@@ -149,8 +158,15 @@
             this.loading = false;
           }
         },
-        goToLogin() {
-           alert('Przekierowanie do strony logowania...');
+        async goToLogin() {
+          this.showMainAlert = true;
+          try {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+          } catch (error) {            
+          } finally {
+            this.showMainAlert = false;
+          }
+          //alert('Przekierowanie do strony logowania...');
           // Przykład przekierowania: window.location.href = '/login';
         },
       },
