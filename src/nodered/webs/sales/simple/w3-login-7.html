@@ -7,7 +7,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wyszukiwanie Zleceń Transportowych</title>
+    <title>Logowanie do poralu</title>
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <style>
@@ -143,21 +143,25 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 <div class="centered-content">
                     <div class="content-card">
                         <div class="text-right text-h6 mb-4 text-primary" style="text-decoration: underline;">
-                             <a href="w3-login-7.html" target="_self" rel="noopener noreferrer">Zaloguj się</a>
+                            <a href="w3-find-7.html" target="_self" rel="noopener noreferrer">Wyszukaj paczkę</a>
+                            <!--a href="#" @click.prevent="goToLogin" target="_self" rel="noopener noreferrer">Zaloguj się</a-->
                         </div>
-                        <h1 class="text-h4 mb-6 text-on-background">Śledzenie Zleceń Transportowych</h1>
-                        <div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer zlecenia, numer
-                            zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
+                        <h1 class="text-h4 mb-6 text-on-background">Zaloguj się do portalu</h1>
+                        <div class="text-subtitle-1 font-italic mb-4 text-on-background">Podaj swój login lub e-mail
+                            oraz hasło aby się zalogować.
                         </div>
-                        <v-text-field label="Wpisz numer zlecenia / zewnętrzny / artykułu" variant="solo-filled"
-                            clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText"
+                        <v-text-field id="fld_login" label="Wpisz swój login lub e-mail oraz hasło" variant="solo-filled" clearable
+                            prepend-inner-icon="mdi-account" @keydown.enter="focusNext" v-model="loginValue"
                             density="comfortable" bg-color="white"></v-text-field>
-                        <div class="text-caption mb-4 text-on-background">
+                        <v-text-field id="fld_password" label="Wpisz hasło" variant="solo-filled" clearable prepend-inner-icon="mdi-lock"
+                            @keydown.enter="performLogin" v-model="passwValue" density="comfortable"
+                            bg-color="white"></v-text-field>
+                        <!--div class="text-caption mb-4 text-on-background">
                             Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
-                        </div>
-                        <v-btn color="primary" block large @click="performSearch" :loading="loading"
-                            :disabled="loading || !searchText">
-                            Wyszukaj
+                        </div-->
+                        <v-btn color="primary" block large @click="performLogin" :loading="loading"
+                            :disabled="loading || !loginValue">
+                            Logowanie
                         </v-btn>
                     </div>
                     <div></div>
@@ -188,6 +192,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
         createApp({
             setup() {
                 const searchText = ref('');
+                const loginValue = ref(null);
+                const passwValue = ref(null);
                 const loading = ref(false);
                 var isShowMainAlert = ref(false);
                 var alertMessage = ref("");
@@ -202,13 +208,32 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 return {
                     searchText,
                     loading,
-                    login,
+                    loginValue,passwValue,
                     isShowMainAlert,
                     alertMessage,
                     alertMessageColor
                 };
             },
             methods: {
+
+                focusNext(e) {
+
+                    if(this.loginValue) {
+                        //this.$refs.passwValue.focus();
+                        const input = document.getElementById('fld_password');
+                        console.log(input);
+                        input.focus();
+                    }
+
+                    /*
+                    const inputs = Array.from(e.target.form.querySelectorAll('input[type="text"]'));
+                    const index = inputs.indexOf(e.target);
+
+                    if (index < inputs.length) {
+                        inputs[index + 1].focus();
+                    }
+                    */
+                },
 
                 async goToLogin() {
 
@@ -232,9 +257,9 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         console.log(message, this.isShowMainAlert);
                     }
                 },
-                async performSearch() {
-                    if (!this.searchText) {
-                        alert('Proszę wprowadzić wartość do wyszukiwania.');
+                async performLogin() {
+                    if (!this.passwValue)  {
+                        this.showMainAlert('Proszę wprowadzić login i hasło.', 'red'); 
                         return;
                     }
 
