@@ -51,14 +51,15 @@
           Zaloguj się
         </v-btn>
       </v-app-bar>
-      <v-main>
-        <v-alert 
-          location="center"
+      <v-alert 
+          location="top"
           :color="alertMessageColor" 
           icon="mdi-material-design" 
           theme="dark" border closable="true" v-if="isShowMainAlert">
           {{alertMessage}}
         </v-alert>
+      <v-main>
+        
         <v-container class="py-8">
           <v-row justify="center">
             <v-col cols="12" md="8" lg="6">

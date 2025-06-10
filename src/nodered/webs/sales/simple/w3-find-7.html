@@ -3,6 +3,7 @@
 <!--
 https://vuetifyjs.com/en/styles/colors/#material-colors
 -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Zapobiega przewijaniu całej strony */
+            overflow: hidden;
+            /* Zapobiega przewijaniu całej strony */
         }
 
         #app {
@@ -34,13 +36,16 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
         .v-application,
         .v-application__wrap {
             height: 100% !important;
-            background-color: transparent !important; /* To jest klucz! */
-            position: relative; /* Ważne dla pozycjonowania tła i overlayu wewnątrz v-app */
+            background-color: transparent !important;
+            /* To jest klucz! */
+            position: relative;
+            /* Ważne dla pozycjonowania tła i overlayu wewnątrz v-app */
         }
 
         /* Aby pasek aplikacji również był półprzezroczysty, jeśli nie jest już taki */
         .v-app-bar {
-            background-color: rgba(0, 0, 0, 0.7) !important; /* Półprzezroczyste tło paska */
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            /* Półprzezroczyste tło paska */
         }
 
         /* Wyśrodkowanie głównej zawartości wewnątrz v-main */
@@ -58,7 +63,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             max-width: 800px;
             width: 100%;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.15); /* Półprzezroczyste białe tło dla czytelności */
+            background-color: rgba(255, 255, 255, 0.15);
+            /* Półprzezroczyste białe tło dla czytelności */
             border-radius: 8px;
         }
 
@@ -75,13 +81,18 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
         /* Ikony kontaktowe */
         .v-icon {
-            color: inherit; /* Dziedziczy kolor z rodzica */
+            color: inherit;
+            /* Dziedziczy kolor z rodzica */
         }
+
         .text-on-background .mdi-email {
-            color: #2196F3 !important; /* Niebieski dla emaila */
+            color: #2196F3 !important;
+            /* Niebieski dla emaila */
         }
+
         .text-on-background .mdi-phone {
-            color: #F44336 !important; /* Czerwony dla telefonu */
+            color: #F44336 !important;
+            /* Czerwony dla telefonu */
         }
     </style>
 </head>
@@ -107,39 +118,33 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             <v-app-bar app dark color="rgba(0,0,0,0.7)" flat>
                 <v-app-bar-title>Platforma WebLogic: Optymalizacja i śledzenie zleceń transportowych</v-app-bar-title>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="login">
+                <v-btn color="primary" @click="goToLogin">
                     Zaloguj się
                 </v-btn>
             </v-app-bar>
 
+
+
+
             <v-main style="position: relative; z-index: 1;">
+                <v-alert location="top" :color="alertMessageColor" icon="mdi-material-design" theme="dark" border
+                    closable="true" v-if="isShowMainAlert">
+                    {{alertMessage}}
+                </v-alert>
                 <div class="centered-content">
                     <div class="content-card">
                         <h1 class="text-h4 mb-6 text-on-background">Śledzenie Zleceń Transportowych</h1>
                         <div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer zlecenia, numer
                             zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
                         </div>
-                        <v-text-field
-                            label="Wpisz numer zlecenia / zewnętrzny / artykułu"
-                            variant="solo-filled"
-                            clearable
-                            prepend-inner-icon="mdi-magnify"
-                            @keyup.enter="performSearch"
-                            v-model="searchText"
-                            density="comfortable"
-                            bg-color="white"
-                        ></v-text-field>
+                        <v-text-field label="Wpisz numer zlecenia / zewnętrzny / artykułu" variant="solo-filled"
+                            clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText"
+                            density="comfortable" bg-color="white"></v-text-field>
                         <div class="text-caption mb-4 text-on-background">
                             Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
                         </div>
-                        <v-btn
-                            color="primary"
-                            block
-                            large
-                            @click="performSearch"
-                            :loading="loading"
-                            :disabled="loading || !searchText"
-                        >
+                        <v-btn color="primary" block large @click="performSearch" :loading="loading"
+                            :disabled="loading || !searchText">
                             Wyszukaj
                         </v-btn>
                     </div>
@@ -173,7 +178,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 const loading = ref(false);
 
                 const login = () => {
-                    alert('Przekierowanie do strony logowania...');
+                    //this.showMainAlert('Przekierowanie do strony logowania...');
+                    //alert('Przekierowanie do strony logowania...');
                     // Tutaj możesz dodać logikę logowania, np. otwarcie modala, przekierowanie
                 };
 
@@ -181,9 +187,35 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     searchText,
                     loading,
                     login,
+                    isShowMainAlert: true,
+                    alertMessage: "",
+                    alertMessageColor: "green"
+
                 };
             },
             methods: {
+
+                async goToLogin() {
+
+                    this.showMainAlert('Przekierowanie do strony logowania...');
+
+                    //alert('Przekierowanie do strony logowania...');
+                    // Przykład przekierowania: window.location.href = '/login';
+                },
+                async showMainAlert(message, color) {
+                    this.isShowMainAlert = true;
+                    this.alertMessageColor = color || "green";
+                    this.alertMessage = message; `Przekierowanie do strony logowania...`
+
+                    console.log(message, this.isShowMainAlert);
+
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                    } catch (error) {
+                    } finally {
+                        this.isShowMainAlert = false;
+                    }
+                },
                 async performSearch() {
                     if (!this.searchText) {
                         alert('Proszę wprowadzić wartość do wyszukiwania.');
@@ -211,8 +243,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 },
             }
         })
-        .use(vuetify)
-        .mount('#app');
+            .use(vuetify)
+            .mount('#app');
     </script>
 </body>
 
