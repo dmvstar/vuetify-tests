@@ -152,10 +152,19 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         </div>
                         <v-text-field ref="fld_login" id="fld_login" label="Wpisz swój login lub e-mail oraz hasło" variant="solo-filled" clearable
                             prepend-inner-icon="mdi-account" @keydown.enter="focusNext" v-model="loginValue"
-                            density="comfortable" bg-color="white"></v-text-field>
+                            density="comfortable" bg-color="white"
+                            counter
+                            ></v-text-field>
                         <v-text-field ref="fld_passw" id="fld_password" label="Wpisz hasło" variant="solo-filled" clearable prepend-inner-icon="mdi-lock"
                             @keydown.enter="performLogin" v-model="passwValue" density="comfortable"
-                            bg-color="white"></v-text-field>
+                            bg-color="white"
+                            :append-icon="isShowPassword ? 'mdi-eye' : 'mdi-eye-off'"                            
+                            :type="isShowPassword ? 'text' : 'password'"
+                            hint="At least 8 characters"            
+                            name="input-10-1"
+                            counter
+                            @click:append="isShowPassword = !isShowPassword"
+                            ></v-text-field>
                         <!--div class="text-caption mb-4 text-on-background">
                             Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
                         </div-->
@@ -191,13 +200,14 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
         createApp({
             setup() {
-                const searchText = ref('');
+                const searchText = ref('');                
                 const loginValue = ref(null);
                 const passwValue = ref(null);
                 const fld_passw = ref(null);
                 const fld_login = ref(null);
                 const loading = ref(false);
                 var isShowMainAlert = ref(false);
+                var isShowPassword = ref(false);
                 var alertMessage = ref("");
                 var alertMessageColor = ref("green");
 
@@ -208,6 +218,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 };
 
                 return {
+                    isShowPassword: false,
                     searchText,
                     loading,
                     loginValue,passwValue,
@@ -250,7 +261,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 async goToLogin() {
 
                     this.showMainAlert('Przekierowanie do strony logowania...');
-
+                    
                     //alert('Przekierowanie do strony logowania...');
                     // Przykład przekierowania: window.location.href = '/login';
                 },
@@ -284,8 +295,13 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         console.log('Logowanie zakończone dla:', this.loginValue);
                         if (this.loginValue == "0000") {
                             this.showMainAlert(`Logowanie NIE udało się dla: ${this.loginValue}`, "error");
+                            this.loginValue = "";
+                            this.passwValue = "";
                         } else {
                             this.showMainAlert(`Logowanie zakończone dla: ${this.loginValue}`, "info");
+                            this.loginValue = "";
+                            this.passwValue = "";
+                            window.open("w3-find-7.html", '_self');
                         }
                         // Tutaj dodaj logikę po wyszukaniu, np.
                         // przekierowanie na inną stronę, wyświetlenie wyników,
