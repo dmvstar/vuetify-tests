@@ -155,16 +155,17 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                             density="comfortable" bg-color="white"
                             counter
                             ></v-text-field>
-                        <v-text-field 
-                            ref="fld_passw" id="fld_password" 
+                        <v-text-field
+                            ref="fld_passw" id="fld_password"
                             label="Wpisz hasło" variant="solo-filled" clearable prepend-inner-icon="mdi-lock"
-                            @keydown.enter="performLogin" 
-                            v-model="passwValue" 
+                            @keydown.enter="performLogin"
+                            v-model="passwValue"
                             density="comfortable"
                             bg-color="white"
-                            :append-icon="isShowPassword ? 'mdi-eye' : 'mdi-eye-off'"                            
+                            :rules="[rules.required, rules.min]"
+                            :append-icon="isShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
                             :type="isShowPassword ? 'text' : 'password'"
-                            hint="At least 8 characters"                                        
+                            hint="At least 8 characters"
                             counter
                             @click:append="isShowPassword = !isShowPassword"
                             ></v-text-field>
@@ -172,7 +173,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                             Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
                         </div-->
                         <v-btn color="primary" block large @click="performLogin" :loading="loading"
-                            :disabled="loading || !loginValue">
+                            :disabled="loading || !loginValue || !passwValue || passwValue.length<8 ">
                             Logowanie
                         </v-btn>
                     </div>
@@ -203,7 +204,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
         createApp({
             setup() {
-                const searchText = ref('');                
+                const searchText = ref('');
                 const loginValue = ref(null);
                 const passwValue = ref(null);
                 const fld_passw = ref(null);
@@ -228,12 +229,16 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     fld_passw,fld_login,
                     isShowMainAlert,
                     alertMessage,
-                    alertMessageColor
+                    alertMessageColor, rules: {
+                        required: value => !!value || 'Required.',
+                        min: v => v.length >= 8 || 'Min 8 characters',
+                        emailMatch: () => (`The email and password you entered don't match`),
+                    },
                 };
             },
-            
+
             mounted() {
-                this.fld_login.focus();
+                //this.fld_login.focus();
                 //this.fld_passw.focus();
             },
 
@@ -243,7 +248,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                     if(this.loginValue) {
                         //this.$refs.passwValue.focus();
-                        //const input = document.getElementById('fld_password');                        
+                        //const input = document.getElementById('fld_password');
                         //input.focus();
                         //console.log(input);
 
@@ -264,7 +269,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 async goToLogin() {
 
                     this.showMainAlert('Przekierowanie do strony logowania...');
-                    
+
                     //alert('Przekierowanie do strony logowania...');
                     // Przykład przekierowania: window.location.href = '/login';
                 },
@@ -285,7 +290,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 },
                 async performLogin() {
                     if (!this.passwValue)  {
-                        this.showMainAlert('Proszę wprowadzić login i hasło.', 'red'); 
+                        this.showMainAlert('Proszę wprowadzić login i hasło.', 'red');
                         return;
                     }
 

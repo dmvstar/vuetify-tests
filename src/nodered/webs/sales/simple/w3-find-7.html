@@ -149,7 +149,9 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         <div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer zlecenia, numer
                             zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
                         </div>
-                        <v-text-field label="Wpisz numer zlecenia / zewnętrzny / artykułu" variant="solo-filled"
+                        <v-text-field label="Wpisz numer zlecenia / zewnętrzny / artykułu" 
+                            variant="solo-filled"
+                            counter
                             clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText"
                             density="comfortable" bg-color="white"></v-text-field>
                         <div class="text-caption mb-4 text-on-background">
