@@ -155,13 +155,16 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                             density="comfortable" bg-color="white"
                             counter
                             ></v-text-field>
-                        <v-text-field ref="fld_passw" id="fld_password" label="Wpisz hasło" variant="solo-filled" clearable prepend-inner-icon="mdi-lock"
-                            @keydown.enter="performLogin" v-model="passwValue" density="comfortable"
+                        <v-text-field 
+                            ref="fld_passw" id="fld_password" 
+                            label="Wpisz hasło" variant="solo-filled" clearable prepend-inner-icon="mdi-lock"
+                            @keydown.enter="performLogin" 
+                            v-model="passwValue" 
+                            density="comfortable"
                             bg-color="white"
                             :append-icon="isShowPassword ? 'mdi-eye' : 'mdi-eye-off'"                            
                             :type="isShowPassword ? 'text' : 'password'"
-                            hint="At least 8 characters"            
-                            name="input-10-1"
+                            hint="At least 8 characters"                                        
                             counter
                             @click:append="isShowPassword = !isShowPassword"
                             ></v-text-field>
@@ -218,7 +221,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 };
 
                 return {
-                    isShowPassword: false,
+                    isShowPassword,
                     searchText,
                     loading,
                     loginValue,passwValue,
