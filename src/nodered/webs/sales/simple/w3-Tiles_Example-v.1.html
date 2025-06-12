@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vuetify 3 Tiles Example</title>
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.15/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container fluid>
+          <v-row no-gutters v-for="rowIndex in 4" :key="rowIndex">
+            <v-col v-for="colIndex in 7" :key="`row-${rowIndex}-col-${colIndex}`" class="d-flex pa-1">
+              <v-card
+                class="flex-grow-1"
+                flat
+                tile
+                color="blue-lighten-4"
+                height="100px"
+              >
+                <v-card-text class="d-flex align-center justify-center text-center">
+                  Tile {{ (rowIndex - 1) * 7 + colIndex }}
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.27/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.15/dist/vuetify.min.js"></script>
+  <script>
+    const { createApp } = Vue;
+    const { createVuetify } = Vuetify;
+
+    const app = createApp({
+      data() {
+        return {
+          // No data needed for this example
+        };
+      },
+      mounted() {
+        console.log('Vue app mounted!');
+      }
+    });
+
+    const vuetify = createVuetify();
+    app.use(vuetify);
+    app.mount('#app');
+  </script>
+</body>
+</html>
