@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vuetify 3 Drag and Drop Tiles Example</title>
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.15/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+    /* Styling for the draggable tile itself */
+    .draggable-tile {
+      cursor: grab;
+      position: absolute; /* Allows precise positioning during drag */
+      width: calc(100% - 8px); /* Adjust for pa-1 (4px padding on each side) */
+      height: 100px;
+      left: 4px; /* Adjust for pa-1 */
+      top: 4px; /* Adjust for pa-1 */
+      box-sizing: border-box; /* Include padding in width/height calculation */
+      transition: transform 0.2s ease-out; /* Smooth transition for snapped tiles */
+    }
+
+    /* Styling for the dragged tile */
+    .dragging {
+      cursor: grabbing;
+      z-index: 1000; /* Bring dragged tile to front */
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Visual lift */
+    }
+
+    /* Styling for the grid cell wrappers */
+    .tile-cell-wrapper {
+      position: relative; /* For absolutely positioned children (draggable-tile, placeholder) */
+      /* No transition here, as the tiles inside will transition */
+    }
+
+    /* Placeholder for the dragged tile's original spot */
+    .drop-placeholder {
+      background-color: rgba(0, 123, 255, 0.1); /* Light blue transparent */
+      border: 2px dashed #007bff;
+      height: 100px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #007bff;
+      font-weight: bold;
+      box-sizing: border-box;
+    }
+
+    /* Highlight for the potential drop target */
+    .drop-target-highlight {
+        background-color: rgba(0, 123, 255, 0.3); /* Darker blue transparent */
+        border: 2px solid #007bff;
+        height: 100px;
+        width: calc(100% - 8px); /* Match draggable-tile width */
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        z-index: 900; /* Below dragged tile, above other tiles */
+        box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container fluid>
+          <v-row no-gutters>
+            <v-col
+              v-for="(tile, index) in tiles"
+              :key="tile.id"
+              class="d-flex pa-1 tile-cell-wrapper"
+              cols="12" sm="6" md="3" lg="1" xl="1" /* Adjust columns for desired grid layout */
+              @dragover.prevent="dragOver($event, index)" /* Allows drop */
+              @dragleave="dragLeave($event, index)"
+              @drop="drop($event, index)"
+            >
+              <template v-if="draggedTileId !== tile.id">
+                <v-card
+                  class="draggable-tile"
+                  flat
+                  tile
+                  color="blue-lighten-4"
+                  height="100px"
+                  :draggable="true" /* Make the card natively draggable */
+                  @dragstart="startDrag($event, tile.id, index)"
+                  @dragend="endDrag"
+                  :style="getTileStyle(tile.id)" /* Keep for individual tile transform if needed (less common with true reorder) */
+                >
+                  <v-card-text class="d-flex align-center justify-center text-center">
+                    {{ tile.text }}
+                  </v-card-text>
+                </v-card>
+              </template>
+              <template v-else>
+                <div class="drop-placeholder flex-grow-1">
+                  Dragging...
+                </div>
+              </template>
+
+              <div
+                v-if="draggedTileId !== null && hoveredIndex === index && draggedTileId !== tile.id"
+                class="drop-target-highlight"
+              ></div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.27/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.15/dist/vuetify.min.js"></script>
+  <script>
+    const { createApp, ref } = Vue; // Use ref for reactivity in setup
+    const { createVuetify } = Vuetify;
+
+    const app = createApp({
+      setup() { // Using Composition API's setup for better state management
+        const tiles = ref([]); // Reactive array to hold tile data
+        const draggedTileId = ref(null); // ID of the tile being dragged
+        const draggedTileOriginalIndex = ref(null); // Original index in the array
+        const hoveredIndex = ref(null); // Index of the tile currently being hovered over for a drop
+
+        // Initialize tiles with IDs and text
+        for (let i = 1; i <= 28; i++) { // Assuming 4 rows * 7 columns = 28 tiles
+          tiles.value.push({ id: `tile-${i}`, text: `Tile ${i}` });
+        }
+
+        // --- Drag Events ---
+        const startDrag = (event, id, index) => {
+          draggedTileId.value = id;
+          draggedTileOriginalIndex.value = index;
+          event.dataTransfer.effectAllowed = 'move';
+          // Set data (good practice, though not always strictly needed for internal reorder)
+          event.dataTransfer.setData('text/plain', id);
+          console.log('Start Drag:', id, 'from index:', index);
+        };
+
+        const dragOver = (event, targetIndex) => {
+          event.preventDefault(); // Crucial to allow dropping
+          if (draggedTileId.value !== null && draggedTileId.value !== tiles.value[targetIndex].id) {
+            hoveredIndex.value = targetIndex;
+          } else if (draggedTileId.value === tiles.value[targetIndex].id) {
+            // If dragging over itself, don't show highlight
+            hoveredIndex.value = null;
+          }
+        };
+
+        const dragLeave = (event, index) => {
+          if (hoveredIndex.value === index) {
+            hoveredIndex.value = null;
+          }
+        };
+
+        const drop = (event, targetIndex) => {
+          event.preventDefault(); // Prevent default browser drop behavior
+          if (draggedTileId.value === null || draggedTileOriginalIndex.value === null) return;
+
+          const sourceIndex = draggedTileOriginalIndex.value;
+
+          // If dropping on the same tile's original spot, do nothing
+          if (sourceIndex === targetIndex) {
+            resetDragState();
+            return;
+          }
+
+          console.log('Drop:', draggedTileId.value, 'from', sourceIndex, 'to', targetIndex);
+
+          // Find the actual tile object from its ID
+          const draggedTile = tiles.value.find(t => t.id === draggedTileId.value);
+          if (!draggedTile) { // Should not happen
+            resetDragState();
+            return;
+          }
+
+          // Create a new array to ensure reactivity (Vue 3 recommendation for array mutations)
+          const newTiles = [...tiles.value];
+
+          // Remove the dragged tile from its original position
+          newTiles.splice(sourceIndex, 1);
+
+          // Insert the dragged tile at the target position
+          // Adjust targetIndex if dropping after the original position
+          const adjustedTargetIndex = (targetIndex > sourceIndex) ? targetIndex : targetIndex;
+          newTiles.splice(adjustedTargetIndex, 0, draggedTile);
+
+          // Update the reactive ref
+          tiles.value = newTiles;
+
+          resetDragState();
+        };
+
+        const endDrag = () => {
+          // This event fires after the drop event, so we only need to reset if drop didn't occur (e.g., dropped outside a valid target)
+          if (draggedTileId.value !== null) {
+              resetDragState();
+          }
+        };
+
+        const resetDragState = () => {
+            draggedTileId.value = null;
+            draggedTileOriginalIndex.value = null;
+            hoveredIndex.value = null;
+        };
+
+        // --- Styling/Positioning (optional for free-moving the dragged tile itself) ---
+        // In a grid reorder, this is less about free movement and more about the grid re-rendering
+        // However, if you want the *dragged* tile to follow the mouse, you'd use a different approach
+        // where the dragged item is absolutely positioned outside the grid, and then inserted on drop.
+        // For this native HTML5 drag/drop approach, the browser handles the "ghost" image.
+        const getTileStyle = (tileId) => {
+          // With native HTML5 drag and drop, the browser creates a "ghost" image of the dragged element.
+          // We don't typically apply transform directly to the dragged element during drag for reordering.
+          // This method is mostly vestigial from the "moving tile by mouse" example.
+          // If you wanted custom "ghost" behavior, you'd implement `dragstart` more extensively.
+          return {};
+        };
+
+
+        return {
+          tiles,
+          draggedTileId,
+          hoveredIndex,
+          startDrag,
+          dragOver,
+          dragLeave,
+          drop,
+          endDrag,
+          getTileStyle, // Kept for compatibility, though not directly used for drag movement
+        };
+      },
+    });
+
+    const vuetify = createVuetify();
+    app.use(vuetify);
+    app.mount('#app');
+  </script>
+</body>
+</html>

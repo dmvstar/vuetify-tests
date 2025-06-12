@@ -5,6 +5,17 @@
   <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.15/dist/vuetify.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+    .draggable-tile {
+      cursor: grab;
+      position: relative; /* Needed for transform */
+      transition: transform 0.05s ease-out; /* Smooth transition for snapping back */
+    }
+    .dragging {
+      cursor: grabbing;
+      z-index: 1000; /* Bring dragged tile to front */
+    }
+  </style>
 </head>
 <body>
   <div id="app">
@@ -14,11 +25,14 @@
           <v-row no-gutters v-for="rowIndex in 4" :key="rowIndex">
             <v-col v-for="colIndex in 7" :key="`row-${rowIndex}-col-${colIndex}`" class="d-flex pa-1">
               <v-card
-                class="flex-grow-1"
+                class="flex-grow-1 draggable-tile"
+                :class="{ 'dragging': draggedTile === `tile-${(rowIndex - 1) * 7 + colIndex}` }"
                 flat
                 tile
-                color="blue-lighten-4"
+                :color="draggedTile === `tile-${(rowIndex - 1) * 7 + colIndex}` ? 'blue-lighten-3' : 'blue-lighten-4'"
                 height="100px"
+                @mousedown="startDrag($event, `tile-${(rowIndex - 1) * 7 + colIndex}`)"
+                :style="getTileStyle(`tile-${(rowIndex - 1) * 7 + colIndex}`)"
               >
                 <v-card-text class="d-flex align-center justify-center text-center">
                   Tile {{ (rowIndex - 1) * 7 + colIndex }}
@@ -40,8 +54,60 @@
     const app = createApp({
       data() {
         return {
-          // No data needed for this example
+          draggedTile: null,
+          initialMouseX: 0,
+          initialMouseY: 0,
+          currentTileX: 0,
+          currentTileY: 0,
+          tileOffsets: {}, // Stores the x, y offset for each tile when dragging
         };
+      },
+      methods: {
+        startDrag(event, tileId) {
+          this.draggedTile = tileId;
+          this.initialMouseX = event.clientX;
+          this.initialMouseY = event.clientY;
+
+          // Get the current position of the tile to calculate offset
+          const tileElement = event.currentTarget;
+          const rect = tileElement.getBoundingClientRect();
+          this.tileOffsets[tileId] = {
+            x: 0, // Initial offset
+            y: 0, // Initial offset
+          };
+
+          window.addEventListener('mousemove', this.doDrag);
+          window.addEventListener('mouseup', this.stopDrag);
+        },
+        doDrag(event) {
+          if (this.draggedTile) {
+            const dx = event.clientX - this.initialMouseX;
+            const dy = event.clientY - this.initialMouseY;
+
+            this.tileOffsets[this.draggedTile] = { x: dx, y: dy };
+          }
+        },
+        stopDrag() {
+          if (this.draggedTile) {
+            // Reset the tile's position after drag ends (snaps back)
+            // If you want to drop it, you'd calculate the new grid position here
+            // For now, we'll just clear the offset
+            this.tileOffsets[this.draggedTile] = { x: 0, y: 0 };
+            this.draggedTile = null;
+
+            window.removeEventListener('mousemove', this.doDrag);
+            window.removeEventListener('mouseup', this.stopDrag);
+          }
+        },
+        getTileStyle(tileId) {
+          if (this.draggedTile === tileId && this.tileOffsets[tileId]) {
+            const { x, y } = this.tileOffsets[tileId];
+            return {
+              transform: `translate(${x}px, ${y}px)`,
+            };
+          }
+          return {};
+        }
       },
       mounted() {
         console.log('Vue app mounted!');
