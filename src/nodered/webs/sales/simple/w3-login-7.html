@@ -143,7 +143,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 <div class="centered-content">
                     <div class="content-card">
                         <div class="text-right text-h6 mb-4 text-primary" style="text-decoration: underline;">
-                            <a href="w3-find-7.html" target="_self" rel="noopener noreferrer">Wyszukaj paczkę</a>
+                            <a ref="fld_link" href="w3-find-7.html" target="_self" rel="noopener noreferrer">Wyszukaj paczkę</a>
                             <!--a href="#" @click.prevent="goToLogin" target="_self" rel="noopener noreferrer">Zaloguj się</a-->
                         </div>
                         <h1 class="text-h4 mb-6 text-on-background">Zaloguj się do portalu</h1>
@@ -203,10 +203,11 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
         const vuetify = createVuetify();
 
         createApp({
-            setup() {
+            setup() {                
                 const searchText = ref('');
                 const loginValue = ref(null);
                 const passwValue = ref(null);
+                const fld_link = ref(null);
                 const fld_passw = ref(null);
                 const fld_login = ref(null);
                 const loading = ref(false);
@@ -226,7 +227,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     searchText,
                     loading,
                     loginValue,passwValue,
-                    fld_passw,fld_login,
+                    fld_passw,fld_login,fld_link,
                     isShowMainAlert,
                     alertMessage,
                     alertMessageColor, rules: {
@@ -238,6 +239,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             },
 
             mounted() {
+                //this.fld_link.focus();
                 //this.fld_login.focus();
                 //this.fld_passw.focus();
             },
@@ -289,8 +291,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     }
                 },
                 async performLogin() {
-                    if (!this.passwValue)  {
-                        this.showMainAlert('Proszę wprowadzić login i hasło.', 'red');
+                    if (!this.passwValue || this.passwValue.length<8)  {
+                        this.showMainAlert(`Proszę wprowadzić login i hasło (min 8, obecnie ${this.passwValue.length}).`, 'red');
                         return;
                     }
 
