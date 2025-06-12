@@ -7,7 +7,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wyszukiwanie Zleceń Transportowych</title>
+    <title>Wyszukiwanie Dokumentów zagubionych</title>
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <style>
@@ -109,7 +109,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 <body>
     <div id="app">
         <v-app :style="{
-            backgroundImage: 'url(\'https://truckers-world.eu/uk/wp-content/uploads/sites/11/2020/09/Wallpaper_IAA_Range_desktop.jpg\')',
+            backgroundImage: 'url(\'https://github.com/dmvstar/vuetify-tests/blob/9d9b908754453ed675e127d4086753ac20b6e866/src/nodered/webs/sales/simple/assets/Wallpaper_IAA_Range_desktop-3.jpg?raw=true\')',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             position: 'relative'
@@ -125,7 +125,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             }"></div>
 
             <v-app-bar app dark color="rgba(0,0,0,0.7)" flat>
-                <v-app-bar-title>Platforma WebLogic: Optymalizacja i śledzenie zleceń transportowych</v-app-bar-title>
+                <v-app-bar-title>Platforma: Archiwum dokumentów</v-app-bar-title>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="goToLogin">
                     Zaloguj się
@@ -143,27 +143,75 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 <div class="centered-content">
                     <div class="content-card">
                         <div class="text-right text-h6 mb-4 text-primary" style="text-decoration: underline;">
-                             <a href="w3-login-7.html" target="_self" rel="noopener noreferrer">Zaloguj się</a>
+                            <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
                         </div>
-                        <h1 class="text-h4 mb-6 text-on-background">Śledzenie Zleceń Transportowych</h1>
-                        <div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer zlecenia, numer
-                            zewnętrzny lub numer artykułu, aby szybko odnaleźć szczegóły przesyłki.
-                        </div>
-                        <v-text-field label="Wpisz numer zlecenia / zewnętrzny / artykułu" 
-                            variant="solo-filled"
-                            counter
-                            clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch" v-model="searchText"
-                            density="comfortable" bg-color="white"></v-text-field>
+                        <h2 class="text-h4 mb-6 text-on-background">Wyszukiwanie Dokumentów zagubionych</h2>
+                        <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
+                        <v-row class="ma-1">
+                            <v-col cols="12" sm="6" md="6">
+                                <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
+                                    :close-on-click="true">
+                                    <template v-slot:activator="{ props }">
+                                        <v-text-field v-model="search.selectedDateFrom" label="Wpisz datę OD"
+                                            prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
+                                            v-bind="props">
+                                        </v-text-field>
+                                    </template>
+                                    <v-date-picker @update:model-value="search.dateFromDateMenu = false"
+                                        v-model="search.selectedDateFromFull"></v-date-picker>
+                                </v-menu>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
+                                    :close-on-click="true">
+                                    <template v-slot:activator="{ props }">
+                                        <v-text-field v-model="search.selectedDateInto" label="Wpisz datę DO"
+                                            prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
+                                            v-bind="props">
+                                        </v-text-field>
+                                    </template>
+                                    <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
+                                        v-model="search.selectedDateIntoFull"></v-date-picker>
+                                </v-menu>
+                            </v-col>
+                        </v-row>
+
+                        <!--v-row class="ma-1">
+                            <v-col cols="12" sm="6" md="6">
+                                <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
+                                    clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                    v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
+                                    clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                    v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                        </v-row-->
+
+                        <v-row class="ma-1">
+                            <v-col>
+                                <v-text-field label="Wpisz numer INN" variant="solo-filled" counter clearable
+                                    prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"
+                                    v-model="search.searchText" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                        </v-row>
+
                         <div class="text-caption mb-4 text-on-background">
-                            Można podać kilka numerów, np: 22211111223 22211111224 ZLTT2025-2245
+                            Można podać tylko jeden np: 2221111122
                         </div>
-                        <v-btn color="primary" block large @click="performSearch" :loading="loading"
-                            :disabled="loading || !searchText">
-                            Wyszukaj
-                        </v-btn>
+                        <v-row class="ma-1">
+                            <v-col>
+                                <v-btn color="primary" block large @click="performSearch" :loading="loading"
+                                    :disabled="loading || !search.searchText">
+                                    Wyszukaj
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                     </div>
                     <div></div>
                     <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
+                        <h4 class="text-subtitle-1 mb-2">{{error}}</h4>
                         <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
                         <div class="font-italic mb-2">
                             W przypadku problemów, skontaktuj się z nami:<br>
@@ -189,11 +237,24 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
         createApp({
             setup() {
-                const searchText = ref('');
+                //const searchText = ref('');
                 const loading = ref(false);
+                const data = ref(null);
+                const error = ref(null);
                 var isShowMainAlert = ref(false);
                 var alertMessage = ref("");
                 var alertMessageColor = ref("green");
+                var search = Vue.reactive(
+                    {
+                        dateFromDateMenu: false,
+                        selectedDateFrom: '2025-05-01',
+                        selectedDateFromFull: null,
+                        dateIntoDateMenu: false,
+                        selectedDateInto: "2025-05-25",
+                        selectedDateIntoFull: null,
+                        searchText: "3133702525"
+                    }
+                );
 
                 const login = () => {
                     //this.showMainAlert('Przekierowanie do strony logowania...');
@@ -202,16 +263,46 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 };
 
                 return {
-                    searchText,
+                    //searchText,
+                    data, error,
                     loading,
-                    login,
+                    login, search,
                     isShowMainAlert,
                     alertMessage,
                     alertMessageColor
                 };
             },
+            watch: {
+                group() {
+                    this.drawer = false;
+                },
+                "search.selectedDateFromFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.search.selectedDateFrom = this.formatDate(newQuestion);
+                },
+                "search.selectedDateIntoFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.search.selectedDateInto = this.formatDate(newQuestion);
+                }
+            },
             methods: {
-
+                formatDate(date) {
+                    if (!date) {
+                        return null
+                    }
+                    console.log(date);
+                    console.log(date.getDate());
+                    const [year, month, day] = [
+                        date.getFullYear(),
+                        date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1,
+                        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+                    ];
+                    //date.toISOString().replace('T', '-').split('-');
+                    //console.log(date.toISOString());
+                    var ret = `${day}-${month}-${year}`;
+                    //console.log(ret);
+                    return ret;
+                },
                 async goToLogin() {
 
                     this.showMainAlert('Przekierowanie do strony logowania...');
@@ -235,22 +326,24 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     }
                 },
                 async performSearch() {
-                    if (!this.searchText) {
+                    if (!this.search.searchText) {
                         alert('Proszę wprowadzić wartość do wyszukiwania.');
                         return;
                     }
-
                     this.loading = true;
 
                     try {
-                        console.log('Rozpoczynam wyszukiwanie dla:', this.searchText);
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.search.searchText);
                         // Symulacja opóźnienia sieciowego
                         await new Promise(resolve => setTimeout(resolve, 1500));
-                        console.log('Wyszukiwanie zakończone dla:', this.searchText);
-                        if (this.searchText == "0") {
-                            this.showMainAlert(`Wyszukiwanie NIE udało się dla: ${this.searchText}`, "error");
+                        console.log('Wyszukiwanie zakończone dla:', this.search.searchText);
+
+                        this.fetchDiiaDataInfo();
+
+                        if (this.search.searchText == "0") {
+                            this.showMainAlert(`Wyszukiwanie NIE udało się dla: ${this.search.searchText}`, "error");
                         } else {
-                            this.showMainAlert(`Wyszukiwanie zakończone dla: ${this.searchText}`, "info");
+                            this.showMainAlert(`Wyszukiwanie zakończone dla: ${this.search.searchText}`, "info");
                         }
                         // Tutaj dodaj logikę po wyszukaniu, np.
                         // przekierowanie na inną stronę, wyświetlenie wyników,
@@ -263,6 +356,62 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         this.loading = false;
                     }
                 },
+                async fetchDiiaDataInfo() {
+                    this.loading = true;
+                    this.data = null;
+                    this.error = null;
+
+                    var baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
+                    //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
+
+                    const params = new URLSearchParams({
+                        inn: this.search.searchText,
+                        from: this.search.selectedDateFrom,
+                        into: this.search.selectedDateInto
+                    });
+
+                    var url = `${baseUrl}?${params.toString()}`;
+                    url = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/info?inn=3069610375&from=2025-03-23&into=2025-03-25'
+
+                    var request = {
+                        inn: this.search.searchText,
+                        from: this.search.selectedDateFrom,
+                        into: this.search.selectedDateInto
+                    };
+
+                    this.showMainAlert(`URL: ${baseUrl}`, "info");
+
+                    var headers = {
+                        "accept": "application/json",
+                        "Content-Type": "application/json",
+                        "Host": "nr-identification.mb.ukrgasbank.com",
+                        "Access-Control-Allow-Origin": "*",
+                        "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
+                    };
+
+                    const requestOptions = {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+
+                    try {
+                        const response = await fetch(baseUrl, requestOptions); //await fetch(url);
+                        //const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
+                        }
+                        this.data = await response.json();
+                        console.log(this.data);
+                    } catch (e) {
+                        console.error('Błąd podczas pobierania danych:', e);
+                        this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+
             }
         })
             .use(vuetify)
