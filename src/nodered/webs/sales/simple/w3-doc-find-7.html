@@ -197,9 +197,10 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                             </v-col>
                         </v-row>
 
-                        <div class="text-caption mb-4 text-on-background">
+                        <!--div class="text-caption mb-4 text-on-background">
                             Można podać tylko jeden np: 2221111122
-                        </div>
+                        </div-->
+
                         <v-row class="ma-1">
                             <v-col>
                                 <v-btn color="primary" block large @click="performSearch" :loading="loading"
@@ -210,16 +211,16 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         </v-row>
                     </div>
                     <div></div>
-                    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
-                        <h4 class="text-subtitle-1 mb-2">{{error}}</h4>
+                    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">                        
                         <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
                         <div class="font-italic mb-2">
                             W przypadku problemów, skontaktuj się z nami:<br>
-                            <v-icon size="small" class="mdi-email"></v-icon>
-                            support@twojafirma.pl<br>
-                            <v-icon size="small" class="mdi-phone"></v-icon>
+                            <v-icon size="small" class="mdi-email">mdi-email</v-icon>
+                            support@twojafirma.pl, 
+                            <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
                             +48 123 456 789
                         </div>
+                        <div style="color:yellow">{{error}}</div>
                     </div>
                 </div>
             </v-main>
