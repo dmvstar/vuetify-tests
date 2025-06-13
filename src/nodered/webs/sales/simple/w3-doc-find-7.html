@@ -189,11 +189,32 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                             </v-col>
                         </v-row-->
 
+
+
                         <v-row class="ma-1">
                             <v-col>
                                 <v-text-field label="Wpisz numer INN" variant="solo-filled" counter clearable
                                     prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"
                                     v-model="search.searchText" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                        </v-row>
+
+                        <v-row class="ma-1">
+                            <v-col cols="12" sm="6" md="6">
+                                <v-select label="Base URL" variant="solo-filled" prepend-inner-icon="mdi-magnify"
+                                    :items="dicts.baseUrls" 
+                                    :item-props="urlProps"
+                                    v-model="modes.baseUrl" density="comfortable"
+                                    bg-color="white">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-magnify"
+                                    :items="dicts.basePaths" 
+                                    :item-props="pathProps"
+                                    v-model="modes.basePath" density="comfortable"
+                                    bg-color="white">
+                                    </v-text-field>
                             </v-col>
                         </v-row>
 
@@ -211,12 +232,12 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         </v-row>
                     </div>
                     <div></div>
-                    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">                        
+                    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
                         <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
                         <div class="font-italic mb-2">
                             W przypadku problemów, skontaktuj się z nami:<br>
                             <v-icon size="small" class="mdi-email">mdi-email</v-icon>
-                            support@twojafirma.pl, 
+                            support@twojafirma.pl,
                             <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
                             +48 123 456 789
                         </div>
@@ -240,11 +261,30 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             setup() {
                 //const searchText = ref('');
                 const loading = ref(false);
-                const data = ref(null);
+                const response = ref(null);
                 const error = ref(null);
                 var isShowMainAlert = ref(false);
                 var alertMessage = ref("");
                 var alertMessageColor = ref("green");
+                var dicts = ref(
+                    {
+                        baseUrls: [
+                            { name: "nr-identification", url: "https://nr-identification.mb-stage.ukrgasbank.com" },
+                            { name: "nr-clients", url: "https://nr-clients.dev.ukrgasaws.com" },
+                            { name: "nr-localhost", url: "http://localhost:1880" },
+                        ],
+                        basePaths: [
+                            { name: "content/test", path: "/api/v2/commons/dija/docs/content/test" },
+                        ]
+                    }
+                );
+                var modes = Vue.reactive(
+                    {
+                        baseUrl: null,
+                        basePath: null,
+                        apiPath: null,
+                    }
+                );
                 var search = Vue.reactive(
                     {
                         dateFromDateMenu: false,
@@ -265,13 +305,17 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                 return {
                     //searchText,
-                    data, error,
+                    response, error,
                     loading,
-                    login, search,
+                    login, search, modes, dicts,
                     isShowMainAlert,
                     alertMessage,
                     alertMessageColor
                 };
+            },
+            mounted() {
+                this.modes.basePath = this.dicts.basePaths[0];
+                this.modes.baseUrl = this.dicts.baseUrls[0];
             },
             watch: {
                 group() {
@@ -287,6 +331,18 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 }
             },
             methods: {
+                urlProps(item) {
+                    return {
+                        title: item.name,
+                        subtitle: item.url,
+                    }
+                },
+                pathProps(item) {
+                    return {
+                        title: item.path,
+                        //subtitle: item.path,
+                    }
+                },
                 formatDate(date) {
                     if (!date) {
                         return null
@@ -334,7 +390,11 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     this.loading = true;
 
                     try {
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.modes);
                         console.log('Rozpoczynam wyszukiwanie dla:', this.search.searchText);
+                        this.modes.apiPath = this.modes.baseUrl.url+this.modes.basePath.path;
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.modes.apiPath);
+                        
                         // Symulacja opóźnienia sieciowego
                         await new Promise(resolve => setTimeout(resolve, 1500));
                         console.log('Wyszukiwanie zakończone dla:', this.search.searchText);
@@ -359,7 +419,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 },
                 async fetchDiiaDataInfo() {
                     this.loading = true;
-                    this.data = null;
+                    this.response = null;
                     this.error = null;
 
                     var baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
@@ -402,8 +462,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         if (!response.ok) {
                             throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
                         }
-                        this.data = await response.json();
-                        console.log(this.data);
+                        this.response = await response.json();
+                        console.log(this.response);
                     } catch (e) {
                         console.error('Błąd podczas pobierania danych:', e);
                         this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
