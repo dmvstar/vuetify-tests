@@ -157,7 +157,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                             v-model="search.selectedDateFrom" 
                                             density="comfortable" bg-color="white"
                                             label="Wpisz datę OD"
-                                            prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
+                                            prepend-inner-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
                                             v-bind="props">
                                         </v-text-field>
                                     </template>
@@ -173,7 +173,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                             v-model="search.selectedDateInto" 
                                             density="comfortable" bg-color="yellow"
                                             label="Wpisz datę DO"
-                                            prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
+                                            prepend-inner-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
                                             v-bind="props">
                                         </v-text-field>
                                     </template>
@@ -208,7 +208,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                         <v-row class="ma-1">
                             <v-col cols="12" sm="6" md="6">
-                                <v-select label="Base URL" variant="solo-filled" prepend-inner-icon="mdi-magnify"
+                                <v-select label="Base URL" variant="solo-filled" 
+                                    prepend-inner-icon="mdi-web"
                                     :items="dicts.baseUrls" 
                                     :item-props="urlProps"
                                     v-model="modes.baseUrl" density="comfortable"
@@ -216,7 +217,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                 </v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
-                                <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-magnify"
+                                <v-select label="API" variant="solo-filled" 
+                                    prepend-inner-icon="mdi-near-me"
                                     :items="dicts.basePaths" 
                                     :item-props="pathProps"
                                     v-model="modes.basePath" density="comfortable"
