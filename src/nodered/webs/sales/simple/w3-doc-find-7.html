@@ -149,10 +149,14 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
                         <v-row class="ma-1">
                             <v-col cols="12" sm="6" md="6">
-                                <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
+                                <v-menu v-model="search.dateFromDateMenu" 
+                                    :close-on-content-click="false"
                                     :close-on-click="true">
                                     <template v-slot:activator="{ props }">
-                                        <v-text-field v-model="search.selectedDateFrom" label="Wpisz datę OD"
+                                        <v-text-field 
+                                            v-model="search.selectedDateFrom" 
+                                            density="comfortable" bg-color="white"
+                                            label="Wpisz datę OD"
                                             prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
                                             v-bind="props">
                                         </v-text-field>
@@ -165,7 +169,10 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                 <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
                                     :close-on-click="true">
                                     <template v-slot:activator="{ props }">
-                                        <v-text-field v-model="search.selectedDateInto" label="Wpisz datę DO"
+                                        <v-text-field 
+                                            v-model="search.selectedDateInto" 
+                                            density="comfortable" bg-color="yellow"
+                                            label="Wpisz datę DO"
                                             prepend-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
                                             v-bind="props">
                                         </v-text-field>
@@ -217,7 +224,9 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                     </v-text-field>
                             </v-col>
                         </v-row>
-
+                        <div style="color:yellow">{{modes.apiPath}}</div>
+                        <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
+                        </v-row-->
                         <!--div class="text-caption mb-4 text-on-background">
                             Można podać tylko jeden np: 2221111122
                         </div-->
@@ -275,6 +284,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         ],
                         basePaths: [
                             { name: "content/test", path: "/api/v2/commons/dija/docs/content/test" },
+                            { name: "content/check", path: "/api/v2/commons/dija/docs/content/check" },
                         ]
                     }
                 );
@@ -289,10 +299,10 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     {
                         dateFromDateMenu: false,
                         selectedDateFrom: '2025-05-01',
-                        selectedDateFromFull: null,
+                        selectedDateFromFull: '2025-05-01',
                         dateIntoDateMenu: false,
                         selectedDateInto: "2025-05-25",
-                        selectedDateIntoFull: null,
+                        selectedDateIntoFull: "2025-05-25",
                         searchText: "3133702525"
                     }
                 );
@@ -320,6 +330,16 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             watch: {
                 group() {
                     this.drawer = false;
+                },
+                "modes.baseUrl": function (newQuestion, oldQuestion) {
+                    if(newQuestion) {
+                        this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                    }
+                },
+                "modes.basePath": function (newQuestion, oldQuestion) {
+                    if(newQuestion) {
+                        this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                    }
                 },
                 "search.selectedDateFromFull": function (newQuestion, oldQuestion) {
                     //alert(newQuestion);
