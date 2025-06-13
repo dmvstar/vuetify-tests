@@ -103,17 +103,19 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             color: #F44336 !important;
             /* Czerwony dla telefonu */
         }
+
+        .background-app {
+            background-image: url('https://github.com/dmvstar/vuetify-tests/blob/9d9b908754453ed675e127d4086753ac20b6e866/src/nodered/webs/sales/simple/assets/Wallpaper_IAA_Range_desktop-3.jpg?raw=true');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <v-app :style="{
-            backgroundImage: 'url(\'https://github.com/dmvstar/vuetify-tests/blob/9d9b908754453ed675e127d4086753ac20b6e866/src/nodered/webs/sales/simple/assets/Wallpaper_IAA_Range_desktop-3.jpg?raw=true\')',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            position: 'relative'
-        }">
+        <v-app class="background-app">
             <div :style="{
                 position: 'absolute',
                 top: 0,
@@ -132,9 +134,6 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 </v-btn>
             </v-app-bar>
 
-
-
-
             <v-main style="position: relative; z-index: 1;">
                 <v-alert location="top" :color="alertMessageColor" icon="mdi-material-design" theme="dark" border
                     closable="true" v-if="isShowMainAlert">
@@ -149,16 +148,12 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
                         <v-row class="ma-1">
                             <v-col cols="12" sm="6" md="6">
-                                <v-menu v-model="search.dateFromDateMenu" 
-                                    :close-on-content-click="false"
+                                <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
                                     :close-on-click="true">
                                     <template v-slot:activator="{ props }">
-                                        <v-text-field 
-                                            v-model="search.selectedDateFrom" 
-                                            density="comfortable" bg-color="white"
-                                            label="Wpisz datę OD"
-                                            prepend-inner-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
-                                            v-bind="props">
+                                        <v-text-field v-model="search.selectedDateFrom" density="comfortable"
+                                            bg-color="white" label="Wpisz datę OD" prepend-inner-icon="mdi-calendar"
+                                            clearable clear-icon="mdi-backspace" v-bind="props">
                                         </v-text-field>
                                     </template>
                                     <v-date-picker @update:model-value="search.dateFromDateMenu = false"
@@ -169,12 +164,9 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                 <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
                                     :close-on-click="true">
                                     <template v-slot:activator="{ props }">
-                                        <v-text-field 
-                                            v-model="search.selectedDateInto" 
-                                            density="comfortable" bg-color="yellow"
-                                            label="Wpisz datę DO"
-                                            prepend-inner-icon="mdi-calendar" clearable clear-icon="mdi-backspace"
-                                            v-bind="props">
+                                        <v-text-field v-model="search.selectedDateInto" density="comfortable"
+                                            bg-color="yellow" label="Wpisz datę DO" prepend-inner-icon="mdi-calendar"
+                                            clearable clear-icon="mdi-backspace" v-bind="props">
                                         </v-text-field>
                                     </template>
                                     <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
@@ -208,26 +200,19 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                         <v-row class="ma-1">
                             <v-col cols="12" sm="6" md="6">
-                                <v-select label="Base URL" variant="solo-filled" 
-                                    prepend-inner-icon="mdi-web"
-                                    :items="dicts.baseUrls" 
-                                    :item-props="urlProps"
-                                    v-model="modes.baseUrl" density="comfortable"
-                                    bg-color="white">
+                                <v-select label="Base URL" variant="solo-filled" prepend-inner-icon="mdi-web"
+                                    :items="dicts.baseUrls" :item-props="urlProps" v-model="modes.baseUrl"
+                                    density="comfortable" bg-color="white">
                                 </v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
-                                <v-select label="API" variant="solo-filled" 
-                                    prepend-inner-icon="mdi-near-me"
-                                    :items="dicts.basePaths" 
-                                    :item-props="pathProps"
-                                    v-model="modes.basePath" density="comfortable"
-                                    bg-color="white">
+                                <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-near-me"
+                                    :items="dicts.basePaths" :item-props="pathProps" v-model="modes.basePath"
+                                    density="comfortable" bg-color="white">
                                     </v-text-field>
                             </v-col>
                         </v-row>
-                        <div class="text-caption" 
-                        style="color:yellow">{{modes.apiPath}} {{search.searchText}}</div>
+                        <div class="text-caption" style="color:yellow">{{modes.apiPath}} {{search.searchText}}</div>
                         <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
                         </v-row-->
                         <!--div class="text-caption mb-4 text-on-background">
@@ -335,12 +320,12 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     this.drawer = false;
                 },
                 "modes.baseUrl": function (newQuestion, oldQuestion) {
-                    if(newQuestion) {
+                    if (newQuestion) {
                         this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
                     }
                 },
                 "modes.basePath": function (newQuestion, oldQuestion) {
-                    if(newQuestion) {
+                    if (newQuestion) {
                         this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
                     }
                 },
@@ -415,9 +400,9 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     try {
                         console.log('Rozpoczynam wyszukiwanie dla:', this.modes);
                         console.log('Rozpoczynam wyszukiwanie dla:', this.search.searchText);
-                        this.modes.apiPath = this.modes.baseUrl.url+this.modes.basePath.path;
+                        this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
                         console.log('Rozpoczynam wyszukiwanie dla:', this.modes.apiPath);
-                        
+
                         // Symulacja opóźnienia sieciowego
                         await new Promise(resolve => setTimeout(resolve, 1500));
                         console.log('Wyszukiwanie zakończone dla:', this.search.searchText);
@@ -481,7 +466,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     };
 
                     try {
-                        const response = await fetch(baseUrl, requestOptions); 
+                        const response = await fetch(baseUrl, requestOptions);
                         //await fetch(url);
                         //const response = await fetch(url);
                         if (!response.ok) {
