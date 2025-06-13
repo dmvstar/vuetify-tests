@@ -224,7 +224,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                     </v-text-field>
                             </v-col>
                         </v-row>
-                        <div style="color:yellow">{{modes.apiPath}}</div>
+                        <div style="color:yellow">{{modes.apiPath}} {{search.searchText}}</div>
                         <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
                         </v-row-->
                         <!--div class="text-caption mb-4 text-on-background">
@@ -442,17 +442,18 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     this.response = null;
                     this.error = null;
 
-                    var baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
+                    var baseUrl;
                     //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
+                    //baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
+                    baseUrl = this.modes.apiPath;
 
                     const params = new URLSearchParams({
                         inn: this.search.searchText,
                         from: this.search.selectedDateFrom,
                         into: this.search.selectedDateInto
                     });
-
                     var url = `${baseUrl}?${params.toString()}`;
-                    url = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/info?inn=3069610375&from=2025-03-23&into=2025-03-25'
+                    //url = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/info?inn=3069610375&from=2025-03-23&into=2025-03-25'
 
                     var request = {
                         inn: this.search.searchText,
@@ -477,7 +478,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     };
 
                     try {
-                        const response = await fetch(baseUrl, requestOptions); //await fetch(url);
+                        const response = await fetch(baseUrl, requestOptions); 
+                        //await fetch(url);
                         //const response = await fetch(url);
                         if (!response.ok) {
                             throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
