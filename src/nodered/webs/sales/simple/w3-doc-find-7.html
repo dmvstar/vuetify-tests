@@ -125,15 +125,15 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 </v-btn>
             </v-app-bar>
 
-            <v-main style=" position: relative; z-index: 1;">
+            <v-main style="position: relative; z-index: 1;">
                 <v-alert location="top" :color="alertMessageColor" icon="mdi-material-design" theme="dark" border
                     closable="true" v-if="isShowMainAlert">
                     {{alertMessage}}
                 </v-alert>
                 <!--div class="centered-content"-->
-                <v-row align="center" justify="center">
+                <v-row location="center" fill-height align="center" justify="center">
                     <v-col cols="12" sm="9" md="9">
-                        <v-row>
+                        <v-row  >
                             <v-col cols="12" sm="9" md="9">
                                 <div class="content-card">
                                     <div class="text-right text-h6 mb-4 text-primary"
