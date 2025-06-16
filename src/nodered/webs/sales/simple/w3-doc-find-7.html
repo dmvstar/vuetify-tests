@@ -231,7 +231,9 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                         <v-row class="ma-1">
                             <v-col>
-                                <v-btn color="primary" block large @click="performSearch" :loading="loading"
+                                <v-btn 
+                                    prepend-icon="mdi-check-circle"
+                                    color="primary" block large @click="performSearch" :loading="loading"
                                     :disabled="loading || !search.searchText">
                                     Wyszukaj
                                 </v-btn>
@@ -256,6 +258,20 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             <h4 class="text-subtitle-1 mb-2">Result:</h4>
             <div style="color:yellow">{{error}}</div>
         </div>
+        <div>            
+            <!--v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2"-->
+            <!--v-img src="https://randomuser.me/api/portraits/men/88.jpg" aspect-ratio="1.7" class="grey lighten-2"></v-img-->                
+            <v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2">
+                <template v-slot:placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                        <v-progress-circular 
+                        v-if="loading"
+                        indeterminate color="grey lighten-5">                            
+                        </v-progress-circular>
+                    </v-row>
+                </template>
+            </v-img>
+        </div>
     </v-col>
     </v-row>
     </v-col>
@@ -279,6 +295,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 //const searchText = ref('');
                 const loading = ref(false);
                 const response = ref(null);
+                var responseImage = ref(null);
+                var base64Image = ref("");
                 const error = ref(null);
                 var isShowMainAlert = ref(false);
                 var alertMessage = ref("");
@@ -324,8 +342,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                 return {
                     //searchText,
-                    response, error,
-                    loading,
+                    response, error, responseImage, base64Image,
+                    loading, 
                     login, search, modes, dicts,
                     isShowMainAlert,
                     alertMessage,
@@ -484,7 +502,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
                     };
 
-                    const requestOptions = {
+                    var requestOptions = {
                         method: "POST",
                         headers: headers,
                         body: JSON.stringify(request)
@@ -523,6 +541,43 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     } finally {
                         this.loading = false;
                     }
+
+                    try {
+                        headers = {
+                            "X-Api-Key": "gS4ZdhQceKREl/F4pEEVNA==CcUuQDcYZB13Q946"
+                        };
+
+                        requestOptions = {
+                            method: "GET",
+                            headers: headers
+                        };
+                        const response = await fetch('https://api.api-ninjas.com/v1/randomimage', requestOptions);
+                        //await fetch(url);
+                        //const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
+                        }
+                        var arrayBuffer = await response.text();
+
+                        //const buffer = Buffer.from(yourArrayBuffer);
+                        //const base64String = buffer.toString('base64');
+                        //const base64String = btoa('base64');
+
+                        this.responseImage = arrayBuffer;
+                        this.base64Image = "data:image/jpeg;base64," + this.responseImage
+
+                        //this.base64Image = 'https://randomuser.me/api/portraits/men/77.jpg';
+                        console.log(this.base64Image);
+                    } catch (e) {
+                        console.error('Błąd podczas pobierania danych:', e);
+                        this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
+                    } finally {
+                        this.loading = false;
+                    }
+
+
+
+
                 },
 
 
