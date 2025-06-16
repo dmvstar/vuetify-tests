@@ -434,6 +434,10 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
                     //baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
                     baseUrl = this.modes.apiPath;
+                    baseUrl = this.modes.baseUrl.url + this.modes.basePath.path;
+
+                    console.log('baseUrl', baseUrl);
+
 
                     const params = new URLSearchParams({
                         inn: this.search.searchText,
@@ -474,6 +478,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         }
                         this.response = await response.json();
                         console.log(this.response);
+                        this.error = JSON.stringify(this.response);
                     } catch (e) {
                         console.error('Błąd podczas pobierania danych:', e);
                         this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
