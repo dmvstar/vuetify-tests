@@ -132,13 +132,13 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     {{alertMessage}}
                 </v-alert>
                 <!--div class="centered-content"-->
-                
+
                 <v-row location="center" fill-height align="center" justify="center">
                     <v-col cols="12" sm="9" md="9">
                         <v-row>
                             <v-col></v-col>
                         </v-row>
-                        <v-row  >
+                        <v-row>
                             <v-col cols="12" sm="9" md="9">
                                 <div class="content-card">
                                     <div class="text-right text-h6 mb-4 text-primary"
@@ -178,17 +178,17 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                         </v-col>
                                     </v-row>
                                     <!--v-row class="ma-1">
-                            <v-col cols="12" sm="6" md="6">
-                                <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
-                                    clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
-                                    v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="6">
-                                <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
-                                    clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
-                                    v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
-                            </v-col>
-                        </v-row-->
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
+                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                                v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
+                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                                v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
+                                        </v-col>
+                                    </v-row-->
                                     <v-row class="ma-1">
                                         <v-col>
                                             <v-text-field label="Wpisz numer INN" variant="solo-filled" counter
@@ -210,52 +210,59 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                                             <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-near-me"
                                                 :items="dicts.basePaths" :item-props="pathProps"
                                                 v-model="modes.basePath" density="comfortable" bg-color="white">
-                                                </v-text-field>
                                         </v-col>
                                     </v-row>
-                                    <div class="text-caption" style="color:yellow">{{modes.apiPath}}
-                                        {{search.searchText}}
-                                    </div>
-                                    <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
+
+                                    <v-row class="ma-1">
+                                        <v-col cols="12">
+                                            <div class="text-caption" style="color:yellow">
+                                                {{modes.apiPath}}
+                                                {{search.searchText}}
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                        </v-row>
+
+                        <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
                         </v-row-->
-                                    <!--div class="text-caption mb-4 text-on-background">
+                        <!--div class="text-caption mb-4 text-on-background">
                             Można podać tylko jeden np: 2221111122
                         </div-->
 
-                                    <v-row class="ma-1">
-                                        <v-col>
-                                            <v-btn color="primary" block large @click="performSearch" :loading="loading"
-                                                :disabled="loading || !search.searchText">
-                                                Wyszukaj
-                                            </v-btn>
-                                        </v-col>
-                                    </v-row>
-                                </div>
-                                <div></div>
-                                <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
-                                    <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
-                                    <div class="font-italic mb-2">
-                                        W przypadku problemów, skontaktuj się z nami:<br>
-                                        <v-icon size="small" class="mdi-email">mdi-email</v-icon>
-                                        support@twojafirma.pl,
-                                        <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
-                                        +48 123 456 789
-                                    </div>
-                                    <div style="color:yellow">{{error}}</div>
-                                </div>
-                            </v-col>
-                            <v-col cols="12" sm="3" md="3">
-                                <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
-                                    <h4 class="text-subtitle-1 mb-2">Result:</h4>
-                                    <div style="color:yellow">{{error}}</div>
-                                </div>
+                        <v-row class="ma-1">
+                            <v-col>
+                                <v-btn color="primary" block large @click="performSearch" :loading="loading"
+                                    :disabled="loading || !search.searchText">
+                                    Wyszukaj
+                                </v-btn>
                             </v-col>
                         </v-row>
-                    </v-col>
-                </v-row>
-                <!--/div-->
-            </v-main>
-        </v-app>
+    </div>
+    <div></div>
+    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
+        <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+        <div class="font-italic mb-2">
+            W przypadku problemów, skontaktuj się z nami:<br>
+            <v-icon size="small" class="mdi-email">mdi-email</v-icon>
+            support@twojafirma.pl,
+            <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
+            +48 123 456 789
+        </div>
+        <!--div style="color:yellow">{{error}}</div-->
+    </div>
+    </v-col>
+    <v-col cols="12" sm="3" md="3">
+        <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
+            <h4 class="text-subtitle-1 mb-2">Result:</h4>
+            <div style="color:yellow">{{error}}</div>
+        </div>
+    </v-col>
+    </v-row>
+    </v-col>
+    </v-row>
+    <!--/div-->
+    </v-main>
+    </v-app>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@3.x/dist/vue.global.prod.js"></script>
@@ -285,6 +292,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         ],
                         basePaths: [
                             { name: "content/test", path: "/api/v2/commons/dija/docs/content/test" },
+                            { name: "content/info", path: "/api/v2/commons/dija/docs/content/info" },
                             { name: "content/check", path: "/api/v2/commons/dija/docs/content/check" },
                         ]
                     }
@@ -299,12 +307,12 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 var search = Vue.reactive(
                     {
                         dateFromDateMenu: false,
-                        selectedDateFrom: '2025-05-01',
-                        selectedDateFromFull: '2025-05-01',
+                        selectedDateFrom: '2025-03-23',// '2025-05-01',
+                        selectedDateFromFull: '2025-03-23',
                         dateIntoDateMenu: false,
-                        selectedDateInto: "2025-05-25",
-                        selectedDateIntoFull: "2025-05-25",
-                        searchText: "3133702525"
+                        selectedDateInto: "2025-03-25",
+                        selectedDateIntoFull: "2025-03-25",
+                        searchText: "3069610375"// "3133702525"
                     }
                 );
 
@@ -508,7 +516,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         }
                         this.response = await response.json();
                         console.log(this.response);
-                        this.error = JSON.stringify(this.response);
+                        this.error = JSON.stringify(this.response, null, 2);
                     } catch (e) {
                         console.error('Błąd podczas pobierania danych:', e);
                         this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
