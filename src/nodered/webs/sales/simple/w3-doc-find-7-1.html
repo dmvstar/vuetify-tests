@@ -310,9 +310,12 @@ https://github.com/bangbang93/node-pdf-extract-image
                             { name: "nr-localhost", url: "http://localhost:1880" },
                         ],
                         basePaths: [
-                            { name: "content/test", method: "GET", path: "/api/v2/commons/dija/docs/content/test" },
-                            { name: "content/info", method: "POST", path: "/api/v2/commons/dija/docs/content/info" },
+                            { name: "content/test",  method: "GET",  path: "/api/v2/commons/dija/docs/content/test" },
+                            { name: "content/info",  method: "POST", path: "/api/v2/commons/dija/docs/content/info" },
                             { name: "content/check", method: "POST", path: "/api/v2/commons/dija/docs/content/check" },
+                            // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
+                            // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
+                            { name: "content/b64",   method : "GET", path : "/api/v2/commons/dija/docs/content/b64" },
                         ]
                     }
                 );
@@ -536,7 +539,8 @@ https://github.com/bangbang93/node-pdf-extract-image
                         }
                         this.response = await response.json();
                         console.log(this.response);
-                        this.error = JSON.stringify(this.response, null, 2);
+                        var text = JSON.stringify(this.response, null, 2);
+                        this.error = text.length<220?text:(text.slice(0,220) +" ...");
                     } catch (e) {
                         console.error('Błąd podczas pobierania danych:', e);
                         this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
