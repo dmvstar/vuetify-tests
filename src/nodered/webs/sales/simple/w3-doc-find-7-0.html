@@ -60,7 +60,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
         }
 
         .content-card {
-            max-width: 1200px;
+            max-width: 800px;
             width: 100%;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.15);
@@ -69,7 +69,7 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
         }
 
         .content-card-bottom {
-            max-width: 1200px;
+            max-width: 800px;
             width: 100%;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.05);
@@ -116,6 +116,15 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 <body>
     <div id="app">
         <v-app class="background-app">
+            <div :style="{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                zIndex: 0 // Pod resztą komponentów Vuetify
+            }"></div>
 
             <v-app-bar app dark color="rgba(0,0,0,0.7)" flat>
                 <v-app-bar-title>Platforma: Archiwum dokumentów</v-app-bar-title>
@@ -126,103 +135,84 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
             </v-app-bar>
 
             <v-main style="position: relative; z-index: 1;">
-
                 <v-alert location="top" :color="alertMessageColor" icon="mdi-material-design" theme="dark" border
                     closable="true" v-if="isShowMainAlert">
                     {{alertMessage}}
                 </v-alert>
-                <!--div class="centered-content"-->
-
-                <v-row location="center" fill-height align="center" justify="center">
-                    <v-col cols="12" sm="9" md="9">
-                        <v-row>
-                            <v-col></v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" sm="9" md="9">
-                                <div class="content-card">
-                                    <div class="text-right text-h6 mb-4 text-primary"
-                                        style="text-decoration: underline;">
-                                        <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
-                                    </div>
-                                    <h2 class="text-h4 mb-6 text-on-background">Wyszukiwanie Dokumentów zagubionych</h2>
-                                    <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
-                                    <v-row class="ma-1">
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
-                                                :close-on-click="true">
-                                                <template v-slot:activator="{ props }">
-                                                    <v-text-field v-model="search.selectedDateFrom"
-                                                        density="comfortable" bg-color="white" label="Wpisz datę OD"
-                                                        prepend-inner-icon="mdi-calendar" clearable
-                                                        clear-icon="mdi-backspace" v-bind="props">
-                                                    </v-text-field>
-                                                </template>
-                                                <v-date-picker @update:model-value="search.dateFromDateMenu = false"
-                                                    v-model="search.selectedDateFromFull"></v-date-picker>
-                                            </v-menu>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
-                                                :close-on-click="true">
-                                                <template v-slot:activator="{ props }">
-                                                    <v-text-field v-model="search.selectedDateInto"
-                                                        density="comfortable" bg-color="yellow" label="Wpisz datę DO"
-                                                        prepend-inner-icon="mdi-calendar" clearable
-                                                        clear-icon="mdi-backspace" v-bind="props">
-                                                    </v-text-field>
-                                                </template>
-                                                <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
-                                                    v-model="search.selectedDateIntoFull"></v-date-picker>
-                                            </v-menu>
-                                        </v-col>
-                                    </v-row>
-                                    <!--v-row class="ma-1">
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
-                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
-                                                v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
-                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
-                                                v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
-                                        </v-col>
-                                    </v-row-->
-                                    <v-row class="ma-1">
-                                        <v-col>
-                                            <v-text-field label="Wpisz numer INN" variant="solo-filled" counter
-                                                clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"
-                                                v-model="search.searchText" density="comfortable"
-                                                bg-color="white"></v-text-field>
-                                        </v-col>
-                                    </v-row>
-
-                                    <v-row class="ma-1">
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-select label="Base URL" variant="solo-filled"
-                                                prepend-inner-icon="mdi-web" :items="dicts.baseUrls"
-                                                :item-props="urlProps" v-model="modes.baseUrl" density="comfortable"
-                                                bg-color="white">
-                                            </v-select>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-near-me"
-                                                :items="dicts.basePaths" :item-props="pathProps"
-                                                v-model="modes.basePath" density="comfortable" bg-color="white">
-                                        </v-col>
-                                    </v-row>
-
-                                    <v-row class="ma-1">
-                                        <v-col cols="12">
-                                            <div class="text-caption" style="color:yellow">
-                                                {{modes.apiPath}}
-                                                {{search.searchText}}
-                                        </v-col>
-                                    </v-row>
-                                </div>
+                <div class="centered-content">
+                    <div class="content-card">
+                        <div class="text-right text-h6 mb-4 text-primary" style="text-decoration: underline;">
+                            <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
+                        </div>
+                        <h2 class="text-h4 mb-6 text-on-background">Wyszukiwanie Dokumentów zagubionych</h2>
+                        <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
+                        <v-row class="ma-1">
+                            <v-col cols="12" sm="6" md="6">
+                                <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
+                                    :close-on-click="true">
+                                    <template v-slot:activator="{ props }">
+                                        <v-text-field v-model="search.selectedDateFrom" density="comfortable"
+                                            bg-color="white" label="Wpisz datę OD" prepend-inner-icon="mdi-calendar"
+                                            clearable clear-icon="mdi-backspace" v-bind="props">
+                                        </v-text-field>
+                                    </template>
+                                    <v-date-picker @update:model-value="search.dateFromDateMenu = false"
+                                        v-model="search.selectedDateFromFull"></v-date-picker>
+                                </v-menu>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
+                                    :close-on-click="true">
+                                    <template v-slot:activator="{ props }">
+                                        <v-text-field v-model="search.selectedDateInto" density="comfortable"
+                                            bg-color="yellow" label="Wpisz datę DO" prepend-inner-icon="mdi-calendar"
+                                            clearable clear-icon="mdi-backspace" v-bind="props">
+                                        </v-text-field>
+                                    </template>
+                                    <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
+                                        v-model="search.selectedDateIntoFull"></v-date-picker>
+                                </v-menu>
+                            </v-col>
                         </v-row>
 
+                        <!--v-row class="ma-1">
+                            <v-col cols="12" sm="6" md="6">
+                                <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
+                                    clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                    v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
+                                    clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                    v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                        </v-row-->
+
+
+
+                        <v-row class="ma-1">
+                            <v-col>
+                                <v-text-field label="Wpisz numer INN" variant="solo-filled" counter clearable
+                                    prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"
+                                    v-model="search.searchText" density="comfortable" bg-color="white"></v-text-field>
+                            </v-col>
+                        </v-row>
+
+                        <v-row class="ma-1">
+                            <v-col cols="12" sm="6" md="6">
+                                <v-select label="Base URL" variant="solo-filled" prepend-inner-icon="mdi-web"
+                                    :items="dicts.baseUrls" :item-props="urlProps" v-model="modes.baseUrl"
+                                    density="comfortable" bg-color="white">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                                <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-near-me"
+                                    :items="dicts.basePaths" :item-props="pathProps" v-model="modes.basePath"
+                                    density="comfortable" bg-color="white">
+                                    </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <div class="text-caption" style="color:yellow">{{modes.apiPath}} {{search.searchText}}</div>
                         <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
                         </v-row-->
                         <!--div class="text-caption mb-4 text-on-background">
@@ -231,54 +221,28 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                         <v-row class="ma-1">
                             <v-col>
-                                <v-btn 
-                                    prepend-icon="mdi-check-circle"
-                                    color="primary" block large @click="performSearch" :loading="loading"
+                                <v-btn color="primary" block large @click="performSearch" :loading="loading"
                                     :disabled="loading || !search.searchText">
                                     Wyszukaj
                                 </v-btn>
                             </v-col>
                         </v-row>
-    </div>
-    <div></div>
-    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
-        <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
-        <div class="font-italic mb-2">
-            W przypadku problemów, skontaktuj się z nami:<br>
-            <v-icon size="small" class="mdi-email">mdi-email</v-icon>
-            support@twojafirma.pl,
-            <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
-            +48 123 456 789
-        </div>
-        <!--div style="color:yellow">{{error}}</div-->
-    </div>
-    </v-col>
-    <v-col cols="12" sm="3" md="3">
-        <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
-            <h4 class="text-subtitle-1 mb-2">Result:</h4>
-            <div style="color:yellow">{{error}}</div>
-        </div>
-        <div>            
-            <!--v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2"-->
-            <!--v-img src="https://randomuser.me/api/portraits/men/88.jpg" aspect-ratio="1.7" class="grey lighten-2"></v-img-->                
-            <v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2">
-                <template v-slot:placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                        <v-progress-circular 
-                        v-if="loading"
-                        indeterminate color="grey lighten-5">                            
-                        </v-progress-circular>
-                    </v-row>
-                </template>
-            </v-img>
-        </div>
-    </v-col>
-    </v-row>
-    </v-col>
-    </v-row>
-    <!--/div-->
-    </v-main>
-    </v-app>
+                    </div>
+                    <div></div>
+                    <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
+                        <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+                        <div class="font-italic mb-2">
+                            W przypadku problemów, skontaktuj się z nami:<br>
+                            <v-icon size="small" class="mdi-email">mdi-email</v-icon>
+                            support@twojafirma.pl,
+                            <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
+                            +48 123 456 789
+                        </div>
+                        <div style="color:yellow">{{error}}</div>
+                    </div>
+                </div>
+            </v-main>
+        </v-app>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@3.x/dist/vue.global.prod.js"></script>
@@ -295,8 +259,6 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 //const searchText = ref('');
                 const loading = ref(false);
                 const response = ref(null);
-                var responseImage = ref(null);
-                var base64Image = ref("");
                 const error = ref(null);
                 var isShowMainAlert = ref(false);
                 var alertMessage = ref("");
@@ -310,7 +272,6 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         ],
                         basePaths: [
                             { name: "content/test", path: "/api/v2/commons/dija/docs/content/test" },
-                            { name: "content/info", path: "/api/v2/commons/dija/docs/content/info" },
                             { name: "content/check", path: "/api/v2/commons/dija/docs/content/check" },
                         ]
                     }
@@ -325,12 +286,12 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                 var search = Vue.reactive(
                     {
                         dateFromDateMenu: false,
-                        selectedDateFrom: '2025-03-23',// '2025-05-01',
-                        selectedDateFromFull: '2025-03-23',
+                        selectedDateFrom: '2025-05-01',
+                        selectedDateFromFull: '2025-05-01',
                         dateIntoDateMenu: false,
-                        selectedDateInto: "2025-03-25",
-                        selectedDateIntoFull: "2025-03-25",
-                        searchText: "3069610375"// "3133702525"
+                        selectedDateInto: "2025-05-25",
+                        selectedDateIntoFull: "2025-05-25",
+                        searchText: "3133702525"
                     }
                 );
 
@@ -342,8 +303,8 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 
                 return {
                     //searchText,
-                    response, error, responseImage, base64Image,
-                    loading, 
+                    response, error,
+                    loading,
                     login, search, modes, dicts,
                     isShowMainAlert,
                     alertMessage,
@@ -473,10 +434,6 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                     //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
                     //baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
                     baseUrl = this.modes.apiPath;
-                    baseUrl = this.modes.baseUrl.url + this.modes.basePath.path;
-
-                    console.log('baseUrl', baseUrl);
-
 
                     const params = new URLSearchParams({
                         inn: this.search.searchText,
@@ -502,28 +459,11 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
                     };
 
-                    var requestOptions = {
+                    const requestOptions = {
                         method: "POST",
                         headers: headers,
                         body: JSON.stringify(request)
                     };
-
-                    /*
-                    try {
-                        res = await post(baseUrl, requestOptions);
-                    } catch (error) {
-                    console.log(error);
-                    resolve(null);
-                    return;
-                    }
-                    console.log(res);
-                    if (res.result != "ok") {
-                        // Resolve with null to indicate this user does not exist
-                        resolve(null);
-                        return;
-                    }
-                    */
-
 
                     try {
                         const response = await fetch(baseUrl, requestOptions);
@@ -534,50 +474,12 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
                         }
                         this.response = await response.json();
                         console.log(this.response);
-                        this.error = JSON.stringify(this.response, null, 2);
                     } catch (e) {
                         console.error('Błąd podczas pobierania danych:', e);
                         this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
                     } finally {
                         this.loading = false;
                     }
-
-                    try {
-                        headers = {
-                            "X-Api-Key": "gS4ZdhQceKREl/F4pEEVNA==CcUuQDcYZB13Q946"
-                        };
-
-                        requestOptions = {
-                            method: "GET",
-                            headers: headers
-                        };
-                        const response = await fetch('https://api.api-ninjas.com/v1/randomimage', requestOptions);
-                        //await fetch(url);
-                        //const response = await fetch(url);
-                        if (!response.ok) {
-                            throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
-                        }
-                        var arrayBuffer = await response.text();
-
-                        //const buffer = Buffer.from(yourArrayBuffer);
-                        //const base64String = buffer.toString('base64');
-                        //const base64String = btoa('base64');
-
-                        this.responseImage = arrayBuffer;
-                        this.base64Image = "data:image/jpeg;base64," + this.responseImage
-
-                        //this.base64Image = 'https://randomuser.me/api/portraits/men/77.jpg';
-                        console.log(this.base64Image);
-                    } catch (e) {
-                        console.error('Błąd podczas pobierania danych:', e);
-                        this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
-                    } finally {
-                        this.loading = false;
-                    }
-
-
-
-
                 },
 
 
