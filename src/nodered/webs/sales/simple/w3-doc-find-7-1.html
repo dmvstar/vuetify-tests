@@ -232,10 +232,8 @@ https://github.com/bangbang93/node-pdf-extract-image
 
                         <v-row class="ma-1">
                             <v-col>
-                                <v-btn 
-                                    prepend-icon="mdi-check-circle"
-                                    color="primary" block large @click="performSearch" :loading="loading"
-                                    :disabled="loading || !search.searchText">
+                                <v-btn prepend-icon="mdi-check-circle" color="primary" block large
+                                    @click="performSearch" :loading="loading" :disabled="loading || !search.searchText">
                                     Wyszukaj
                                 </v-btn>
                             </v-col>
@@ -255,24 +253,33 @@ https://github.com/bangbang93/node-pdf-extract-image
     </div>
     </v-col>
     <v-col cols="12" sm="3" md="3">
+        
         <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
             <h4 class="text-subtitle-1 mb-2">Result:</h4>
             <div style="color:yellow">{{error}}</div>
-        </div>
-        <div>            
+        
+    </v-row>
+        <div>
             <!--v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2"-->
-            <!--v-img src="https://randomuser.me/api/portraits/men/88.jpg" aspect-ratio="1.7" class="grey lighten-2"></v-img-->                
+            <!--v-img src="https://randomuser.me/api/portraits/men/88.jpg" aspect-ratio="1.7" class="grey lighten-2"></v-img-->
             <v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2">
                 <template v-slot:placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
-                        <v-progress-circular 
-                        v-if="loading"
-                        indeterminate color="grey lighten-5">                            
+                        <v-progress-circular v-if="loading" indeterminate color="grey lighten-5">
                         </v-progress-circular>
                     </v-row>
                 </template>
-            </v-img>
+            </v-img>        
+        </div>        
         </div>
+        <v-row sm="3" md="3">
+            <v-btn prepend-icon="mdi-upload" color="secondary" 
+                block large @click="performSearch" 
+                :loading="loading"
+                :disabled="loading || !search.searchText">
+                Przekaź dane
+            </v-btn>
+        <v-row>
     </v-col>
     </v-row>
     </v-col>
@@ -310,12 +317,12 @@ https://github.com/bangbang93/node-pdf-extract-image
                             { name: "nr-localhost", url: "http://localhost:1880" },
                         ],
                         basePaths: [
-                            { name: "content/test",  method: "GET",  path: "/api/v2/commons/dija/docs/content/test" },
-                            { name: "content/info",  method: "POST", path: "/api/v2/commons/dija/docs/content/info" },
+                            { name: "content/test", method: "GET", path: "/api/v2/commons/dija/docs/content/test" },
+                            { name: "content/info", method: "POST", path: "/api/v2/commons/dija/docs/content/info" },
                             { name: "content/check", method: "POST", path: "/api/v2/commons/dija/docs/content/check" },
                             // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
                             // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
-                            { name: "content/b64",   method : "GET", path : "/api/v2/commons/dija/docs/content/b64" },
+                            { name: "content/b64", method: "GET", path: "/api/v2/commons/dija/docs/content/b64" },
                         ]
                     }
                 );
@@ -348,7 +355,7 @@ https://github.com/bangbang93/node-pdf-extract-image
                 return {
                     //searchText,
                     response, error, responseImage, base64Image,
-                    loading, 
+                    loading,
                     login, search, modes, dicts,
                     isShowMainAlert,
                     alertMessage,
@@ -473,6 +480,7 @@ https://github.com/bangbang93/node-pdf-extract-image
                     this.loading = true;
                     this.response = null;
                     this.error = null;
+                    this.base64Image = null;
 
                     var baseUrl;
                     //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
@@ -481,7 +489,6 @@ https://github.com/bangbang93/node-pdf-extract-image
                     baseUrl = this.modes.baseUrl.url + this.modes.basePath.path;
 
                     console.log('baseUrl', baseUrl);
-
 
                     const params = new URLSearchParams({
                         inn: this.search.searchText,
@@ -540,7 +547,7 @@ https://github.com/bangbang93/node-pdf-extract-image
                         this.response = await response.json();
                         console.log(this.response);
                         var text = JSON.stringify(this.response, null, 2);
-                        this.error = text.length<220?text:(text.slice(0,220) +" ...");
+                        this.error = text.length < 220 ? text : (text.slice(0, 220) + " ...");
                     } catch (e) {
                         console.error('Błąd podczas pobierania danych:', e);
                         this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
@@ -552,6 +559,8 @@ https://github.com/bangbang93/node-pdf-extract-image
                         headers = {
                             "X-Api-Key": "gS4ZdhQceKREl/F4pEEVNA==CcUuQDcYZB13Q946"
                         };
+
+                        this.loading = false;
 
                         requestOptions = {
                             method: "GET",
