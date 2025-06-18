@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pl">
+<!--
+https://vuetifyjs.com/en/styles/colors/#material-colors
+https://github.com/bangbang93/node-pdf-extract-image
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyszukiwanie Dokumentów zagubionych</title>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* Zapobiega przewijaniu całej strony */
+        }
+
+        #app {
+            height: 100%;
+            /* Kolor tekstu na tle powinien być biały */
+            color: white;
+            /* Usunięto background-image i pseudo-element ::before stąd */
+        }
+
+        /* Półprzezroczysty overlay (teraz w v-app) */
+        /* Ten styl NIE jest już potrzebny, bo będzie bezpośrednio w v-app jako styl */
+        /* #app::before { ... } */
+
+        /* Upewnij się, że element v-app (i jego wewnętrzny .v-application__wrap)
+           zajmują całą dostępną przestrzeń i są przezroczyste */
+        .v-application,
+        .v-application__wrap {
+            height: 100% !important;
+            background-color: transparent !important;
+            /* To jest klucz! */
+            position: relative;
+            /* Ważne dla pozycjonowania tła i overlayu wewnątrz v-app */
+        }
+
+        /* Aby pasek aplikacji również był półprzezroczysty, jeśli nie jest już taki */
+        .v-app-bar {
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            /* Półprzezroczyste tło paska */
+        }
+
+        /* Wyśrodkowanie głównej zawartości wewnątrz v-main */
+        .centered-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .content-card {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.15);
+            /* Półprzezroczyste białe tło dla czytelności */
+            border-radius: 8px;
+        }
+
+        .content-card-bottom {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            /* Półprzezroczyste białe tło dla czytelności */
+            border-radius: 8px;
+        }
+
+        .content-card-info {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.25);
+            /* Półprzezroczyste białe tło dla czytelności */
+            border-radius: 8px;
+        }
+
+        /* Upewnij się, że tekst nagłówka w v-app-bar jest biały */
+        .v-app-bar-title .v-toolbar-title__placeholder {
+            color: white !important;
+        }
+
+        /* Styl dla tekstu na tle, aby był czytelny */
+        .text-on-background {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Ikony kontaktowe */
+        .v-icon {
+            color: inherit;
+            /* Dziedziczy kolor z rodzica */
+        }
+
+        .text-on-background .mdi-email {
+            color: #2196F3 !important;
+            /* Niebieski dla emaila */
+        }
+
+        .text-on-background .mdi-phone {
+            color: #F44336 !important;
+            /* Czerwony dla telefonu */
+        }
+
+        .background-app {
+            background-image: url('https://github.com/dmvstar/vuetify-tests/blob/9d9b908754453ed675e127d4086753ac20b6e866/src/nodered/webs/sales/simple/assets/Wallpaper_IAA_Range_desktop-3.jpg?raw=true');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <v-app class="background-app">
+            <v-app-bar app dark color="rgba(0,0,0,0.7)" flat>
+                <v-app-bar-title>Platforma: Archiwum dokumentów</v-app-bar-title>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="goToLogin">
+                    Zaloguj się
+                </v-btn>
+            </v-app-bar>
+            <v-main style="position: relative; z-index: 1;">
+                <v-alert location="top" :color="alertMessageColor" icon="mdi-material-design" theme="dark" border
+                    closable="true" v-if="isShowMainAlert">
+                    {{alertMessage}}
+                </v-alert>
+                <!--div class="centered-content"-->
+                <v-row location="center" fill-height align="center" justify="center">
+                    <v-col cols="12" sm="9" md="9">
+                        <v-row>
+                            <v-col></v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" sm="9" md="9">
+                                <div class="content-card">
+                                    <div class="text-right text-h6 mb-4 text-primary"
+                                        style="text-decoration: underline;">
+                                        <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
+                                    </div>
+                                    <h2 class="text-h4 mb-6 text-on-background">Wyszukiwanie Dokumentów zagubionych</h2>
+                                    <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
+                                    <v-row class="ma-1">
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
+                                                :close-on-click="true">
+                                                <template v-slot:activator="{ props }">
+                                                    <v-text-field v-model="search.selectedDateFrom"
+                                                        density="comfortable" bg-color="white" label="Wpisz datę OD"
+                                                        prepend-inner-icon="mdi-calendar" clearable
+                                                        clear-icon="mdi-backspace" v-bind="props">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker @update:model-value="search.dateFromDateMenu = false"
+                                                    v-model="search.selectedDateFromFull"></v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
+                                                :close-on-click="true">
+                                                <template v-slot:activator="{ props }">
+                                                    <v-text-field v-model="search.selectedDateInto"
+                                                        density="comfortable" bg-color="yellow" label="Wpisz datę DO"
+                                                        prepend-inner-icon="mdi-calendar" clearable
+                                                        clear-icon="mdi-backspace" v-bind="props">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
+                                                    v-model="search.selectedDateIntoFull"></v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                    <!--v-row class="ma-1">
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
+                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                                v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
+                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
+                                                v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
+                                        </v-col>
+                                    </v-row-->
+                                    <v-row class="ma-1">
+                                        <v-col>
+                                            <v-text-field label="Wpisz numer INN" variant="solo-filled" counter
+                                                clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"
+                                                v-model="search.searchText" density="comfortable"
+                                                bg-color="white"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row class="ma-1">
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-select label="Base URL" variant="solo-filled"
+                                                prepend-inner-icon="mdi-web" :items="dicts.baseUrls"
+                                                :item-props="urlProps" v-model="modes.baseUrl" density="comfortable"
+                                                bg-color="white">
+                                            </v-select>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-near-me"
+                                                :items="dicts.basePaths" :item-props="pathProps"
+                                                v-model="modes.basePath" density="comfortable" bg-color="white">
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row class="ma-1">
+                                        <v-col cols="12">
+                                            <div class="text-caption" style="color:yellow">
+                                                {{modes.apiPath}}
+                                                {{search.searchText}}
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                        </v-row>
+
+                        <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
+                        </v-row-->
+                        <!--div class="text-caption mb-4 text-on-background">
+                            Można podać tylko jeden np: 2221111122
+                        </div-->
+
+                        <v-row class="ma-1">
+                            <v-col>
+                                <v-btn prepend-icon="mdi-check-circle" color="primary" block large
+                                    @click="performSearch" :loading="loading" :disabled="loading || !search.searchText">
+                                    Wyszukaj
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+
+                        <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
+                            <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
+                            <div class="font-italic mb-2">
+                                W przypadku problemów, skontaktuj się z nami:<br>
+                                <v-icon size="small" class="mdi-email">mdi-email</v-icon>
+                                support@twojafirma.pl,
+                                <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
+                                +48 123 456 789
+                            </div>
+                            <!--div style="color:yellow">{{error}}</div-->
+                        </div>
+                    </v-col>
+                    <v-col cols="12" sm="3" md="3">
+                        <v-row>
+                            <div class="content-card-info text-caption mt-auto pb-4 text-on-background">
+                                <h4 class="text-subtitle-1 mb-2">Result:</h4>
+                                <div style="color:yellow">{{error}}</div>
+                                <div>
+                                    <!--v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2"-->
+                                    <!--v-img src="https://randomuser.me/api/portraits/men/88.jpg" aspect-ratio="1.7" class="grey lighten-2"></v-img-->
+                                    <v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2">
+                                        <template v-slot:placeholder>
+                                            <v-row class="fill-height ma-0" align="center" justify="center">
+                                                <v-progress-circular v-if="loading" indeterminate
+                                                    color="grey lighten-5">
+                                                </v-progress-circular>
+                                            </v-row>
+                                        </template>
+                                    </v-img>
+                                </div>
+                                <div></div>
+                                <v-spacer></v-spacer>
+                                <div>
+                                    <v-row pa="6" ma="6">
+                                        <v-btn pa="6" ma="6" prepend-icon="mdi-upload" color="secondary" block large
+                                            @click="performSearch" :loading="loading"
+                                            :disabled="loading || !search.searchText">
+                                            Przekaź dane
+                                        </v-btn>
+                                        <v-row>
+                                </div>
+                        </v-row>
+                    </v-col>
+                </v-row>
+                <!--/div-->
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.x/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.js"></script>
+
+    <script>
+        const { createApp, ref } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const vuetify = createVuetify();
+
+        createApp({
+            setup() {
+                //const searchText = ref('');
+                const loading = ref(false);
+                const response = ref(null);
+                var responseImage = ref(null);
+                var base64Image = ref("");
+                const error = ref(null);
+                var isShowMainAlert = ref(false);
+                var alertMessage = ref("");
+                var alertMessageColor = ref("green");
+                var dicts = ref(
+                    {
+                        baseUrls: [
+                            { name: "nr-identification", url: "https://nr-identification.mb-stage.ukrgasbank.com" },
+                            { name: "nr-clients", url: "https://nr-clients.dev.ukrgasaws.com" },
+                            { name: "nr-localhost", url: "http://localhost:1880" },
+                        ],
+                        basePaths: [
+                            { name: "content/test", method: "GET", path: "/api/v2/commons/dija/docs/content/test" },
+                            { name: "content/info", method: "POST", path: "/api/v2/commons/dija/docs/content/info" },
+                            { name: "content/check", method: "POST", path: "/api/v2/commons/dija/docs/content/check" },
+                            // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
+                            // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
+                            { name: "content/b64", method: "GET", path: "/api/v2/commons/dija/docs/content/b64" },
+                        ]
+                    }
+                );
+                var modes = Vue.reactive(
+                    {
+                        baseUrl: null,
+                        basePath: null,
+                        baseMethod: null,
+                        apiPath: null,
+                    }
+                );
+                var search = Vue.reactive(
+                    {
+                        dateFromDateMenu: false,
+                        selectedDateFrom: '2025-03-23',// '2025-05-01',
+                        selectedDateFromFull: '2025-03-23',
+                        dateIntoDateMenu: false,
+                        selectedDateInto: "2025-03-25",
+                        selectedDateIntoFull: "2025-03-25",
+                        searchText: "3069610375"// "3133702525"
+                    }
+                );
+
+                const login = () => {
+                    //this.showMainAlert('Przekierowanie do strony logowania...');
+                    //alert('Przekierowanie do strony logowania...');
+                    // Tutaj możesz dodać logikę logowania, np. otwarcie modala, przekierowanie
+                };
+
+                return {
+                    //searchText,
+                    response, error, responseImage, base64Image,
+                    loading,
+                    login, search, modes, dicts,
+                    isShowMainAlert,
+                    alertMessage,
+                    alertMessageColor
+                };
+            },
+            mounted() {
+                this.modes.basePath = this.dicts.basePaths[0];
+                this.modes.baseUrl = this.dicts.baseUrls[0];
+            },
+            watch: {
+                group() {
+                    this.drawer = false;
+                },
+                "modes.baseUrl": function (newQuestion, oldQuestion) {
+                    if (newQuestion) {
+                        this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                    }
+                },
+                "modes.basePath": function (newQuestion, oldQuestion) {
+                    if (newQuestion) {
+                        this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                    }
+                },
+                "search.selectedDateFromFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.search.selectedDateFrom = this.formatDate(newQuestion);
+                },
+                "search.selectedDateIntoFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.search.selectedDateInto = this.formatDate(newQuestion);
+                }
+            },
+            methods: {
+                urlProps(item) {
+                    return {
+                        title: item.name,
+                        subtitle: item.url,
+                    }
+                },
+                pathProps(item) {
+                    return {
+                        title: `[${item.method}] ${item.path}`,
+                        //subtitle: item.path,
+                    }
+                },
+                formatDate(date) {
+                    if (!date) {
+                        return null
+                    }
+                    console.log(date);
+                    console.log(date.getDate());
+                    const [year, month, day] = [
+                        date.getFullYear(),
+                        date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1,
+                        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+                    ];
+                    //date.toISOString().replace('T', '-').split('-');
+                    //console.log(date.toISOString());
+                    var ret = `${day}-${month}-${year}`;
+                    //console.log(ret);
+                    return ret;
+                },
+                async goToLogin() {
+
+                    this.showMainAlert('Przekierowanie do strony logowania...');
+
+                    //alert('Przekierowanie do strony logowania...');
+                    // Przykład przekierowania: window.location.href = '/login';
+                },
+                async showMainAlert(message, color) {
+                    this.isShowMainAlert = true;
+                    this.alertMessageColor = color || "green";
+                    this.alertMessage = message; `Przekierowanie do strony logowania...`
+
+                    console.log(message, this.isShowMainAlert);
+
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                    } catch (error) {
+                    } finally {
+                        this.isShowMainAlert = false;
+                        console.log(message, this.isShowMainAlert);
+                    }
+                },
+                async performSearch() {
+                    if (!this.search.searchText) {
+                        alert('Proszę wprowadzić wartość do wyszukiwania.');
+                        return;
+                    }
+                    this.loading = true;
+
+                    try {
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.modes);
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.search.searchText);
+                        this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                        console.log('Rozpoczynam wyszukiwanie dla:', this.modes.apiPath);
+
+                        // Symulacja opóźnienia sieciowego
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        console.log('Wyszukiwanie zakończone dla:', this.search.searchText);
+
+                        this.fetchDiiaDataInfo();
+
+                        if (this.search.searchText == "0") {
+                            this.showMainAlert(`Wyszukiwanie NIE udało się dla: ${this.search.searchText}`, "error");
+                        } else {
+                            this.showMainAlert(`Wyszukiwanie zakończone dla: ${this.search.searchText} ${this.modes.apiPath}`, "info");
+                        }
+                        // Tutaj dodaj logikę po wyszukaniu, np.
+                        // przekierowanie na inną stronę, wyświetlenie wyników,
+                        // lub wywołanie API, które następnie otworzy detale zlecenia.
+
+                    } catch (error) {
+                        console.error("Błąd podczas wyszukiwania:", error);
+                        alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                async fetchDiiaDataInfo() {
+                    this.loading = true;
+                    this.response = null;
+                    this.error = null;
+                    this.base64Image = null;
+
+                    var baseUrl;
+                    //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
+                    //baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
+                    baseUrl = this.modes.apiPath;
+                    baseUrl = this.modes.baseUrl.url + this.modes.basePath.path;
+
+                    console.log('baseUrl', baseUrl);
+
+                    const params = new URLSearchParams({
+                        inn: this.search.searchText,
+                        from: this.search.selectedDateFrom,
+                        into: this.search.selectedDateInto
+                    });
+                    var url = `${baseUrl}?${params.toString()}`;
+                    //url = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/info?inn=3069610375&from=2025-03-23&into=2025-03-25'
+
+                    var request = {
+                        inn: this.search.searchText,
+                        from: this.search.selectedDateFrom,
+                        into: this.search.selectedDateInto
+                    };
+
+                    this.showMainAlert(`URL: ${baseUrl}`, "info");
+
+                    var headers = {
+                        "accept": "application/json",
+                        "Content-Type": "application/json",
+                        "Host": "nr-identification.mb.ukrgasbank.com",
+                        "Access-Control-Allow-Origin": "*",
+                        "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
+                    };
+
+                    var requestOptions = {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(request)
+                    };
+
+                    /*
+                    try {
+                        res = await post(baseUrl, requestOptions);
+                    } catch (error) {
+                    console.log(error);
+                    resolve(null);
+                    return;
+                    }
+                    console.log(res);
+                    if (res.result != "ok") {
+                        // Resolve with null to indicate this user does not exist
+                        resolve(null);
+                        return;
+                    }
+                    */
+
+
+                    try {
+                        const response = await fetch(baseUrl, requestOptions);
+                        //await fetch(url);
+                        //const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
+                        }
+                        this.response = await response.json();
+                        console.log(this.response);
+                        var text = JSON.stringify(this.response, null, 2);
+                        this.error = text.length < 220 ? text : (text.slice(0, 220) + " ...");
+                    } catch (e) {
+                        console.error('Błąd podczas pobierania danych:', e);
+                        this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
+                    } finally {
+                        this.loading = false;
+                    }
+
+                    try {
+                        headers = {
+                            "X-Api-Key": "gS4ZdhQceKREl/F4pEEVNA==CcUuQDcYZB13Q946"
+                        };
+
+                        this.loading = false;
+
+                        requestOptions = {
+                            method: "GET",
+                            headers: headers
+                        };
+                        const response = await fetch('https://api.api-ninjas.com/v1/randomimage', requestOptions);
+                        //await fetch(url);
+                        //const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
+                        }
+                        var arrayBuffer = await response.text();
+
+                        //const buffer = Buffer.from(yourArrayBuffer);
+                        //const base64String = buffer.toString('base64');
+                        //const base64String = btoa('base64');
+
+                        this.responseImage = arrayBuffer;
+                        this.base64Image = "data:image/jpeg;base64," + this.responseImage
+
+                        //this.base64Image = 'https://randomuser.me/api/portraits/men/77.jpg';
+                        console.log(this.base64Image);
+                    } catch (e) {
+                        console.error('Błąd podczas pobierania danych:', e);
+                        this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
+                    } finally {
+                        this.loading = false;
+                    }
+
+
+
+
+                },
+
+
+            }
+        })
+            .use(vuetify)
+            .mount('#app');
+    </script>
+</body>
+
+</html>
