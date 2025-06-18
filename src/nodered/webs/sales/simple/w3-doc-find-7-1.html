@@ -271,15 +271,18 @@ https://github.com/bangbang93/node-pdf-extract-image
                 </template>
             </v-img>        
         </div>        
-        </div>
-        <v-row sm="3" md="3">
-            <v-btn prepend-icon="mdi-upload" color="secondary" 
+        <div></div>
+        <v-spacer></v-spacer>
+        <div>
+        <v-row pa="6" ma="6">
+            <v-btn pa="6" ma="6" prepend-icon="mdi-upload" color="secondary" 
                 block large @click="performSearch" 
                 :loading="loading"
                 :disabled="loading || !search.searchText">
                 Przekaź dane
             </v-btn>
         <v-row>
+        </div>
     </v-col>
     </v-row>
     </v-col>
