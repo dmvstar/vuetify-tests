@@ -191,7 +191,13 @@ createApp({
                 this.loading = false;
             }
         },
-
+        clearSearchData() {
+            //this.search.searchText = null;
+            this.base64Image = null;
+            this.document.content = null;
+            this.document.image = null;
+            this.document.filename = null;
+        },
         async fetchDiiaDataInfo() {
             this.loading = true;
             this.response = null;

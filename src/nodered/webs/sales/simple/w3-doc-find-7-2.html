@@ -138,157 +138,145 @@ https://github.com/bangbang93/node-pdf-extract-image
                     closable="true" v-if="isShowMainAlert">
                     {{alertMessage}}
                 </v-alert>
-                <!--div class="centered-content"-->
-                <v-row location="center" fill-height align="center" justify="center">
-                    <v-col cols="12" sm="9" md="9">
-                        <v-row>
-                            <v-col></v-col>
-                        </v-row>
-                        <v-row>
+                <v-row>
+                    <v-col cols="12" sm="12" md="12">
+                        <v-row location="center" fill-height align="center" justify="center">
                             <v-col cols="12" sm="9" md="9">
-                                <div class="content-card">
-                                    <div class="text-right text-h6 mb-4 text-primary"
-                                        style="text-decoration: underline;">
-                                        <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
-                                    </div>
-                                    <h2 class="text-h4 mb-6 text-on-background">Wyszukiwanie Dokumentów zagubionych</h2>
-                                    <!--div class="text-subtitle-1 font-italic mb-4 text-on-background">Wpisz numer INN</div-->
-                                    <v-row class="ma-1">
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-menu v-model="search.dateFromDateMenu" :close-on-content-click="false"
-                                                :close-on-click="true">
-                                                <template v-slot:activator="{ props }">
-                                                    <v-text-field v-model="search.selectedDateFrom"
-                                                        density="comfortable" bg-color="white" label="Wpisz datę OD"
-                                                        prepend-inner-icon="mdi-calendar" clearable
-                                                        clear-icon="mdi-backspace" v-bind="props">
-                                                    </v-text-field>
-                                                </template>
-                                                <v-date-picker @update:model-value="search.dateFromDateMenu = false"
-                                                    v-model="search.selectedDateFromFull"></v-date-picker>
-                                            </v-menu>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-menu v-model="search.dateIntoDateMenu" :close-on-content-click="false"
-                                                :close-on-click="true">
-                                                <template v-slot:activator="{ props }">
-                                                    <v-text-field v-model="search.selectedDateInto"
-                                                        density="comfortable" bg-color="yellow" label="Wpisz datę DO"
-                                                        prepend-inner-icon="mdi-calendar" clearable
-                                                        clear-icon="mdi-backspace" v-bind="props">
-                                                    </v-text-field>
-                                                </template>
-                                                <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
-                                                    v-model="search.selectedDateIntoFull"></v-date-picker>
-                                            </v-menu>
-                                        </v-col>
-                                    </v-row>
-                                    <!--v-row class="ma-1">
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-text-field ref="fld_date_from" label="Wpisz datę OD" variant="solo-filled" counter
-                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
-                                                v-model="searchDateFrom" density="comfortable" bg-color="white"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-text-field ref="fld_date_into" label="Wpisz datę DO" variant="solo-filled" counter
-                                                clearable prepend-inner-icon="mdi-calendar" @keyup.enter="performSearch"
-                                                v-model="searchDateInto" density="comfortable" bg-color="white"></v-text-field>
-                                        </v-col>
-                                    </v-row-->
-                                    <v-row class="ma-1">
-                                        <v-col>
-                                            <v-text-field label="Wpisz numer INN" variant="solo-filled" counter
-                                                clearable prepend-inner-icon="mdi-magnify" @keyup.enter="performSearch"
-                                                v-model="search.searchText" density="comfortable"
-                                                bg-color="white"></v-text-field>
-                                        </v-col>
-                                    </v-row>
+                                <v-row>
+                                    <v-col></v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" sm="9" md="9" class="content-card">                                        
+                                        <v-row class="ma-1 text-right text-h6 mb-2 text-primary"
+                                            justify="end"
+                                            style="text-decoration: underline;">
+                                            <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
+                                        </v-row>
+                                        <v-row class="ma-1 text-h5 mb-2 text-on-background">Wyszukiwanie Dokumentów
+                                            zagubionych
+                                        </v-row>                                        
+                                        <v-row class="ma-1">
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-menu v-model="search.dateFromDateMenu"
+                                                    :close-on-content-click="false" :close-on-click="true">
+                                                    <template v-slot:activator="{ props }">
+                                                        <v-text-field v-model="search.selectedDateFrom"
+                                                            density="comfortable" bg-color="white" label="Wpisz datę OD"
+                                                            prepend-inner-icon="mdi-calendar" clearable
+                                                            clear-icon="mdi-backspace" v-bind="props">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker @update:model-value="search.dateFromDateMenu = false"
+                                                        v-model="search.selectedDateFromFull"></v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-menu v-model="search.dateIntoDateMenu"
+                                                    :close-on-content-click="false" :close-on-click="true">
+                                                    <template v-slot:activator="{ props }">
+                                                        <v-text-field v-model="search.selectedDateInto"
+                                                            density="comfortable" bg-color="yellow"
+                                                            label="Wpisz datę DO" prepend-inner-icon="mdi-calendar"
+                                                            clearable clear-icon="mdi-backspace" v-bind="props">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker @update:model-value="search.dateIntoDateMenu = false"
+                                                        v-model="search.selectedDateIntoFull"></v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="ma-1">
+                                            <v-col>
+                                                <v-text-field label="Wpisz numer INN" variant="solo-filled" counter
+                                                    clearable prepend-inner-icon="mdi-magnify"
+                                                    @keyup.enter="performSearch" v-model="search.searchText"
+                                                    density="comfortable" bg-color="white"></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="ma-1">
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-select label="Base URL" variant="solo-filled"
+                                                    prepend-inner-icon="mdi-web" :items="dicts.baseUrls"
+                                                    :item-props="urlProps" v-model="modes.baseUrl" density="comfortable"
+                                                    bg-color="white">
+                                                </v-select>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-select label="API" variant="solo-filled"
+                                                    prepend-inner-icon="mdi-near-me" :items="dicts.basePaths"
+                                                    :item-props="pathProps" v-model="modes.basePath"
+                                                    density="comfortable" bg-color="white">
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="ma-1 text-caption" style="color:yellow">
+                                            {{modes.apiPath}}
+                                            {{search.searchText}}
+                                        </v-row>
+                                        <v-row class="ma-1">
+                                            <v-col>
+                                                <v-btn prepend-icon="mdi-check-circle" color="primary" block large
+                                                    @click="performSearch" :loading="loading"
+                                                    :disabled="loading || !search.searchText">
+                                                    Wyszukaj
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="ma-1 text-caption" style="color:yellow">{{error}}</v-row>
 
-                                    <v-row class="ma-1">
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-select label="Base URL" variant="solo-filled"
-                                                prepend-inner-icon="mdi-web" :items="dicts.baseUrls"
-                                                :item-props="urlProps" v-model="modes.baseUrl" density="comfortable"
-                                                bg-color="white">
-                                            </v-select>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-select label="API" variant="solo-filled" prepend-inner-icon="mdi-near-me"
-                                                :items="dicts.basePaths" :item-props="pathProps"
-                                                v-model="modes.basePath" density="comfortable" bg-color="white">
-                                        </v-col>
-                                    </v-row>
+                                        <v-row
+                                            class="ma-1 content-card-bottom text-caption mt-auto pb-4 text-on-background">
+                                            <v-col cols="12" sm="4" md="4">
+                                                <v-row class="text-subtitle-1 mb-2">Kontakt / Pomoc:</v-row>
+                                                <v-row class="font-italic mb-2">
+                                                    <v-col>
+                                                        W przypadku problemów, skontaktuj się z nami:<br>
+                                                        <v-icon size="small" class="mdi-email">mdi-email</v-icon>
+                                                        support@twojafirma.pl,
+                                                        <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
+                                                        +48 123 456 789
+                                                    </v-col>
+                                                </v-row>                                                
+                                            </v-col>                                            
+                                        </v-row>
+                                    </v-col>
 
-                                    <v-row class="ma-1">
-                                        <v-col cols="12">
-                                            <div class="text-caption" style="color:yellow">
-                                                {{modes.apiPath}}
-                                                {{search.searchText}}
-                                        </v-col>
-                                    </v-row>
-                                </div>
-                        </v-row>
-
-                        <!--v-row class="ma-2" color="white--text"> {{modes.apiPath}}
-                        </v-row-->
-                        <!--div class="text-caption mb-4 text-on-background">
-                            Można podać tylko jeden np: 2221111122
-                        </div-->
-
-                        <v-row class="ma-1">
-                            <v-col>
-                                <v-btn prepend-icon="mdi-check-circle" color="primary" block large
-                                    @click="performSearch" :loading="loading" :disabled="loading || !search.searchText">
-                                    Wyszukaj
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-
-                        <div class="content-card-bottom text-caption mt-auto pb-4 text-on-background">
-                            <h4 class="text-subtitle-1 mb-2">Kontakt / Pomoc:</h4>
-                            <div class="font-italic mb-2">
-                                W przypadku problemów, skontaktuj się z nami:<br>
-                                <v-icon size="small" class="mdi-email">mdi-email</v-icon>
-                                support@twojafirma.pl,
-                                <v-icon size="small" class="mdi-phone">mdi-phone</v-icon>
-                                +48 123 456 789
-                            </div>
-                            <!--div style="color:yellow">{{error}}</div-->
-                        </div>
-                    </v-col>
-                    <v-col cols="12" sm="3" md="3">
-                        <v-row>
-                            <div class="content-card-info text-caption mt-auto pb-4 text-on-background">
-                                <h4 class="text-subtitle-1 mb-2">Result:</h4>
-                                <div style="color:yellow">{{error}}</div>
-                                <div>
-                                    <!--v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2"-->
-                                    <!--v-img src="https://randomuser.me/api/portraits/men/88.jpg" aspect-ratio="1.7" class="grey lighten-2"></v-img-->
-                                    <v-img :src="base64Image" aspect-ratio="1.7" class="grey lighten-2">
-                                        <template v-slot:placeholder>
-                                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                                <v-progress-circular v-if="loading" indeterminate
-                                                    color="grey lighten-5">
-                                                </v-progress-circular>
-                                            </v-row>
-                                        </template>
-                                    </v-img>
-                                </div>
-                                <div></div>
-                                <v-spacer></v-spacer>
-                                <div>
-                                    <v-row pa="6" ma="6">
-                                        <v-btn pa="6" ma="6" prepend-icon="mdi-upload" color="secondary" block large
-                                            @click="performSearch" :loading="loading"
-                                            :disabled="loading || !search.searchText">
-                                            Przekaź dane
-                                        </v-btn>
+                                    <v-col cols="12" sm="3" md="3" class="content-card-bottom">
+                                        <v-row class="text-on-background">Result:</v-row>
                                         <v-row>
-                                </div>
+                                            <v-img :src="base64Image" height="225" aspect-ratio="1.7"
+                                                class="grey lighten-2">
+                                                <template v-slot:placeholder>
+                                                    <v-row class="fill-height ma-0" align="center" justify="center">
+                                                        <v-progress-circular v-if="loading" indeterminate
+                                                            color="grey lighten-5">
+                                                        </v-progress-circular>
+                                                    </v-row>
+                                                </template>
+                                            </v-img>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col></v-col>
+                                        </v-row>
+                                        <v-row class="ma-2">
+                                            <v-btn pa="6" ma="6" prepend-icon="mdi-upload" color="secondary" block large
+                                                @click="performUpload" :loading="loading"
+                                                :disabled="loading || !search.searchText  || !document.content">
+                                                Przekaź dane
+                                            </v-btn>
+                                        </v-row>
+                                        <v-row class="ma-2">
+                                            <v-btn pa="6" ma="6" prepend-icon="mdi-cached" color="orange" block large
+                                                @click="clearSearchData" :loading="loading"
+                                                :disabled="loading || !search.searchText || !document.content">
+                                                Wyczyść dane
+                                            </v-btn>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
                         </v-row>
                     </v-col>
                 </v-row>
-                <!--/div-->
             </v-main>
         </v-app>
     </div>
