@@ -379,11 +379,10 @@ createApp({
                 console.log(this.response);
                 var text = JSON.stringify(this.response, null, 2);
                 console.log(text);
-
+                this.error = text.length < 220 ? text : (text.slice(0, 220) + " ...");
                 if (this.response.result == "ok") {
 
                 }
-
             } catch (e) {
                 console.error('Błąd podczas wysylania danych:', e);
                 this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
