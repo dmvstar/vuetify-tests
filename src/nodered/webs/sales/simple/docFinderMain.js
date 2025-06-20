@@ -23,7 +23,7 @@ createApp({
                 content: null,
                 image: null,
                 filename: null,
-                doctype:null,
+                doctype: null,
             }
         );
 
@@ -244,23 +244,7 @@ createApp({
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify(request)
-            };
-
-            /*
-            try {
-                res = await post(baseUrl, requestOptions);
-            } catch (error) {
-            console.log(error);
-            resolve(null);
-            return;
-            }
-            console.log(res);
-            if (res.result != "ok") {
-                // Resolve with null to indicate this user does not exist
-                resolve(null);
-                return;
-            }
-            */
+            };          
 
             var haveImage = false;
             try {
@@ -277,23 +261,25 @@ createApp({
                 this.error = text.length < 220 ? text : (text.slice(0, 220) + " ...");
 
                 if (this.response.result == "ok") {
-                    if (this.response.data[0] && this.response.data[0].image) {
-                        this.base64Image = "data:image/jpeg;base64," + this.response.data[0].image;
-                        this.document.image = this.response.data[0].image;                        
-                        haveImage = true;
-                    }
-                    if (this.response.data[0] && this.response.data[0].content) {
-                        this.document.content = this.response.data[0].content;
-                        this.document.filename = this.response.data[0].filename;
-                        this.document.doctype = this.response.data[0].doctype;
-                        this.document.result = this.response.result;
-                        this.document.inn = this.search.searchText;
+                    if (this.response.data) {
+                        if (this.response.data[0] && this.response.data[0].image) {
+                            this.base64Image = "data:image/jpeg;base64," + this.response.data[0].image;
+                            this.document.image = this.response.data[0].image;
+                            haveImage = true;
+                        }
+                        if (this.response.data[0] && this.response.data[0].content) {
+                            this.document.content = this.response.data[0].content;
+                            this.document.filename = this.response.data[0].filename;
+                            this.document.doctype = this.response.data[0].doctype;
+                            this.document.result = this.response.result;
+                            this.document.inn = this.search.searchText;
+                        }
                     }
                 }
 
             } catch (e) {
                 console.error('Błąd podczas pobierania danych:', e);
-                this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
+                this.error = `Wystąpił błąd [fetchDiiaDataInfo]: ${e.message}. Sprawdź konsolę przeglądarki.`;
             } finally {
                 this.loading = false;
             }
@@ -357,7 +343,7 @@ createApp({
                 content: this.document.content,
                 image: this.document.image,
                 filename: this.document.filename,
-                doctype : this.document.doctype,
+                doctype: this.document.doctype,
                 sendPhoto: true
             };
 

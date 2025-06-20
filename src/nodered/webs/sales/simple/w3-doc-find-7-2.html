@@ -92,10 +92,10 @@ https://github.com/bangbang93/node-pdf-extract-image
             color: white !important;
         }
 
-        /* Styl dla tekstu na tle, aby był czytelny */
+        /* Styl dla tekstu na tle, aby był czytelny font-weight: bold;*/
         .text-on-background {
             color: rgba(255, 255, 255, 0.9) !important;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);            
         }
 
         .text-on-background-gray {
@@ -105,7 +105,7 @@ https://github.com/bangbang93/node-pdf-extract-image
 
         .text-on-background-info {
             color: rgba(246, 238, 8, 0.9) !important;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);            
         }
 
         /* Ikony kontaktowe */
@@ -157,12 +157,12 @@ https://github.com/bangbang93/node-pdf-extract-image
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" sm="9" md="9" class="content-card">                                        
-                                        <v-row class="ma-1 text-right text-h6 mb-2 text-primary"
+                                        <v-row class="ma-1 text-right text-h6 text-primary"
                                             justify="end"
                                             style="text-decoration: underline;">
                                             <a href="#" target="_self" rel="noopener noreferrer">Zaloguj się</a>
                                         </v-row>
-                                        <v-row class="ma-1 text-h5 mb-2 text-on-background">Wyszukiwanie Dokumentów
+                                        <v-row class="ma-1 text-h5 text-on-background">Wyszukiwanie Dokumentów
                                             zagubionych
                                         </v-row>                                        
                                         <v-row class="ma-1">
@@ -220,8 +220,8 @@ https://github.com/bangbang93/node-pdf-extract-image
                                         </v-row>                                        
                                         <v-row class="ma-1">
                                             <v-col>
-                                                <v-btn prepend-icon="mdi-check-circle" color="primary" block large
-                                                    @click="performSearch" :loading="loading"
+                                                <v-btn prepend-icon="mdi-check-circle" color="primary" block x-large
+                                                    @click="performSearch" :loading="loading" class="py-6"
                                                     :disabled="loading || !search.searchText">
                                                     Wyszukaj
                                                 </v-btn>
