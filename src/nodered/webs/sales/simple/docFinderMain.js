@@ -23,6 +23,7 @@ createApp({
                 content: null,
                 image: null,
                 filename: null,
+                doctype:null,
             }
         );
 
@@ -162,6 +163,7 @@ createApp({
                 return;
             }
             this.loading = true;
+            this.clearSearchData();
 
             try {
                 console.log('Rozpoczynam wyszukiwanie dla:', this.modes);
@@ -197,6 +199,8 @@ createApp({
             this.document.content = null;
             this.document.image = null;
             this.document.filename = null;
+            this.document.doctype = null;
+            this.document.result = null;
         },
         async fetchDiiaDataInfo() {
             this.loading = true;
@@ -275,12 +279,14 @@ createApp({
                 if (this.response.result == "ok") {
                     if (this.response.data[0] && this.response.data[0].image) {
                         this.base64Image = "data:image/jpeg;base64," + this.response.data[0].image;
-                        this.document.image = this.response.data[0].image;
+                        this.document.image = this.response.data[0].image;                        
                         haveImage = true;
                     }
                     if (this.response.data[0] && this.response.data[0].content) {
                         this.document.content = this.response.data[0].content;
                         this.document.filename = this.response.data[0].filename;
+                        this.document.doctype = this.response.data[0].doctype;
+                        this.document.result = this.response.result;
                         this.document.inn = this.search.searchText;
                     }
                 }
@@ -351,6 +357,7 @@ createApp({
                 content: this.document.content,
                 image: this.document.image,
                 filename: this.document.filename,
+                doctype : this.document.doctype,
                 sendPhoto: true
             };
 

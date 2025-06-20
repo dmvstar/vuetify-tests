@@ -73,7 +73,7 @@ https://github.com/bangbang93/node-pdf-extract-image
             max-width: 1200px;
             width: 100%;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.411);
             /* Półprzezroczyste białe tło dla czytelności */
             border-radius: 8px;
         }
@@ -96,6 +96,16 @@ https://github.com/bangbang93/node-pdf-extract-image
         .text-on-background {
             color: rgba(255, 255, 255, 0.9) !important;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .text-on-background-gray {
+            color: rgba(68, 66, 66, 0.9) !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .text-on-background-info {
+            color: rgba(246, 238, 8, 0.9) !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         /* Ikony kontaktowe */
@@ -207,11 +217,7 @@ https://github.com/bangbang93/node-pdf-extract-image
                                                     :item-props="pathProps" v-model="modes.basePath"
                                                     density="comfortable" bg-color="white">
                                             </v-col>
-                                        </v-row>
-                                        <v-row class="ma-1 text-caption" style="color:yellow">
-                                            {{modes.apiPath}}
-                                            {{search.searchText}}
-                                        </v-row>
+                                        </v-row>                                        
                                         <v-row class="ma-1">
                                             <v-col>
                                                 <v-btn prepend-icon="mdi-check-circle" color="primary" block large
@@ -221,8 +227,14 @@ https://github.com/bangbang93/node-pdf-extract-image
                                                 </v-btn>
                                             </v-col>
                                         </v-row>
-                                        <v-row class="ma-1 text-caption" style="color:yellow">{{error}}</v-row>
-
+                                        
+                                        <v-row                                            
+                                            class="ma-1 content-card-bottom text-caption mt-auto pb-4 text-on-background-info">
+                                            {{modes.apiPath}}
+                                            {{search.searchText}}</br>
+                                            {{error}}
+                                        </v-row>
+                                        
                                         <v-row
                                             class="ma-1 content-card-bottom text-caption mt-auto pb-4 text-on-background">
                                             <v-col cols="12" sm="4" md="4">
@@ -254,8 +266,12 @@ https://github.com/bangbang93/node-pdf-extract-image
                                                 </template>
                                             </v-img>
                                         </v-row>
-                                        <v-row>
-                                            <v-col></v-col>
+                                        <v-row class="text-on-background-gray">
+                                            <v-col>
+                                                Dokument: {{document.doctype}}</br>
+                                                Plik: {{document.filename}}</br>
+                                                Result: {{document.result}}
+                                            </v-col>
                                         </v-row>
                                         <v-row class="ma-2">
                                             <v-btn pa="6" ma="6" prepend-icon="mdi-upload" color="secondary" block large
