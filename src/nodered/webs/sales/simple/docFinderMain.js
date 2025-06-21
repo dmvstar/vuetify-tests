@@ -7,7 +7,7 @@ const vuetify = createVuetify();
 createApp({
     setup() {
         //const searchText = ref('');
-        const versionInfo = ref("v.0.0.25-23");
+        const versionInfo = ref("v.0.0.25-34");
         const loading = ref(false);
         const response = ref(null);
         var responseImage = ref(null);
@@ -36,12 +36,12 @@ createApp({
                 ],
                 baseVers: ["v1","v2","v3"],
                 basePaths: [
+                    { name: "content/b64", method: "GET", path: "/api/{ver}/commons/dija/docs/content/b64" },
                     { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
                     { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
                     { name: "content/check", method: "POST", path: "/api/{ver}/commons/dija/docs/content/check" },
                     // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
                     // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
-                    { name: "content/b64", method: "GET", path: "/api/{ver}/commons/dija/docs/content/b64" },
                     { name: "content/b64", method: "POST", path: "/api/{ver}/commons/dija/docs/content/send" },
                 ]
             }
