@@ -34,14 +34,15 @@ createApp({
                     { name: "nr-clients", url: "https://nr-clients.dev.ukrgasaws.com" },
                     { name: "nr-localhost", url: "http://localhost:1880" },
                 ],
+                baseVers: ["v1","v2","v3"],
                 basePaths: [
-                    { name: "content/test", method: "GET", path: "/api/v2/commons/dija/docs/content/test" },
-                    { name: "content/info", method: "POST", path: "/api/v2/commons/dija/docs/content/info" },
-                    { name: "content/check", method: "POST", path: "/api/v2/commons/dija/docs/content/check" },
+                    { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
+                    { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
+                    { name: "content/check", method: "POST", path: "/api/{ver}/commons/dija/docs/content/check" },
                     // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
                     // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
-                    { name: "content/b64", method: "GET", path: "/api/v2/commons/dija/docs/content/b64" },
-                    { name: "content/b64", method: "POST", path: "/api/v2/commons/dija/docs/content/send" },
+                    { name: "content/b64", method: "GET", path: "/api/{ver}/commons/dija/docs/content/b64" },
+                    { name: "content/b64", method: "POST", path: "/api/{ver}/commons/dija/docs/content/send" },
                 ]
             }
         );
@@ -49,6 +50,7 @@ createApp({
             {
                 baseUrl: null,
                 basePath: null,
+                baseVer: "v3",
                 baseMethod: null,
                 apiPath: null,
             }
@@ -88,12 +90,17 @@ createApp({
         },
         "modes.baseUrl": function (newQuestion, oldQuestion) {
             if (newQuestion) {
-                this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
             }
         },
         "modes.basePath": function (newQuestion, oldQuestion) {
             if (newQuestion) {
-                this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
+            }
+        },
+        "modes.baseVer": function (newQuestion, oldQuestion) {
+            if (newQuestion) {
+                this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
             }
         },
         "search.selectedDateFromFull": function (newQuestion, oldQuestion) {
@@ -169,6 +176,7 @@ createApp({
                 console.log('Rozpoczynam wyszukiwanie dla:', this.modes);
                 console.log('Rozpoczynam wyszukiwanie dla:', this.search.searchText);
                 this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path;
+                this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
                 console.log('Rozpoczynam wyszukiwanie dla:', this.modes.apiPath);
 
                 // Symulacja opóźnienia sieciowego
@@ -211,9 +219,9 @@ createApp({
             var baseUrl;
             //baseUrl = 'https://nr-clients.dev.ukrgasaws.com/api/v2/commons/dija/docs/content/test'
             //baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
+            this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
             baseUrl = this.modes.apiPath;
-            baseUrl = this.modes.baseUrl.url + this.modes.basePath.path;
-
+            
             console.log('baseUrl', baseUrl);
 
             const params = new URLSearchParams({
@@ -335,7 +343,7 @@ createApp({
             this.error = null;
 
             var baseUrl;
-            baseUrl = this.modes.baseUrl.url + '/api/v2/commons/dija/docs/content/send';
+            baseUrl = this.modes.baseUrl.url + `/api/${this.modes.baseVer}/commons/dija/docs/content/send`;
             console.log('baseUrl', baseUrl);
 
             var request = {
@@ -385,14 +393,17 @@ createApp({
 
         },
 
+        /* NOT USE */
         async uploadDiiaPhoto() {
             this.loading = true;
             this.response = null;
             this.error = null;
             this.base64Image = null;
 
-            var baseUrl;
-            baseUrl = this.modes.baseUrl.url + this.modes.basePath.path;
+            var baseUrl;            
+            this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
+            baseUrl = this.modes.apiPath;
+
             console.log('baseUrl', baseUrl);
 
             var request = {

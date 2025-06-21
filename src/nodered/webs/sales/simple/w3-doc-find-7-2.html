@@ -104,7 +104,7 @@ https://github.com/bangbang93/node-pdf-extract-image
         }
 
         .text-on-background-info {
-            color: rgba(246, 238, 8, 0.9) !important;
+            color: rgba(16, 0, 49, 0.9) !important;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);            
         }
 
@@ -204,10 +204,17 @@ https://github.com/bangbang93/node-pdf-extract-image
                                             </v-col>
                                         </v-row>
                                         <v-row class="ma-1">
-                                            <v-col cols="12" sm="6" md="6">
+                                            <v-col cols="12" sm="4" md="4">
                                                 <v-select label="Base URL" variant="solo-filled"
                                                     prepend-inner-icon="mdi-web" :items="dicts.baseUrls"
                                                     :item-props="urlProps" v-model="modes.baseUrl" density="comfortable"
+                                                    bg-color="white">
+                                                </v-select>
+                                            </v-col>
+                                            <v-col cols="12" sm="2" md="2">
+                                                <v-select label="Ver" variant="solo-filled"
+                                                    prepend-inner-icon="mdi-share-variant" :items="dicts.baseVers"
+                                                    v-model="modes.baseVer" density="comfortable"
                                                     bg-color="white">
                                                 </v-select>
                                             </v-col>
