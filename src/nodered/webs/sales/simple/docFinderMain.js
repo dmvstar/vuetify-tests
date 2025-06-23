@@ -29,20 +29,45 @@ createApp({
 
         var dicts = ref(
             {
-                baseUrls: [
-                    { name: "nr-identification", url: "https://nr-identification.mb-stage.ukrgasbank.com" },
-                    { name: "nr-clients", url: "https://nr-clients.dev.ukrgasaws.com" },
-                    { name: "nr-localhost", url: "http://localhost:1880" },
-                ],
                 baseVers: ["v1","v2","v3"],
+                baseUrls: [
+                    { name: "nr-identification", url: "https://nr-identification.mb-stage.ukrgasbank.com", vers : ["v1","v2"] },
+                    { name: "nr-clients", url: "https://nr-clients.dev.ukrgasaws.com", vers : ["v2"] },
+                    { name: "nr-localhost", url: "http://localhost:1880", vers : ["v1","v2","v3"] },
+                ],
+                // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
+                // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
                 basePaths: [
                     { name: "content/b64", method: "GET", path: "/api/{ver}/commons/dija/docs/content/b64" },
                     { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
                     { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
                     { name: "content/check", method: "POST", path: "/api/{ver}/commons/dija/docs/content/check" },
-                    // https://nr-identification.mb.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3133702525&from=2025-05-20&into=2025-05-25&index=0
-                    // https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/get?inn=3069610375&from=2025-03-23&into=2025-03-25
                     { name: "content/b64", method: "POST", path: "/api/{ver}/commons/dija/docs/content/send" },
+                ],
+                baseApis: [
+                    { "ver" : "v1",
+                        "apis" :[
+                            { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
+                            { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
+                        ]
+                    },
+                    { "ver" : "v2",
+                        "apis" :[
+                            { name: "content/b64", method: "GET", path: "/api/{ver}/commons/dija/docs/content/b64" },
+                            { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
+                            { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
+                            { name: "content/check", method: "POST", path: "/api/{ver}/commons/dija/docs/content/check" },
+                        ]
+                    },
+                    { "ver" : "v3",
+                        "apis" :[
+                            { name: "content/b64", method: "GET", path: "/api/{ver}/commons/dija/docs/content/b64" },
+                            { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
+                            { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
+                            { name: "content/check", method: "POST", path: "/api/{ver}/commons/dija/docs/content/check" },
+                            { name: "content/b64", method: "POST", path: "/api/{ver}/commons/dija/docs/content/send" },
+                        ]
+                    }
                 ]
             }
         );
@@ -81,6 +106,7 @@ createApp({
         };
     },
     mounted() {
+        this.makeApiListByVersion(this.modes.baseVer);
         this.modes.basePath = this.dicts.basePaths[0];
         this.modes.baseUrl = this.dicts.baseUrls[0];
     },
@@ -90,6 +116,8 @@ createApp({
         },
         "modes.baseUrl": function (newQuestion, oldQuestion) {
             if (newQuestion) {
+                this.makeListVersionByUrl(this.modes.baseUrl);
+                this.makeApiListByVersion(this.modes.baseVer);
                 this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
             }
         },
@@ -100,6 +128,7 @@ createApp({
         },
         "modes.baseVer": function (newQuestion, oldQuestion) {
             if (newQuestion) {
+                this.makeApiListByVersion(this.modes.baseVer);
                 this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
             }
         },
@@ -201,15 +230,6 @@ createApp({
                 this.loading = false;
             }
         },
-        clearSearchData() {
-            //this.search.searchText = null;
-            this.base64Image = null;
-            this.document.content = null;
-            this.document.image = null;
-            this.document.filename = null;
-            this.document.doctype = null;
-            this.document.result = null;
-        },
         async fetchDiiaDataInfo() {
             this.loading = true;
             this.response = null;
@@ -221,7 +241,7 @@ createApp({
             //baseUrl = 'https://nr-identification.mb-stage.ukrgasbank.com/api/v2/commons/dija/docs/content/test';
             this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
             baseUrl = this.modes.apiPath;
-            
+
             console.log('baseUrl', baseUrl);
 
             const params = new URLSearchParams({
@@ -252,7 +272,7 @@ createApp({
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify(request)
-            };          
+            };
 
             var haveImage = false;
             try {
@@ -329,14 +349,12 @@ createApp({
                 }
             }
         },
-
         async performUpload() {
             if (!this.document.content & !this.document.image) {
                 return;
             }
             this.uploadDiiaDokument();
         },
-
         async uploadDiiaDokument() {
             this.loading = true;
             this.response = null;
@@ -392,66 +410,34 @@ createApp({
             }
 
         },
-
-        /* NOT USE */
-        async uploadDiiaPhoto() {
-            this.loading = true;
-            this.response = null;
-            this.error = null;
+        clearSearchData() {
+            //this.search.searchText = null;
             this.base64Image = null;
-
-            var baseUrl;            
-            this.modes.apiPath = this.modes.baseUrl.url + this.modes.basePath.path.replace("{ver}",this.modes.baseVer);
-            baseUrl = this.modes.apiPath;
-
-            console.log('baseUrl', baseUrl);
-
-            var request = {
-                inn: this.search.searchText,
-                from: this.search.selectedDateFrom,
-                into: this.search.selectedDateInto
-            };
-
-            this.showMainAlert(`URL: ${baseUrl}`, "info");
-
-            var headers = {
-                "accept": "application/json",
-                "Content-Type": "application/json",
-                "Host": "nr-identification.mb.ukrgasbank.com",
-                "Access-Control-Allow-Origin": "*",
-                "x-auth-token": "PTzQlEIYZVslkOyzKh41cJCfJCSuhJJ8"
-            };
-
-            var requestOptions = {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(request)
-            };
-
-            try {
-                const response = await fetch(baseUrl, requestOptions);
-                if (!response.ok) {
-                    throw new Error(`Błąd serwera: ${response.status} ${response.statusText}`);
-                }
-                this.response = await response.json();
-                console.log(this.response);
-                var text = JSON.stringify(this.response, null, 2);
-                console.log(text);
-
-                if (this.response.result == "ok") {
-
-                }
-
-            } catch (e) {
-                console.error('Błąd podczas wysylania danych:', e);
-                this.error = `Wystąpił błąd: ${e.message}. Sprawdź konsolę przeglądarki.`;
-            } finally {
-                this.loading = false;
-            }
-
+            this.document.content = null;
+            this.document.image = null;
+            this.document.filename = null;
+            this.document.doctype = null;
+            this.document.result = null;
         },
-
-
+        makeListVersionByUrl(url) {
+            console.log(1,'makeListVersionByUrl', url.url);
+            var verList = this.dicts.baseUrls.find(x => x.url == url.url);
+            console.log(2,'makeListVersionByUrl', JSON.stringify(verList));
+            if(verList) {
+                this.dicts.baseVers = verList.vers;
+                this.modes.baseVer = this.dicts.baseVers[ this.dicts.baseVers.length - 1];
+            }
+        },
+        makeApiListByVersion(version) {
+            console.log(1,'makeApiListByVersion', version);
+            var apiList = this.dicts.baseApis.find(x => x.ver == version);
+            console.log(2,'makeApiListByVersion', JSON.stringify(apiList));
+            if(apiList) {
+                this.dicts.basePaths = apiList.apis;
+            }
+            console.log(3,'makeApiListByVersion', JSON.stringify(this.dicts.basePaths));
+            return;
+        }
     }
 })
     .use(vuetify)
