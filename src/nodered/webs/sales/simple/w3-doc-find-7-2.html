@@ -237,9 +237,13 @@ https://github.com/bangbang93/node-pdf-extract-image
                                         
                                         <v-row                                            
                                             class="ma-1 content-card-bottom text-caption mt-auto pb-4 text-on-background-info">
-                                            {{modes.apiPath}}
+                                            Url: {{modes.apiPath}}
                                             {{search.searchText}}</br>
-                                            {{error}}
+                                            Response: {{error}}
+                                            <v-tooltip
+                                                    activator="parent"
+                                                    location="start">{{error}}
+                                            </v-tooltip>
                                         </v-row>
                                         
                                         <v-row
@@ -278,6 +282,10 @@ https://github.com/bangbang93/node-pdf-extract-image
                                                 Dokument: {{document.doctype}}</br>
                                                 Plik: {{document.filename}}</br>
                                                 Result: {{document.result}}
+                                                <v-tooltip
+                                                    activator="parent"
+                                                    location="start">Tooltip
+                                                </v-tooltip>
                                             </v-col>
                                         </v-row>
                                         <v-row class="ma-2">
