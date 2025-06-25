@@ -2,7 +2,8 @@
  * @WHAT JS funkcje do strony wyszukiwania dokumentów 
  * @AUTHOR StarDust
  * @DATE 2025-06-25 11:06:17 
- * @VER 0.0.
+ * @VER 0.0.25-37
+ * @INFO
 */
 // docFinderMain
 const { createApp, ref } = Vue;
