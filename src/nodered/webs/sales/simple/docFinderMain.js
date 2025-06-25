@@ -1,3 +1,9 @@
+/**
+ * @WHAT JS funkcje do strony wyszukiwania dokumentów 
+ * @AUTHOR StarDust
+ * @DATE 2025-06-25 11:06:17 
+ * @VER 0.0.
+*/
 // docFinderMain
 const { createApp, ref } = Vue;
 const { createVuetify } = Vuetify;
@@ -7,7 +13,7 @@ const vuetify = createVuetify();
 createApp({
     setup() {
         //const searchText = ref('');
-        const versionInfo = ref("v.0.0.25-34");
+        const versionInfo = ref("v.0.0.25-37");
         const loading = ref(false);
         const response = ref(null);
         var responseImage = ref(null);
@@ -65,7 +71,8 @@ createApp({
                             { name: "content/test", method: "GET", path: "/api/{ver}/commons/dija/docs/content/test" },
                             { name: "content/info", method: "POST", path: "/api/{ver}/commons/dija/docs/content/info" },
                             { name: "content/check", method: "POST", path: "/api/{ver}/commons/dija/docs/content/check" },
-                            { name: "content/b64", method: "POST", path: "/api/{ver}/commons/dija/docs/content/send" },
+                            { name: "content/send", method: "POST", path: "/api/{ver}/commons/dija/docs/content/send" },
+                            { name: "content/arc/b64", method: "POST", path: "/api/{ver}/commons/dija/docs/content/arc/b64" },
                         ]
                     }
                 ]
