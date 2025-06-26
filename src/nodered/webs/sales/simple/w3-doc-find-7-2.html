@@ -61,7 +61,7 @@ https://github.com/bangbang93/node-pdf-extract-image
         }
 
         .content-card {
-            max-width: 1200px;
+            max-width: 1600px;
             width: 100%;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.15);
@@ -81,7 +81,7 @@ https://github.com/bangbang93/node-pdf-extract-image
         .content-card-info {
             max-width: 1200px;
             width: 100%;
-            padding: 20px;
+            padding: 20px;            
             background-color: rgba(255, 255, 255, 0.25);
             /* Półprzezroczyste białe tło dla czytelności */
             border-radius: 8px;
@@ -151,12 +151,12 @@ https://github.com/bangbang93/node-pdf-extract-image
                 <v-row>
                     <v-col cols="12" sm="12" md="12">
                         <v-row location="center" fill-height align="center" justify="center">
-                            <v-col cols="12" sm="9" md="9">
+                            <v-col cols="12" sm="10" md="10">
                                 <v-row>
                                     <v-col></v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col cols="12" sm="9" md="9" class="content-card">                                        
+                                <v-row >
+                                    <v-col cols="12" sm="9" md="9" mx="5" class="content-card">                                        
                                         <v-row class="ma-1 text-right text-h6 text-primary"
                                             justify="end"
                                             style="text-decoration: underline;">
@@ -262,8 +262,7 @@ https://github.com/bangbang93/node-pdf-extract-image
                                             </v-col>                                            
                                         </v-row>
                                     </v-col>
-
-                                    <v-col cols="12" sm="3" md="3" class="content-card-info">
+                                    <v-col cols="12" sm="3" md="3" mx="5" class="content-card-info">
                                         <v-row class="text-on-background">Result:</v-row>
                                         <v-row>
                                             <v-img :src="base64Image" height="225" aspect-ratio="1.7"
