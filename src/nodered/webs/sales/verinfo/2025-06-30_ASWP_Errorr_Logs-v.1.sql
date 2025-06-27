@@ -9,6 +9,7 @@ and l.date < '2025-06-28'
 and l.source LIKE '%order set IN%'
 */
 
+/*
 SELECT  
 	a.date
 	, a.payload -> 'order' -> 'externalId' AS externalId
@@ -18,8 +19,7 @@ AND a.date > '2025-06-27'
 AND a.SOURCE LIKE '%order set IN%'
 ORDER BY ID DESC
 LIMIT 30
-
-
+*/
 
 SELECT  
 	a.date
