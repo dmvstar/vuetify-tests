@@ -206,18 +206,18 @@ VALUES( 'S', 'Обработка счетов', 'Оператор, обрабо�
 
 
 
-SELECT * FROM aswplogger a 
+SELECT  
+	a.date
+	, a.payload -> 'order' -> 'externalId' AS externalId
+FROM aswplogger a 
 WHERE 1=1
 AND a.date > '2025-06-27' 
---AND a.payload :: TEXT LIKE  '%26791560366%'
 AND a.SOURCE LIKE '%order set IN%'
 ORDER BY ID DESC
 LIMIT 30
 
 
 
-
-{"order": {"info": null, "kind": 2, "params": [{"code": "ExecName", "value": "Самбірський відділ державної виконавчої служби у Самбірському районі Львівської області Західного міжрегіонального управління Міністерства юстиції Звір Ірина Михайлівна"}, {"code": "ExecCode", "value": "68699849"}, {"code": "ExecNum", "value": "21186"}, {"code": "ExecDate", "kind": "date", "value": "2025-06-27T12:12:45Z"}, {"code": "ExecArrest", "kind": "flag", "value": 1}], "account": null, "clientId": "4354193", "execInfo": "АА Пост-а Самбірський ВДВС у Самбірському районі Львівської області Західного міжрегіонального управління Міністерства юстиції Звір Ірина Михайлівна про арешт коштів боржника від 27.06.2025 (ВП № 68699849).", "reserved": 16606.63, "userCode": null, "accountId": null, "externalId": "NR_29154759362", "properties": ["Use9", "AddNew"], "codeClosing": null, "currencyTag": "", "accountPoint": [{"account": "26201111793999.100101.980", "accountId": 71823427, "currencyTag": ""}], "confirmState": "Active", "decisionCode": "68699849", "decisionDate": "2025-06-27T12:15:09.597Z", "externalSystemId": 8001, "externalSystemCode": "NR_ASWP"}, "morderMode": "CLI"}
 
 
 
