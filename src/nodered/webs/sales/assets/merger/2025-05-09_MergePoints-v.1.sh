@@ -2,13 +2,15 @@
 CFROM="#0000FF";
 
 COLORS=('0000ff' '00ff00' 'ff0000');
-COLORS=('3b82f6' '22c55e' 'eab308' '06b6d4' 'ec4899' '6366f1' '14b8a6' 'f97316' 'a855f7' 'ff3d32' '85b2f9' '76db9b' 'f2d066' '65d2e4' 'f38ec0' '9ea0f6' '6dd3c8' 'fba86f' 'c996fa' 'ff8780');
+COLORS=('0000ff' '00ff00' 'ff0000' '3b82f6' '22c55e' 'eab308' '06b6d4' 'ec4899' '6366f1' '14b8a6' 'f97316' 'a855f7' 'ff3d32' '85b2f9' '76db9b' 'f2d066' '65d2e4' 'f38ec0' '9ea0f6' '6dd3c8' 'fba86f' 'c996fa' 'ff8780');
 
 DIR_IN="in/pins"
 RESIZE="28x"
-DIR_OUT="../../../../../../../out"
+DIR_OUT="../../../../../../../out/pin"
+DIR_OUT2="../../../../../../../out/pin2"
 
 PIESKA='p_BB.png';   PIESKA_36='p_BB.x36.png';
+PIESKA_B='p_B.png';
 PIESKA_O='p.png'; PIESKA_O_36='p.x36.png';
 
 POINTS_COLORS=('00ff00' 'ff0000' '0000ff' 'ffff00');
@@ -36,6 +38,9 @@ for point in "pt_0000ff.png"; do
         magick ${fc_POINT} -resize "${RESIZE}" ${fc_POINT_32}
     done    
 done
+
+echo "Prepare pins";
+cp ${DIR_IN}/${PIESKA} ${DIR_OUT}/${PIESKA_B}
 
 for image in "${IMAGES[@]}"; do
     f_PIESKA=$(basename ${PIESKA} .png);
@@ -68,8 +73,12 @@ for image in "${IMAGES[@]}"; do
             echo "          Add point ${point} To ${P_Image}";
             magick ${DIR_OUT}/${point} ${O_Image} -composite ${P_Image}
             #resize
-            echo "              resize "${RESIZE} to ${P_Image_32}";
-            magick ${P_Image} -resize "${RESIZE}" ${P_Image_32}
+            #echo "              resize ${RESIZE} to ${P_Image_32}";
+            magick ${P_Image} -resize "${RESIZE}" ${P_Image_32};
         done
     done
+
+
 done
+
+exit 0
