@@ -1,3 +1,5 @@
+
+/*
 select * 
 l.payload.*
 from aswplogger l
@@ -5,3 +7,14 @@ where 1=1
 and l.date > '2025-06-27'
 and l.date < '2025-06-28'
 and l.source LIKE '%order set IN%'
+*/
+
+SELECT  
+	a.date
+	, a.payload -> 'order' -> 'externalId' AS externalId
+FROM aswplogger a 
+WHERE 1=1
+AND a.date > '2025-06-27' 
+AND a.SOURCE LIKE '%order set IN%'
+ORDER BY ID DESC
+LIMIT 30
