@@ -1,8 +1,8 @@
 /**
  * @WHAT JS funkcje do strony wyszukiwania dokumentów 
  * @AUTHOR StarDust
- * @DATE 2025-06-27 11:42:54
- * @VER 0.0.25-39
+ * @DATE 2025-06-27 18:38:48
+ * @VER 0.0.25-40
  * @INFO
 */
 // docFinderMain
@@ -14,7 +14,7 @@ const vuetify = createVuetify();
 createApp({
     setup() {
         //const searchText = ref('');
-        const versionInfo = ref("v.0.0.25-39");
+        const versionInfo = ref("v.0.0.25-40");
         const loading = ref(false);
         const response = ref(null);
         var responseImage = ref(null);
@@ -296,12 +296,18 @@ createApp({
                 console.log(text);
                 this.error = text.length < 220 ? text : (text.slice(0, 220) + " ...");
 
+                console.log('[fetchDiiaDataInfo] Wyszukiwanie zakończone dla:', haveImage);                            
                 if (this.response.result == "ok") {
                     if (this.response.data) {
                         if (this.response.data[0] && this.response.data[0].image) {
                             this.base64Image = "data:image/jpeg;base64," + this.response.data[0].image;
                             this.document.image = this.response.data[0].image;
                             haveImage = true;
+                            console.log('[fetchDiiaDataInfo] Wyszukiwanie zakończone dla:', haveImage);                            
+                            if (!haveImage) {
+                                this.loadRandomImage();
+                            }
+                            
                         }
                         if (this.response.data[0] && this.response.data[0].content) {
                             this.document.content = this.response.data[0].content;
@@ -319,8 +325,10 @@ createApp({
             } finally {
                 this.loading = false;
             }
-
-            if (!haveImage) {
+            
+        },
+        async loadRandomImage() {
+            //if (!haveImage) {
                 try {
                     headers = {
                         "X-Api-Key": "gS4ZdhQceKREl/F4pEEVNA==CcUuQDcYZB13Q946"
@@ -355,7 +363,7 @@ createApp({
                 } finally {
                     this.loading = false;
                 }
-            }
+            //}
         },
         async performUpload() {
             if (!this.document.content & !this.document.image) {
