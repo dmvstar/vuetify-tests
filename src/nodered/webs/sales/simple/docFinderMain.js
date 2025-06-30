@@ -320,9 +320,10 @@ createApp({
                 }
 
             } catch (e) {
+                this.loadRandomImage();
                 console.error('Błąd podczas pobierania danych:', e);
                 this.error = `Wystąpił błąd [fetchDiiaDataInfo]: ${e.message}. Sprawdź konsolę przeglądarki.`;
-            } finally {
+            } finally {                
                 this.loading = false;
             }
             
