@@ -37,9 +37,9 @@ copy ..\pin\p_i_Bank_B-0000ff.pt-000000.png                 i_Bank_M.png
 copy ..\pin\p_i_Car_B-0000ff.pt-ff0000.png                 i_CarB_M-p_ORANGE.png
 copy ..\pin\p_i_Car_B-0000ff.pt-ff0000.png                 i_CarB_M-p_RED.png
 copy ..\pin\p_i_Car_B-0000ff.pt-000000.png                 i_CarB_M.png
-copy ..\pin\p_i_Dollar_B-00ff00.pt-ff0000.png                 i_DollarG_M-p_ORANGE.png
-copy ..\pin\p_i_Dollar_B-00ff00.pt-ff0000.png                 i_DollarG_M-p_RED.png
-copy ..\pin\p_i_Dollar_B-00ff00.pt-000000.png                 i_DollarG_M.png
+copy ..\pin\p_i_S_B-00ff00.pt-ff0000.png                 i_DollarG_M-p_ORANGE.png
+copy ..\pin\p_i_S_B-00ff00.pt-ff0000.png                 i_DollarG_M-p_RED.png
+copy ..\pin\p_i_S_B-00ff00.pt-000000.png                 i_DollarG_M.png
 copy ..\pin\p_i_Gear_B-0000ff.pt-ff0000.png                 i_GearB_M-p_ORANGE.png
 copy ..\pin\p_i_Gear_B-0000ff.pt-ff0000.png                 i_GearB_M-p_RED.png
 copy ..\pin\p_i_Gear_B-0000ff.pt-000000.png                 i_GearB_M.png
