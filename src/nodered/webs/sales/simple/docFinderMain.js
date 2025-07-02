@@ -1,8 +1,8 @@
 /**
  * @WHAT JS funkcje do strony wyszukiwania dokumentów 
  * @AUTHOR StarDust
- * @DATE 2025-06-27 18:38:48
- * @VER 0.0.25-40
+ * @DATE 2025-07-02 10:14:20
+ * @VER 0.0.25-41
  * @INFO
 */
 // docFinderMain
@@ -14,7 +14,7 @@ const vuetify = createVuetify();
 createApp({
     setup() {
         //const searchText = ref('');
-        const versionInfo = ref("v.0.0.25-40");
+        const versionInfo = ref("v.0.0.25-41");
         const loading = ref(false);
         const response = ref(null);
         var responseImage = ref(null);
