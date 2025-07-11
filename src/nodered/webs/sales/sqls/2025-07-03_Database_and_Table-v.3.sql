@@ -165,3 +165,20 @@ CREATE TRIGGER trg_dictsProductMapping_dateModified
 BEFORE UPDATE ON dictsProductMapping
 FOR EACH ROW
 EXECUTE FUNCTION set_date_modified();
+
+
+/* EXAMPLES */
+
+INSERT INTO public.appsdecisions(
+    applicationid, applicationstatus, statecode, absprodcode, decissiondate)
+VALUES
+    (123, 'MD Approved', '1234567890', '10.2.3.55.76.', '2025-07-07'),
+    (124, 'MD Pending', '0987654321', '10.2.3.55.77.', '2025-07-08'),
+    (125, 'MD Rejected', '1122334455', '10.2.3.55.78.', '2025-07-09'),
+    (127, 'MD Approved', '1234567897', '10.2.3.55.76.', '2025-07-07'),
+    (128, 'MD Pending',  '0987654328', '10.2.3.55.77.', '2025-07-08'),
+    (129, 'MD Rejected', '1122334459', '10.2.3.55.78.', '2025-07-09');
+
+SELECT * FROM public.appsdecisions
+
+UPDATE public.appsdecisions SET applicationstatus = 'MD Approved' WHERE id = 2
