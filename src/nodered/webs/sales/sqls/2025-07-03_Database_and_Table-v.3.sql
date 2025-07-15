@@ -63,7 +63,7 @@ CREATE TABLE
       , clientId INT NULL
       , programTypeId INT NULL
       , absProdCode VARCHAR(64) NOT NULL
-      , docUpdated VARCHAR(64) NULL
+      , docUpdated DATE --VARCHAR(64) NULL
       , COMMENT VARCHAR(128) NULL
       , history VARCHAR(128) NULL
 
@@ -181,4 +181,15 @@ VALUES
 
 SELECT * FROM public.appsdecisions
 
-UPDATE public.appsdecisions SET applicationstatus = 'MD Approved' WHERE id = 2
+UPDATE public.appsdecisions SET applicationstatus = 'MD Approved' WHERE id = 2;
+
+
+INSERT INTO public.appserrors(
+	applicationid, decisionresult, recordstatus, statecode, clientid, programtypeid, absprodcode, docupdated, comment, history)
+	VALUES 
+		(123, 'Result', 'Status MB', '1234567890', 2445666, 334, '10.2.25.99.', '2025-07-20', 'Comment', 'Last history'),
+		(124, 'Result', 'Status MB', '1234567890', 2445666, 334, '10.2.25.99.', '2025-07-20', 'Comment', 'Last history'),
+		(125, 'Result', 'Status MB', '1234567890', 2445666, 334, '10.2.25.99.', '2025-07-20', 'Comment', 'Last history'),
+		(126, 'Result', 'Status MB', '1234567890', 2445666, 334, '10.2.25.99.', '2025-07-20', 'Comment', 'Last history');
+
+select * from public.appserrors
