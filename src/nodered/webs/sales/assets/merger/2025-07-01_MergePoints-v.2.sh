@@ -33,7 +33,7 @@ for point in "pt_0000ff.png"; do
     f_POINT=$(basename ${point} .png);    
     for color in "${POINTS_COLORS[@]}"; do
         fc_POINT="${DIR_OUT}/pt-${color}.png"
-        fc_POINT_32="${DIR_OUT}/pt-${color}.32.png"
+        fc_POINT_32="${DIR_OUT}/pt-${color}.x32.png"
         echo "  Prepare point ${fc_POINT}";
         magick ${DIR_IN}/points/${point} -fill "#${color}" -opaque "${CFROM}" ${fc_POINT}
         magick ${fc_POINT} -resize "${RESIZE_P}" ${fc_POINT_32}
