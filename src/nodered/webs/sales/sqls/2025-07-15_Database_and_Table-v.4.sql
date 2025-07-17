@@ -75,7 +75,7 @@ CREATE TABLE
       , absProdCode VARCHAR(64) NOT NULL
       , docUpdated DATE --VARCHAR(64) NULL
       , comment VARCHAR(128) NULL
-      , history VARCHAR(128) NULL -- TRUE at end of work
+      , recordInfo VARCHAR(128) NULL -- Coś tam
 
       , status INT DEFAULT 1
       , PRIMARY KEY (id)
