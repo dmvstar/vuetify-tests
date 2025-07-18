@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuetify 3 + Vue-Leaflet CDN Example</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
+
+    <style>
+        html, body, #app {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent body scroll if app takes full height */
+        }
+        .v-main {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .map-container {
+            flex-grow: 1; /* Make the map take remaining space */
+            height: 0; /* Important for flex-grow to work correctly */
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-app-bar app color="primary" dark>
+                <v-app-bar-title>Vuetify 3 & Vue-Leaflet CDN Example</v-app-bar-title>
+            </v-app-bar>
+
+            <v-main>
+                <v-container fluid class="fill-height pa-0">
+                    <v-row no-gutters class="fill-height">
+                        <v-col cols="12" class="d-flex flex-column">
+                            <v-card class="ma-4 pa-2">
+                                <v-card-title>Interactive Map</v-card-title>
+                                <v-card-text>
+                                    <p>Click on the map to add a marker!</p>
+                                    <p v-if="clickedCoords">Last Clicked: Lat: {{ clickedCoords[0].toFixed(4) }}, Lng: {{ clickedCoords[1].toFixed(4) }}</p>
+                                </v-card-text>
+                            </v-card>
+                            <div class="map-container">
+                                <l-map
+                                    v-model:zoom="zoom"
+                                    :center="center"
+                                    :use-global-leaflet="false"
+                                    @click="addMarker"
+                                    style="height: 100%; width: 100%;"
+                                >
+                                    <l-tile-layer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                    ></l-tile-layer>
+                                    <l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker"></l-marker>
+                                </l-map>
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+        const { createVuetify } = Vuetify;
+        const { LMap, LTileLayer, LMarker } = VueLeaflet;
+
+        const vuetify = createVuetify();
+
+        createApp({
+            components: {
+                LMap,
+                LTileLayer,
+                LMarker
+            },
+            setup() {
+                const zoom = ref(13);
+                const center = ref([52.2297, 21.0122]); // Centered around Warsaw, Poland
+                const markers = ref([]);
+                const clickedCoords = ref(null);
+
+                const addMarker = (event) => {
+                    const latlng = event.latlng;
+                    markers.value.push([latlng.lat, latlng.lng]);
+                    clickedCoords.value = [latlng.lat, latlng.lng];
+                };
+
+                return {
+                    zoom,
+                    center,
+                    markers,
+                    clickedCoords,
+                    addMarker
+                };
+            }
+        })
+        .use(vuetify)
+        .mount('#app');
+    </script>
+</body>
+</html>
