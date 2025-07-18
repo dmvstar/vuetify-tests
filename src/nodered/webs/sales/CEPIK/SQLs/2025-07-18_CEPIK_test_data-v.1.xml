@@ -1,0 +1,251 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:upr="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <upr:DaneDokumentuRequest>
+         <imiePierwsze>AIGERIM</imiePierwsze>
+         <nazwisko>SZCZYPEK</nazwisko>
+         <seriaNumerBlankietuDruku>RZ000266</seriaNumerBlankietuDruku>
+      </upr:DaneDokumentuRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns3:DaneDokumentuResponse xmlns:ns2="http://exceptions.api.cepik.coi.gov.pl" xmlns:ns3="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+         <dokumentPotwierdzajacyUprawnienia>
+            <typDokumentu>
+               <kod>DICT155_PJ</kod>
+               <wartosc>Prawo jazdy</wartosc>
+            </typDokumentu>
+            <seriaNumerBlankietuDruku>RZ000266</seriaNumerBlankietuDruku>
+            <organWydajacyDokument>
+               <kod>DICT061_0219</kod>
+               <wartosc>STAROSTWO POWIATOWE W ŚWIDNICY</wartosc>
+            </organWydajacyDokument>
+            <stanDokumentu>
+               <stanDokumentu>
+                  <kod>DICT003_WYD</kod>
+                  <wartosc>Wydany</wartosc>
+               </stanDokumentu>
+            </stanDokumentu>
+            <daneUprawnieniaKategorii>
+               <kategoria>B</kategoria>
+            </daneUprawnieniaKategorii>
+            <daneUprawnieniaKategorii>
+               <kategoria>B1</kategoria>
+            </daneUprawnieniaKategorii>
+         </dokumentPotwierdzajacyUprawnienia>
+      </ns3:DaneDokumentuResponse>
+   </soap:Body>
+</soap:Envelope>
+
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:upr="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <upr:DaneDokumentuRequest>
+         <imiePierwsze>Jan</imiePierwsze>
+         <nazwisko>Kowalski</nazwisko>
+         <seriaNumerBlankietuDruku>A123456</seriaNumerBlankietuDruku>
+      </upr:DaneDokumentuRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <soap:Fault>
+         <faultcode>soap:Server</faultcode>
+         <faultstring>FaultId: 20200326:141908_UKG_6983b86d-aefe-4bc5-82fa-51789314abcf, Kody: DICT501_UKG_1, Komunikaty: Nie znaleziono dokumentu</faultstring>
+         <detail>
+            <ns2:cepikException xmlns:ns3="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl" xmlns:ns2="http://exceptions.api.cepik.coi.gov.pl">
+               <komunikaty>
+                  <typ>ERROR</typ>
+                  <kod>DICT501_UKG_1</kod>
+                  <komunikat>Nie znaleziono dokumentu</komunikat>
+                  <identyfikatorBledu>20200326:141908_UKG_6983b86d-aefe-4bc5-82fa-51789314abcf</identyfikatorBledu>
+               </komunikaty>
+            </ns2:cepikException>
+         </detail>
+      </soap:Fault>
+   </soap:Body>
+</soap:Envelope>
+
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:upr="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <upr:DaneDokumentuRequest>
+         <imiePierwsze>KOPEL</imiePierwsze>
+         <nazwisko>LECHEL</nazwisko>
+         <seriaNumerBlankietuDruku>A2121401</seriaNumerBlankietuDruku>
+      </upr:DaneDokumentuRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns3:DaneDokumentuResponse xmlns:ns2="http://exceptions.api.cepik.coi.gov.pl" xmlns:ns3="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+         <dokumentPotwierdzajacyUprawnienia>
+            <typDokumentu>
+               <kod>DICT155_PJ</kod>
+               <wartosc>Prawo jazdy</wartosc>
+            </typDokumentu>
+            <seriaNumerBlankietuDruku>A2121401</seriaNumerBlankietuDruku>
+            <organWydajacyDokument>
+               <kod>DICT061_0415</kod>
+               <wartosc>STAROSTWO POWIATOWE W TORUNIU</wartosc>
+            </organWydajacyDokument>
+            <dataWaznosci>2032-09-02+02:00</dataWaznosci>
+            <stanDokumentu>
+               <stanDokumentu>
+                  <kod>DICT003_WYD</kod>
+                  <wartosc>Wydany</wartosc>
+               </stanDokumentu>
+            </stanDokumentu>
+            <daneUprawnieniaKategorii>
+               <kategoria>B</kategoria>
+               <dataWaznosci>2023-09-02+02:00</dataWaznosci>
+            </daneUprawnieniaKategorii>
+         </dokumentPotwierdzajacyUprawnienia>
+      </ns3:DaneDokumentuResponse>
+   </soap:Body>
+</soap:Envelope>
+
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:upr="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <upr:DaneDokumentuRequest>
+         <imiePierwsze>VITALI</imiePierwsze>
+         <nazwisko>BAZUN</nazwisko>
+         <seriaNumerBlankietuDruku>D4027460</seriaNumerBlankietuDruku>
+      </upr:DaneDokumentuRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns3:DaneDokumentuResponse xmlns:ns2="http://exceptions.api.cepik.coi.gov.pl" xmlns:ns3="http://uprawnieniakierowcow-przewoznicy.ul.api.cepik.coi.gov.pl">
+         <dokumentPotwierdzajacyUprawnienia>
+            <typDokumentu>
+               <kod>DICT155_PJ</kod>
+               <wartosc>Prawo jazdy</wartosc>
+            </typDokumentu>
+            <seriaNumerBlankietuDruku>D4027460</seriaNumerBlankietuDruku>
+            <organWydajacyDokument>
+               <kod>DICT061_9999999</kod>
+               <wartosc>STAROSTA KRAKOWSKI 2</wartosc>
+            </organWydajacyDokument>
+            <stanDokumentu>
+               <stanDokumentu>
+                  <kod>DICT003_ZT_OKRD</kod>
+                  <wartosc>Zatrzymany przez OKRD (PJ, PT)</wartosc>
+               </stanDokumentu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+               <powodZmianyStanu>
+                  <kod>DICT097_INNP</kod>
+                  <wartosc>Upłynął termin ważności dokumentu;Podejrzenie, że kierowca popełnił przestępstwo lub wykroczenie, za które może być orzeczony zakaz prowadzenia pojazdów</wartosc>
+               </powodZmianyStanu>
+            </stanDokumentu>
+            <daneUprawnieniaKategorii>
+               <kategoria>B</kategoria>
+            </daneUprawnieniaKategorii>
+         </dokumentPotwierdzajacyUprawnienia>
+      </ns3:DaneDokumentuResponse>
+   </soap:Body>
+</soap:Envelope>

@@ -1,0 +1,55 @@
+## **Procedura Opracowywania Odpowiedzi z Serwisu CEPIK**
+
+Po wysłaniu zapytania do serwisu CEPIK i otrzymaniu odpowiedzi, system powinien przetworzyć ją zgodnie z poniższymi krokami:
+
+
+### **1. Weryfikacja Statusu Odpowiedzi (HTTP Status Code)**
+
+
+
+* **Jeśli otrzymano <code>statusCode = 200</code> (OK):** Kontynuuj przetwarzanie odpowiedzi, analizując jej zawartość XML (treść SOAP Body).
+
+
+### **2. Analiza Zawartości Treści (SOAP Body)**
+
+
+
+* **Jeśli w <code>soap:Body</code> wykryto <code>soap:Fault</code>:** Oznacza to błąd po stronie serwisu CEPIK lub błąd w zapytaniu. Należy **zapisać szczegóły tego błędu** do logów systemu lub dedykowanej tabeli błędów, w celu dalszej analizy i potencjalnego powiadomienia administratora.
+    * dodać wpis do WebAPiLog 
+        * WebAPILogDate = now()
+        * WebAPIMethod = ‘POST’ 
+        * WebAPIRoute = ‘/cepik/api/ul/UprawnieniaKierowcowPrzewoznicyService’
+        * WebAPIName = ‘CEPIKService’
+        * TableName = ‘Driver’
+        * ObjectID = Driver.DriverId
+        * StatusNR = statusCode
+        * StatusDetails = Odpowiedź XML
+    * dodać wpis do DriverControlLicence
+        * DriverId = Driver.DriverId
+        * LicenceNumber = Driver.LicenceNumber
+        * Message = 
+            * <soap:Body>.<soap:Fault>.<detail>
+* **Jeśli w <code>soap:Body</code> wykryto <code>ns3:DaneDokumentuResponse</code>:** Oznacza to pomyślne otrzymanie danych. Należy **zapisać otrzymane dane** do odpowiednich tabel w bazie danych, aktualizując informacje o kierowcy lub jego uprawnieniach.
+    * dodać wpis do WebAPiLog 
+        * WebAPILogDate = now()
+        * WebAPIMethod = ‘POST’ 
+        * WebAPIRoute = ‘/cepik/api/ul/UprawnieniaKierowcowPrzewoznicyService’
+        * WebAPIName = ‘CEPIKService’
+        * TableName = ‘Driver’
+        * ObjectID = Driver.DriverId
+        * StatusNR = statusCode
+        * StatusDetails = Odpowiedź XML
+    * dodać lub zmodyfikować wpis do DriverControlLicence
+        * DriverId = Driver.DriverId
+        * ControlDate  = now()
+        * LicenceNumber = <dokumentPotwierdzajacyUprawnienia>.<seriaNumerBlankietuDruku>
+        * DocumentType = <dokumentPotwierdzajacyUprawnienia>.<typDokumentu>.<wartosc>
+        * ExpiredDate = <dokumentPotwierdzajacyUprawnienia>.<dataWaznosci>
+        * Message = 
+            * <soap:Body>.<organWydajacyDokument>
+            * <stanDokumentu>.<stanDokumentu>
+            * <stanDokumentu>.<powodZmianyStanu>
+    * dodać lub zmodyfikować wpis do DriverControlCategories za kluczem DriverControlLicenceId+DriverLicenceTypeID 
+        * DriverControlLicenceId
+        * DriverLicenceTypeID
+        * Categorie = <daneUprawnieniaKategorii>.<kategoria>
