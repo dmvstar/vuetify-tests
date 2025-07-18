@@ -52,7 +52,7 @@ for image in "${IMAGES[@]}"; do
     N_Image="${DIR_OUT}/p_${f_image}.pt-000000.png";
 
     echo "Prepare ${N_Image}";    
-    #Add icon
+    #Add icon -gravity center
     magick ${DIR_IN}/${PIESKA} ${DIR_IN}/${image} -composite ${N_Image}
 
     for color in "${COLORS[@]}"; do
