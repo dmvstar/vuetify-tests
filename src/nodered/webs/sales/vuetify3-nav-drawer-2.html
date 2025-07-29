@@ -108,12 +108,37 @@
 
                 <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
 
-                <v-btn >
-                    <img src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg"
-                        style="width: 24px; height: 24px; margin-right: 8px; border-radius: 50%;"
-                    >
-                </v-btn>
-                <v-btn icon="mdi-account-star" color="green" variant="text"></v-btn>
+                <v-menu transition="scale-transition">
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" rounded="xl">
+                            <img src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg"
+                                style="width: 28x; height: 28px; margin-right: 0px; border-radius: 50%;">
+                        </v-btn>
+                    </template>
+                    <v-list density="compact">
+                        <v-list-subheader>Language</v-list-subheader>
+                        <v-list-item title="PL" subtitle="Polish" value="pl"
+                            prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg">
+                        </v-list-item>
+                        <v-list-item title="EN" subtitle="English" value="en"
+                            prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg">
+                        </v-list-item>
+                        <v-list-item title="DE" subtitle="Deuchland" value="de"
+                            prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg">
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+
+                <v-menu transition="scale-transition">
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" icon="mdi-account-star" color="green"></v-btn>
+                    </template>
+                    <v-list density="compact">
+                        <v-list-item prepend-icon="mdi-account-settings" title="Informations" value="settings"></v-list-item>
+                        <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
+                    </v-list>
+                </v-menu>
+
             </v-app-bar>
             <v-navigation-drawer temporary permanent expand-on-hover rall :width="325" :rail="mainDrawerRail"
                 v-model="mainDrawer">
@@ -192,9 +217,8 @@
                                         clear-icon="mdi-backspace" v-bind="props">
                                     </v-text-field>
                                 </template>
-                                <v-date-picker 
-                                @update:model-value="searchData.dateFromDateMenu = false"
-                                v-model="searchData.selectedDateFromFull"></v-date-picker>
+                                <v-date-picker @update:model-value="searchData.dateFromDateMenu = false"
+                                    v-model="searchData.selectedDateFromFull"></v-date-picker>
                             </v-menu>
                         </v-col>
                     </v-row>
