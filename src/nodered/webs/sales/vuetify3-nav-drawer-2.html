@@ -107,6 +107,13 @@
 
 
                 <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
+
+                <v-btn >
+                    <img src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg"
+                        style="width: 24px; height: 24px; margin-right: 8px; border-radius: 50%;"
+                    >
+                </v-btn>
+                <v-btn icon="mdi-account-star" color="green" variant="text"></v-btn>
             </v-app-bar>
             <v-navigation-drawer temporary permanent expand-on-hover rall :width="325" :rail="mainDrawerRail"
                 v-model="mainDrawer">
@@ -1160,7 +1167,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.51 (2025-04-23 10:20:43)";
+                const appVersion = "v. 0.0.52 (2025-07-29 16:11:04)";
                 const appAuthor = "StarDust";
                 return {
                     isDarkTheme
