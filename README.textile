@@ -1,4 +1,4 @@
-# vuetify-tests
+h1(#vuetify-tests). vuetify-tests
 
 * Some examples for VUE and Vuetify framework
 * Assets for Vuetify
