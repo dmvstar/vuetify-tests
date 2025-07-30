@@ -111,21 +111,29 @@
                 <v-menu transition="scale-transition">
                     <template v-slot:activator="{ props }">
                         <v-btn v-bind="props" rounded="xl">
-                            <img src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg"
+                            <img :src="menuActions.languageSelectedUrl"    
                                 style="width: 28x; height: 28px; margin-right: 0px; border-radius: 50%;">
                         </v-btn>
                     </template>
                     <v-list density="compact">
                         <v-list-subheader>Language</v-list-subheader>
-                        <v-list-item title="PL" subtitle="Polish" value="pl"
+                        <!--v-list-item title="PL" subtitle="Polish" value="pl"
                             prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg">
                         </v-list-item>
                         <v-list-item title="EN" subtitle="English" value="en"
                             prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg">
                         </v-list-item>
-                        <v-list-item title="DE" subtitle="Deuchland" value="de"
+                        <v-list-item title="DE" subtitle="Germany" value="de"
                             prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg">
+                        </v-list-item-->
+                        <v-list-item v-for="item in menuActions.languages" :key="item.value"
+                                :prepend-avatar="item.url" 
+                                :title="item.title" 
+                                :subtitle="item.subtitle" :value="item.value"
+                                @click="onLanguageMenuClick(item)">
                         </v-list-item>
+
+
                     </v-list>
                 </v-menu>
 
@@ -135,6 +143,7 @@
                     </template>
                     <v-list density="compact">
                         <v-list-item prepend-icon="mdi-account-settings" title="Informations" value="settings"></v-list-item>
+                        <v-list-item prepend-icon="mdi-account-key" title="Password" value="password"></v-list-item>
                         <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
                     </v-list>
                 </v-menu>
@@ -795,6 +804,12 @@
                     return objects;
                 },
 
+                onLanguageMenuClick(item) {
+                    console.log(`[onLanguageMenuClick] ${JSON.stringify(item)}`);
+                    this.menuActions.languageSelected = item.value;
+                    this.menuActions.languageSelectedUrl = item.url;
+                },
+
                 onOperationClick(event, index) {
                     console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
                     this.menuActions.operationSelected = event;
@@ -1171,6 +1186,14 @@
                         ["Print Barcode", "mdi-barcode", "print_bar"],
                         ["Print QRCode", "mdi-qrcode", "print_qr"],
                         ["Download CSV", "mdi-download", "download_csv"]
+                    ],
+                    languageSelected : 'pl',
+                    languageSelectedUrl : "https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg",
+                    languages : [
+                        { value: 'pl', title: 'PL', subtitle: 'Polish', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg' },
+                        { value: 'en', title: 'EN', subtitle: 'English', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg' },
+                        { value: 'de', title: 'DE', subtitle: 'Germany', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg' },
+                        { value: 'cz', title: 'CZ', subtitle: 'Czechia', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/cz.svg' },                         
                     ]
 
                 };
@@ -1191,7 +1214,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.52 (2025-07-29 16:11:04)";
+                const appVersion = "v. 0.0.56 (2025-07-30 09:13:58)";
                 const appAuthor = "StarDust";
                 return {
                     isDarkTheme
