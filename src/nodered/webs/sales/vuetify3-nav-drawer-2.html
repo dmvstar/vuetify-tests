@@ -111,7 +111,7 @@
                 <v-menu transition="scale-transition">
                     <template v-slot:activator="{ props }">
                         <v-btn v-bind="props" rounded="xl">
-                            <img :src="menuActions.languageSelectedUrl"    
+                            <img :src="menuActions.languageSelectedUrl"
                                 style="width: 28x; height: 28px; margin-right: 0px; border-radius: 50%;">
                         </v-btn>
                     </template>
@@ -126,11 +126,9 @@
                         <v-list-item title="DE" subtitle="Germany" value="de"
                             prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg">
                         </v-list-item-->
-                        <v-list-item v-for="item in menuActions.languages" :key="item.value"
-                                :prepend-avatar="item.url" 
-                                :title="item.title" 
-                                :subtitle="item.subtitle" :value="item.value"
-                                @click="onLanguageMenuClick(item)">
+                        <v-list-item v-for="item in menuActions.languages" :key="item.value" :prepend-avatar="item.url"
+                            :title="item.title" :subtitle="item.subtitle" :value="item.value"
+                            @click="onLanguageMenuClick(item)">
                         </v-list-item>
 
 
@@ -142,7 +140,8 @@
                         <v-btn v-bind="props" icon="mdi-account-star" color="green"></v-btn>
                     </template>
                     <v-list density="compact">
-                        <v-list-item prepend-icon="mdi-account-settings" title="Informations" value="settings"></v-list-item>
+                        <v-list-item prepend-icon="mdi-account-settings" title="Informations"
+                            value="settings"></v-list-item>
                         <v-list-item prepend-icon="mdi-account-key" title="Password" value="password"></v-list-item>
                         <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
                     </v-list>
@@ -350,11 +349,17 @@
                         <v-col cols="12" sm="12" ma="10">
 
                             <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
-                                density="comfortable" v-model="dessertsData.selectedItems"
+                                density="comfortable" v-model="dessertsData.selectedItems" show-expand
                                 :items="dessertsData.dessertsItems" item-value="name" item-key="name"
                                 :search="searchData.searchText" class="elevation-1" sort-asc-icon="mdi-sort-ascending"
                                 sort-desc-icon="mdi-sort-descending" @click:row="handleDessertsDataSingleClick"
                                 @dblclick:row="handleDessertsDataDoubleClick" show-select class="elevation-1">
+
+                                <template v-slot:expanded-item="{ headers, item }">
+                                    <td :colspan="headers.length">
+                                        More info about {{ item.name }}
+                                    </td>
+                                </template>
 
                                 <!--HEADER SLOTS-->
                                 <template v-for="header in dessertsData.dessertsHeaders"
@@ -866,6 +871,17 @@
                     var lastClickTime = this.dessertsData.lastClickTime;
                     const doubleClickThreshold = 500; // Adjust this value (milliseconds)
                     console.log(`1 [handleDessertsDataSingleClick] lastClickTime ${lastClickTime}=${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
+
+                    /*
+                    if (event.isExpanded) {
+                        const indexExpanded = this.dessertsHeaders.expanded.findIndex(i => i === item);
+                        this.dessertsHeaders.expanded.splice(indexExpanded, 1)
+                    } else {
+                        this.dessertsHeaders.expanded.push(item);
+                    }
+                    */    
+
+
                     //lastClickTime > 0 &&
                     /*
                     if (lastClickTime == 0) {
@@ -1057,6 +1073,7 @@
                             { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '15%' },
                             { title: 'Operations', subtitle: "Operation for item", hint: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
+                        expanded:[],
                         selectedRows: [],
                         selectedItems: [],
                         dessertsItems: [
@@ -1187,13 +1204,13 @@
                         ["Print QRCode", "mdi-qrcode", "print_qr"],
                         ["Download CSV", "mdi-download", "download_csv"]
                     ],
-                    languageSelected : 'pl',
-                    languageSelectedUrl : "https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg",
-                    languages : [
-                        { value: 'pl', title: 'PL', subtitle: 'Polish', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg' },
-                        { value: 'en', title: 'EN', subtitle: 'English', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg' },
-                        { value: 'de', title: 'DE', subtitle: 'Germany', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg' },
-                        { value: 'cz', title: 'CZ', subtitle: 'Czechia', url : 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/cz.svg' },                         
+                    languageSelected: 'pl',
+                    languageSelectedUrl: "https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg",
+                    languages: [
+                        { value: 'pl', title: 'PL', subtitle: 'Polish', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg' },
+                        { value: 'en', title: 'EN', subtitle: 'English', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg' },
+                        { value: 'de', title: 'DE', subtitle: 'Germany', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg' },
+                        { value: 'cz', title: 'CZ', subtitle: 'Czechia', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/cz.svg' },
                     ]
 
                 };
