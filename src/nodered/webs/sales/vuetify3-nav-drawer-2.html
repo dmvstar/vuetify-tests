@@ -357,11 +357,15 @@
 
                                 <template v-slot:expanded-row="{ columns, item }">
                                     <tr>
-                                        <td :colspan="columns.length" class="py-2">
-                                            <v-sheet rounded="lg" border>                                                
+                                        <td :colspan="columns.length" class="ma-4">
+                                            <v-sheet rounded="lg" border>                                            
+                                               {{ item.name }}
+
+                                                    
+                                             
+                                            </v-sheet>
+                                            <!--
                                                 {{ item.name }}
-                                            </v-sheet>                                            
-                                            <!--v-sheet rounded="lg" border>
                                                 <v-table density="compact">
                                                     <tbody class="bg-surface-light">
                                                         <tr>
@@ -378,7 +382,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </v-table>
-                                            </v-sheet-->
+                                                -->
                                         </td>
                                     </tr>
                                 </template>
