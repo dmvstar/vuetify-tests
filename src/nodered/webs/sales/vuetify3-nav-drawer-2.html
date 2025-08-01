@@ -355,10 +355,32 @@
                                 sort-desc-icon="mdi-sort-descending" @click:row="handleDessertsDataSingleClick"
                                 @dblclick:row="handleDessertsDataDoubleClick" show-select class="elevation-1">
 
-                                <template v-slot:expanded-item="{ headers, item }">
-                                    <td :colspan="headers.length">
-                                        More info about {{ item.name }}
-                                    </td>
+                                <template v-slot:expanded-row="{ columns, item }">
+                                    <tr>
+                                        <td :colspan="columns.length" class="py-2">
+                                            <v-sheet rounded="lg" border>                                                
+                                                {{ item.name }}
+                                            </v-sheet>                                            
+                                            <!--v-sheet rounded="lg" border>
+                                                <v-table density="compact">
+                                                    <tbody class="bg-surface-light">
+                                                        <tr>
+                                                            <th>Rating</th>
+                                                            <th>Synopsis</th>
+                                                            <th>Cast</th>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody class="bg-surface-light">
+                                                        <tr>
+                                                            <td class="py-2">{{ item.name }}</td>
+                                                            <td class="py-2">{{ item.name }}</td>
+                                                            <td class="py-2">{{ item.name }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </v-table>
+                                            </v-sheet-->
+                                        </td>
+                                    </tr>
                                 </template>
 
                                 <!--HEADER SLOTS-->
@@ -879,7 +901,7 @@
                     } else {
                         this.dessertsHeaders.expanded.push(item);
                     }
-                    */    
+                    */
 
 
                     //lastClickTime > 0 &&
@@ -1073,7 +1095,7 @@
                             { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '15%' },
                             { title: 'Operations', subtitle: "Operation for item", hint: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
-                        expanded:[],
+                        expanded: [],
                         selectedRows: [],
                         selectedItems: [],
                         dessertsItems: [
