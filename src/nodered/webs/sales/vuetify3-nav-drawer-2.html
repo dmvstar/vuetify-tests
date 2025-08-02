@@ -356,15 +356,33 @@
                                 @dblclick:row="handleDessertsDataDoubleClick" show-select class="elevation-1">
 
                                 <template v-slot:expanded-row="{ columns, item }">
+                                    <td :colspan="columns.length" class="ma-4">
+                                    <v-sheet
+                                        rounded="lg" 
+                                        class="d-flex align-center justify-center flex-wrap text-center mx-auto px-4"
+                                        elevation="4">
+                                        <div>
+                                            <h2 class="text-h4 font-weight-black text-orange">Congratulations!</h2>
+                                            <div class="text-h5 font-weight-medium mb-2">
+                                                Item: {{ item.name }}
+                                            </div>
+                                            <p class="text-body-2 mb-4">
+                                                Please head over to your inbox/spam or others folder to find our
+                                                verification email.
+                                            </p>
+                                        </div>
+                                    </v-sheet>
+                                    </td>
+                                </template>
+
+                                <!--template v-slot:expanded-row="{ columns, item }">
                                     <tr>
                                         <td :colspan="columns.length" class="ma-4">
-                                            <v-sheet rounded="lg" border>                                            
-                                               {{ item.name }}
+                                            <v-sheet rounded="lg" border>
+                                                {{ item.name }}
 
-                                                    
-                                             
                                             </v-sheet>
-                                            <!--
+                                            !--
                                                 {{ item.name }}
                                                 <v-table density="compact">
                                                     <tbody class="bg-surface-light">
@@ -382,10 +400,10 @@
                                                         </tr>
                                                     </tbody>
                                                 </v-table>
-                                                -->
+                                                --
                                         </td>
                                     </tr>
-                                </template>
+                                </template-->
 
                                 <!--HEADER SLOTS-->
                                 <template v-for="header in dessertsData.dessertsHeaders"
