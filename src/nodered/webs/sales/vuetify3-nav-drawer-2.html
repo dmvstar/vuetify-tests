@@ -357,21 +357,20 @@
 
                                 <template v-slot:expanded-row="{ columns, item }">
                                     <td :colspan="columns.length" class="ma-4">
-                                    <v-sheet
-                                        rounded="lg" 
-                                        class="d-flex align-center justify-center flex-wrap text-center mx-auto px-4"
-                                        elevation="4">
-                                        <div>
-                                            <h2 class="text-h4 font-weight-black text-orange">Congratulations!</h2>
-                                            <div class="text-h5 font-weight-medium mb-2">
-                                                Item: {{ item.name }}
+                                        <v-sheet rounded="lg"
+                                            class="d-flex align-center justify-center flex-wrap text-center mx-auto px-4"
+                                            elevation="4">
+                                            <div>
+                                                <h2 class="text-h4 font-weight-black text-orange">Congratulations!</h2>
+                                                <div class="text-h5 font-weight-medium mb-2">
+                                                    Item: {{ item.name }}
+                                                </div>
+                                                <p class="text-body-2 mb-4">
+                                                    Please head over to your inbox/spam or others folder to find our
+                                                    verification email.
+                                                </p>
                                             </div>
-                                            <p class="text-body-2 mb-4">
-                                                Please head over to your inbox/spam or others folder to find our
-                                                verification email.
-                                            </p>
-                                        </div>
-                                    </v-sheet>
+                                        </v-sheet>
                                     </td>
                                 </template>
 
@@ -1275,7 +1274,7 @@
 
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.56 (2025-07-30 09:13:58)";
+                const appVersion = "v. 0.0.57 (2025-08-02 11:49:09)";
                 const appAuthor = "StarDust";
                 return {
                     isDarkTheme
