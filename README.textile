@@ -1,6 +1,6 @@
-h1(#vuetify-tests). vuetify-tests
+h1(#vuetify-tests). vuetify&#45;tests
 
-* Some examples for VUE and Vuetify framework
+* Some examples for VUE and <Vuetify> framework
 * Assets for Vuetify
 * PG SQL examples
 * Pin icon merger shell

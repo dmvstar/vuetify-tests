@@ -1,6 +1,6 @@
 # vuetify-tests
 
-* Some examples for VUE and Vuetify framework
+* Some examples for VUE and <Vuetify> framework
 * Assets for Vuetify
 * PG SQL examples
 * Pin icon merger shell
