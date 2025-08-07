@@ -57,6 +57,12 @@
         }
     </style>
     <style>
+        .clock_font {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;            
+            text-shadow:  rgb(162, 253, 193) 1px 0 10px;
+        }
         #clock {
             font-family: 'Share Tech Mono', monospace;
             color: #ffffff;
@@ -120,8 +126,8 @@
                         </template>
                     </v-card>
                 </v-toolbar-title>
-                <v-spacer></v-spacer>                               
-                <v-toolbar-title>
+                <v-spacer></v-spacer>
+                <!--v-toolbar-title>
                     <v-card outlined color="transparent">
                         <template v-slot:title>
                             <p class="time">{{ clock.time }}</p>
@@ -130,7 +136,7 @@
                             <p class="time">{{ clock.date }}</p>
                         </template>
                     </v-card>
-                </v-toolbar-title>
+                </v-toolbar-title-->
                 <!-- https://codepen.io/gau/pen/LjQwGp -->
                 <!--v-toolbar-title>
                     <div id="clock">
@@ -139,20 +145,18 @@
                     </div>
                 </v-toolbar-title-->
                 <v-spacer></v-spacer>
-                <template v-if="$vuetify.display.mdAndUp">
+                <template v-slot:append>
+                    <v-card outlined color="transparent" variant="text">
+                        <template v-slot:title>
+                            <p class="clock_font">{{ clock.time }}</p>
+                        </template>
+                        <template v-slot:subtitle>
+                            <p class="clock_font">{{ clock.date }}</p>
+                        </template>
+                    </v-card>
+
                     <v-btn icon="mdi-magnify" variant="text"></v-btn>
-
                     <v-btn icon="mdi-filter" variant="text"></v-btn>
-                </template>
-
-                <v-tooltip top>
-                    <template v-slot:activator="{ props }">
-                        <v-btn v-bind="props" :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
-                            @click="onBtnChangeTheme"></v-btn>
-                    </template>
-                    <span>Be on the dark side ...</span>
-                </v-tooltip>
-
 
                 <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
 
@@ -194,6 +198,22 @@
                         <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
                     </v-list>
                 </v-menu>
+
+                </template>
+
+
+                <template v-if="$vuetify.display.mdAndUp">
+                </template>
+
+                <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+                            @click="onBtnChangeTheme"></v-btn>
+                    </template>
+                    <span>Be on the dark side ...</span>
+                </v-tooltip>
+
+
 
             </v-app-bar>
             <v-navigation-drawer temporary permanent expand-on-hover rall :width="325" :rail="mainDrawerRail"
