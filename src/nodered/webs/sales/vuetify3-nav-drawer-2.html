@@ -72,11 +72,13 @@
                 letter-spacing: 0.1em;
                 font-size: 12px;
             }
+
             .time {
                 letter-spacing: 0.05em;
                 font-size: 32px;
                 padding: 5px 0;
             }
+
             .text {
                 letter-spacing: 0.1em;
                 font-size: 12px;
@@ -118,13 +120,24 @@
                         </template>
                     </v-card>
                 </v-toolbar-title>
-                <!-- https://codepen.io/gau/pen/LjQwGp -->
+                <v-spacer></v-spacer>                               
                 <v-toolbar-title>
+                    <v-card outlined color="transparent">
+                        <template v-slot:title>
+                            <p class="time">{{ clock.time }}</p>
+                        </template>
+                        <template v-slot:subtitle>
+                            <p class="time">{{ clock.date }}</p>
+                        </template>
+                    </v-card>
+                </v-toolbar-title>
+                <!-- https://codepen.io/gau/pen/LjQwGp -->
+                <!--v-toolbar-title>
                     <div id="clock">
-                        <!--p class="date">{{ clock.date }}</p-->
+                        <p class="date">{{ clock.date }}</p>
                         <p class="time">{{ clock.time }}</p>
                     </div>
-                </v-toolbar-title>                
+                </v-toolbar-title-->
                 <v-spacer></v-spacer>
                 <template v-if="$vuetify.display.mdAndUp">
                     <v-btn icon="mdi-magnify" variant="text"></v-btn>
@@ -1308,10 +1321,10 @@
 
 
                 var clock = Vue.reactive(
-                {
-                    time: '15:05:34',
-                    date: '2025-08-06 WED'
-                });
+                    {
+                        time: '15:05:34',
+                        date: '2025-08-06 WED'
+                    });
 
                 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
                 var timerID = setInterval(updateTime, 1000);
