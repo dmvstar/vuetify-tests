@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vuetify Drawer example NG V3</title>
+    <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+
+    <style>
+        .v-data-table__tr:has(input[type='checkbox']:checked) {
+            background: #f5c17d70 !important;
+        }
+
+        .v-theme--light.v-data-table thead {
+            background-color: #bb996dc2;
+        }
+
+        .v-theme--light.v-data-table tbody tr:nth-child(even) {
+            background-color: #f4e1c8c2;
+        }
+
+        .v-theme--dark.v-data-table thead {
+            background-color: #101010c2;
+        }
+
+        .v-theme--dark.v-data-table tbody tr:nth-child(even) {
+            background-color: #363636c2;
+        }
+
+        /*
+        .v-theme--light.v-table tbody tr td:nth-child(even) {
+            background-color: #a17b49c2;
+        }
+        .v-theme--light.v-table tbody tr td:nth-child(odd) {
+            background-color: #ffd296d2;
+        }
+        .v-data-table-header__content {
+            background-color: #D14081 !important;
+            color: #CCF5AC;
+            font-weight: bold;
+        }
+        */
+
+        .v-data-table {
+            table {
+                tr {
+
+                    th,
+                    td {
+                        padding: 0 4px !important;
+                    }
+                }
+            }
+        }
+    </style>
+    <style>
+        .clock_font {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;            
+            text-shadow:  rgb(162, 253, 193) 1px 0 10px;
+        }
+        #clock {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #daf6ff;
+            text-shadow: 0 0 20px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+
+            .date {
+                letter-spacing: 0.1em;
+                font-size: 12px;
+            }
+
+            .time {
+                letter-spacing: 0.05em;
+                font-size: 32px;
+                padding: 5px 0;
+            }
+
+            .text {
+                letter-spacing: 0.1em;
+                font-size: 12px;
+                padding: 20px 0 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <div id="app"></div>
+
+    <template id="app-template">
+        <!-- <v-card> -->
+        <v-layout>
+            <v-app-bar density="comfortable" class="text-white" color="green" prominent
+                image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                <v-app-bar-nav-icon variant="text" @click.stop="mainDrawer = !mainDrawer"></v-app-bar-nav-icon>
+                <!--v-img>
+                    max-height="150"
+                    max-width="250"
+                    src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
+                </v-img-->
+                <v-img class="mx-2"
+                    src="https://raw.githubusercontent.com/dmvstar/vuetify-tests/refs/heads/main/src/nodered/webs/sales/assets/Stardust-v.2-3.png"
+                    src0="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png" max-width="180"
+                    contain></v-img>
+                <v-toolbar-title>
+                    <v-card outlined color="transparent">
+                        <template v-slot:title>
+                            Drawer example
+                        </template>
+                        <template v-slot:subtitle>
+                            {{appAuthor}} {{appVersion}}
+                        </template>
+                    </v-card>
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <!--v-toolbar-title>
+                    <v-card outlined color="transparent">
+                        <template v-slot:title>
+                            <p class="time">{{ clock.time }}</p>
+                        </template>
+                        <template v-slot:subtitle>
+                            <p class="time">{{ clock.date }}</p>
+                        </template>
+                    </v-card>
+                </v-toolbar-title-->
+                <!-- https://codepen.io/gau/pen/LjQwGp -->
+                <!--v-toolbar-title>
+                    <div id="clock">
+                        <p class="date">{{ clock.date }}</p>
+                        <p class="time">{{ clock.time }}</p>
+                    </div>
+                </v-toolbar-title-->
+                <v-spacer></v-spacer>
+                <template v-slot:append>
+                    <v-card outlined color="transparent" variant="text">
+                        <template v-slot:title>
+                            <p class="clock_font">{{ clock.time }}</p>
+                        </template>
+                        <template v-slot:subtitle>
+                            <p class="clock_font">{{ clock.date }}</p>
+                        </template>
+                    </v-card>
+
+                    <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                    <v-btn icon="mdi-filter" variant="text"></v-btn>
+
+                <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
+
+                <v-menu transition="scale-transition">
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" rounded="xl">
+                            <img :src="menuActions.languageSelectedUrl"
+                                style="width: 28x; height: 28px; margin-right: 0px; border-radius: 50%;">
+                        </v-btn>
+                    </template>
+                    <v-list density="compact">
+                        <v-list-subheader>Language</v-list-subheader>
+                        <!--v-list-item title="PL" subtitle="Polish" value="pl"
+                            prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg">
+                        </v-list-item>
+                        <v-list-item title="EN" subtitle="English" value="en"
+                            prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg">
+                        </v-list-item>
+                        <v-list-item title="DE" subtitle="Germany" value="de"
+                            prepend-avatar="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg">
+                        </v-list-item-->
+                        <v-list-item v-for="item in menuActions.languages" :key="item.value" :prepend-avatar="item.url"
+                            :title="item.title" :subtitle="item.subtitle" :value="item.value"
+                            @click="onLanguageMenuClick(item)">
+                        </v-list-item>
+
+
+                    </v-list>
+                </v-menu>
+
+                <v-menu transition="scale-transition">
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" icon="mdi-account-star" color="green"></v-btn>
+                    </template>
+                    <v-list density="compact">
+                        <v-list-item prepend-icon="mdi-account-settings" title="Informations"
+                            value="settings"></v-list-item>
+                        <v-list-item prepend-icon="mdi-account-key" title="Password" value="password"></v-list-item>
+                        <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
+                    </v-list>
+                </v-menu>
+
+                </template>
+
+
+                <template v-if="$vuetify.display.mdAndUp">
+                </template>
+
+                <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+                            @click="onBtnChangeTheme"></v-btn>
+                    </template>
+                    <span>Be on the dark side ...</span>
+                </v-tooltip>
+
+
+
+            </v-app-bar>
+            <v-navigation-drawer temporary permanent expand-on-hover rall :width="325" :rail="mainDrawerRail"
+                v-model="mainDrawer">
+
+                <v-list>
+                    <v-list-item :prepend-avatar="faceInfo.faceIdUrl" :subtitle="getGeneratedEmailAddress()"
+                        :title="getGeneratedName()">
+                        <template v-slot:append>
+                            <v-btn :icon=faceInfo.faceRailIcon variant="text"
+                                @click.stop="mainDrawerRail = !mainDrawerRail"></v-btn>
+                        </template>
+                    </v-list-item>
+                </v-list>
+                <v-divider></v-divider>
+                <v-list density="compact" nav>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-folder" title="My Files" value="myfiles">
+                            </v-list-item>
+                        </template>
+                        <span>Select My Files</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-multiple" title="Shared with me"
+                                value="shared"></v-list-item>
+                        </template>
+                        <span>Shared info to</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-star" title="Starred"
+                                value="starred"></v-list-item>
+                        </template>
+                        <span>Select favorites</span>
+                    </v-tooltip>
+                    <!-- https://stackoverflow.com/questions/62954632/force-collapse-of-all-active-items-in-vuetify-v-list-group -->
+                    <v-list-group value="Users">
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-account-check" title="Users"></v-list-item>
+                        </template>
+                        <v-list density="compact" nav>
+                            <v-list-item v-for="([title, icon, action], index) in menuActions.userMenu" :key="index"
+                                :prepend-icon="icon" :title="title" :value="title"
+                                @click="onUserMenuClick(action, index)">
+                            </v-list-item>
+                        </v-list>
+                    </v-list-group>
+                </v-list>
+            </v-navigation-drawer>
+
+            <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
+                <div id="second-driwer" class="ma-3">
+                    <!--v-list density="compact" nav-->
+                    <v-row ma="10">
+
+                        <v-col ma="10">
+                            <v-icon icon="mdi-radar"></v-icon>
+                            Filteres
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-text-field density="compact" v-model="searchData.searchText" label="Search text"
+                                prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateFrom"
+                                        label="Date From" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker @update:model-value="searchData.dateFromDateMenu = false"
+                                    v-model="searchData.selectedDateFromFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateInto"
+                                        label="Date Into" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <!--/v-list-->
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="green" block @click="onBtnApplyFilters">Apply</v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="orange" block @click="onBtnClearFilters">Clear</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+            </v-navigation-drawer>
+
+            <v-main>
+                <div id="main" class="ma-3">
+                    <v-row ma="5">
+                        <v-card-title>
+                            The navigation drawer will appear from the bottom on smaller size screens.
+                        </v-card-title>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="6" sm="6" ma="10">
+                            <v-btn id="btn-main-ok" color="green" block>OK</v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="6" ma="10">
+                            <v-btn id="btn-main-no" color="orange" block @click="onBtnMainNoClick">NO</v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="2">
+                        <v-col cols="8">
+                            <v-card-text>
+                                VDataTable {{dessertsData.dessertsItems.length}} items
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="2" align="right">
+                            <!--v-model="statesButtons.isColumnOrderMenuShow"-->
+                            <!--:click="statesButtons.isColumnOrderMenuShow=true"-->
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn color="green" v-bind="props" @click="onReorderMenuClick"
+                                        append-icon="mdi-chevron-down">
+                                        Columns Order ...
+                                    </v-btn>
+                                </template>
+                                <v-list v-model:selected="dessertsData.selectedOrderListItem">
+                                    <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
+                                    <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
+                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"
+                                        :key="index" :title="title" :subtitle="subtitle" :value="title"
+                                        :disabled="checkReorderColumnsDisabled(index)" density="compact">
+                                        <template v-slot:append>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-up" variant="text"
+                                                @click="onReorderColumnsClick('UP', index)"></v-btn>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-down" variant="text"
+                                                @click="onReorderColumnsClick('DN', index)"></v-btn>
+                                        </template>
+                                        <!--v-icon icon="mdi-chevron-up"></v-icon>
+                                        <v-icon icon="mdi-chevron-down"></v-icon-->
+                                    </v-list-item>
+                                    <v-list-item>
+                                        <!--:disabled="statesButtons.isDisabledSaveColumnOrder" -->
+                                        <v-btn color="primary" prepend-icon="mdi-content-save-settings" block
+                                            @click="saveDessertsHeadersOrder()">
+                                            Save order
+                                        </v-btn>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-col>
+                        <v-col cols="2" align="center">
+                            <!--:close-on-content-click="false"-->
+                            <v-menu transition="scale-transition">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn color="secondary" v-bind="props" append-icon="mdi-chevron-down">
+                                        Operations ...
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item v-for="([title, icon, action], index) in menuActions.operationsList"
+                                        :key="index" :prepend-icon="icon" :title="title" :value="title"
+                                        @click="onOperationClick(action, index)">
+                                        <!--template v-slot:append>
+                                            <v-btn
+                                              color="grey-lighten-1"
+                                              icon="mdi-chevron-up"
+                                              variant="text"
+                                            ></v-btn>
+                                            <v-btn
+                                              color="grey-lighten-1"
+                                              icon="mdi-chevron-down"
+                                              variant="text"
+                                            ></v-btn>
+                                          </template-->
+                                        <!--v-icon icon="mdi-chevron-up"></v-icon>
+                                        <v-icon icon="mdi-chevron-down"></v-icon-->
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="12" sm="12" ma="10">
+
+                            <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
+                                density="comfortable" v-model="dessertsData.selectedItems" show-expand
+                                :items="dessertsData.dessertsItems" item-value="name" item-key="name"
+                                :search="searchData.searchText" class="elevation-1" sort-asc-icon="mdi-sort-ascending"
+                                sort-desc-icon="mdi-sort-descending" @click:row="handleDessertsDataSingleClick"
+                                @dblclick:row="handleDessertsDataDoubleClick" show-select class="elevation-1">
+
+                                <template v-slot:expanded-row="{ columns, item }">
+                                    <td :colspan="columns.length" class="ma-4">
+                                        <v-sheet rounded="lg"
+                                            class="d-flex align-center justify-center flex-wrap text-center mx-auto px-4"
+                                            elevation="4">
+                                            <div>
+                                                <h2 class="text-h4 font-weight-black text-orange">Congratulations!</h2>
+                                                <div class="text-h5 font-weight-medium mb-2">
+                                                    Item: {{ item.name }}
+                                                </div>
+                                                <p class="text-body-2 mb-4">
+                                                    Please head over to your inbox/spam or others folder to find our
+                                                    verification email.
+                                                </p>
+                                            </div>
+                                        </v-sheet>
+                                    </td>
+                                </template>
+
+                                <!--template v-slot:expanded-row="{ columns, item }">
+                                    <tr>
+                                        <td :colspan="columns.length" class="ma-4">
+                                            <v-sheet rounded="lg" border>
+                                                {{ item.name }}
+
+                                            </v-sheet>
+                                            !--
+                                                {{ item.name }}
+                                                <v-table density="compact">
+                                                    <tbody class="bg-surface-light">
+                                                        <tr>
+                                                            <th>Rating</th>
+                                                            <th>Synopsis</th>
+                                                            <th>Cast</th>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody class="bg-surface-light">
+                                                        <tr>
+                                                            <td class="py-2">{{ item.name }}</td>
+                                                            <td class="py-2">{{ item.name }}</td>
+                                                            <td class="py-2">{{ item.name }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </v-table>
+                                                --
+                                        </td>
+                                    </tr>
+                                </template-->
+
+                                <!--HEADER SLOTS-->
+                                <template v-for="header in dessertsData.dessertsHeaders"
+                                    #[`header.${header.key}`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-card outlined color="transparent" variant="flat">
+                                        <template v-slot:title>
+                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">
+                                                <template v-if="column.sortable">
+                                                    <template v-if="isSorted(column)">
+                                                        <v-icon size="x-small"
+                                                            :icon="getSortIcon(column, toggleSort)"></v-icon>
+                                                    </template>
+                                                    <template v-else>
+                                                        <v-icon size="x-small" color="#808080" icon="mdi-sort"></v-icon>
+                                                    </template>
+                                                </template>
+                                                {{column.title}}
+                                                <template v-if="column.icon">
+                                                    <v-icon size="x-small"
+                                                        color="green-darken-2">{{column.icon}}</v-icon>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template v-slot:subtitle class="text-subtitle-2">
+                                            {{ column.subtitle }}
+
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+
+                                    </v-card>
+                                </template>
+                                <!--ITEMS SLOTS-->
+                                <template v-slot:item.name="{ item }">
+                                    <div style="white-space: pre-wrap;">{{ item.name }}</div>
+                                </template>
+                                <template v-slot:item.calories1="{ item }">
+                                    <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.calories="{ key, value, item }">
+                                    <div>
+                                        <v-chip :color="getDebtStatusIconColor(item)">
+                                            {{ value }}
+                                        </v-chip>
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.actions="{ item }">
+                                    <v-menu density="compact" v-model="searchData.dateFromDateMenu1"
+                                        :close-on-content-click="false" :close-on-click="true">
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
+                                                @click="onBtnActionsStubClick(item, 'ACTIONS')" v-bind="props">
+                                            </v-btn>
+                                        </template>
+                                        <v-date-picker v-model="searchData.selectedDateFromFull1"></v-date-picker>
+                                    </v-menu>
+                                    <!--v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn-->
+                                    <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
+                                        :icon="getDebtStatusIcon(item.fat)"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')">
+                                    </v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"
+                                        @click="onBtnActionsEditClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                </template>
+
+                                <template v-slot:item.operations="{ item }">
+                                    <!--v-btn block color="blue">Operations</v-btn-->
+                                    <v-menu transition="scale-transition">
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-cog-outline"
+                                                append-icon="mdi-chevron-down">
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item
+                                                v-for="([title, icon, action], index) in menuActions.actionsList"
+                                                :key="index" :prepend-icon="icon" :title="title" :value="title"
+                                                @click="onUserMenuClick(action, index)">
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </template>
+
+                            </v-data-table>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="12" sm="12" ma="10">
+                            <v-btn color="primary" @click="onBtnRefresh(event)" block>Refresh</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
+                    color="surface-light">
+                    <div class="flex-1-0-100 text-center mt-2">
+                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong> {{appAuthor}} {{appVersion}}
+                    </div>
+                </v-footer>
+            </v-main>
+
+        </v-layout>
+
+
+        <v-dialog v-model="dessertsData.dialogEdit" max-width="500px">
+            <v-card density="compact" border="border-thin">
+                <v-card-title>
+                    <span class="text-h5" color="red-lighten-2">Edit item [{{ dessertsData.editedItem.name }}]</span>
+                </v-card-title>
+                <v-divider class="border-opacity-100"></v-divider>
+                <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" md="12" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.name"
+                                    label="Dessert name"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.calories"
+                                    label="Calories"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbex"
+                                    label="Carbo exchange (eg)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.carbs"
+                                    label="Carbs (g)"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.fat"
+                                    label="Fat (g)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.protein"
+                                    label="Protein (g)"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4" sm="6">
+                                <v-text-field density="compact" v-model="dessertsData.editedItem.iron"
+                                    label="Iron (%)"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogEdit = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="dessertsData.dialogAction" max-width="500px">
+            <v-card density="compact" border="border-thin">
+                <v-card-title>
+                    <div :class="dessertsData.dialogTitleClass">
+                        Operations [{{ menuActions.operationSelected }}] for [{{ dessertsData.selectedItems.length }}]
+                        items.
+                    </div>
+                </v-card-title>
+                <v-divider class="border-opacity-100"></v-divider>
+                <v-card-text>
+                    <div :class="dessertsData.dialogTextClass">
+                        {{ dessertsData.dialogInfo }}
+                    </div>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" md="12" sm="6">
+                                {{ dessertsData.dialogMessage }}
+                            </v-col>
+                        </v-row>
+                        <v-list v-model:selected="dessertsData.settingsSelection" lines="three" select-strategy="leaf">
+                            <v-list-subheader>General</v-list-subheader>
+                            <v-list-item v-for="item in dessertsData.settingsItems" :key="item.value"
+                                :subtitle="item.subtitle" :title="item.title" :value="item.value"
+                                active-class="text-pink">
+                                <template v-slot:prepend="{ isSelected, select }">
+                                    <v-list-item-action start>
+                                        <v-checkbox-btn :model-value="isSelected"
+                                            @update:model-value="select"></v-checkbox-btn>
+                                    </v-list-item-action>
+                                </template>
+                            </v-list-item>
+                        </v-list>
+
+
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogAction = false">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="dessertsData.dialogAction = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <!-- </v-card> -->
+    </template>
+
+    <script setup>
+        const { createApp, ref, defineProps, reactive } = Vue;
+        const { createVuetify, useTheme, version } = Vuetify;
+
+
+        const vuetify = createVuetify({
+
+            theme: {
+                defaultTheme: "dark",
+            }
+
+        });
+        const app = createApp({
+            template: "#app-template",
+            created() {
+                console.log(version);
+                var faceId = Math.floor(10 + Math.random() * 90);
+                this.faceId = faceId;
+                this.faceIdUrl = `https://randomuser.me/api/portraits/men/${faceId}.jpg`;
+                this.generateName();
+            },
+            mounted() {
+                this.loadDessertsHeadersOrder();
+                this.loadFilters();
+            },
+            watch: {
+                mainDrawerRail: function (newQuestion, oldQuestion) {
+                    console.log("mainDrawerRail", newQuestion, oldQuestion, this.faceInfo.faceRailIcon);
+                    if (newQuestion) {
+                        this.faceInfo.faceRailIcon = "mdi-chevron-right";
+                    } else {
+                        this.faceInfo.faceRailIcon = "mdi-chevron-left";
+                    }
+                },
+                "searchData.selectedDateFromFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.searchData.selectedDateFrom = this.formatDate(newQuestion);
+                    this.searchData.dateFromDateMenu = false;
+                    this.searchData.dateIntoDateMenu = false;
+                },
+                "searchData.selectedDateIntoFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.searchData.selectedDateInto = this.formatDate(newQuestion);
+                    this.searchData.dateFromDateMenu = false;
+                    this.searchData.dateIntoDateMenu = false;
+                }
+            },
+            methods: {
+                formatDate(date) {
+                    if (!date) {
+                        return null
+                    }
+                    console.log(date);
+                    console.log(date.getDate());
+                    const [year, month, day] = [
+                        date.getFullYear(),
+                        date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1,
+                        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+                    ];
+                    //date.toISOString().replace('T', '-').split('-');
+                    //console.log(date.toISOString());
+                    var ret = `${day}-${month}-${year}`;
+                    //console.log(ret);
+                    return ret;
+                },
+
+                parseDate(dateStrDDMMYYYY) {
+                    var ret = new Date();
+                    var parDate = dateStrDDMMYYYY.split('-');
+                    ret = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    console.log(ret);
+                    return ret;
+                },
+
+                onBtnActionsStubClick(item, column) {
+                    console.log(`[onBtnActionsStubClick] ${JSON.stringify(item)}, ${column}`);
+                    this.dessertsData.isDessertsDataHandleClick = false;
+                },
+
+                onBtnActionsEditClick(item, column) {
+                    console.log(`[onBtnActionsEditClick] ${JSON.stringify(item)}, ${column}`);
+                    this.dessertsData.isDessertsDataHandleClick = false;
+                    this.dessertsData.dialogEdit = true;
+                    this.dessertsData.editedItem = item;
+                },
+
+                onBtnApplyFilters() {
+                    this.saveFilters();
+                },
+                onBtnClearFilters() {
+                    for (var i in this.searchData) {
+                        this.searchData[i] = null;
+                    }
+                    this.saveFilters();
+                },
+
+                saveFilters() {
+                    console.log(this.searchData);
+                    localStorage.setItem('searchData', JSON.stringify(this.searchData));
+                },
+                loadFilters() {
+                    var searchData = localStorage.getItem('searchData');
+                    var searchDataObj = JSON.parse(searchData);
+                    console.log(`[loadFilters] ${searchData}`);
+                    console.log(searchDataObj);
+                    if (searchData) {
+                        var parDate = [];
+                        this.searchData.searchText = searchDataObj.searchText;
+
+                        this.searchData.selectedDateFrom = searchDataObj.selectedDateFrom;
+                        this.searchData.dateFromDateMenu = searchDataObj.dateFromDateMenu;
+                        this.searchData.selectedDateFromFull = this.parseDate(searchDataObj.selectedDateFrom);
+                        //parDate = searchDataObj.selectedDateFrom.split('-');
+                        //this.searchData.selectedDateFromFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+
+                        this.searchData.selectedDateInto = searchDataObj.selectedDateInto;
+                        this.searchData.dateIntoDateMenu = searchDataObj.dateIntoDateMenu;
+                        this.searchData.selectedDateIntoFull = this.parseDate(searchDataObj.selectedDateInto);
+                        //parDate = searchDataObj.selectedDateInto.split('-');
+                        //this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    }
+                },
+
+                onBtnChangeTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    this.isDarkTheme = !this.isDarkTheme;
+                    //console.log(this.$vuetify.theme);
+                    //console.log(this.$vuetify.theme.global);
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';
+                    var isDark = this.$vuetify.theme.global.current.dark;
+                    console.log(`isDark=${isDark}, isDarkTheme= ${this.isDarkTheme}`);
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                    isDark = !isDark;
+                    console.log('isDark', isDark);
+                    //this.$vuetify.theme.global.current.dark = isDark;
+                    this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                },
+                onShowUserMenu() {
+                    this.isShowUserMenu = !this.isShowUserMenu;
+                },
+                checkReorderColumnsDisabled(index) {
+                    ret = false;
+                    var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
+                    ret = !isSortableCurr;
+                    //console.log(index,   this.dessertsData.dessertsHeaders[index].title, ret);
+                    return ret;
+                },
+                onReorderMenuClick(event) {
+                    console.log('[onReorderMenuClick]', event);
+                },
+                onReorderColumnsClick(where, index) {
+                    var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
+                    //console.log(where, index, this.dessertsData.dessertsHeaders[index].title, isSortableCurr, this.dessertsData.dessertsHeaders[index].sortable);
+                    if (where == 'UP' && index > 0 && isSortableCurr) {
+                        var isSortablePrev = this.dessertsData.dessertsHeaders[index - 1].sortable;
+                        if (isSortablePrev == undefined) { isSortablePrev = true; }
+                        if (isSortablePrev) {
+                            var element_old = this.dessertsData.dessertsHeaders[index - 1];
+                            var element_new = this.dessertsData.dessertsHeaders[index];
+                            this.dessertsData.dessertsHeaders[index] = element_old;
+                            this.dessertsData.dessertsHeaders[index - 1] = element_new;
+                            this.statesButtons.isDisabledSaveColumnOrder = false;
+                            this.dessertsData.selectedOrderListItem = [element_new.title];
+                        }
+                    }
+                    if (where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
+                        var isSortableNext = this.dessertsData.dessertsHeaders[index + 1].sortable;
+                        if (isSortableNext == undefined) { isSortableNext = true; }
+                        if (isSortableNext) {
+                            var element_old = this.dessertsData.dessertsHeaders[index + 1];
+                            var element_new = this.dessertsData.dessertsHeaders[index];
+                            this.dessertsData.dessertsHeaders[index] = element_old;
+                            this.dessertsData.dessertsHeaders[index + 1] = element_new;
+                            this.statesButtons.isDisabledSaveColumnOrder = false;
+                            this.dessertsData.selectedOrderListItem = [element_new.title];
+                        }
+                    }
+                    console.log('1 [onReorderColumnsClick]', this.statesButtons.isColumnOrderMenuShow, this.statesButtons.isDisabledSaveColumnOrder);
+                    console.log('2 [onReorderColumnsClick]', JSON.stringify(this.dessertsData.selectedOrderListItem));
+                    console.log('3 [onReorderColumnsClick]', JSON.stringify(element_new));
+                },
+
+                saveDessertsHeadersOrder() {
+                    var dessertsHeadersOrder = this.dessertsData.dessertsHeaders.map(obj => obj['key']);
+                    localStorage.setItem('dessertsHeadersOrder', JSON.stringify(dessertsHeadersOrder));
+                    this.statesButtons.isDisabledSaveColumnOrder = true;
+                    this.statesButtons.isColumnOrderMenuShow = false;
+                    console.log('1 [saveDessertsHeadersOrder]', this.statesButtons.isColumnOrderMenuShow, dessertsHeadersOrder, this.dessertsData.selectedOrderListItem);
+                    console.log('2 [saveDessertsHeadersOrder]', JSON.stringify(this.dessertsData.selectedOrderListItem));
+                    //this.dessertsData.selectedOrderListItem = ["Carbs (g)"];
+                    console.log('3 [saveDessertsHeadersOrder]', JSON.stringify(this.dessertsData.selectedOrderListItem));
+                },
+
+                loadDessertsHeadersOrder() {
+                    var dessertsHeadersOrder = localStorage.getItem('dessertsHeadersOrder');
+                    if (dessertsHeadersOrder) {
+                        dessertsHeadersOrder = JSON.parse(dessertsHeadersOrder)
+                        console.log(dessertsHeadersOrder);
+                        this.sortObjectsByKeyOrder(this.dessertsData.dessertsHeaders, 'key', dessertsHeadersOrder);
+                        //this.dessertsData.dessertsHeaders
+                        //this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
+                    }
+                },
+
+                sortObjectsByKeyOrder(objects, key, orderArray) {
+                    // Create a map of the orderArray for efficient lookup.
+                    const orderMap = new Map(orderArray.map((value, index) => [value, index]));
+                    // Sort the objects based on the orderArray.
+
+                    objects.sort((a, b) => {
+                        const aIndex = orderMap.get(a[key]);
+                        const bIndex = orderMap.get(b[key]);
+                        // Handle cases where the key is not found in the orderArray.
+                        if (aIndex === undefined) {
+                            return bIndex === undefined ? 0 : 1; // Put undefined at the end.
+                        }
+                        if (bIndex === undefined) {
+                            return -1; // Put undefined at the end.
+                        }
+                        return aIndex - bIndex;
+                    });
+
+                    return objects;
+                },
+
+                onLanguageMenuClick(item) {
+                    console.log(`[onLanguageMenuClick] ${JSON.stringify(item)}`);
+                    this.menuActions.languageSelected = item.value;
+                    this.menuActions.languageSelectedUrl = item.url;
+                },
+
+                onOperationClick(event, index) {
+                    console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
+                    this.menuActions.operationSelected = event;
+                    this.dessertsData.dialogAction = true;
+                    this.dessertsData.dialogInfo = "";
+                    this.dessertsData.dialogMessage = "";
+
+                    if (this.dessertsData.selectedItems.length == 0) {
+                        this.dessertsData.dialogInfo = "You must select at least one item for operations."
+                        this.dessertsData.dialogTitleClass =
+                            this.dessertsData.dialogTitleClasses.find(x => x.key == "error" && x.to == "title").value;
+                        this.dessertsData.dialogTextClass =
+                            this.dessertsData.dialogTitleClasses.find(x => x.key == "error" && x.to == "text").value;
+                    } else {
+                        this.dessertsData.dialogInfo = `Selected a ${this.dessertsData.selectedItems.length} item(s) for operations.`;
+                        this.dessertsData.dialogTitleClass =
+                            this.dessertsData.dialogTitleClasses.find(x => x.key == "ok" && x.to == "title").value;
+                        this.dessertsData.dialogTextClass =
+                            this.dessertsData.dialogTitleClasses.find(x => x.key == "ok" && x.to == "text").value;
+                        this.dessertsData.dialogMessage = "Making operation for selected items."
+                    }
+                    console.log(`[onOperationClick]`, this.dialogTitleClass);
+
+                },
+
+                onBtnMainNoClick(event) {
+                    console.log(`1 [onBtnMainNoClick] ${event} ${this.statesButtons.isColumnOrderMenuShow}`);
+                    this.statesButtons.isColumnOrderMenuShow = true;
+                    console.log(`2 [onBtnMainNoClick] ${event} ${this.statesButtons.isColumnOrderMenuShow}`);
+                },
+
+                onBtnRefresh(event) {
+                    console.log(this.dessertsData.selectedItems.length);
+                    console.log(this.dessertsData.selectedItems);
+                },
+
+                onUserMenuClick(event, index) {
+                    switch (event) {
+                        case "logout":
+                            console.log(`Execute event ${event}`);
+                            break;
+                        case "hide":
+                            console.log(`Execute event ${event}`);
+                            this.mainDrawer = false;
+                            break;
+                        default:
+                            console.log(`Sorry, we are out of ${event}.`);
+                    }
+                },
+
+                handleDessertsDataSingleClick(event, row) {
+                    // code for v-data-table handle double click before single click
+                    const now = new Date().getTime();
+                    var lastClickTime = this.dessertsData.lastClickTime;
+                    const doubleClickThreshold = 500; // Adjust this value (milliseconds)
+                    console.log(`1 [handleDessertsDataSingleClick] lastClickTime ${lastClickTime}=${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
+
+                    /*
+                    if (event.isExpanded) {
+                        const indexExpanded = this.dessertsHeaders.expanded.findIndex(i => i === item);
+                        this.dessertsHeaders.expanded.splice(indexExpanded, 1)
+                    } else {
+                        this.dessertsHeaders.expanded.push(item);
+                    }
+                    */
+
+
+                    //lastClickTime > 0 &&
+                    /*
+                    if (lastClickTime == 0) {
+                        this.dessertsData.lastClickTime = now;
+                        return;
+                    }
+                    */
+                    //if ((now - lastClickTime) > doubleClickThreshold)
+                    {
+                        console.log(`2 [handleDessertsDataSingleClick] lastClickTime ${now - this.dessertsData.lastClickTime}=${doubleClickThreshold}`);
+                        // Single click logic here
+                        if (!this.dessertsData.isDessertsDataHandleClick) {
+                            this.dessertsData.isDessertsDataHandleClick = true;
+                            return;
+                        }
+                        //https://codepen.io/Hexodus/pen/ExKGWBe
+                        //let selectState = (row.isSelected()) ? false : true;
+                        //console.log(`[handleDessertsDataSingleClick] event ${JSON.stringify(event)}`);
+                        //console.log(event);
+                        //console.log(`[handleDessertsDataSingleClick] row  ${JSON.stringify(row)}`);
+                        //console.log(this.dessertsData.selectedItems.length);
+                        //console.log(this.dessertsData.selectedItems);
+                        this.toggleSelection(row.item.name);
+                    }
+                    if (event.ctrlKey) {
+                        this.toggleSelection(row.item.name);
+                    }
+                    this.dessertsData.lastClickTime = now;
+                },
+
+                handleDessertsDataDoubleClick(event, row) {
+                    //console.log(`3 [handleDessertsDataDoubleClick] event ${JSON.stringify(event)}`);
+                    //console.log(event);
+                    //this.toggleSelection(row.item.name);
+                    //this.dessertsData.editedItem = row.item;
+                    //this.dessertsData.dialogEdit = true;
+                    this.dessertsData.lastClickTime = 0; //reset lastClickTime to prevent Single click logic running.
+                },
+
+                toggleSelection(keyID) {
+                    if (this.dessertsData.selectedItems.includes(keyID)) {
+                        this.dessertsData.selectedItems = this.dessertsData.selectedItems.filter(
+                            selectedKeyID => selectedKeyID !== keyID
+                        );
+                    } else {
+                        this.dessertsData.selectedItems.push(keyID);
+                    }
+                },
+
+                getReorderColumnsStatus(event, index) {
+
+                },
+
+                getShowUserMenuIcon() {
+                    var ret = "mdi-chevron-down";
+                    if (this.isShowUserMenu) {
+                        ret = "mdi-chevron-up";
+                    }
+                    return ret;
+                },
+
+                getGeneratedEmailAddress() {
+                    var ret = "awataros.pedros@gmail.com";
+                    if (this.faceInfo.usersList.firstName && this.faceInfo.usersList.lastName) {
+                        ret = `${this.faceInfo.usersList.firstName.toLowerCase()}.${this.faceInfo.usersList.lastName.toLowerCase()}@gmail.com`
+                    };
+                    return ret;
+                },
+
+                getGeneratedName() {
+                    var ret = "Awataros Pedros"
+                    if (this.faceInfo.usersList.firstName && this.faceInfo.usersList.lastName) {
+                        ret = `${this.faceInfo.usersList.firstName} ${this.faceInfo.usersList.lastName}`
+                    };
+                    return ret;
+                },
+                generateName() {
+                    var firstNames = this.faceInfo.usersList.firstNames;
+                    var lastNames = this.faceInfo.usersList.lastNames;
+
+                    var ret = "Awataros Pedros"
+                    var min = 0, max;
+                    max = firstNames.length - 1;
+                    var firstIndex = Math.floor(Math.random() * (max - min + 1) + min);
+                    max = lastNames.length - 1;
+                    var lastIndex = Math.floor(Math.random() * (max - min + 1) + min);
+
+                    this.faceInfo.usersList.firstName = firstNames[firstIndex];
+                    this.faceInfo.usersList.lastName = lastNames[firstIndex];
+                    ret = `${firstNames[firstIndex]} ${lastNames[lastIndex]}`;
+
+                    console.log('generateName', firstIndex, lastIndex, ret);
+                    return ret;
+                },
+
+                getDebtStatusIcon(debtstatus) {
+                    ret = "mdi-account";
+                    let item = this.dicts.debtStatus.find(x => x.status === ("" + debtstatus));
+                    if (item !== undefined) ret = item.icon;
+                    //console.log("[getDebtStatusIcon]", ret);
+                    return ret;
+                },
+
+                getTitle(column) {
+                    var ret = "";
+                    //console.log("[getTitle]", column);
+                    return ret;
+                },
+
+                getSortIconLocal(column, toggleSort) {
+                    var ret = 'mdi-sort-variant-off'
+                    console.log("[getSortIconLocal]", column, toggleSort);
+                    console.log("[getSortIconLocal]", toggleSort.key);
+                    return ret;
+                },
+
+                getDebtStatusIconColor(item) {
+                    //console.log("[getDebtStatusIconColor]", item);
+                    ret = "green";
+                    if (item.calories > 200 && item.calories < 300) {
+                        ret = "yellow";
+                    }
+                    if (item.calories > 300 && item.calories < 400) {
+                        ret = "pink";
+                    }
+                    if (item.calories > 400) {
+                        ret = "red";
+                    }
+                    //console.log("[getDebtStatusIconColor]", ret);
+                    return ret;
+                },
+
+
+            },
+            setup() {
+
+                var faceInfo = Vue.ref({
+                    faceId: 10,
+                    faceIdUrl: "https://randomuser.me/api/portraits/men/22.jpg",
+                    faceRailIcon: "mdi-chevron-right",
+                    usersList: {
+                        firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                        lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                    }
+                });
+                var mainDrawer = Vue.ref(true);
+                var secondDrawer = Vue.ref(false);
+
+                var mainDrawerRail = Vue.ref(true);
+                var group = Vue.ref(null);
+
+                const searchData = Vue.reactive({
+                    searchText: null,
+                    dateFromDateMenu: null,
+                    dateIntoDateMenu: null,
+                    selectedDateFromFull: null,
+                    selectedDateFrom: null,
+                    selectedDateFromInto: null,
+                    selectedDateInto: null,
+                    userMode: null,
+                    userState: null
+                });
+
+
+                var dessertsData = Vue.ref(
+                    {
+                        dialogEdit: false,
+                        dialogAction: false,
+                        dialogTitleClass: "text-green-darken-3 font-weight-bold",
+                        dialogTextClass: "text-green-darken-3",
+                        dialogTitleClasses: [
+                            { key: "ok", to: "title", value: "text-green-darken-3 font-weight-bold" },
+                            { key: "error", to: "title", value: "text-red-darken-3 font-weight-bold" },
+                            { key: "ok", to: "text", value: "text-green-darken-3" },
+                            { key: "error", to: "text", value: "text-red-darken-3" },
+                        ],
+                        dialogInfo: "",
+                        dialogMessage: "",
+                        lastClickTime: 0,
+                        isDessertsDataHandleClick: true,
+                        editedItem: {},
+                        selectedOrderListItem: [],
+                        dessertsHeaders: [
+                            { title: 'Dessert (100g)', subtitle: "Dessert info (100g serving)", hint: "Dessert information for serving (100g serving)", align: 'start', sortable: true, orderable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories (100g)', subtitle: "Total Calories", hint: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style', icon: 'mdi-mushroom' },
+                            { title: 'Carbo ex. (eg)', subtitle: "Carbohydrate exchange rate", hint: "Carbohydrate exchange rate", align: 'end', key: 'carboex', class: 'my-header-style' },
+                            { title: 'Fat (g)', subtitle: "Fat in dessert", hint: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", hint: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'Protein (g)', subtitle: "Protein in dessert", hint: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'Iron (%)', subtitle: "Iron in dessert", hint: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle: "Actions buttons", hint: "Actions buttons for manipulate data", align: 'center', key: 'actions', sortable: false, width: '15%' },
+                            { title: 'Operations', subtitle: "Operation for item", hint: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
+                        ],
+                        expanded: [],
+                        selectedRows: [],
+                        selectedItems: [],
+                        dessertsItems: [
+                            {
+                                name: 'Frozen Yogurt',
+                                calories: 159,
+                                carboex: 2.0,
+                                fat: 6.0,
+                                carbs: 24,
+                                protein: 4.0,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Natural Yogurt',
+                                calories: 59,
+                                carboex: 2.0,
+                                fat: 6.0,
+                                carbs: 24,
+                                protein: 4.0,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Ice cream \nsand\nwich',
+                                calories: 237,
+                                carboex: 3.5,
+                                fat: 9.0,
+                                carbs: 37,
+                                protein: 4.3,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Eclair',
+                                calories: 262,
+                                carboex: 2.5,
+                                fat: 16.0,
+                                carbs: 23,
+                                protein: 6.0,
+                                iron: 7,
+                            },
+                            {
+                                name: 'Cupcake',
+                                calories: 305,
+                                carboex: 6.5,
+                                fat: 3.7,
+                                carbs: 67,
+                                protein: 4.3,
+                                iron: 8,
+                            },
+                            {
+                                name: 'Gingerbread',
+                                calories: 356,
+                                carboex: 4.4,
+                                fat: 16.0,
+                                carbs: 49,
+                                protein: 3.9,
+                                iron: 16,
+                            },
+                            {
+                                name: 'Jelly bean',
+                                calories: 375,
+                                carboex: 8.7,
+                                fat: 0.0,
+                                carbs: 94,
+                                protein: 0.0,
+                                iron: 0,
+                            },
+                            {
+                                name: 'Lollipop',
+                                calories: 392,
+                                carboex: 8.5,
+                                fat: 0.2,
+                                carbs: 98,
+                                protein: 0,
+                                iron: 2,
+                            },
+                            {
+                                name: 'Honeycomb',
+                                calories: 408,
+                                carboex: 8.1,
+                                fat: 3.2,
+                                carbs: 87,
+                                protein: 6.5,
+                                iron: 45,
+                            },
+                            {
+                                name: 'Donut',
+                                calories: 452,
+                                carboex: 4.7,
+                                fat: 25.0,
+                                carbs: 51,
+                                protein: 4.9,
+                                iron: 22,
+                            },
+                            {
+                                name: 'KitKat',
+                                calories: 518,
+                                carboex: 5.8,
+                                fat: 26.0,
+                                carbs: 65,
+                                protein: 7,
+                                iron: 6,
+                            },
+                        ],
+                        settingsItems: [
+                            { value: 'notifications', title: 'Notifications', subtitle: 'Notify me about updates to apps or games that I downloaded' },
+                            { value: 'sound', title: 'Sound', subtitle: 'Auto-update apps at any time. Data charges may apply' },
+                            { value: 'widgets', title: 'Auto-add widgets', subtitle: 'Automatically add home screen widgets when downloads complete' },
+                        ],
+                        settingsSelection: []
+                    }
+                );
+
+                const menuActions = {
+                    userMenu: [
+                        ["Hide", "mdi-fire", "hide"],
+                        ["Logout", "mdi-logout", "logout"]
+                    ],
+                    actionSelected: null,
+                    actionsList: [
+                        ["Print Report", "mdi-printer", "print_rep"],
+                        ["Print Barcode", "mdi-barcode", "print_bar"],
+                        ["Print QRCode", "mdi-qrcode", "print_qr"]
+                    ],
+                    operationSelected: null,
+                    operationsList: [
+                        ["Print Report", "mdi-printer", "print_rep"],
+                        ["Print Barcode", "mdi-barcode", "print_bar"],
+                        ["Print QRCode", "mdi-qrcode", "print_qr"],
+                        ["Download CSV", "mdi-download", "download_csv"]
+                    ],
+                    languageSelected: 'pl',
+                    languageSelectedUrl: "https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg",
+                    languages: [
+                        { value: 'pl', title: 'PL', subtitle: 'Polish', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/pl.svg' },
+                        { value: 'en', title: 'EN', subtitle: 'English', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/gb.svg' },
+                        { value: 'de', title: 'DE', subtitle: 'Germany', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/de.svg' },
+                        { value: 'cz', title: 'CZ', subtitle: 'Czechia', url: 'https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/1x1/cz.svg' },
+                    ]
+
+                };
+
+                const dicts = {
+                    debtStatus: [
+
+                    ]
+                };
+
+                const statesButtons = {
+                    isDisabledSaveColumnOrder: true,
+                    isColumnOrderMenuShow: false
+                };
+
+
+                var clock = Vue.reactive(
+                    {
+                        time: '15:05:34',
+                        date: '2025-08-06 WED'
+                    });
+
+                var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                var timerID = setInterval(updateTime, 1000);
+
+                updateTime();
+                function updateTime() {
+                    var cd = new Date();
+                    clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
+                    clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth() + 1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
+
+                    console.log(`clock.time = ${clock.time}`)
+                };
+
+                function zeroPadding(num, digit) {
+                    var zero = '';
+                    for (var i = 0; i < digit; i++) {
+                        zero += '0';
+                    }
+                    return (zero + num).slice(-digit);
+                }
+
+
+
+                const theme = ref('light');
+                const isDarkTheme = ref(true);
+
+                const isShowUserMenu = ref(false);
+
+                const appVersion = "v. 0.0.57 (2025-08-02 11:49:09)";
+                const appAuthor = "StarDust";
+                return {
+                    isDarkTheme
+                    , isShowUserMenu
+                    , appVersion, appAuthor
+                    , faceInfo
+
+                    , mainDrawer, mainDrawerRail, secondDrawer
+                    , group
+                    , statesButtons
+
+                    , dessertsData
+                    , dicts
+                    , searchData
+                    , menuActions
+                    , clock
+                }
+            },
+        })
+            .use(vuetify)
+            .mount("#app");
+    </script>
+</body>
+
+</html>
