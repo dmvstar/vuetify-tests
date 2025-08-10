@@ -1,0 +1,71 @@
+<!-- https://codepen.io/gau/pn/LjQwGp -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vuetify Drawer example NG V3</title>
+    <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+    <div id="clock">
+    <p class="date">{{ date }}</p>
+    <p class="time">{{ time }}</p>
+    <p class="text">DIGITAL CLOCK with Vue.js</p>
+    </div>
+
+    <!--template>
+        <v-app-bar app>
+            <v-toolbar-title>My App</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-btn text>
+                    {{ formattedTime }}
+                </v-btn>
+            </v-toolbar-items>
+        </v-app-bar>
+    </template-->
+
+    <script>
+        export default {
+            data() {
+                return {
+                    currentTime: new Date()
+                };
+            },
+            mounted() {
+                this.updateTime();
+                this.interval = setInterval(this.updateTime, 1000);
+            },
+            beforeDestroy() {
+                clearInterval(this.interval);
+            },
+            computed: {
+                formattedTime() {
+                    return this.currentTime.toLocaleTimeString();
+                }
+            },
+            methods: {
+                updateTime() {
+                    this.currentTime = new Date();
+                }
+            }
+        };
+    </script>
+
+</body>
+
+</html>
