@@ -189,7 +189,8 @@
 
                 <v-menu transition="scale-transition">
                     <template v-slot:activator="{ props }">
-                        <v-btn v-bind="props" icon="mdi-account-star" color="green"></v-btn>
+                        <v-btn 
+                        v-bind="props" icon="mdi-account-star" color="green"></v-btn>
                     </template>
                     <v-list density="compact">
                         <v-list-item prepend-icon="mdi-account-settings" title="Informations"
@@ -232,7 +233,10 @@
                 <v-list density="compact" nav>
                     <v-tooltip top>
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-folder" title="My Files" value="myfiles">
+                            <v-list-item 
+                            href="https://www.google.com"
+                            target="_blank"                            
+                            v-bind="props" prepend-icon="mdi-folder" title="My Files" value="myfiles">
                             </v-list-item>
                         </template>
                         <span>Select My Files</span>
@@ -1354,8 +1358,7 @@
                     var cd = new Date();
                     clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
                     clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth() + 1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
-
-                    console.log(`clock.time = ${clock.time}`)
+                    //console.log(`clock.time = ${clock.time}`)
                 };
 
                 function zeroPadding(num, digit) {
