@@ -162,7 +162,7 @@
 
                 <v-menu transition="scale-transition">
                     <template v-slot:activator="{ props }">
-                        <v-btn v-bind="props" rounded="xl">
+                        <v-btn v-bind="props" rounded="xl" append-icon="mdi-chevron-down">
                             <img :src="menuActions.languageSelectedUrl"
                                 style="width: 28x; height: 28px; margin-right: 0px; border-radius: 50%;">
                         </v-btn>
@@ -189,7 +189,7 @@
 
                 <v-menu transition="scale-transition">
                     <template v-slot:activator="{ props }">
-                        <v-btn 
+                        <v-btn append-icon="mdi-chevron-down"
                         v-bind="props" icon="mdi-account-star" color="green"></v-btn>
                     </template>
                     <v-list density="compact">
