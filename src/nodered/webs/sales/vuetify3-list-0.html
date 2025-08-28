@@ -178,10 +178,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
-                  rounded="sm" size="x-large"
-                  
+                  rounded="sm" size="x-large"                  
                   icon="mdi-cloud-download"
-                  @click="goGetDecsBySelect">
+                  @click="goGetDataApi">
                   <template v-slot:default>
                     <v-icon color="success"></v-icon>
                   </template>
@@ -193,10 +192,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
-                  rounded="sm" size="x-large"
-                  
+                  rounded="sm" size="x-large"                  
                   icon="mdi-cloud-upload"
-                  @click="goGetDecsBySelect">
+                  @click="goPutDataApi">
                   <template v-slot:default>
                     <v-icon color="warning"></v-icon>
                   </template>
@@ -298,17 +296,26 @@ https://vuejs.org/guide/components/registration.html#global-registration
               kind: 3,
               value: true,
               name: "Enable external API 1",
-              info: "Enable external API 1",
+              info: "http://site.a/api/v1/test/send",
               icon: 'mdi-clock'
             },
             {
               code: "ENABLE_API_2",
               kind: 3,
               value: true,
-              name: "Enable external API 1",
-              info: "Enable external API 1",
+              name: "Enable external API 2",
+              info: "http://site.a/api/v1/test/update",
               icon: 'mdi-clock'
             },
+            {
+              code: "ENABLE_API_3",
+              kind: 3,
+              value: true,
+              name: "Enable external API 3",
+              info: "http://site.a/api/v1/test/list",
+              icon: 'mdi-clock'
+            },
+            /*
             {
               code: "USER_INFO",
               kind: 1,
@@ -317,6 +324,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
               info: "User Info",
               icon: 'mdi-flag'
             },
+            */
           ];
         },
         deleteItem(item) { },
@@ -356,6 +364,32 @@ https://vuejs.org/guide/components/registration.html#global-registration
           }, 5000);
           //setTimeout(function () { console.log("Howdy!"); this.workModes.loading = false; }, 7000);
           //alert(this.workModes.loadMode);
+        },
+
+        goPutDataApi(event) {
+          this.snackBar.snackbar = true;
+          this.workModes.loading = true;
+          this.snackBar.title = `Put selected Api to Database.`;
+          this.snackBar.timeout = 3000;
+          setTimeout(() => {
+            this.workModes.loading = false;
+            this.snackBar.snackbar = true;
+            this.snackBar.title = `Put selected Api to Database complete.`;
+            this.snackBar.timeout = 3000;
+          }, 5000);
+        },
+
+        goGetDataApi(event) {
+          this.snackBar.snackbar = true;
+          this.workModes.loading = true;
+          this.snackBar.title = `Get selected Api from Database.`;
+          this.snackBar.timeout = 3000;
+          setTimeout(() => {
+            this.workModes.loading = false;
+            this.snackBar.snackbar = true;
+            this.snackBar.title = `Get selected Api from Database complete.`;
+            this.snackBar.timeout = 3000;
+          }, 5000);
         },
 
         highlightClickedRow(event) {
