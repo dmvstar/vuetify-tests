@@ -133,15 +133,16 @@ https://vuejs.org/guide/components/registration.html#global-registration
       <v-list-subheader>API</v-list-subheader>
 
       <v-list-item
-        v-for="(item, i) in listApiItems"
-        :key="i"
-        :value="item"
-        color="primary"
-        active-class="text-pink"
-        class="py-3"
         v-model:selected="listApiItemsSelected" 
         select-strategy="leaf"
+        v-for="item in listApiItems"
+        :key="item.code"
+        :value="item.code"
+        color="primary"
+        active-class="text-pink"
+        class="py-3"        
       >
+      
         <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
         </template>
@@ -153,20 +154,17 @@ https://vuejs.org/guide/components/registration.html#global-registration
         <template v-slot:append="{ isSelected }">
           <v-list-item-action class="flex-column align-end">
             <small class="mb-4 text-high-emphasis opacity-60">{{ item.action }}</small>
-
             <v-spacer></v-spacer>
-
             <v-icon v-if="isSelected" color="yellow-darken-3">mdi-star</v-icon>
-
             <v-icon v-else class="opacity-30">mdi-star-outline</v-icon>
           </v-list-item-action>
         </template>
-
         
       </v-list-item>
+      <!--
+      https://vuetifyjs.com/en/components/lists/#action-with-text
+      -->
     </v-list>
-
-
           </v-card-text>
           <v-card-actions>
             <v-row>
@@ -177,7 +175,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   variant="tonal"
                   block
                   rounded="sm" size="x-large"
-                  v-bind="props"
+                  
                   icon="mdi-cloud-download"
                   @click="goGetDecsBySelect">
                   <template v-slot:default>
@@ -192,7 +190,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   variant="tonal"
                   block
                   rounded="sm" size="x-large"
-                  v-bind="props"
+                  
                   icon="mdi-cloud-upload"
                   @click="goGetDecsBySelect">
                   <template v-slot:default>
@@ -203,7 +201,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                 </v-row>
           </v-card-actions>
         </v-card>
-
+        {{listApiItemsSelected}}
             
       </v-app>
     </script>
