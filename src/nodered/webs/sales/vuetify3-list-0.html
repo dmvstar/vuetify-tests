@@ -5,10 +5,7 @@ https://leafletjs.com/examples/quick-start/
 https://vue2-leaflet.netlify.app/
 https://github.com/vue-leaflet/Vue2Leaflet
 https://www.jsdelivr.com/package/npm/@vue-leaflet/vue-leaflet
-
 https://vuejs.org/guide/components/registration.html#global-registration
-
-
 -->
 
 <!DOCTYPE html>
@@ -19,62 +16,15 @@ https://vuejs.org/guide/components/registration.html#global-registration
     <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
     <link rel="shortcut icon" type="image/png"
         href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
-
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
-    <style>
-        .selected {
-            background-color: red;
-        }
-
-        tr.v-data-table__selected {
-            background: #7d92f5 !important;
-        }
-    </style>
-
-    <style>
-        .theme--light.v-data-table tbody tr:nth-of-type(even) {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
-
-        .theme--dark.v-data-table tbody tr:nth-of-type(even) {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .theme--light.v-data-table tbody tr.v-data-table__selected {
-            background: #f5c17d70 !important;
-        }
-
-        .theme--dark.v-data-table tbody tr.v-data-table__selected {
-            background: #a17b4970 !important;
-        }
-
-        .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
-            background: #a17b49c2 !important;
-        }
-
-        .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
-            background: #ffd296d2 !important;
-        }
-
-        .spacer {
-            margin-top: 3em;
-        }
-    </style>
 </head>
 
 <body>
     <div id="app">{{ message }}</div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
-
-    <!--
-  <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.cjs.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.es.js"></script>
-  -->
 
     <script type="text/x-template" id="app-template">
       <v-app>
@@ -179,7 +129,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
             <v-row>
                 <v-col cols="12" md="6" sm="6">
             <v-btn
-                  id="ID_goGetDecsBySelect"
+                  id="ID_goGetDataApi"
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
@@ -193,7 +143,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                 </v-col>
                 <v-col cols="12" md="6" sm="6">
                     <v-btn
-                  id="ID_goGetDecsBySelect"
+                  id="ID_goPutDataApi"
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
@@ -238,10 +188,8 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     timeout: 2000,
                 });
 
-                var dialog = Vue.ref(false);
-                var dialogDelete = Vue.ref(false);
+                var dialogInfo = Vue.ref(false);
 
-                var items = Vue.ref([]);
                 var selected_desserts = Vue.ref([]);
                 var desserts = Vue.ref([]);
                 var editedIndex = Vue.ref(-1);
@@ -269,12 +217,8 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     workModes,
                     title,
                     verInfo,
-                    dialog,
-                    dialogDelete,
+                    dialogInfo,
 
-                    items,
-
-                    selected_desserts,
                     listItems,
                     listApiItems,
                     listApiItemsSelected,
@@ -332,29 +276,8 @@ https://vuejs.org/guide/components/registration.html#global-registration
                         */
                     ];
                 },
-                deleteItem(item) { },
-                editItem(item) { },
-                getTitle(title) {
-                    var ret = "";
-                    console.log(title);
-                    return ret;
-                },
-                getColor(calories) {
-                    if (calories > 100) return "red";
-                    else if (calories > 50) return "orange";
-                    else return "green";
-                },
                 //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
-                //https://codepen.io/Hexodus/pen/ExKGWBe
-                handleClick(event, row) {
-                    console.log("Clicked event: ", event);
-                    console.log("Clicked item: ", row.item);
-                    //this.highlightClickedRow(event);
-                    //event.select(true);
-                    let selectState = row.isSelected ? false : true;
-                    console.log("selectState: ", selectState);
-                    //row.select(selectState);
-                },
+                //https://codepen.io/Hexodus/pen/ExKGWBe               
 
                 goGetDecsBySelect(event) {
                     this.snackBar.snackbar = true;
@@ -397,10 +320,6 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     }, 5000);
                 },
 
-                highlightClickedRow(event) {
-                    const tr = event.target.parentNode;
-                    tr.classList.add("highlight");
-                },
             },
         })
             .use(vuetify)
