@@ -28,9 +28,11 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
     <script type="text/x-template" id="app-template">
       <v-app>
+        
         <v-snackbar
+          min-width="100%"
           :timeout=snackBar.timeout
-          class="elevation-24"
+          class="elevation-24 w-100"
           color="primary"
           v-model="snackBar.snackbar">{{ snackBar.title }}
         <template v-slot:actions>
@@ -42,6 +44,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
           </v-btn>
         </template>
         </v-snackbar>
+
         <v-card
           class="mx-auto"
           width="800"
