@@ -15,63 +15,68 @@ https://vuejs.org/guide/components/registration.html#global-registration
 <html>
 
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
-  <style>
-    .selected {
-      background-color: red;
-    }
+    <title>Vuetify List example NG V3</title>
+    <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
 
-    tr.v-data-table__selected {
-      background: #7d92f5 !important;
-    }
-  </style>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
+    <style>
+        .selected {
+            background-color: red;
+        }
 
-  <style>
-    .theme--light.v-data-table tbody tr:nth-of-type(even) {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
+        tr.v-data-table__selected {
+            background: #7d92f5 !important;
+        }
+    </style>
 
-    .theme--dark.v-data-table tbody tr:nth-of-type(even) {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
+    <style>
+        .theme--light.v-data-table tbody tr:nth-of-type(even) {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
 
-    .theme--light.v-data-table tbody tr.v-data-table__selected {
-      background: #f5c17d70 !important;
-    }
+        .theme--dark.v-data-table tbody tr:nth-of-type(even) {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
 
-    .theme--dark.v-data-table tbody tr.v-data-table__selected {
-      background: #a17b4970 !important;
-    }
+        .theme--light.v-data-table tbody tr.v-data-table__selected {
+            background: #f5c17d70 !important;
+        }
 
-    .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
-      background: #a17b49c2 !important;
-    }
+        .theme--dark.v-data-table tbody tr.v-data-table__selected {
+            background: #a17b4970 !important;
+        }
 
-    .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
-      background: #ffd296d2 !important;
-    }
+        .theme--dark.v-data-table tbody tr.v-data-table__selected:hover {
+            background: #a17b49c2 !important;
+        }
 
-    .spacer {
-      margin-top: 3em;
-    }
-  </style>
+        .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
+            background: #ffd296d2 !important;
+        }
+
+        .spacer {
+            margin-top: 3em;
+        }
+    </style>
 </head>
 
 <body>
-  <div id="app">{{ message }}</div>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
+    <div id="app">{{ message }}</div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
 
-  <!--
+    <!--
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.cjs.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.es.js"></script>
   -->
 
-  <script type="text/x-template" id="app-template">
+    <script type="text/x-template" id="app-template">
       <v-app>
         <v-snackbar
           :timeout=snackBar.timeout
@@ -208,199 +213,199 @@ https://vuejs.org/guide/components/registration.html#global-registration
       </v-app>
   
     </script>
-  <script setup>
+    <script setup>
 
-    const { createApp, ref, reactive, defineProps } = Vue;
-    const { createVuetify, useTheme, version } = Vuetify;
+        const { createApp, ref, reactive, defineProps } = Vue;
+        const { createVuetify, useTheme, version } = Vuetify;
 
-    const vuetify = createVuetify({});
+        const vuetify = createVuetify({});
 
-    const app = createApp({
-      template: "#app-template",
+        const app = createApp({
+            template: "#app-template",
 
-      setup() {
-        const title = Vue.ref("Vuetify 3.0");
-        const verInfo = Vue.ref("ver. 0.0.2");
-        const theme = useTheme();
+            setup() {
+                const title = Vue.ref("Vuetify 3.0");
+                const verInfo = Vue.ref("ver. 0.0.2");
+                const theme = useTheme();
 
-        var workModes = Vue.ref({
-          loadMode: "ASWP",
-          loading: false,
-        });
-        var snackBar = Vue.ref({
-          snackbar: false,
-          title: "Get a new DECS for ...",
-          timeout: 2000,
-        });
+                var workModes = Vue.ref({
+                    loadMode: "ASWP",
+                    loading: false,
+                });
+                var snackBar = Vue.ref({
+                    snackbar: false,
+                    title: "Get a new DECS for ...",
+                    timeout: 2000,
+                });
 
-        var dialog = Vue.ref(false);
-        var dialogDelete = Vue.ref(false);
+                var dialog = Vue.ref(false);
+                var dialogDelete = Vue.ref(false);
 
-        var items = Vue.ref([]);
-        var selected_desserts = Vue.ref([]);
-        var desserts = Vue.ref([]);
-        var editedIndex = Vue.ref(-1);
-        var editedItem = Vue.ref({
-          name: "",
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0,
-        });
-        var defaultItem = Vue.ref({
-          name: "",
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0,
-        });
+                var items = Vue.ref([]);
+                var selected_desserts = Vue.ref([]);
+                var desserts = Vue.ref([]);
+                var editedIndex = Vue.ref(-1);
+                var editedItem = Vue.ref({
+                    name: "",
+                    calories: 0,
+                    fat: 0,
+                    carbs: 0,
+                    protein: 0,
+                });
+                var defaultItem = Vue.ref({
+                    name: "",
+                    calories: 0,
+                    fat: 0,
+                    carbs: 0,
+                    protein: 0,
+                });
 
-        var listItems = ["ASWP", "ACCS", "NONE"];
-        var listApiItems = Vue.ref([]);
-        var listApiItemsSelected = Vue.ref([]);
+                var listItems = ["ASWP", "ACCS", "NONE"];
+                var listApiItems = Vue.ref([]);
+                var listApiItemsSelected = Vue.ref([]);
 
-        return {
-          snackBar,
-          workModes,
-          title,
-          verInfo,
-          dialog,
-          dialogDelete,
+                return {
+                    snackBar,
+                    workModes,
+                    title,
+                    verInfo,
+                    dialog,
+                    dialogDelete,
 
-          items,
+                    items,
 
-          selected_desserts,
-          listItems,
-          listApiItems,
-          listApiItemsSelected,
-        };
-      },
-      created() {
-        console.log("verInfo: ", this.verInfo);
-        this.initialize();
-      },
-
-      watch: {
-        "workModes.snackbar"(value) {
-          if (value === false) {
-            //this.workModes.loading = false;
-          }
-        },
-      },
-
-      methods: {
-        initialize() {
-          this.listApiItems = [
-            {
-              code: "ENABLE_API_1",
-              kind: 3,
-              value: true,
-              name: "Enable external API 1",
-              info: "http://site.a/api/v1/test/send",
-              icon: 'mdi-clock'
+                    selected_desserts,
+                    listItems,
+                    listApiItems,
+                    listApiItemsSelected,
+                };
             },
-            {
-              code: "ENABLE_API_2",
-              kind: 3,
-              value: true,
-              name: "Enable external API 2",
-              info: "http://site.a/api/v1/test/update",
-              icon: 'mdi-clock'
+            created() {
+                console.log("verInfo: ", this.verInfo);
+                this.initialize();
             },
-            {
-              code: "ENABLE_API_3",
-              kind: 3,
-              value: true,
-              name: "Enable external API 3",
-              info: "http://site.a/api/v1/test/list",
-              icon: 'mdi-clock'
+
+            watch: {
+                "workModes.snackbar"(value) {
+                    if (value === false) {
+                        //this.workModes.loading = false;
+                    }
+                },
             },
-            /*
-            {
-              code: "USER_INFO",
-              kind: 1,
-              value: "Info",
-              name: "User Info",
-              info: "User Info",
-              icon: 'mdi-flag'
+
+            methods: {
+                initialize() {
+                    this.listApiItems = [
+                        {
+                            code: "ENABLE_API_1",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 1",
+                            info: "http://site.a/api/v1/test/send",
+                            icon: 'mdi-clock'
+                        },
+                        {
+                            code: "ENABLE_API_2",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 2",
+                            info: "http://site.a/api/v1/test/update",
+                            icon: 'mdi-clock'
+                        },
+                        {
+                            code: "ENABLE_API_3",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 3",
+                            info: "http://site.a/api/v1/test/list",
+                            icon: 'mdi-clock'
+                        },
+                        /*
+                        {
+                          code: "USER_INFO",
+                          kind: 1,
+                          value: "Info",
+                          name: "User Info",
+                          info: "User Info",
+                          icon: 'mdi-flag'
+                        },
+                        */
+                    ];
+                },
+                deleteItem(item) { },
+                editItem(item) { },
+                getTitle(title) {
+                    var ret = "";
+                    console.log(title);
+                    return ret;
+                },
+                getColor(calories) {
+                    if (calories > 100) return "red";
+                    else if (calories > 50) return "orange";
+                    else return "green";
+                },
+                //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
+                //https://codepen.io/Hexodus/pen/ExKGWBe
+                handleClick(event, row) {
+                    console.log("Clicked event: ", event);
+                    console.log("Clicked item: ", row.item);
+                    //this.highlightClickedRow(event);
+                    //event.select(true);
+                    let selectState = row.isSelected ? false : true;
+                    console.log("selectState: ", selectState);
+                    //row.select(selectState);
+                },
+
+                goGetDecsBySelect(event) {
+                    this.snackBar.snackbar = true;
+                    this.workModes.loading = true;
+                    this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
+                    this.snackBar.timeout = 3000;
+                    setTimeout(() => {
+                        this.workModes.loading = false;
+                        this.snackBar.snackbar = true;
+                        this.snackBar.title = `Loading new DECS for ${this.workModes.loadMode} apps complete.`;
+                        this.snackBar.timeout = 3000;
+                    }, 5000);
+                    //setTimeout(function () { console.log("Howdy!"); this.workModes.loading = false; }, 7000);
+                    //alert(this.workModes.loadMode);
+                },
+
+                goPutDataApi(event) {
+                    this.snackBar.snackbar = true;
+                    this.workModes.loading = true;
+                    this.snackBar.title = `Put selected Api to Database.`;
+                    this.snackBar.timeout = 3000;
+                    setTimeout(() => {
+                        this.workModes.loading = false;
+                        this.snackBar.snackbar = true;
+                        this.snackBar.title = `Put selected Api to Database complete.`;
+                        this.snackBar.timeout = 3000;
+                    }, 5000);
+                },
+
+                goGetDataApi(event) {
+                    this.snackBar.snackbar = true;
+                    this.workModes.loading = true;
+                    this.snackBar.title = `Get selected Api from Database.`;
+                    this.snackBar.timeout = 3000;
+                    setTimeout(() => {
+                        this.workModes.loading = false;
+                        this.snackBar.snackbar = true;
+                        this.snackBar.title = `Get selected Api from Database complete.`;
+                        this.snackBar.timeout = 3000;
+                    }, 5000);
+                },
+
+                highlightClickedRow(event) {
+                    const tr = event.target.parentNode;
+                    tr.classList.add("highlight");
+                },
             },
-            */
-          ];
-        },
-        deleteItem(item) { },
-        editItem(item) { },
-        getTitle(title) {
-          var ret = "";
-          console.log(title);
-          return ret;
-        },
-        getColor(calories) {
-          if (calories > 100) return "red";
-          else if (calories > 50) return "orange";
-          else return "green";
-        },
-        //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
-        //https://codepen.io/Hexodus/pen/ExKGWBe
-        handleClick(event, row) {
-          console.log("Clicked event: ", event);
-          console.log("Clicked item: ", row.item);
-          //this.highlightClickedRow(event);
-          //event.select(true);
-          let selectState = row.isSelected ? false : true;
-          console.log("selectState: ", selectState);
-          //row.select(selectState);
-        },
-
-        goGetDecsBySelect(event) {
-          this.snackBar.snackbar = true;
-          this.workModes.loading = true;
-          this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
-          this.snackBar.timeout = 3000;
-          setTimeout(() => {
-            this.workModes.loading = false;
-            this.snackBar.snackbar = true;
-            this.snackBar.title = `Loading new DECS for ${this.workModes.loadMode} apps complete.`;
-            this.snackBar.timeout = 3000;
-          }, 5000);
-          //setTimeout(function () { console.log("Howdy!"); this.workModes.loading = false; }, 7000);
-          //alert(this.workModes.loadMode);
-        },
-
-        goPutDataApi(event) {
-          this.snackBar.snackbar = true;
-          this.workModes.loading = true;
-          this.snackBar.title = `Put selected Api to Database.`;
-          this.snackBar.timeout = 3000;
-          setTimeout(() => {
-            this.workModes.loading = false;
-            this.snackBar.snackbar = true;
-            this.snackBar.title = `Put selected Api to Database complete.`;
-            this.snackBar.timeout = 3000;
-          }, 5000);
-        },
-
-        goGetDataApi(event) {
-          this.snackBar.snackbar = true;
-          this.workModes.loading = true;
-          this.snackBar.title = `Get selected Api from Database.`;
-          this.snackBar.timeout = 3000;
-          setTimeout(() => {
-            this.workModes.loading = false;
-            this.snackBar.snackbar = true;
-            this.snackBar.title = `Get selected Api from Database complete.`;
-            this.snackBar.timeout = 3000;
-          }, 5000);
-        },
-
-        highlightClickedRow(event) {
-          const tr = event.target.parentNode;
-          tr.classList.add("highlight");
-        },
-      },
-    })
-      .use(vuetify)
-      .mount("#app");
-  </script>
+        })
+            .use(vuetify)
+            .mount("#app");
+    </script>
 </body>
 
 </html>
