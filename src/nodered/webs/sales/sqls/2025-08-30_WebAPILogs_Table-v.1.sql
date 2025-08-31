@@ -15,6 +15,7 @@ CREATE TABLE sysapilog (
 
 	requestid varchar(256) NOT NULL,
 	clientip INET DEFAULT('127.0.0.1') NOT NULL,
+    process varchar(64) NOT NULL,
 	method e_method DEFAULT('GET') NOT NULL,
 	direction e_direct DEFAULT('NEVER') NOT NULL,
 	statuscode varchar(32) NOT NULL,
@@ -40,6 +41,7 @@ INSERT INTO sysapilog (
     method,
     direction,
     statuscode,
+    process,
     host,
     path,
     result,
@@ -54,6 +56,7 @@ INSERT INTO sysapilog (
     'POST'::e_method,
     'REQUEST'::e_direct,
     '0',
+    'GenSQL',
     'api.example.com',
     '/v2/users',
     '',
@@ -69,6 +72,7 @@ INSERT INTO sysapilog (
     'POST'::e_method,
     'RESPONSE'::e_direct,
     '200',
+    'GenSQL',
     'api.example.com',
     '/v2/users',
     'ok',
@@ -84,6 +88,7 @@ INSERT INTO sysapilog (
     'POST'::e_method,
     'RESPONSE'::e_direct,
     '500',
+    'GenSQL',
     'api.example.com',
     '/v2/users',
     'error',
@@ -96,145 +101,6 @@ INSERT INTO sysapilog (
 
 
 --DELETE FROM public.sysapilog;
-SELECT  * FROM public.sysapilog;
-
--------------------
-
-CREATE OR REPLACE FUNCTION add_sysapilog_entry(
-    p_requestid VARCHAR(256),
-    p_clientip INET,
-    p_method e_method,
-    p_direction e_direct,
-    p_statuscode VARCHAR(32),
-    p_host VARCHAR(256),
-    p_path VARCHAR(256),
-    p_result VARCHAR(32),
-    p_contenttext TEXT,
-    p_contentbody JSONB,
-    p_headers JSONB,
-    p_exception TEXT,
-    p_duration INTEGER
-)
-RETURNS BIGINT AS $$
-DECLARE
-    new_id BIGINT;
-BEGIN
-    INSERT INTO sysapilog (
-        requestid,
-        clientip,
-        method,
-        direction,
-        statuscode,
-        host,
-        path,
-        result,
-        contenttext,
-        contentbody,
-        headers,
-        exception,
-        duration
-    )
-    VALUES (
-        p_requestid,
-        p_clientip,
-        p_method,
-        p_direction,
-        p_statuscode,
-        p_host,
-        p_path,
-        p_result,
-        p_contenttext,
-        p_contentbody,
-        p_headers,
-        p_exception,
-        p_duration
-    )
-    RETURNING id INTO new_id;
-
-    RETURN new_id;
-END;
-$$ LANGUAGE plpgsql;
-
-SELECT  add_sysapilog_entry(
-    '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8888',
-    '192.168.1.100'::INET,
-    'POST'::e_method,
-    'REQUEST'::e_direct,
-    '200',
-    'api.example.com',
-    '/v1/users',
-    'ok',
-    '{"message": "User successfully created."}',
-    '{"name": "Jane Doe", "email": "jane.doe@example.com"}',
-    '{"content-type": "application/json", "accept": "application/json"}',
-    NULL,
-    760
-);
+SELECT * FROM public.sysapilog;
 
 
-CREATE OR REPLACE PROCEDURE add_sysapilog_entry_proc(
-    p_requestid VARCHAR(256),
-    p_clientip INET,
-    p_method e_method,
-    p_direction e_direct,
-    p_statuscode VARCHAR(32),
-    p_host VARCHAR(256),
-    p_path VARCHAR(256),
-    p_result VARCHAR(32),
-    p_contenttext TEXT,
-    p_contentbody JSONB,
-    p_headers JSONB,
-    p_exception TEXT,
-    p_duration INTEGER
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    INSERT INTO sysapilog (
-        requestid,
-        clientip,
-        method,
-        direction,
-        statuscode,
-        host,
-        path,
-        result,
-        contenttext,
-        contentbody,
-        headers,
-        exception,
-        duration
-    )
-    VALUES (
-        p_requestid,
-        p_clientip,
-        p_method,
-        p_direction,
-        p_statuscode,
-        p_host,
-        p_path,
-        p_result,
-        p_contenttext,
-        p_contentbody,
-        p_headers,
-        p_exception,
-        p_duration
-    );
-END;
-$$;
-
-CALL add_sysapilog_entry_proc(
-    '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e7c',
-    '192.168.1.100'::INET,
-    'POST'::e_method,
-    'INBOUND'::e_direct,
-    '200 OK',
-    'api.example.com',
-    '/v1/users',
-    'SUCCESS',
-    '{"message": "User successfully created."}',
-    '{"name": "Jane Doe", "email": "jane.doe@example.com"}',
-    '{"content-type": "application/json", "accept": "application/json"}',
-    NULL,
-    450
-);
