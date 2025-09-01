@@ -314,13 +314,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
                     this.snackBar.title = `Get selected Api from Database.`;
-                    this.snackBar.timeout = 3000;
-                    this.listApiItemsSelected = ['ENABLE_API_2'];
+                    this.snackBar.timeout = 3000;                    
                     setTimeout(() => {
                         this.workModes.loading = false;
                         this.snackBar.snackbar = true;
                         this.snackBar.title = `Get selected Api ${this.listApiItemsSelected} from Database complete.`;
                         this.snackBar.timeout = 2000;
+                        this.listApiItemsSelected = ['ENABLE_API_2'];
                     }, 3000);
                 },
 
