@@ -1,5 +1,5 @@
 <!--
-TRY to 
+TRY to
 https://github.com/vue-leaflet/vue-leaflet
 https://leafletjs.com/examples/quick-start/
 https://vue2-leaflet.netlify.app/
@@ -28,7 +28,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
     <script type="text/x-template" id="app-template">
       <v-app>
-        
+
         <v-snackbar
           min-width="100%"
           :timeout=snackBar.timeout
@@ -89,15 +89,15 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
       <v-list-subheader>API</v-list-subheader>
 
-      <v-list-item        
+      <v-list-item
         v-for="item in listApiItems"
         :key="item.code"
         :value="item.code"
         color="primary"
         active-class="text-pink"
-        class="py-3"        
+        class="py-3"
       >
-      
+
         <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
         </template>
@@ -105,14 +105,14 @@ https://vuejs.org/guide/components/registration.html#global-registration
         <v-list-item-title v-text="item.code"></v-list-item-title>
         <v-list-item-subtitle class="mb-1 text-high-emphasis opacity-100">{{ item.name }}</v-list-item-subtitle>
         <v-list-item-subtitle class="text-high-emphasis">{{ item.info }}</v-list-item-subtitle>
-        <v-list-item-subtitle class="text-high-emphasis">          
+        <v-list-item-subtitle class="text-high-emphasis">
           <v-text-field v-if="item.kind==1"
             label="Email address"
             placeholder="johndoe@gmail.com"
             type="email"
           ></v-text-field>
         </v-list-item-subtitle>
-        
+
         <template v-slot:append="{ isSelected }">
           <v-list-item-action class="flex-column align-end">
             <small class="mb-4 text-high-emphasis opacity-60">{{ item.action }}</small>
@@ -121,7 +121,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
             <v-icon v-else class="opacity-30">mdi-star-outline</v-icon>
           </v-list-item-action>
         </template>
-        
+
       </v-list-item>
       <!--
       https://vuetifyjs.com/en/components/lists/#action-with-text
@@ -136,7 +136,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
-                  rounded="sm" size="x-large"                  
+                  rounded="sm" size="x-large"
                   icon="mdi-cloud-download"
                   @click="goGetDataApi">
                   <template v-slot:default>
@@ -150,7 +150,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
-                  rounded="sm" size="x-large"                  
+                  rounded="sm" size="x-large"
                   icon="mdi-cloud-upload"
                   @click="goPutDataApi">
                   <template v-slot:default>
@@ -162,9 +162,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
           </v-card-actions>
         </v-card>
         {{listApiItemsSelected}}
-            
+
       </v-app>
-  
+
     </script>
     <script setup>
 
@@ -280,7 +280,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     ];
                 },
                 //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
-                //https://codepen.io/Hexodus/pen/ExKGWBe               
+                //https://codepen.io/Hexodus/pen/ExKGWBe
 
                 goGetDecsBySelect(event) {
                     this.snackBar.snackbar = true;
@@ -300,13 +300,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
                 goPutDataApi(event) {
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
-                    this.snackBar.title = `Put selected Api to Database.`;
+                    this.snackBar.title = `Put selected ${this.listApiItemsSelected} Api to Database.`;
                     this.snackBar.timeout = 3000;
                     setTimeout(() => {
                         this.workModes.loading = false;
                         this.snackBar.snackbar = true;
-                        this.snackBar.title = `Put selected Api to Database complete.`;
-                        this.snackBar.timeout = 3000;
+                        this.snackBar.title = `Put selected ${this.listApiItemsSelected} Api to Database complete.`;
+                        this.snackBar.timeout = 1000;
                     }, 5000);
                 },
 
@@ -315,12 +315,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     this.workModes.loading = true;
                     this.snackBar.title = `Get selected Api from Database.`;
                     this.snackBar.timeout = 3000;
+                    this.listApiItemsSelected = ['ENABLE_API_2'];
                     setTimeout(() => {
                         this.workModes.loading = false;
                         this.snackBar.snackbar = true;
-                        this.snackBar.title = `Get selected Api from Database complete.`;
-                        this.snackBar.timeout = 3000;
-                    }, 5000);
+                        this.snackBar.title = `Get selected Api ${this.listApiItemsSelected} from Database complete.`;
+                        this.snackBar.timeout = 2000;
+                    }, 3000);
                 },
 
             },
