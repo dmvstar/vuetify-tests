@@ -188,7 +188,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
             setup() {
                 const title = Vue.ref("Vuetify 3.0");
-                const verInfo = Vue.ref("ver. 0.0.2");
+                const verInfo = Vue.ref("ver. 0.0.5");
                 const theme = useTheme();
 
                 var workModes = Vue.ref({
@@ -200,27 +200,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     title: "Get a new DECS for ...",
                     timeout: 2000,
                 });
-
-                var dialogInfo = Vue.ref(false);
-
-                var selected_desserts = Vue.ref([]);
-                var desserts = Vue.ref([]);
-                var editedIndex = Vue.ref(-1);
-                var editedItem = Vue.ref({
-                    name: "",
-                    calories: 0,
-                    fat: 0,
-                    carbs: 0,
-                    protein: 0,
-                });
-                var defaultItem = Vue.ref({
-                    name: "",
-                    calories: 0,
-                    fat: 0,
-                    carbs: 0,
-                    protein: 0,
-                });
-
+              
                 var listItems = ["ASWP", "ACCS", "NONE"];
                 var listApiItems = Vue.ref([]);
                 var listApiItemsSelected = Vue.ref([]);
@@ -229,9 +209,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     snackBar,
                     workModes,
                     title,
-                    verInfo,
-                    dialogInfo,
-
+                    verInfo, 
                     listItems,
                     listApiItems,
                     listApiItemsSelected,
@@ -249,7 +227,6 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     }
                 },
             },
-
             methods: {
                 initialize() {
                     this.listApiItems = [
@@ -277,16 +254,23 @@ https://vuejs.org/guide/components/registration.html#global-registration
                             info: "http://site.a/api/v1/test/list",
                             icon: 'mdi-clock'
                         },
-                        /*
                         {
-                          code: "USER_INFO",
-                          kind: 1,
-                          value: "Info",
-                          name: "User Info",
-                          info: "User Info",
-                          icon: 'mdi-flag'
+                            code: "ENABLE_API_4",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 4",
+                            info: "http://site.a/api/v1/test/accs",
+                            icon: 'mdi-clock'
                         },
-                        */
+                        {
+                            code: "ENABLE_API_5",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 5",
+                            info: "http://site.a/api/v1/test/users",
+                            icon: 'mdi-clock'
+                        },
+                        
                     ];
                 },
                 //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
