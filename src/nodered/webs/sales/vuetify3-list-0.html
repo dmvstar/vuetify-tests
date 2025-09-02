@@ -68,13 +68,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
             <v-tooltip>
               <template v-slot:activator="{ props }">
                 <v-btn
-                  id="ID_goGetDecsBySelect"
+                  id="ID_btnGetDecsBySelect"
                   :disabled="workModes.loading"
                   variant="tonal"
                   rounded="sm" size="x-large"
                   v-bind="props"
                   icon="mdi-briefcase-download"
-                  @click="goGetDecsBySelect">
+                  @click="btnGetDecsBySelect">
                   <template v-slot:default>
                     <v-icon color="success"></v-icon>
                   </template>
@@ -143,13 +143,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
             <v-row>
                 <v-col cols="12" md="6" sm="6">
             <v-btn
-                  id="ID_goGetDataApi"
+                  id="ID_btnGetDataApi"
                   :disabled="workModes.loading"
                   variant="tonal"
                   block
                   rounded="sm" size="x-large"
                   icon="mdi-cloud-download"
-                  @click="goGetDataApi">
+                  @click="btnGetDataApi">
                   <template v-slot:default>
                     <v-icon color="success"></v-icon>
                   </template>
@@ -157,13 +157,13 @@ https://vuejs.org/guide/components/registration.html#global-registration
                 </v-col>
                 <v-col cols="12" md="6" sm="6">
                     <v-btn
-                  id="ID_goPutDataApi"
-                  :disabled="workModes.loading"
+                  id="ID_btnPutDataApi"
+                  :disabled="workModes.loading || listApiItems.length == 0"
                   variant="tonal"
                   block
                   rounded="sm" size="x-large"
                   icon="mdi-cloud-upload"
-                  @click="goPutDataApi">
+                  @click="btnPutDataApi">
                   <template v-slot:default>
                     <v-icon color="warning"></v-icon>
                   </template>
@@ -235,7 +235,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                 //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
                 //https://codepen.io/Hexodus/pen/ExKGWBe
 
-                goGetDecsBySelect(event) {
+                btnGetDecsBySelect(event) {
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
                     this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
@@ -250,7 +250,8 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     //alert(this.workModes.loadMode);
                 },
 
-                goPutDataApi(event) {
+                btnPutDataApi(event) {
+                    this.executePutDataAPi();
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
                     this.snackBar.title = `Put selected ${this.listApiItemsSelected} Api to Database.`;
@@ -263,7 +264,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     }, 5000);
                 },
 
-                goGetDataApi(event) {
+                btnGetDataApi(event) {
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
                     this.snackBar.title = `Get selected Api from Database.`;
@@ -278,6 +279,9 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     }, 3000);
                 },
 
+                executePutDataAPi(){
+
+                },
                 executeGetDataAPi(){
                     this.listApiItems = [
                         {
