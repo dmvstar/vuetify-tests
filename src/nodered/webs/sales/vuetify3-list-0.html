@@ -87,7 +87,8 @@ https://vuejs.org/guide/components/registration.html#global-registration
 
       <v-list density="compact" v-model:selected="listApiItemsSelected" select-strategy="leaf">
 
-      <v-list-subheader>API</v-list-subheader>
+      <v-list-header>API</v-list-header>
+      <v-list-subheader>API list for controlling</v-list-subheader>
 
       <v-list-item
         v-for="item in listApiItems"
@@ -98,7 +99,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
         class="py-3"
       >
 
-        <template v-slot:prepend>            
+        <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
         </template>
 
@@ -112,19 +113,19 @@ https://vuejs.org/guide/components/registration.html#global-registration
             type="email"
           ></v-text-field>
         </v-list-item-subtitle>
-        
+
         <template v-slot:append="{ isSelected }">
-          <v-list-item-action class="flex-column align-end">            
+          <v-list-item-action class="flex-column align-end">
             <small class="mb-4 text-high-emphasis opacity-60">{{ item.action }}</small>
             <v-spacer></v-spacer>
             <div v-if="workModes.loading">
-            <v-progress-circular                
+            <v-progress-circular
                 :width="2"
                 :size="15"
                 color="red"
                 indeterminate
             ></v-progress-circular>
-            </div>            
+            </div>
             <div v-else>
             <v-icon v-if="isSelected" color="yellow-darken-3">mdi-star</v-icon>
             <v-icon v-else class="opacity-30">mdi-star-outline</v-icon>
@@ -200,7 +201,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     title: "Get a new DECS for ...",
                     timeout: 2000,
                 });
-              
+
                 var listItems = ["ASWP", "ACCS", "NONE"];
                 var listApiItems = Vue.ref([]);
                 var listApiItemsSelected = Vue.ref([]);
@@ -209,7 +210,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
                     snackBar,
                     workModes,
                     title,
-                    verInfo, 
+                    verInfo,
                     listItems,
                     listApiItems,
                     listApiItemsSelected,
@@ -229,49 +230,7 @@ https://vuejs.org/guide/components/registration.html#global-registration
             },
             methods: {
                 initialize() {
-                    this.listApiItems = [
-                        {
-                            code: "ENABLE_API_1",
-                            kind: 3,
-                            value: true,
-                            name: "Enable external API 1",
-                            info: "http://site.a/api/v1/test/send",
-                            icon: 'mdi-clock'
-                        },
-                        {
-                            code: "ENABLE_API_2",
-                            kind: 3,
-                            value: true,
-                            name: "Enable external API 2",
-                            info: "http://site.a/api/v1/test/update",
-                            icon: 'mdi-clock'
-                        },
-                        {
-                            code: "ENABLE_API_3",
-                            kind: 3,
-                            value: true,
-                            name: "Enable external API 3",
-                            info: "http://site.a/api/v1/test/list",
-                            icon: 'mdi-clock'
-                        },
-                        {
-                            code: "ENABLE_API_4",
-                            kind: 3,
-                            value: true,
-                            name: "Enable external API 4",
-                            info: "http://site.a/api/v1/test/accs",
-                            icon: 'mdi-clock'
-                        },
-                        {
-                            code: "ENABLE_API_5",
-                            kind: 3,
-                            value: true,
-                            name: "Enable external API 5",
-                            info: "http://site.a/api/v1/test/users",
-                            icon: 'mdi-clock'
-                        },
-                        
-                    ];                    
+                    
                 },
                 //https://stackoverflow.com/questions/56686652/vuetify-how-to-highlight-row-on-click-in-v-data-table
                 //https://codepen.io/Hexodus/pen/ExKGWBe
@@ -314,8 +273,55 @@ https://vuejs.org/guide/components/registration.html#global-registration
                         this.snackBar.snackbar = true;
                         this.snackBar.title = `Get selected Api ${this.listApiItemsSelected} from Database complete.`;
                         this.snackBar.timeout = 2000;
+                        this.executeGetDataAPi();
                         this.listApiItemsSelected = ['ENABLE_API_2'];
                     }, 3000);
+                },
+
+                executeGetDataAPi(){
+                    this.listApiItems = [
+                        {
+                            code: "ENABLE_API_1",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 1",
+                            info: "http://site.a/api/v1/test/send",
+                            icon: 'mdi-clock'
+                        },
+                        {
+                            code: "ENABLE_API_2",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 2",
+                            info: "http://site.a/api/v1/test/update",
+                            icon: 'mdi-clock'
+                        },
+                        {
+                            code: "ENABLE_API_3",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 3",
+                            info: "http://site.a/api/v1/test/list",
+                            icon: 'mdi-clock'
+                        },
+                        {
+                            code: "ENABLE_API_4",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 4",
+                            info: "http://site.a/api/v1/test/accs",
+                            icon: 'mdi-clock'
+                        },
+                        {
+                            code: "ENABLE_API_5",
+                            kind: 3,
+                            value: true,
+                            name: "Enable external API 5",
+                            info: "http://site.a/api/v1/test/users",
+                            icon: 'mdi-clock'
+                        },
+
+                    ];
                 },
 
             },
