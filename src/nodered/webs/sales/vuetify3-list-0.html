@@ -36,7 +36,7 @@ https://vuetifyjs.com/en/components/lists/#action-with-text
           min-width="100%"
           :timeout=snackBar.timeout
           class="elevation-24 w-100"
-          color="primary"
+          :color=snackBar.color
           v-model="snackBar.snackbar">
             {{ snackBar.title }}          
             <template v-slot:actions>
@@ -188,6 +188,7 @@ https://vuetifyjs.com/en/components/lists/#action-with-text
                 var snackBar = Vue.ref({
                     snackbar: false,
                     title: "Get a new DECS for ...",
+                    color : "primary",
                     timeout: 2000,
                 });
 
@@ -228,10 +229,12 @@ https://vuetifyjs.com/en/components/lists/#action-with-text
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
                     this.snackBar.title = `Get a new DECS for ${this.workModes.loadMode} apps.`;
+                    this.snackBar.color = "yellow";
                     this.snackBar.timeout = 3000;
                     setTimeout(() => {
                         this.workModes.loading = false;
                         this.snackBar.snackbar = true;
+                        this.snackBar.color = "primary";
                         this.snackBar.title = `Loading new DECS for ${this.workModes.loadMode} apps complete.`;
                         this.snackBar.timeout = 3000;
                     }, 5000);
@@ -243,11 +246,13 @@ https://vuetifyjs.com/en/components/lists/#action-with-text
                     this.executePutDataAPi();
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
+                    this.snackBar.color = "orange";
                     this.snackBar.title = `Put selected ${this.listApiItemsSelected} Api to Database.`;
                     this.snackBar.timeout = 3000;
                     setTimeout(() => {
                         this.workModes.loading = false;
                         this.snackBar.snackbar = true;
+                        this.snackBar.color = "primary";
                         this.snackBar.title = `Put selected ${this.listApiItemsSelected} Api to Database complete.`;
                         this.snackBar.timeout = 1000;
                     }, 5000);
@@ -256,11 +261,13 @@ https://vuetifyjs.com/en/components/lists/#action-with-text
                 btnGetDataApi(event) {
                     this.snackBar.snackbar = true;
                     this.workModes.loading = true;
+                    this.snackBar.color = "green";
                     this.snackBar.title = `Get selected Api from Database.`;
                     this.snackBar.timeout = 3000;
                     setTimeout(() => {
                         this.workModes.loading = false;
                         this.snackBar.snackbar = true;
+                        this.snackBar.color = "primary";
                         this.snackBar.title = `Get selected Api ${this.listApiItemsSelected} from Database complete.`;
                         this.snackBar.timeout = 2000;
                         this.executeGetDataAPi();
