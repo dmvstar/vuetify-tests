@@ -11,6 +11,7 @@ CREATE TABLE
     );
 
 INSERT INTO api_items (code, ident, kind, value, name, info, icon) VALUES
-('TEST_API_1', 'api_test', 1, TRUE, 'Test API A', 'http://test.site/api/v1/a', 'mdi-test-a'),
-('TEST_API_2', 'api_test', 2, FALSE, 'Test API B', 'http://test.site/api/v1/b', 'mdi-test-b'),
-('TEST_API_3', 'api_test', 3, TRUE, 'Test API C', 'http://test.site/api/v1/c', 'mdi-test-b');
+('STATUS_API_2', 'CC_API', 3, TRUE,  'API 2. Отримання даних заявок з рішеннями з статусом [MB Documents Signed]', 'https://ccs.dev.ukrgasaws.com/api/ccs/report/expired', 'mdi-clock'),
+('STATUS_API_7', 'CC_API', 3, FALSE, 'API 7. Відправка пуша по погодженому ліміту', 'https://nr-messages.dev.ukrgasaws.com', 'mdi-clock'),
+('STATUS_API_9', 'CC_API', 3, FALSE, 'API 9. Активація картки', 'https://mobservice-main.ukrgas.bank.local:1990', 'mdi-clock'),
+('STATUS_API_10', 'CC_API', 3, TRUE,  'API 10. Отримання даних про ліміт', 'https://credit.ukrgasbank.com/api/ccs/application/limit', 'mdi-clock');
