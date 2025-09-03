@@ -31,142 +31,152 @@ https://vuetifyjs.com/en/components/lists/#action-with-text
     <script src="https://cdn.jsdelivr.net/npm/@vue-leaflet/vue-leaflet@0.10.1/dist/vue-leaflet.umd.min.js"></script>
 
     <script type="text/x-template" id="app-template">
-      <v-app>
-        <v-snackbar
-          min-width="100%"
-          :timeout=snackBar.timeout
-          class="elevation-24 w-100"
-          :color=snackBar.color
-          v-model="snackBar.snackbar">
-            {{ snackBar.title }}          
-            <template v-slot:actions>
+        <v-app>
+    <v-snackbar
+      min-width="100%"
+      :timeout="snackBar.timeout"
+      class="elevation-24 w-100"
+      :color="snackBar.color"
+      v-model="snackBar.snackbar"
+    >
+      {{ snackBar.title }}
+      <template v-slot:actions>
+        <v-btn
+          color="black"
+          variant="tonal"
+          @click="snackBar.snackbar = false; workModes.loading = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-card
+      class="mx-auto"
+      width="800"
+      append-icon="mdi-human-greeting"
+    >
+      <template v-slot:title>
+        {{ title }}
+      </template>
+      <v-card-text>
+        {{ verInfo }}
+      </v-card-text>
+      <v-card-text>
+        <v-select
+          :items="listItems"
+          v-model="workModes.loadMode"
+          density="compact"
+          label="Mode"
+        >
+          <template #append>
+            <v-tooltip>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  id="ID_btnGetDecsBySelect"
+                  :disabled="workModes.loading"
+                  variant="tonal"
+                  rounded="sm"
+                  size="x-large"
+                  v-bind="props"
+                  icon="mdi-briefcase-download"
+                  @click="btnGetDecsBySelect"
+                >
+                  <v-icon color="success"></v-icon>
+                </v-btn>
+              </template>
+              <span>Get a new DECS for {{ workModes.loadMode }} apps.</span>
+            </v-tooltip>
+          </template>
+        </v-select>
+
+        <v-list
+          density="compact"
+          v-model:selected="listApiItemsSelected"
+          select-strategy="leaf"
+        >
+          <v-list-subheader>List API for controlling</v-list-subheader>
+          <v-list-item
+            v-for="item in listApiItems"
+            :key="item.code"
+            :value="item.code"
+            color="primary"
+            active-class="text-pink"
+            class="py-3"
+          >
+            <template v-slot:prepend>
+              <v-icon :icon="item.icon"></v-icon>
+            </template>
+            <v-list-item-title v-text="item.code"></v-list-item-title>
+            <v-list-item-subtitle class="mb-1 text-high-emphasis opacity-100">{{ item.name }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="text-high-emphasis">{{ item.info }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="text-high-emphasis">
+              <v-text-field
+                v-if="item.kind == 1"
+                label="Email address"
+                placeholder="johndoe@gmail.com"
+                type="email"
+              ></v-text-field>
+            </v-list-item-subtitle>
+
+            <template v-slot:append="{ isSelected }">
+              <v-list-item-action class="flex-column align-end">
+                <small class="mb-4 text-high-emphasis opacity-60">{{ item.action }}</small>
+                <v-spacer></v-spacer>
+                <div v-if="workModes.loading">
+                  <v-progress-circular
+                    :width="2"
+                    :size="15"
+                    color="red"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+                <div v-else>
+                  <v-icon v-if="isSelected" color="yellow-darken-3">mdi-star</v-icon>
+                  <v-icon v-else class="opacity-30">mdi-star-outline</v-icon>
+                </div>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+      <v-card-actions>
+        <v-row>
+          <v-col cols="12" md="6" sm="6">
             <v-btn
-                color="black"
-                variant="tonal"
-                @click="snackBar.snackbar = false; workModes.loading = false">
-                Close
+              id="ID_btnGetDataApi"
+              :disabled="workModes.loading"
+              variant="tonal"
+              block
+              rounded="sm"
+              size="x-large"
+              icon="mdi-cloud-download"
+              @click="btnGetDataApi"
+            >
+              <v-icon color="success"></v-icon>
             </v-btn>
-            </template>
-        </v-snackbar>
-
-        <v-card
-          class="mx-auto"
-          width="800"
-          append-icon="mdi-human-greeting">
-            <template v-slot:title>
-                {{title}}
-            </template>
-            <v-card-text>
-                {{verInfo}}
-            </v-card-text>
-            <v-card-text>
-                <v-select
-                    :items="listItems"
-                    v-model="workModes.loadMode"
-                    density="compact"
-                    label="Mode">
-                    <template #append>
-                        <v-tooltip>
-                        <template v-slot:activator="{ props }">
-                            <v-btn
-                            id="ID_btnGetDecsBySelect"
-                            :disabled="workModes.loading"
-                            variant="tonal"
-                            rounded="sm" size="x-large"
-                            v-bind="props"
-                            icon="mdi-briefcase-download"
-                            @click="btnGetDecsBySelect">
-                            <template v-slot:default>
-                                <v-icon color="success"></v-icon>
-                            </template>
-                            </v-btn>
-                        </template>
-                        <span>Get a new DECS for {{ workModes.loadMode }} apps.</span>
-                        </v-tooltip>
-                    </template>
-                </v-select>
-
-                <v-list density="compact" v-model:selected="listApiItemsSelected" select-strategy="leaf">
-                <v-list-subheader>List API for controlling</v-list-subheader>
-                <v-list-item
-                    v-for="item in listApiItems"
-                    :key="item.code"
-                    :value="item.code"
-                    color="primary"
-                    active-class="text-pink"
-                    class="py-3">
-                        <template v-slot:prepend>
-                        <v-icon :icon="item.icon"></v-icon>
-                        </template>
-                        <v-list-item-title v-text="item.code"></v-list-item-title>
-                        <v-list-item-subtitle class="mb-1 text-high-emphasis opacity-100">{{ item.name }}</v-list-item-subtitle>
-                        <v-list-item-subtitle class="text-high-emphasis">{{ item.info }}</v-list-item-subtitle>
-                        <v-list-item-subtitle class="text-high-emphasis">
-                            <v-text-field v-if="item.kind==1"
-                                label="Email address"
-                                placeholder="johndoe@gmail.com"
-                                type="email"
-                            ></v-text-field>
-                        </v-list-item-subtitle>
-
-                        <template v-slot:append="{ isSelected }">
-                        <v-list-item-action class="flex-column align-end">
-                            <small class="mb-4 text-high-emphasis opacity-60">{{ item.action }}</small>
-                            <v-spacer></v-spacer>
-                            <div v-if="workModes.loading">
-                            <v-progress-circular
-                                :width="2"
-                                :size="15"
-                                color="red"
-                                indeterminate
-                            ></v-progress-circular>
-                            </div>
-                            <div v-else>
-                            <v-icon v-if="isSelected" color="yellow-darken-3">mdi-star</v-icon>
-                            <v-icon v-else class="opacity-30">mdi-star-outline</v-icon>
-                            </div>
-                        </v-list-item-action>
-                        </template>
-                        </v-list-item>
-                </v-list>
-            </v-card-text>
-            <v-card-actions>
-                <v-row>
-                <v-col cols="12" md="6" sm="6">
-                <v-btn
-                    id="ID_btnGetDataApi"
-                    :disabled="workModes.loading"
-                    variant="tonal"
-                    block
-                    rounded="sm" size="x-large"
-                    icon="mdi-cloud-download"
-                    @click="btnGetDataApi">
-                    <template v-slot:default>
-                        <v-icon color="success"></v-icon>
-                    </template>
-                </v-btn>
-                </v-col>
-                <v-col cols="12" md="6" sm="6">
-                <v-btn
-                    id="ID_btnPutDataApi"
-                    :disabled="workModes.loading || listApiItems.length == 0"
-                    variant="tonal"
-                    block
-                    rounded="sm" size="x-large"
-                    icon="mdi-cloud-upload"
-                    @click="btnPutDataApi">
-                    <template v-slot:default>
-                        <v-icon color="warning"></v-icon>
-                    </template>
-                </v-btn>
-                </v-col>
-                </v-row>
-            </v-card-actions>
-        </v-card>
-        {{listApiItemsSelected}}
-        </v-app>
+          </v-col>
+          <v-col cols="12" md="6" sm="6">
+            <v-btn
+              id="ID_btnPutDataApi"
+              :disabled="workModes.loading || listApiItems.length == 0"
+              variant="tonal"
+              block
+              rounded="sm"
+              size="x-large"
+              icon="mdi-cloud-upload"
+              @click="btnPutDataApi"
+            >
+              <v-icon color="warning"></v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+    {{ listApiItemsSelected }}
+  </v-app>
     </script>
-    
+
     <script setup>
 
         const { createApp, ref, reactive, defineProps } = Vue;
