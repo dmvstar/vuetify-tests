@@ -124,6 +124,31 @@ CREATE TABLE
 );
 CREATE INDEX dpm_dateCreated_idx ON dictsProductMapping (dateCreated);
 
+------------------------------------------------------
+CREATE TABLE appsControlApi (
+    id bigserial NOT NULL
+    , dateCreated TIMESTAMP NOT NULL DEFAULT NOW()
+    , dateModified TIMESTAMP NOT NULL DEFAULT NOW()
+
+    , code VARCHAR(64) PRIMARY KEY
+    , ident VARCHAR(32) NOT NULL
+    , kind INTEGER NOT NULL
+    , value BOOLEAN NOT NULL
+    , name TEXT NOT NULL
+    , info TEXT
+    , icon VARCHAR(64)
+
+    , status INT DEFAULT 1
+    , PRIMARY KEY (id)
+);
+
+INSERT INTO appsControlApi (code, ident, kind, value, name, info, icon) VALUES
+('STATUS_API_2', 'CC_API', 3, true, 'API 2. Отримання даних заявок з рішеннями з статусом [MB Documents Signed]', 'https://ccs.dev.ukrgasaws.com/api/ccs/report/expired', 'mdi-clock'),
+('STATUS_API_7', 'CC_API', 3, false, 'API 7. Відправка пуша по погодженому ліміту', 'https://nr-messages.dev.ukrgasaws.com', 'mdi-clock'),
+('STATUS_API_9', 'CC_API', 3, false, 'API 9. Активація картки', 'https://mobservice-main.ukrgas.bank.local:1990', 'mdi-clock'),
+('STATUS_API_10', 'CC_API', 3, true, 'API 10. Отримання даних про ліміт', 'https://credit.ukrgasbank.com/api/ccs/application/limit', 'mdi-clock');
+------------------------------------------------------
+
 
 /*
 [
