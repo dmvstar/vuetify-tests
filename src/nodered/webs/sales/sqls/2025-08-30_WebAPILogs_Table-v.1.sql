@@ -14,14 +14,15 @@ CREATE TABLE sysapilog (
 	updated timestamp DEFAULT NOW() NOT NULL,
 
 	requestid varchar(256) NOT NULL,
-	clientip INET DEFAULT('127.0.0.1') NOT NULL,
+	--clientip INET DEFAULT('127.0.0.1') NOT NULL,
+    hostname varchar(256) NOT NULL,
     process varchar(64) NOT NULL,
 	method e_method DEFAULT('GET') NOT NULL,
 	direction e_direct DEFAULT('NEVER') NOT NULL,
 	statuscode varchar(32) NOT NULL,
 	
-	host varchar(256) NOT NULL,
-	path varchar(256) NOT NULL,
+	apihost varchar(256) NOT NULL,
+	apipath varchar(256) NOT NULL,
 
 	result varchar(32) NOT NULL,
 	contenttext TEXT NULL,
@@ -37,13 +38,13 @@ COMMENT ON TABLE public.sysapilog IS 'sysapilog';
 
 INSERT INTO sysapilog (
     requestid,
-    clientip,
+    hostname,
     method,
     direction,
     statuscode,
     process,
-    host,
-    path,
+    apihost,
+    apipath,
     result,
     contenttext,
     contentbody,
@@ -52,7 +53,7 @@ INSERT INTO sysapilog (
     duration
 ) VALUES (
     '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e77',
-    '192.168.1.100'::INET,
+    '192.168.1.100',
     'POST'::e_method,
     'REQUEST'::e_direct,
     '0',
@@ -68,7 +69,7 @@ INSERT INTO sysapilog (
 ),
 (
     '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e77',
-    '192.168.1.100'::INET,
+    '192.168.1.100',
     'POST'::e_method,
     'RESPONSE'::e_direct,
     '200',
@@ -84,7 +85,7 @@ INSERT INTO sysapilog (
 ),
 (
     '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e77',
-    '192.168.1.100'::INET,
+    '192.168.1.100',
     'POST'::e_method,
     'RESPONSE'::e_direct,
     '500',
