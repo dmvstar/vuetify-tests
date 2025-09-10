@@ -15,9 +15,9 @@ CREATE TYPE e_status AS ENUM ('SUCCESS', 'FAILURE', 'ERROR');
 
 
 -- Utworzenie tabeli logów
-CREATE TABLE sys_api_log (
+CREATE TABLE sysApiLog (
     id bigserial PRIMARY KEY,
-    created_at timestamp DEFAULT NOW() NOT NULL,
+    created timestamp DEFAULT NOW() NOT NULL,
 
     -- Informacje o wywołaniu
     request_id varchar(256) NOT NULL,
@@ -45,10 +45,10 @@ CREATE TABLE sys_api_log (
 );
 
 -- Dodanie indeksów dla lepszej wydajności wyszukiwania
-CREATE INDEX idx_sys_api_log_request_id ON sys_api_log(request_id);
-CREATE INDEX idx_sys_api_log_created_at ON sys_api_log(created_at DESC);
-CREATE INDEX idx_sys_api_log_uri ON sys_api_log(uri);
-CREATE INDEX idx_sys_api_log_status ON sys_api_log(status);
+CREATE INDEX idx_sys_api_log_request_id ON sysApiLog(request_id);
+CREATE INDEX idx_sys_api_log_created_at ON sysApiLog(created DESC);
+--CREATE INDEX idx_sys_api_log_uri ON sysApiLog(uri);
+--CREATE INDEX idx_sys_api_log_status ON sysApiLog(status);
 
 
 
