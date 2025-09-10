@@ -27,17 +27,19 @@ CREATE TABLE sysApiLog (
     
     -- Informacje o API
     http_method e_http_method NOT NULL,    
-    api_host varchar(256) NOT NULL,
-	api_path varchar(256) NOT NULL,
-
     -- Status i rezultat
-    status e_status NOT NULL,
+    --status e_status NOT NULL,
     http_status_code varchar(64) DEFAULT '' NOT NULL,
 
+    api_host varchar(256) NOT NULL,
+	api_path varchar(256) NOT NULL,
+	api_result varchar(32) NOT NULL, -- "ok", "no", "error" ,"Success" inne
+    api_code INT default 0 NOT NULL, -- 1200 1500 .... if exists
+
     -- Nagłówki i treść zapytania
+    headers JSONB NULL,
 	content_text TEXT NULL,
 	content_body JSONB NULL,
-    headers JSONB NULL,
 
     -- Informacje o błędach
     exception_message text NULL,
@@ -49,122 +51,27 @@ CREATE INDEX idx_sys_api_log_request_id ON sysApiLog(request_id);
 CREATE INDEX idx_sys_api_log_created_at ON sysApiLog(created DESC);
 --CREATE INDEX idx_sys_api_log_uri ON sysApiLog(uri);
 --CREATE INDEX idx_sys_api_log_status ON sysApiLog(status);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-CREATE TABLE sysapilog (
-	id bigserial NOT NULL,
-	created timestamp DEFAULT NOW() NOT NULL,
-	updated timestamp DEFAULT NOW() NOT NULL,
-
-	requestid varchar(256) NOT NULL,
-	srchost varchar(128) NOT NULL,
-    process varchar(64) NOT NULL,
-	method e_http_method DEFAULT('GET') NOT NULL,
-	direction e_direction DEFAULT('NEVER') NOT NULL,
-
-	statuscode varchar(32) DEFAULT 0 NOT NULL,
-	
-	apihost varchar(256) NOT NULL,
-	apipath varchar(256) NOT NULL,
-
-	result varchar(32) NOT NULL,
-
-	contenttext TEXT NULL,
-	contentbody JSONB NULL,
-
-	headers JSONB NULL,
-	exception TEXT NULL,
-	duration INTEGER DEFAULT 0
-);
-
-COMMENT ON TABLE public.sysapilog IS 'sysapilog';
-
-
-INSERT INTO sysapilog (
-    requestid,
-    clientip,
-    method,
-    direction,
-    statuscode,
-    process,
-    host,
-    path,
-    result,
-    contenttext,
-    contentbody,
-    headers,
-    exception,
-    duration
-) VALUES (
-    '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e77',
-    '192.168.1.100'::INET,
-    'POST'::e_method,
-    'REQUEST'::e_direct,
-    '0',
-    'GenSQL',
-    'api.example.com',
-    '/v2/users',
-    '',
-    '{"name": "Jane Doe", "email": "jane.doe@example.com"}',
-    '{"name": "Jane Doe", "email": "jane.doe@example.com"}',
-    '{"content-type": "application/json", "accept": "application/json", "user-agent": "PostmanRuntime/7.29.0"}',
-    NULL,
-    0
-),
-(
-    '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e77',
-    '192.168.1.100'::INET,
-    'POST'::e_method,
-    'RESPONSE'::e_direct,
-    '200',
-    'GenSQL',
-    'api.example.com',
-    '/v2/users',
-    'ok',
-    '{"message": "User successfully created."}',
-    '{"message": "User successfully created."}',
-    '{"content-type": "application/json", "accept": "application/json", "user-agent": "PostmanRuntime/7.29.0"}',
-    NULL,
-    450
-),
-(
-    '87943d6c-6a7f-4f1a-b03a-6f7d2f9d8e77',
-    '192.168.1.100'::INET,
-    'POST'::e_method,
-    'RESPONSE'::e_direct,
-    '500',
-    'GenSQL',
-    'api.example.com',
-    '/v2/users',
-    'error',
-    '{"message": "Failed connect to slave server"}',
-    '{"message": "Failed connect to slave server"}',
-    '{"content-type": "application/json", "accept": "application/json", "user-agent": "PostmanRuntime/7.29.0"}',
-    'Failed connect to slave server',
-    980
-);
-
-
+--COMMENT ON TABLE public.sysapilog IS 'sysapilog';
 --DELETE FROM public.sysapilog;
-SELECT * FROM public.sysapilog;
+--SELECT * FROM public.sysapilog;
 
+/*
+-- DEMO_TEST_DS.dbo.WebAPiLog definition
 
+-- Drop table
+
+-- DROP TABLE DEMO_TEST_DS.dbo.WebAPiLog;
+
+CREATE TABLE DEMO_TEST_DS.dbo.WebAPiLog (
+	WebAPILogID ID IDENTITY(1,1) NOT NULL,
+	WebAPILogDate datetime NOT NULL,
+	WebAPIName nvarchar(50) COLLATE Polish_CI_AS NULL,
+	WebAPIMethod nvarchar(10) COLLATE Polish_CI_AS NULL,
+	WebAPIRoute nvarchar(300) COLLATE Polish_CI_AS NULL,
+	TableName nvarchar(50) COLLATE Polish_CI_AS NULL,
+	ObjectID int NULL,
+	StatusNR int NULL,
+	StatusDetails nvarchar(4000) COLLATE Polish_CI_AS NULL,
+	CONSTRAINT PK_WebAPiLog PRIMARY KEY (WebAPILogID)
+);
+*/
