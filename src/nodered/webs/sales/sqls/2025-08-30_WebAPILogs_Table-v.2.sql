@@ -1,8 +1,8 @@
 /** 
 * @WHAT Table for WEB API Logging
-* @VERSION v.0.0.1
+* @VERSION v.0.0.2
 * @WHERE src/nodered/webs/sales/sqls/2025-08-30_WebAPILogs_Table-v.1.sql
-* @DATE 2025-08-30 21:19:36
+* @DATE 2025-09-11 08:11:01
 */
 
 -- Utworzenie typów ENUM dla standaryzacji danych
@@ -27,9 +27,9 @@ CREATE TABLE sysApiLog (
     
     -- Informacje o API
     http_method e_http_method NOT NULL,    
-    -- Status i rezultat
-    --status e_status NOT NULL,
+    -- Status i rezultat    
     http_status_code varchar(64) DEFAULT '' NOT NULL,
+    process_status e_status NULL,
 
     api_host varchar(256) NOT NULL,
 	api_path varchar(256) NOT NULL,
