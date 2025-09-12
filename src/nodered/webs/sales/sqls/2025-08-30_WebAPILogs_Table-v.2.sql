@@ -28,7 +28,8 @@ CREATE TABLE sysApiLog (
     
     -- Informacje o API
     http_method e_http_method NOT NULL,    
-    -- Status i rezultat    
+    -- Status i rezultat
+    --status e_status NOT NULL,
     http_status_code varchar(64) DEFAULT '' NOT NULL,
     process_status e_status NULL,
 
