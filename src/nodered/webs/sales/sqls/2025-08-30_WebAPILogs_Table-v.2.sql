@@ -18,6 +18,7 @@ CREATE TYPE e_status AS ENUM ('SUCCESS', 'FAILURE', 'ERROR');
 CREATE TABLE sysApiLog (
     id bigserial PRIMARY KEY,
     created timestamp DEFAULT NOW() NOT NULL,
+    updated timestamp DEFAULT NOW() NOT NULL,
 
     -- Informacje o wywołaniu
     request_id varchar(256) NOT NULL,
@@ -54,6 +55,20 @@ CREATE INDEX idx_sys_api_log_created_at ON sysApiLog(created DESC);
 --COMMENT ON TABLE public.sysapilog IS 'sysapilog';
 --DELETE FROM public.sysapilog;
 --SELECT * FROM public.sysapilog;
+
+-- Trigger for sysapilog table
+-- Function to update the dateModified column
+CREATE OR REPLACE FUNCTION set_date_modified()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trg_sysapilog_dateModified
+BEFORE UPDATE ON sysapilog
+FOR EACH ROW
+EXECUTE FUNCTION set_date_modified();
 
 /*
 -- DEMO_TEST_DS.dbo.WebAPiLog definition
