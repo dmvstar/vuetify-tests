@@ -15,6 +15,7 @@ CREATE TYPE e_status AS ENUM ('SUCCESS', 'FAILURE', 'ERROR');
 
 
 -- Utworzenie tabeli logów
+-- DROP TABLE sysApiLog;
 CREATE TABLE sysApiLog (
     id bigserial PRIMARY KEY,
     created timestamp DEFAULT NOW() NOT NULL,
