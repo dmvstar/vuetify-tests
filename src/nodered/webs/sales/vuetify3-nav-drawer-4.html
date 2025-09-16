@@ -538,6 +538,7 @@
                                     <v-menu density="compact" :close-on-content-click="false" :close-on-click="true">
                                         <template v-slot:activator="{ props }">
                                             <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
+                                                @click="isShowSelectDateMenu = true"
                                                 v-bind="props">
                                             </v-btn>
                                         </template>
