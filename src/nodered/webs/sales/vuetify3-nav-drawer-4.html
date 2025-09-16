@@ -422,7 +422,7 @@
                                 :items="dessertsData.dessertsItems" item-value="name" item-key="name"
                                 :search="searchData.searchText" class="elevation-1" sort-asc-icon="mdi-sort-ascending"
                                 sort-desc-icon="mdi-sort-descending" @click:row="handleDessertsDataSingleClick"
-                                @dblclick:row="handleDessertsDataDoubleClick" show-select class="elevation-1">
+                                @dblclick:row="handleDessertsDataDoubleClick" show-select>
 
                                 <template v-slot:expanded-row="{ columns, item }">
                                     <td :colspan="columns.length" class="ma-4">
