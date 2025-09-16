@@ -533,22 +533,26 @@
                                         <v-date-picker v-model="searchData.selectedDateFromFull1"></v-date-picker>
 
                                          v-model="isShowSelectDateMenu"
+                                         @click="isShowSelectDateMenu = true"
                                     </v-menu-->
 
-                                    <v-menu density="compact" :close-on-content-click="false" :close-on-click="true">
+                                    <v-menu density="compact" 
+                                        :close-on-content-click="false" 
+                                        :close-on-click="true"                                        
+                                    >
                                         <template v-slot:activator="{ props }">
-                                            <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
-                                                @click="isShowSelectDateMenu = true"
+                                            <v-btn class="mr-1" density="comfortable" 
+                                                color="indigo" icon="mdi-alarm"                                                
                                                 v-bind="props">
                                             </v-btn>
                                         </template>
+                                        
                                         <v-date-picker v-model="searchData.selectedDateFromFull1"></v-date-picker>
                                         <v-spacer></v-spacer>
                                         <v-btn text color="primary" @click="isShowSelectDateMenu = false">
                                             Close
                                         </v-btn>
                                     </v-menu>
-
 
                                     <!--v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn-->
