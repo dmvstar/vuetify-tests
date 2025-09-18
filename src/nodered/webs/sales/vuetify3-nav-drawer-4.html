@@ -351,6 +351,7 @@
                         <v-col cols="2" align="right">
                             <v-menu v-model="isMenuPopover" :close-on-content-click="false" location="end">
                                 <template v-slot:activator="{ props }">
+
                                     <v-btn color="indigo" v-bind="props">
                                         Menu as Popover
                                     </v-btn>
@@ -361,8 +362,8 @@
                                         <v-list-item prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
                                             subtitle="Founder of Vuetify" title="John Leider">
                                             <template v-slot:append>
-                                                <v-btn :class="menuPopover.fav ? 'text-red' : ''" icon="mdi-heart" variant="text"
-                                                    @click="menuPopover.fav = !fav"></v-btn>
+                                                <v-btn :class="menuPopover.fav ? 'text-red' : ''" icon="mdi-heart"
+                                                    variant="text" @click="menuPopover.fav = !fav"></v-btn>
                                             </template>
                                         </v-list-item>
                                     </v-list>
@@ -371,8 +372,8 @@
 
                                     <v-list>
                                         <v-list-item>
-                                            <v-switch v-model="menuPopover.message" color="purple" label="Enable messages"
-                                                hide-details></v-switch>
+                                            <v-switch v-model="menuPopover.message" color="purple"
+                                                label="Enable messages" hide-details></v-switch>
                                         </v-list-item>
 
                                         <v-list-item>
@@ -380,6 +381,10 @@
                                                 hide-details></v-switch>
                                         </v-list-item>
                                     </v-list>
+
+                                    <v-card-item>
+                                        <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                                    </v-card-item>
 
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -581,21 +586,41 @@
 
                                          v-model="isShowSelectDateMenu"
                                          @click="isShowSelectDateMenu = true"
+
+                                        :close-on-click="true"
                                     </v-menu-->
 
-                                    <v-menu density="compact" :close-on-content-click="false" :close-on-click="true">
+                                    <v-menu density="compact" :close-on-content-click="false"
+                                        v-model="isShowSelectDateMenu">
                                         <template v-slot:activator="{ props }">
                                             <v-btn class="mr-1" density="comfortable" color="indigo" icon="mdi-alarm"
                                                 v-bind="props">
                                             </v-btn>
                                         </template>
+                                        <v-card>
+                                            <v-card-item>
+                                                <v-date-picker
+                                                    v-model="item.selectedDateIntoFull"
+                                                    ></v-date-picker>
+                                            </v-card-item>
+                                            <v-card-actions>                                                
+                                                <v-btn variant="text" @click="isShowSelectDateMenu = false">
+                                                    Cancel
+                                                </v-btn>
+                                                <v-btn color="primary" variant="text"
+                                                    @click="isShowSelectDateMenu = false">
+                                                    Save
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-card>
 
-                                        <v-date-picker v-model="searchData.selectedDateFromFull1"></v-date-picker>
+                                        <!--v-date-picker v-model="searchData.selectedDateFromFull1"></v-date-picker>
                                         <v-spacer></v-spacer>
                                         <v-btn text color="primary" @click="isShowSelectDateMenu = false">
                                             Close
-                                        </v-btn>
+                                        </v-btn-->
                                     </v-menu>
+
 
                                     <!--v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn-->
@@ -1437,19 +1462,19 @@
                 const isDarkTheme = ref(true);
 
                 const isShowUserMenu = ref(false);
-                var isShowSelectDateMenu = ref(false);
+                const isShowSelectDateMenu = ref(false);
                 var isMenuPopover = ref(false);
 
                 var menuPopover = reactive(
                     {
-                        fav:null,
+                        fav: null,
                         message: null,
-                        hint:null
+                        hint: null
                     }
                 );
 
 
-                const appVersion = "v. 0.0.57 (2025-08-02 11:49:09)";
+                const appVersion = "v. 0.0.59 (2025-09-18 14:16:45)";
                 const appAuthor = "StarDust";
                 return {
                     isDarkTheme
