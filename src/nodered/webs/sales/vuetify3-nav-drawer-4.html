@@ -590,27 +590,23 @@
                                         :close-on-click="true"
                                     </v-menu-->
 
-                                    <v-menu density="compact" :close-on-content-click="false"
-                                        v-model="item.isShowSelectDateMenu"
-                                        >
 
+                                    <v-menu v-bind="attrs" v-on="on" density="compact" :close-on-content-click="false"
+                                        v-model="item.isShowSelectDateMenu">
                                         <template v-slot:activator="{ props }">
                                             <v-btn class="mr-1" density="comfortable" color="indigo" icon="mdi-alarm"
                                                 v-bind="props">
                                             </v-btn>
                                         </template>
-
                                         <v-card>
                                             <v-card-title>
                                                 {{item.name}}
                                             </v-card-title>
-                                            
+
                                             <v-card-item>
-                                                <v-date-picker
-                                                    v-model="item.selectedDateIntoFullNow"
-                                                    ></v-date-picker>
+                                                <v-date-picker v-model="item.selectedDateIntoFullNow"></v-date-picker>
                                             </v-card-item>
-                                            <v-card-actions>                                                
+                                            <v-card-actions>
                                                 <v-btn variant="text" @click="item.isShowSelectDateMenu = false">
                                                     Cancel
                                                 </v-btn>
@@ -628,18 +624,28 @@
                                         </v-btn-->
                                     </v-menu>
 
+
                                     <!--v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn-->
-                                    <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
-                                        :icon="getDebtStatusIcon(item.fat)"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')">
-                                    </v-btn>
+
+
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn v-bind="props" class="mr-1" density="comfortable"
+                                                :color="getDebtStatusIconColor(item)"
+                                                :icon="getDebtStatusIcon(item.fat)"
+                                                @click="onBtnActionsStubClick(item, 'ACTIONS')">
+                                            </v-btn>
+                                        </template>
+                                        <span>Be on the dark side ... {{item.selectedDateIntoFullNow}}</span>
+                                    </v-tooltip>
+
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-file-document"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
-                                    
-                                        <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"
+
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"
                                         @click="onBtnActionsEditClick(item, 'ACTIONS')"></v-btn>
-                                    
+
                                     <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"
                                         @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                 </template>
