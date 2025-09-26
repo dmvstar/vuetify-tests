@@ -797,6 +797,7 @@
     </template>
 
     <script setup>
+
         const { createApp, ref, defineProps, reactive } = Vue;
         const { createVuetify, useTheme, version } = Vuetify;
 
@@ -808,6 +809,7 @@
             }
 
         });
+
         const app = createApp({
             template: "#app-template",
             created() {
