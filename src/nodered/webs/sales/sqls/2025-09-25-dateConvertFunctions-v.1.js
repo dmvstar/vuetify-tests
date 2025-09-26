@@ -232,6 +232,7 @@ console.log("\n--- Parsing Examples ---");
 const parsedDate1 = parseDateFromPattern(formattedDate1, pattern1);
 console.log(`Parsing "${formattedDate1}" with pattern "${pattern1}":`, parsedDate1);
 */
+/*
 // Parsing Example 2: Parsing a different string
 const dateString2 = "2024-03-10 09:05:45.000";
 const patternString2 = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -243,3 +244,25 @@ const dateString3 = "12/25/2023";
 const patternString3 = "MM/dd/yyyy";
 const parsedDate3 = parseDateFromPattern(dateString3, patternString3);
 console.log(`Parsing "${dateString3}" with pattern "${patternString3}":`, parsedDate3);
+*/
+
+var patterns = [
+    {
+        dateString : "2024-03-10 09:05:45.000",
+        patternString : "yyyy-MM-dd HH:mm:ss.SSS"
+    },
+    {
+        dateString : "12/25/2023",
+        patternString : "MM/dd/yyyy"
+    },
+    {
+        dateString : "12.09.2025",
+        patternString : "dd.MM.yyyy"
+    },
+]
+
+for(var o of patterns) {
+    o.parsedDate = parseDateFromPattern(o.dateString, o.patternString);
+}
+
+console.log(`Parsing`, patterns);
