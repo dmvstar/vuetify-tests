@@ -1,7 +1,7 @@
 /**
  * Formats a Date object into a string based on a provided pattern.
  * This function mimics the behavior of Java's SimpleDateFormat for a subset of patterns.
- * * @param {Date} dateObj The Date object to format.
+ * @param {Date} dateObj The Date object to format.
  * @param {string} pattern The pattern string. Supported patterns:
  * - yyyy: The full year (e.g., 2023)
  * - MM: The month of the year (01-12)
@@ -205,48 +205,38 @@ function parseDateFromPattern(dateString, pattern) {
 
     return parsedDate;
 }
-// --- Example Usage for formatDateByPattern ---
-
 // Create a new Date object
-/*
 const myDate = new Date();
 myDate.setFullYear(2023, 8, 25); // Set to September 25, 2023
 myDate.setHours(14, 30, 5, 123); // Set to 14:30:05.123
-
 console.log("Original Date:", myDate.toString());
 
-// Example 1: Full date and time
-const pattern1 = "yyyy-MM-dd HH:mm:ss.SSS";
-const formattedDate1 = formatDateByPattern(myDate, pattern1);
-console.log(`Pattern "${pattern1}":`, formattedDate1);
+// --- Example Usage for formatDateByPattern ---
+var patternsInto = [
+    {    
+        patternString : "yyyy-MM-dd HH:mm:ss.SSS"
+    },
+    {    
+        patternString : "EEEE, MMMM dd, yyyy"
+    },
+    {    
+        patternString : "yyyy-MM-dd"
+    },
+    {    
+        patternString : "dd.MM.yyyy HH:mm:ss"
+    },
+    {    
+        patternString : "dd.MM.yyyy"
+    },
+];
 
-// Example 2: Date with full day of the week
-const pattern2 = "EEEE, MMMM dd, yyyy";
-const formattedDate2 = formatDateByPattern(myDate, pattern2);
-console.log(`Pattern "${pattern2}":`, formattedDate2);
+for(var o of patternsInto) {
+    o.formatDate = formatDateByPattern(myDate, o.patternString);
+}
+console.log(`patternsInto`, patternsInto);
 
 // --- Example Usage for parseDateFromPattern ---
-console.log("\n--- Parsing Examples ---");
-
-// Parsing Example 1: Round-trip from the first example
-const parsedDate1 = parseDateFromPattern(formattedDate1, pattern1);
-console.log(`Parsing "${formattedDate1}" with pattern "${pattern1}":`, parsedDate1);
-*/
-/*
-// Parsing Example 2: Parsing a different string
-const dateString2 = "2024-03-10 09:05:45.000";
-const patternString2 = "yyyy-MM-dd HH:mm:ss.SSS";
-const parsedDate2 = parseDateFromPattern(dateString2, patternString2);
-console.log(`Parsing "${dateString2}" with pattern "${patternString2}":`, parsedDate2);
-
-// Parsing Example 3: Parsing with a different pattern
-const dateString3 = "12/25/2023";
-const patternString3 = "MM/dd/yyyy";
-const parsedDate3 = parseDateFromPattern(dateString3, patternString3);
-console.log(`Parsing "${dateString3}" with pattern "${patternString3}":`, parsedDate3);
-*/
-
-var patterns = [
+var patternsFrom = [
     {
         dateString : "2024-03-10 09:05:45.000",
         patternString : "yyyy-MM-dd HH:mm:ss.SSS"
@@ -261,8 +251,8 @@ var patterns = [
     },
 ]
 
-for(var o of patterns) {
+for(var o of patternsFrom) {
     o.parsedDate = parseDateFromPattern(o.dateString, o.patternString);
 }
 
-console.log(`Parsing`, patterns);
+console.log(`patternsFrom`, patternsFrom);
