@@ -152,6 +152,9 @@ function parseDateFromPattern(dateString, pattern) {
     const orderedKeys = [];
     let regexString = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+    dateString = dateString.slice(0, pattern.length);
+    console.log("dateString", dateString);
+
     for (const key in patternRegexMap) {
         if (regexString.includes(key)) {
             // Use a non-greedy regex to find all occurrences
@@ -246,7 +249,7 @@ var patternsFrom = [
         patternString : "MM/dd/yyyy"
     },
     {
-        dateString : "12.09.2025",
+        dateString : "12.09.2025 56",
         patternString : "dd.MM.yyyy"
     },
 ]
