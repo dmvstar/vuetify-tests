@@ -208,6 +208,56 @@ function parseDateFromPattern(dateString, pattern) {
 
     return parsedDate;
 }
+/**
+ * Konwertuje ciąg znaków reprezentujący liczbę (z uwzględnieniem
+ * europejskich formatów, gdzie przecinek jest separatorem dziesiętnym
+ * oraz spacji/apostrofu jako separatora tysięcy) do liczby zmiennoprzecinkowej (double).
+ * @param {string | null | undefined} str - Ciąg znaków do konwersji.
+ * @returns {number} Przekonwertowana liczba zmiennoprzecinkowa lub NaN, jeśli konwersja się nie powiedzie.
+ */
+function stringSafeToDouble(str) {
+    if (str === null || str === undefined || !isValidNumericString(str)) {
+        return 0;
+    }
+
+    // 1. Upewnienie się, że mamy string i usunięcie białych znaków na końcach
+    let cleanStr = String(str).trim();
+
+    if (cleanStr.length === 0) {
+        return 0; // Pusty ciąg zwraca 0
+    }
+
+    // 2. Usunięcie separatorów tysięcy (spacja ' ' i apostrof ''')
+    // Używamy wyrażeń regularnych z flagą 'g' (global)
+    cleanStr = cleanStr.replace(/[\s'`]/g, '');
+
+    // 3. Zamiana przecinka (europejski separator dziesiętny) na kropkę (JS/angielski separator)
+    // UWAGA: Ta operacja zakłada, że ostatni przecinek w ciągu jest separatorem dziesiętnym.
+    // Jeśli w stringu jest kropka ORAZ przecinek, to zakłada, że kropka jest separatorem tysięcy
+    // (np. 1.200,75), ale po kroku 2 zostawiamy tylko ostatni separator, jeśli to przecinek.
+    cleanStr = cleanStr.replace(/,/g, '.');
+
+    // 4. Konwersja na liczbę. parseFloat zatrzyma się, jeśli napotka nieprawidłowe znaki.
+    var result = parseFloat(cleanStr);
+    return result;
+}
+
+/**
+ * Sprawdza, czy ciąg znaków zawiera jakiekolwiek znaki inne niż cyfry (0-9), kropka (.),
+ * przecinek (,) lub spacja (' ').
+ * Przydatne do wstępnej walidacji pól numerycznych.
+ * @param {string} str - Ciąg znaków do sprawdzenia.
+ * @returns {boolean} True, jeśli ciąg zawiera tylko cyfry, kropki, przecinki lub spacje.
+ */
+function isValidNumericString(str) {
+    if (typeof str !== 'string') {
+        return false;
+    }
+    // Wyrażenie regularne: szuka jakiegokolwiek znaku, który NIE jest cyfrą (\d), kropką (\.),
+    // przecinkiem (,) lub białym znakiem (\s).
+    // Jeśli znajdzie cokolwiek spoza tej grupy, to znaczy, że zawiera "coś nienumerycznego".
+    return !/[^\d.,\s'`-]/.test(str);
+}
 // Create a new Date object
 const myDate = new Date();
 myDate.setFullYear(2023, 8, 25); // Set to September 25, 2023
@@ -257,5 +307,26 @@ var patternsFrom = [
 for(var o of patternsFrom) {
     o.parsedDate = parseDateFromPattern(o.dateString, o.patternString);
 }
-
 console.log(`patternsFrom`, patternsFrom);
+
+
+// Dane testowe
+var test_str = [
+    "23,98",        // Przecinek jako separator dziesiętny
+    "22",           // Liczba całkowita
+    "2.8766",       // Kropka jako separator dziesiętny
+    "23 2.8766",    // Spacja traktowana jako separator tysięcy (wynik: 232.8766)
+    "1'200,766",    // Apostrof jako separator tysięcy, przecinek jako dziesiętny
+    "1`200`988,76",    // Apostrof jako separator tysięcy, przecinek jako dziesiętny
+    "1 200,766",    // Spacja jako separator tysięcy, przecinek jako dziesiętny
+    "abc",          // Nieprawidłowy ciąg
+    "99,99 zł",     // Nieprawidłowe znaki po liczbie
+    null,           // Null
+    ""              // Pusty ciąg
+];
+
+console.log("--- Konwersja za pomocą stringToDouble ---");
+for (var o of test_str) {
+    var res = stringSafeToDouble(o);
+    console.log(`Input: "${o}" => ${res} (Type: ${typeof res})`);
+}
