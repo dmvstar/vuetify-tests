@@ -290,13 +290,42 @@ function removeNonNumericSymbols(str) {
     return ret;
 }
 
+function toLocalISOString(date) {
+    // 1. Get the local time zone offset in minutes. getTimezoneOffset() returns
+    //    a value that is positive if the local time is behind UTC and negative if ahead.
+    const offsetMinutes = date.getTimezoneOffset();
+    
+    // 2. Determine the sign for the offset string and calculate absolute hours/minutes.
+    const sign = offsetMinutes > 0 ? '-' : '+'; // Invert the sign for the ISO string
+    const absOffsetMinutes = Math.abs(offsetMinutes);
+    const offsetHours = Math.floor(absOffsetMinutes / 60);
+    const offsetMins = absOffsetMinutes % 60;
+    
+    // 3. Format hours and minutes to be two digits (e.g., '02' or '30').
+    const pad = (n) => String(n).padStart(2, '0');
+    
+    // 4. Construct the timezone offset string (e.g., '+02:00').
+    const timezoneOffsetString = `${sign}${pad(offsetHours)}:${pad(offsetMins)}`;
+    
+    // 5. Adjust the date's internal UTC value to *fake* the local time being UTC.
+    //    This ensures toISOString() uses the local hour/minute values.
+    const adjustedDate = new Date(date.getTime() - (offsetMinutes * 60000));
+    
+    // 6. Get the UTC ISO string, remove the 'Z', and append the local offset.
+    return adjustedDate.toISOString().slice(0, -1) + timezoneOffsetString;
+}
 
-
+// --- Example Usage ---
 // Create a new Date object
 const myDate = new Date();
+const localISO = toLocalISOString(myDate);
+
+console.log(`Original toISOString: ${myDate.toISOString()}`);
+console.log(`Custom Local ISO:     ${localISO}`);
+
 myDate.setFullYear(2023, 8, 25); // Set to September 25, 2023
 myDate.setHours(14, 30, 5, 123); // Set to 14:30:05.123
-console.log("Original Date:", myDate.toString());
+console.log(`Original Date New:    ${toLocalISOString(myDate)}`);
 
 // --- Example Usage for formatDateByPattern ---
 var patternsInto = [
