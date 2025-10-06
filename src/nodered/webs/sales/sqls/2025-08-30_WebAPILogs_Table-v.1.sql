@@ -17,6 +17,7 @@ CREATE TABLE sysapilog (
 	--clientip INET DEFAULT('127.0.0.1') NOT NULL,
     hostname varchar(256) NOT NULL,
     process varchar(64) NOT NULL,
+    
 	method e_method DEFAULT('GET') NOT NULL,
 	direction e_direct DEFAULT('NEVER') NOT NULL,
 	statuscode varchar(32) NOT NULL,

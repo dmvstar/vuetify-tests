@@ -25,11 +25,11 @@ CREATE TABLE sysCallApiLog (
     request_id varchar(256) NOT NULL,
     source_host varchar(128) NOT NULL,
     --process    
-    process_status e_status NULL,
-    process_id varchar(128) NOT NULL, -- additional id for group calls 
+    process_status e_status NULL,   
+
     process_name varchar(64) NOT NULL,
-    process_status e_status NULL,
-    process_id varchar(128) NOT NULL, -- additional id for group calls 
+    process_step varchar(32) NOT NULL,
+    process_info varchar(128) NOT NULL, -- additional id for group calls 
 
     direction e_direction NOT NULL,
     
