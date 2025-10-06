@@ -1,4 +1,7 @@
 /*
+@TODO Add to appssteps fields nodeid VARCHAR(64), stepinfo VARCHAR(128)
+*/
+/*
 DROP TABLE IF EXISTS public.semaphores;
 CREATE TABLE IF NOT EXISTS public.semaphores
 (
