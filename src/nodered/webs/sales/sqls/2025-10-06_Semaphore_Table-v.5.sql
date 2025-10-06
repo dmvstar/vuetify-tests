@@ -1,23 +1,23 @@
 /*
 @TODO Add to appssteps fields nodeid VARCHAR(64), stepinfo VARCHAR(128)
 */
-/*
+
 DROP TABLE IF EXISTS public.semaphores;
 CREATE TABLE IF NOT EXISTS public.semaphores
 (
-    id bigserial NOT NULL,
-    dateCreated timestamp with time zone NOT NULL DEFAULT now(),
-    dateModified timestamp with time zone NOT NULL DEFAULT now(),
+    id bigserial                NOT NULL,
+    dateCreated timestamp       NOT NULL DEFAULT now(),
+    dateModified timestamp      NOT NULL DEFAULT now(),
     code character varying(32)  NOT NULL UNIQUE,
     ident character varying(64) NOT NULL DEFAULT '',
-    isbusy boolean NOT NULL DEFAULT FALSE,
+    isbusy boolean              NOT NULL DEFAULT FALSE,
     CONSTRAINT semaphores_pkey PRIMARY KEY (id)
 );
 CREATE TRIGGER trg_semaphores_dateModified
 BEFORE UPDATE ON semaphores
 FOR EACH ROW
 EXECUTE FUNCTION set_date_modified();
-*/
+
 
 INSERT INTO public.semaphores(code, ident, isbusy)
 	VALUES 
