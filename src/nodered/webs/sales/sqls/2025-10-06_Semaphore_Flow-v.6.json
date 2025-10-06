@@ -1,0 +1,330 @@
+[    {
+        "id": "ddbf99140b7d5e0b",
+        "type": "tab",
+        "label": "semaphores",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c87c63ebe786e26e",
+        "type": "inject",
+        "z": "ddbf99140b7d5e0b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 120,
+        "wires": [
+            [
+                "0a0ed2f27eb14801"
+            ]
+        ]
+    },
+    {
+        "id": "d21f16f0195753a5",
+        "type": "debug",
+        "z": "ddbf99140b7d5e0b",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "0a0ed2f27eb14801",
+        "type": "function",
+        "z": "ddbf99140b7d5e0b",
+        "name": "MKPSep.DIGITAL true->false",
+        "func": "msg.in = {};\nvar crypto = global.get(\"crypto\");\nvar os = global.get(\"os\");\n\nvar uuid = crypto.randomUUID();\n\nmsg.ident = uuid;\nmsg.payload = {\n    code:'MKPSEP.DIGITAL',\n    ident:uuid,\n    isbusy : true,\n    busy : false\n}\nmsg.in.semaphor = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "crypto",
+                "module": "crypto"
+            }
+        ],
+        "x": 460,
+        "y": 120,
+        "wires": [
+            [
+                "d21f16f0195753a5",
+                "7eba48d4f5ff927d"
+            ]
+        ]
+    },
+    {
+        "id": "8bcdb42ff56b248b",
+        "type": "postgres",
+        "z": "ddbf99140b7d5e0b",
+        "postgresdb": "3aa51fa986c37ec2",
+        "name": "",
+        "output": true,
+        "perrow": false,
+        "rowspermsg": "1",
+        "return_on_error": false,
+        "limit_queries": "0",
+        "limit_by": "payload",
+        "limit_value": "1",
+        "limit_drop_intermediate": false,
+        "limit_drop_if_in_queue": false,
+        "outputs": true,
+        "x": 600,
+        "y": 60,
+        "wires": [
+            [
+                "d21f16f0195753a5"
+            ]
+        ]
+    },
+    {
+        "id": "ea7c9a99570c01bb",
+        "type": "inject",
+        "z": "ddbf99140b7d5e0b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 60,
+        "wires": [
+            [
+                "1e1f8f7080db8093"
+            ]
+        ]
+    },
+    {
+        "id": "1e1f8f7080db8093",
+        "type": "template",
+        "z": "ddbf99140b7d5e0b",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT * FROM public.semaphores;",
+        "output": "str",
+        "x": 420,
+        "y": 60,
+        "wires": [
+            [
+                "8bcdb42ff56b248b"
+            ]
+        ]
+    },
+    {
+        "id": "7eba48d4f5ff927d",
+        "type": "template",
+        "z": "ddbf99140b7d5e0b",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "UPDATE public.semaphores\nSET isbusy = {{payload.busy}},\nident = '{{payload.ident}}'\nWHERE 1=1 \nAND code = '{{payload.code}}'\n--AND ident = '{{payload.ident}}'\nAND isbusy = {{payload.isbusy}}\nRETURNING *;",
+        "output": "str",
+        "x": 440,
+        "y": 240,
+        "wires": [
+            [
+                "055b3b8870e3924c"
+            ]
+        ]
+    },
+    {
+        "id": "055b3b8870e3924c",
+        "type": "postgres",
+        "z": "ddbf99140b7d5e0b",
+        "postgresdb": "3aa51fa986c37ec2",
+        "name": "",
+        "output": true,
+        "perrow": false,
+        "rowspermsg": "1",
+        "return_on_error": false,
+        "limit_queries": "0",
+        "limit_by": "payload",
+        "limit_value": "1",
+        "limit_drop_intermediate": false,
+        "limit_drop_if_in_queue": false,
+        "outputs": 1,
+        "x": 600,
+        "y": 240,
+        "wires": [
+            [
+                "269cf6f79ea8afae",
+                "ee072257c885f500"
+            ]
+        ]
+    },
+    {
+        "id": "269cf6f79ea8afae",
+        "type": "function",
+        "z": "ddbf99140b7d5e0b",
+        "name": "result isData",
+        "func": "context.set(\"counter\", (context.get(\"counter\")||0)+1);\nnode.status({fill:\"red\",shape:\"ring\",text: `${context.get(\"counter\")}`});\n\nvar isString = typeof msg.payload == 'string';\nvar isData = false;\n\nif(Array.isArray(msg.payload) && msg.payload.length > 0){\n    isData = true            \n}\n\nif(isData && !isString) {\n    return [msg, null];\n} else {\n    return [null, msg];\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 240,
+        "wires": [
+            [
+                "983e9c72a2e464df"
+            ],
+            [
+                "d2b60cfdc607f9d9"
+            ]
+        ]
+    },
+    {
+        "id": "69cddd1377e2d8b0",
+        "type": "inject",
+        "z": "ddbf99140b7d5e0b",
+        "name": "worker",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 320,
+        "wires": [
+            [
+                "94470985aed43f75"
+            ]
+        ]
+    },
+    {
+        "id": "94470985aed43f75",
+        "type": "function",
+        "z": "ddbf99140b7d5e0b",
+        "name": "MKPSep.DIGITAL false->true",
+        "func": "msg.in = {};\nvar crypto = global.get(\"crypto\");\nvar os = global.get(\"os\");\n\nvar uuid = crypto.randomUUID();\n\nmsg.ident = uuid;\nmsg.payload = {\n    code:'MKPSEP.DIGITAL',\n    ident:uuid,\n    isbusy: false,\n    busy : true\n\n}\nmsg.in.semaphor = msg.payload;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "crypto",
+                "module": "crypto"
+            }
+        ],
+        "x": 460,
+        "y": 320,
+        "wires": [
+            [
+                "7eba48d4f5ff927d"
+            ]
+        ]
+    },
+    {
+        "id": "ee072257c885f500",
+        "type": "debug",
+        "z": "ddbf99140b7d5e0b",
+        "name": "SQL",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "983e9c72a2e464df",
+        "type": "function",
+        "z": "ddbf99140b7d5e0b",
+        "name": "work",
+        "func": "context.set(\"counter\", (context.get(\"counter\")||0)+1);\nnode.status({fill:\"red\",shape:\"ring\",text: `${context.get(\"counter\")}`});\n\nmsg.payload = msg.in.semaphor;\nmsg.payload.isbusy = !msg.payload.isbusy;\nmsg.payload.busy   = !msg.payload.busy;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 220,
+        "wires": [
+            [
+                "9891d991895bbaaf"
+            ]
+        ]
+    },
+     {
+        "id": "d2b60cfdc607f9d9",
+        "type": "function",
+        "z": "ddbf99140b7d5e0b",
+        "name": "skip",
+        "func": "context.set(\"counter\", (context.get(\"counter\")||0)+1);\nnode.status({fill:\"red\",shape:\"ring\",text: `${context.get(\"counter\")}`});\n\nmsg.payload = {\n    result : \"no\",\n    message : `Work a other worker for ${msg.in.semaphor.code}`,\n    ident : msg.in.semaphor.ident\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 280,
+        "wires": [
+            [
+                "ddf71d0eaa2ff4c2"
+            ]
+        ]
+    }
+]
