@@ -209,6 +209,52 @@ function parseDateFromPattern(dateString, pattern) {
     return parsedDate;
 }
 /**
+ * Converts a Date object or a date string into various formats.
+ *
+ * @param {Date|string} dateInput The date to convert. Can be a Date object or a string parsable by Date.
+ * @returns {object|null} An object containing unixTimestamp (seconds), unixTimestampMinutes, and excelDate.
+ * Returns null if the input date is invalid.
+ */
+function convertDateFormats(dateInput) {
+    const date = new Date(dateInput);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+        console.error("Invalid Date input provided.");
+        return null;
+    }
+
+    // 1. Unix Timestamp (seconds since Jan 1, 1970 UTC)
+    // getTime() returns milliseconds, so divide by 1000
+    const unixTimestampSeconds = Math.floor(date.getTime() / 1000);
+
+    // 2. Unix Timestamp in Minutes (minutes since Jan 1, 1970 UTC)
+    // Divide milliseconds by 1000 (for seconds) and then by 60 (for minutes)
+    const unixTimestampMinutes = Math.floor(date.getTime() / (1000 * 60));
+
+    // 3. Excel Date Number
+    // Excel's epoch is Jan 1, 1900 (day 1). JavaScript's epoch is Jan 1, 1970.
+    // Excel also has a bug where it treats 1900 as a leap year (Feb 29, 1900 exists in Excel).
+    // The number of days between Jan 1, 1900 and Jan 1, 1970 (inclusive of the Excel bug day) is 25569.
+    // This value accounts for the Excel leap year bug in 1900.
+    const excelEpoch = new Date('1900-01-01T00:00:00Z'); // Using Z for UTC to avoid local timezone issues for epoch
+    const excelOffsetDays = 25569; // Days from 1900-01-01 to 1970-01-01, plus the Excel 1900 leap day bug.
+
+    // Calculate milliseconds since Excel's epoch
+    // Using UTC to avoid timezone issues affecting the day count
+    const msSinceExcelEpoch = date.getTime() - excelEpoch.getTime();
+
+    // Convert milliseconds to days, then add the Excel offset
+    // Need to use 1000 * 60 * 60 * 24 for milliseconds in a day
+    const excelDate = (msSinceExcelEpoch / (1000 * 60 * 60 * 24)) + excelOffsetDays;
+
+    return {
+        unixTimestamp: unixTimestampSeconds,
+        unixTimestampMinutes: unixTimestampMinutes,
+        excelDate: excelDate
+    };
+}
+/**
  * Konwertuje ciąg znaków reprezentujący liczbę (z uwzględnieniem
  * europejskich formatów, gdzie przecinek jest separatorem dziesiętnym
  * oraz spacji/apostrofu jako separatora tysięcy) do liczby zmiennoprzecinkowej (double).
@@ -398,3 +444,9 @@ for (var o of test_str) {
     var res = stringSafeToDouble(o);
     console.log(`Input: "${o}" => ${res} (Type: ${typeof res})`);
 }
+
+
+const now = new Date();
+const convertedNow = convertDateFormats(now);
+console.log("Current Date:", now.toISOString());
+console.log("Converted Current Date:", convertedNow);
