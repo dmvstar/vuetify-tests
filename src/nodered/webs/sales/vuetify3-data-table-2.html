@@ -81,7 +81,8 @@
                     <v-row ma="10">
                         <v-col cols="4" sm="4" ma="10">
                             <v-text-field v-model="searchData.applicationID" label="Application ID" type="text"
-                                @keypress="filterNumber(event)" placeholder="123456789" clearable></v-text-field>
+                            density = "compact"    
+                            @keypress="filterNumber(event)" placeholder="123456789" clearable></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" ma="10">
                             <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID" color="green"
@@ -92,7 +93,9 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-select label="Refer ID" v-model="searchData.referID" clearable
+                            <v-select 
+                            density = "compact"    
+                            label="Refer ID" v-model="searchData.referID" clearable
                                 :items=searchData.referIDS></v-select>
                         </v-col>
                     </v-row>
