@@ -81,8 +81,8 @@
                     <v-row ma="10">
                         <v-col cols="4" sm="4" ma="10">
                             <v-text-field v-model="searchData.applicationID" label="Application ID" type="text"
-                            density = "compact"    
-                            @keypress="filterNumber(event)" placeholder="123456789" clearable></v-text-field>
+                                density="compact" @keypress="filterNumber(event)" placeholder="123456789"
+                                clearable></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" ma="10">
                             <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID" color="green"
@@ -93,9 +93,7 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-select 
-                            density = "compact"    
-                            label="Refer ID" v-model="searchData.referID" clearable
+                            <v-select density="compact" label="Refer ID" v-model="searchData.referID" clearable
                                 :items=searchData.referIDS></v-select>
                         </v-col>
                     </v-row>
@@ -279,6 +277,3058 @@
                     userState: null
                 });
 
+
+                var stepsData = Vue.ref(
+                    {
+                    dessertsHeaders :  [
+                            { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'ApplicationId', subtitle: "Application ident", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'StepCode', subtitle: "Step Code", align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
+                        ],
+                        selectedRows: [],
+                        selectedItems: [],
+                        stepdSimpleData :
+                    [
+                        {
+                            "id": 1,
+                            "dateCreated": "2025-10-20T08:00:00Z",
+                            "dateModified": "2025-10-20T08:00:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Start application",
+                                "status": "success"
+                            }
+                        },
+                        {
+                            "id": 2,
+                            "dateCreated": "2025-10-20T08:01:00Z",
+                            "dateModified": "2025-10-20T08:01:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Gathering initial data",
+                                "progress": 50
+                            }
+                        },
+                        {
+                            "id": 3,
+                            "dateCreated": "2025-10-20T08:02:00Z",
+                            "dateModified": "2025-10-20T08:02:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Initial form filled",
+                                "validation": "OK"
+                            }
+                        },
+                        {
+                            "id": 4,
+                            "dateCreated": "2025-10-20T08:03:00Z",
+                            "dateModified": "2025-10-20T08:03:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "User consent given",
+                                "consent_type": "full"
+                            }
+                        },
+                        {
+                            "id": 5,
+                            "dateCreated": "2025-10-20T08:04:00Z",
+                            "dateModified": "2025-10-20T08:04:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "error": "Timeout during external system call",
+                                "code": "504"
+                            }
+                        },
+                        {
+                            "id": 6,
+                            "dateCreated": "2025-10-20T08:05:00Z",
+                            "dateModified": "2025-10-20T08:05:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Application template loaded",
+                                "version": "1.2"
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "dateCreated": "2025-10-20T08:06:00Z",
+                            "dateModified": "2025-10-20T08:06:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Awaiting initial data from API",
+                                "retry_count": 1
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "dateCreated": "2025-10-20T08:07:00Z",
+                            "dateModified": "2025-10-20T08:07:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Step 1 process finished",
+                                "next_step": "VERIFICATION"
+                            }
+                        },
+                        {
+                            "id": 9,
+                            "dateCreated": "2025-10-20T08:08:00Z",
+                            "dateModified": "2025-10-20T08:08:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "System checks passed",
+                                "check_level": "basic"
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "dateCreated": "2025-10-20T08:09:00Z",
+                            "dateModified": "2025-10-20T08:09:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "error": "Invalid input format",
+                                "field": "application_type"
+                            }
+                        },
+                        {
+                            "id": 11,
+                            "dateCreated": "2025-10-20T08:10:00Z",
+                            "dateModified": "2025-10-20T08:10:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Data saved to temporary storage",
+                                "storage_id": "temp_001"
+                            }
+                        },
+                        {
+                            "id": 12,
+                            "dateCreated": "2025-10-20T08:11:00Z",
+                            "dateModified": "2025-10-20T08:11:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Executing initial script",
+                                "script_name": "setup.sh"
+                            }
+                        },
+                        {
+                            "id": 13,
+                            "dateCreated": "2025-10-20T08:12:00Z",
+                            "dateModified": "2025-10-20T08:12:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Initial form submission received",
+                                "source": "web"
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "dateCreated": "2025-10-20T08:13:00Z",
+                            "dateModified": "2025-10-20T08:13:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Required parameters set",
+                                "config_status": "loaded"
+                            }
+                        },
+                        {
+                            "id": 15,
+                            "dateCreated": "2025-10-20T08:14:00Z",
+                            "dateModified": "2025-10-20T08:14:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "error": "Database connection error",
+                                "code": "DB-E001"
+                            }
+                        },
+                        {
+                            "id": 16,
+                            "dateCreated": "2025-10-20T08:15:00Z",
+                            "dateModified": "2025-10-20T08:15:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "User session created",
+                                "session_id": "S1001"
+                            }
+                        },
+                        {
+                            "id": 17,
+                            "dateCreated": "2025-10-20T08:16:00Z",
+                            "dateModified": "2025-10-20T08:16:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Waiting for external service response",
+                                "service": "identity_api"
+                            }
+                        },
+                        {
+                            "id": 18,
+                            "dateCreated": "2025-10-20T08:17:00Z",
+                            "dateModified": "2025-10-20T08:17:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Application initialization successful",
+                                "duration_ms": 1023
+                            }
+                        },
+                        {
+                            "id": 19,
+                            "dateCreated": "2025-10-20T08:18:00Z",
+                            "dateModified": "2025-10-20T08:18:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "All required initial data present",
+                                "data_hash": "a1b2c3d4"
+                            }
+                        },
+                        {
+                            "id": 20,
+                            "dateCreated": "2025-10-20T08:19:00Z",
+                            "dateModified": "2025-10-20T08:19:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 1,
+                            "absProdCode": "PRD_LOAN_A",
+                            "stepUUID": "31f197eb-3cac-4b83-b625-13855a859268",
+                            "stepCode": "INITIATION",
+                            "payload": {
+                                "message": "Handover to verification step",
+                                "next_step_uuid": "3aa83506-b4df-46f8-8ae8-e93d99446bac"
+                            }
+                        },
+                        {
+                            "id": 21,
+                            "dateCreated": "2025-10-20T08:20:00Z",
+                            "dateModified": "2025-10-20T08:20:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "id_check": "passed",
+                                "method": "electronic"
+                            }
+                        },
+                        {
+                            "id": 22,
+                            "dateCreated": "2025-10-20T08:21:00Z",
+                            "dateModified": "2025-10-20T08:21:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "document": "income_proof",
+                                "status": "pending manual review"
+                            }
+                        },
+                        {
+                            "id": 23,
+                            "dateCreated": "2025-10-20T08:22:00Z",
+                            "dateModified": "2025-10-20T08:22:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "address_match": "true",
+                                "source": "database_X"
+                            }
+                        },
+                        {
+                            "id": 24,
+                            "dateCreated": "2025-10-20T08:23:00Z",
+                            "dateModified": "2025-10-20T08:23:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "sanctions_list": "clear",
+                                "timestamp": "2025-10-20T08:23:00Z"
+                            }
+                        },
+                        {
+                            "id": 25,
+                            "dateCreated": "2025-10-20T08:24:00Z",
+                            "dateModified": "2025-10-20T08:24:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "error": "Document quality too low",
+                                "document_id": "DOC045"
+                            }
+                        },
+                        {
+                            "id": 26,
+                            "dateCreated": "2025-10-20T08:25:00Z",
+                            "dateModified": "2025-10-20T08:25:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "pep_check": "negative",
+                                "country": "PL"
+                            }
+                        },
+                        {
+                            "id": 27,
+                            "dateCreated": "2025-10-20T08:26:00Z",
+                            "dateModified": "2025-10-20T08:26:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "bank_verification": "awaiting response",
+                                "attempt": 1
+                            }
+                        },
+                        {
+                            "id": 28,
+                            "dateCreated": "2025-10-20T08:27:00Z",
+                            "dateModified": "2025-10-20T08:27:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "employment_status": "verified",
+                                "verifier": "system_V"
+                            }
+                        },
+                        {
+                            "id": 29,
+                            "dateCreated": "2025-10-20T08:28:00Z",
+                            "dateModified": "2025-10-20T08:28:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "all_documents": "verified",
+                                "count": 3
+                            }
+                        },
+                        {
+                            "id": 30,
+                            "dateCreated": "2025-10-20T08:29:00Z",
+                            "dateModified": "2025-10-20T08:29:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "error": "Mismatched names in documents",
+                                "issue": "KYC_MISMATCH"
+                            }
+                        },
+                        {
+                            "id": 31,
+                            "dateCreated": "2025-10-20T08:30:00Z",
+                            "dateModified": "2025-10-20T08:30:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "data_integrity_check": "passed",
+                                "check_version": "2.1"
+                            }
+                        },
+                        {
+                            "id": 32,
+                            "dateCreated": "2025-10-20T08:31:00Z",
+                            "dateModified": "2025-10-20T08:31:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "external_api_call": "pending",
+                                "api_name": "CREDIT_BUREAU"
+                            }
+                        },
+                        {
+                            "id": 33,
+                            "dateCreated": "2025-10-20T08:32:00Z",
+                            "dateModified": "2025-10-20T08:32:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "credit_report_fetched": "success",
+                                "report_id": "CR789"
+                            }
+                        },
+                        {
+                            "id": 34,
+                            "dateCreated": "2025-10-20T08:33:00Z",
+                            "dateModified": "2025-10-20T08:33:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "aml_check": "clean",
+                                "threshold": 0.95
+                            }
+                        },
+                        {
+                            "id": 35,
+                            "dateCreated": "2025-10-20T08:34:00Z",
+                            "dateModified": "2025-10-20T08:34:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "error": "Fraud flag triggered",
+                                "severity": "high"
+                            }
+                        },
+                        {
+                            "id": 36,
+                            "dateCreated": "2025-10-20T08:35:00Z",
+                            "dateModified": "2025-10-20T08:35:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "client_history_check": "no issues",
+                                "records_found": 0
+                            }
+                        },
+                        {
+                            "id": 37,
+                            "dateCreated": "2025-10-20T08:36:00Z",
+                            "dateModified": "2025-10-20T08:36:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "manual_review_queue": "assigned",
+                                "reviewer_id": "R005"
+                            }
+                        },
+                        {
+                            "id": 38,
+                            "dateCreated": "2025-10-20T08:37:00Z",
+                            "dateModified": "2025-10-20T08:37:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "verification_final": "approved",
+                                "manual_override": "false"
+                            }
+                        },
+                        {
+                            "id": 39,
+                            "dateCreated": "2025-10-20T08:38:00Z",
+                            "dateModified": "2025-10-20T08:38:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "risk_profile_set": "basic",
+                                "score_range": "300-500"
+                            }
+                        },
+                        {
+                            "id": 40,
+                            "dateCreated": "2025-10-20T08:39:00Z",
+                            "dateModified": "2025-10-20T08:39:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 2,
+                            "absProdCode": "PRD_LOAN_B",
+                            "stepUUID": "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "stepCode": "VERIFICATION",
+                            "payload": {
+                                "next_action": "Proceed to Scoring",
+                                "duration_sec": 119
+                            }
+                        },
+                        {
+                            "id": 41,
+                            "dateCreated": "2025-10-20T08:40:00Z",
+                            "dateModified": "2025-10-20T08:40:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 750,
+                                "risk_level": "low"
+                            }
+                        },
+                        {
+                            "id": 42,
+                            "dateCreated": "2025-10-20T08:41:00Z",
+                            "dateModified": "2025-10-20T08:41:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "engine": "Model_A",
+                                "status": "data aggregation"
+                            }
+                        },
+                        {
+                            "id": 43,
+                            "dateCreated": "2025-10-20T08:42:00Z",
+                            "dateModified": "2025-10-20T08:42:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 680,
+                                "risk_level": "medium"
+                            }
+                        },
+                        {
+                            "id": 44,
+                            "dateCreated": "2025-10-20T08:43:00Z",
+                            "dateModified": "2025-10-20T08:43:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 790,
+                                "risk_level": "very_low"
+                            }
+                        },
+                        {
+                            "id": 45,
+                            "dateCreated": "2025-10-20T08:44:00Z",
+                            "dateModified": "2025-10-20T08:44:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "error": "No credit history found",
+                                "reason": "missing_data"
+                            }
+                        },
+                        {
+                            "id": 46,
+                            "dateCreated": "2025-10-20T08:45:00Z",
+                            "dateModified": "2025-10-20T08:45:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 710,
+                                "risk_level": "low"
+                            }
+                        },
+                        {
+                            "id": 47,
+                            "dateCreated": "2025-10-20T08:46:00Z",
+                            "dateModified": "2025-10-20T08:46:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "engine": "Model_B",
+                                "status": "calculating risk factors"
+                            }
+                        },
+                        {
+                            "id": 48,
+                            "dateCreated": "2025-10-20T08:47:00Z",
+                            "dateModified": "2025-10-20T08:47:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 810,
+                                "risk_level": "minimal"
+                            }
+                        },
+                        {
+                            "id": 49,
+                            "dateCreated": "2025-10-20T08:48:00Z",
+                            "dateModified": "2025-10-20T08:48:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 650,
+                                "risk_level": "high",
+                                "reason": "high_debt_ratio"
+                            }
+                        },
+                        {
+                            "id": 50,
+                            "dateCreated": "2025-10-20T08:49:00Z",
+                            "dateModified": "2025-10-20T08:49:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "error": "Scoring engine internal error",
+                                "code": "SE999"
+                            }
+                        },
+                        {
+                            "id": 51,
+                            "dateCreated": "2025-10-20T08:50:00Z",
+                            "dateModified": "2025-10-20T08:50:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 730,
+                                "risk_level": "low"
+                            }
+                        },
+                        {
+                            "id": 52,
+                            "dateCreated": "2025-10-20T08:51:00Z",
+                            "dateModified": "2025-10-20T08:51:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "manual_review": "required",
+                                "queue": "exceptions"
+                            }
+                        },
+                        {
+                            "id": 53,
+                            "dateCreated": "2025-10-20T08:52:00Z",
+                            "dateModified": "2025-10-20T08:52:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 760,
+                                "risk_level": "low"
+                            }
+                        },
+                        {
+                            "id": 54,
+                            "dateCreated": "2025-10-20T08:53:00Z",
+                            "dateModified": "2025-10-20T08:53:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 690,
+                                "risk_level": "medium"
+                            }
+                        },
+                        {
+                            "id": 55,
+                            "dateCreated": "2025-10-20T08:54:00Z",
+                            "dateModified": "2025-10-20T08:54:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "error": "Scoring service unavailable",
+                                "http_status": 503
+                            }
+                        },
+                        {
+                            "id": 56,
+                            "dateCreated": "2025-10-20T08:55:00Z",
+                            "dateModified": "2025-10-20T08:55:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 720,
+                                "risk_level": "low"
+                            }
+                        },
+                        {
+                            "id": 57,
+                            "dateCreated": "2025-10-20T08:56:00Z",
+                            "dateModified": "2025-10-20T08:56:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "simulation_run": "started",
+                                "scenario": "S_01"
+                            }
+                        },
+                        {
+                            "id": 58,
+                            "dateCreated": "2025-10-20T08:57:00Z",
+                            "dateModified": "2025-10-20T08:57:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 780,
+                                "risk_level": "low"
+                            }
+                        },
+                        {
+                            "id": 59,
+                            "dateCreated": "2025-10-20T08:58:00Z",
+                            "dateModified": "2025-10-20T08:58:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 670,
+                                "risk_level": "medium",
+                                "watch_list": "true"
+                            }
+                        },
+                        {
+                            "id": 60,
+                            "dateCreated": "2025-10-20T08:59:00Z",
+                            "dateModified": "2025-10-20T08:59:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 3,
+                            "absProdCode": "PRD_LOAN_C",
+                            "stepUUID": "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "stepCode": "SCORING",
+                            "payload": {
+                                "credit_score": 800,
+                                "risk_level": "very_low",
+                                "next_step_uuid": "7cd92e64-0c29-46e8-9577-169aacf0f2d2"
+                            }
+                        },
+                        {
+                            "id": 61,
+                            "dateCreated": "2025-10-20T09:00:00Z",
+                            "dateModified": "2025-10-20T09:00:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1001",
+                                "amount": 50000,
+                                "rate": 0.08
+                            }
+                        },
+                        {
+                            "id": 62,
+                            "dateCreated": "2025-10-20T09:01:00Z",
+                            "dateModified": "2025-10-20T09:01:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "status": "calculating terms",
+                                "model_version": "v1.5"
+                            }
+                        },
+                        {
+                            "id": 63,
+                            "dateCreated": "2025-10-20T09:02:00Z",
+                            "dateModified": "2025-10-20T09:02:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1002",
+                                "amount": 100000,
+                                "rate": 0.075
+                            }
+                        },
+                        {
+                            "id": 64,
+                            "dateCreated": "2025-10-20T09:03:00Z",
+                            "dateModified": "2025-10-20T09:03:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1003",
+                                "amount": 25000,
+                                "rate": 0.09
+                            }
+                        },
+                        {
+                            "id": 65,
+                            "dateCreated": "2025-10-20T09:04:00Z",
+                            "dateModified": "2025-10-20T09:04:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "reason": "Not eligible for any product",
+                                "code": "NO_MATCH"
+                            }
+                        },
+                        {
+                            "id": 66,
+                            "dateCreated": "2025-10-20T09:05:00Z",
+                            "dateModified": "2025-10-20T09:05:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1004",
+                                "amount": 75000,
+                                "rate": 0.08
+                            }
+                        },
+                        {
+                            "id": 67,
+                            "dateCreated": "2025-10-20T09:06:00Z",
+                            "dateModified": "2025-10-20T09:06:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "external_pricing_call": "in_progress",
+                                "system": "PriceEngine_2"
+                            }
+                        },
+                        {
+                            "id": 68,
+                            "dateCreated": "2025-10-20T09:07:00Z",
+                            "dateModified": "2025-10-20T09:07:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1005",
+                                "amount": 50000,
+                                "rate": 0.08
+                            }
+                        },
+                        {
+                            "id": 69,
+                            "dateCreated": "2025-10-20T09:08:00Z",
+                            "dateModified": "2025-10-20T09:08:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1006",
+                                "amount": 150000,
+                                "rate": 0.07
+                            }
+                        },
+                        {
+                            "id": 70,
+                            "dateCreated": "2025-10-20T09:09:00Z",
+                            "dateModified": "2025-10-20T09:09:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "reason": "Regulatory limit breached",
+                                "limit_type": "DTI"
+                            }
+                        },
+                        {
+                            "id": 71,
+                            "dateCreated": "2025-10-20T09:10:00Z",
+                            "dateModified": "2025-10-20T09:10:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1007",
+                                "amount": 30000,
+                                "rate": 0.095
+                            }
+                        },
+                        {
+                            "id": 72,
+                            "dateCreated": "2025-10-20T09:11:00Z",
+                            "dateModified": "2025-10-20T09:11:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "status": "A/B testing selection",
+                                "test_group": "Group_B"
+                            }
+                        },
+                        {
+                            "id": 73,
+                            "dateCreated": "2025-10-20T09:12:00Z",
+                            "dateModified": "2025-10-20T09:12:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1008",
+                                "amount": 60000,
+                                "rate": 0.082
+                            }
+                        },
+                        {
+                            "id": 74,
+                            "dateCreated": "2025-10-20T09:13:00Z",
+                            "dateModified": "2025-10-20T09:13:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1009",
+                                "amount": 90000,
+                                "rate": 0.078
+                            }
+                        },
+                        {
+                            "id": 75,
+                            "dateCreated": "2025-10-20T09:14:00Z",
+                            "dateModified": "2025-10-20T09:14:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "reason": "System template error",
+                                "template_id": "TPL003"
+                            }
+                        },
+                        {
+                            "id": 76,
+                            "dateCreated": "2025-10-20T09:15:00Z",
+                            "dateModified": "2025-10-20T09:15:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1010",
+                                "amount": 40000,
+                                "rate": 0.085
+                            }
+                        },
+                        {
+                            "id": 77,
+                            "dateCreated": "2025-10-20T09:16:00Z",
+                            "dateModified": "2025-10-20T09:16:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "review_type": "pricing review",
+                                "reviewer": "Auto_Price"
+                            }
+                        },
+                        {
+                            "id": 78,
+                            "dateCreated": "2025-10-20T09:17:00Z",
+                            "dateModified": "2025-10-20T09:17:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1011",
+                                "amount": 80000,
+                                "rate": 0.079
+                            }
+                        },
+                        {
+                            "id": 79,
+                            "dateCreated": "2025-10-20T09:18:00Z",
+                            "dateModified": "2025-10-20T09:18:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1012",
+                                "amount": 120000,
+                                "rate": 0.072
+                            }
+                        },
+                        {
+                            "id": 80,
+                            "dateCreated": "2025-10-20T09:19:00Z",
+                            "dateModified": "2025-10-20T09:19:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 4,
+                            "absProdCode": "PRD_OFFER_D",
+                            "stepUUID": "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "stepCode": "OFFER_GENERATION",
+                            "payload": {
+                                "offer_id": "OFR1013",
+                                "amount": 50000,
+                                "rate": 0.08
+                            }
+                        },
+                        {
+                            "id": 81,
+                            "dateCreated": "2025-10-20T09:20:00Z",
+                            "dateModified": "2025-10-20T09:20:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "signature_method": "e-sign"
+                            }
+                        },
+                        {
+                            "id": 82,
+                            "dateCreated": "2025-10-20T09:21:00Z",
+                            "dateModified": "2025-10-20T09:21:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "status": "waiting for user signature",
+                                "timeout_mins": 15
+                            }
+                        },
+                        {
+                            "id": 83,
+                            "dateCreated": "2025-10-20T09:22:00Z",
+                            "dateModified": "2025-10-20T09:22:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "ip_address": "192.168.1.1"
+                            }
+                        },
+                        {
+                            "id": 84,
+                            "dateCreated": "2025-10-20T09:23:00Z",
+                            "dateModified": "2025-10-20T09:23:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "offer_version": "v3.0"
+                            }
+                        },
+                        {
+                            "id": 85,
+                            "dateCreated": "2025-10-20T09:24:00Z",
+                            "dateModified": "2025-10-20T09:24:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "reason": "User explicitly declined",
+                                "decline_code": "UD01"
+                            }
+                        },
+                        {
+                            "id": 86,
+                            "dateCreated": "2025-10-20T09:25:00Z",
+                            "dateModified": "2025-10-20T09:25:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "channel": "mobile_app"
+                            }
+                        },
+                        {
+                            "id": 87,
+                            "dateCreated": "2025-10-20T09:26:00Z",
+                            "dateModified": "2025-10-20T09:26:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "document_generation": "finished",
+                                "status": "awaiting signature"
+                            }
+                        },
+                        {
+                            "id": 88,
+                            "dateCreated": "2025-10-20T09:27:00Z",
+                            "dateModified": "2025-10-20T09:27:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "contract_hash": "e6f7g8h9"
+                            }
+                        },
+                        {
+                            "id": 89,
+                            "dateCreated": "2025-10-20T09:28:00Z",
+                            "dateModified": "2025-10-20T09:28:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "signing_date": "2025-10-20"
+                            }
+                        },
+                        {
+                            "id": 90,
+                            "dateCreated": "2025-10-20T09:29:00Z",
+                            "dateModified": "2025-10-20T09:29:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "reason": "Offer expired before acceptance",
+                                "expiry_time": "2025-10-20T09:28:00Z"
+                            }
+                        },
+                        {
+                            "id": 91,
+                            "dateCreated": "2025-10-20T09:30:00Z",
+                            "dateModified": "2025-10-20T09:30:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "status_code": "A_OK"
+                            }
+                        },
+                        {
+                            "id": 92,
+                            "dateCreated": "2025-10-20T09:31:00Z",
+                            "dateModified": "2025-10-20T09:31:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "pre_booking_check": "running",
+                                "check_id": "PBC001"
+                            }
+                        },
+                        {
+                            "id": 93,
+                            "dateCreated": "2025-10-20T09:32:00Z",
+                            "dateModified": "2025-10-20T09:32:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "confirmation_id": "CONF456"
+                            }
+                        },
+                        {
+                            "id": 94,
+                            "dateCreated": "2025-10-20T09:33:00Z",
+                            "dateModified": "2025-10-20T09:33:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "final_check": "passed"
+                            }
+                        },
+                        {
+                            "id": 95,
+                            "dateCreated": "2025-10-20T09:34:00Z",
+                            "dateModified": "2025-10-20T09:34:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "reason": "System error during acceptance logic",
+                                "error_type": "LogicError"
+                            }
+                        },
+                        {
+                            "id": 96,
+                            "dateCreated": "2025-10-20T09:35:00Z",
+                            "dateModified": "2025-10-20T09:35:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "status_message": "Ready for Booking"
+                            }
+                        },
+                        {
+                            "id": 97,
+                            "dateCreated": "2025-10-20T09:36:00Z",
+                            "dateModified": "2025-10-20T09:36:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "security_protocol": "running",
+                                "level": 3
+                            }
+                        },
+                        {
+                            "id": 98,
+                            "dateCreated": "2025-10-20T09:37:00Z",
+                            "dateModified": "2025-10-20T09:37:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "next_step": "BOOKING"
+                            }
+                        },
+                        {
+                            "id": 99,
+                            "dateCreated": "2025-10-20T09:38:00Z",
+                            "dateModified": "2025-10-20T09:38:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "system_id": "SYS42"
+                            }
+                        },
+                        {
+                            "id": 100,
+                            "dateCreated": "2025-10-20T09:39:00Z",
+                            "dateModified": "2025-10-20T09:39:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 5,
+                            "absProdCode": "PRD_ACCEPT_E",
+                            "stepUUID": "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                            "stepCode": "ACCEPTANCE",
+                            "payload": {
+                                "user_action": "accepted",
+                                "offer_accepted_at": "2025-10-20T09:39:00Z"
+                            }
+                        },
+                        {
+                            "id": 101,
+                            "dateCreated": "2025-10-20T09:40:00Z",
+                            "dateModified": "2025-10-20T09:40:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9001",
+                                "booking_status": "success",
+                                "core_system": "CBS_A"
+                            }
+                        },
+                        {
+                            "id": 102,
+                            "dateCreated": "2025-10-20T09:41:00Z",
+                            "dateModified": "2025-10-20T09:41:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "status": "sending request to core banking",
+                                "attempt": 1
+                            }
+                        },
+                        {
+                            "id": 103,
+                            "dateCreated": "2025-10-20T09:42:00Z",
+                            "dateModified": "2025-10-20T09:42:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9002",
+                                "booking_status": "success",
+                                "amount_booked": 100000
+                            }
+                        },
+                        {
+                            "id": 104,
+                            "dateCreated": "2025-10-20T09:43:00Z",
+                            "dateModified": "2025-10-20T09:43:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9003",
+                                "booking_status": "success",
+                                "product_code": "PL001"
+                            }
+                        },
+                        {
+                            "id": 105,
+                            "dateCreated": "2025-10-20T09:44:00Z",
+                            "dateModified": "2025-10-20T09:44:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "error": "Core banking system rejection",
+                                "rejection_code": "CB_R05"
+                            }
+                        },
+                        {
+                            "id": 106,
+                            "dateCreated": "2025-10-20T09:45:00Z",
+                            "dateModified": "2025-10-20T09:45:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9004",
+                                "booking_status": "success",
+                                "term_months": 36
+                            }
+                        },
+                        {
+                            "id": 107,
+                            "dateCreated": "2025-10-20T09:46:00Z",
+                            "dateModified": "2025-10-20T09:46:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "status": "data transformation for CBS",
+                                "transformer": "TFORM_V1"
+                            }
+                        },
+                        {
+                            "id": 108,
+                            "dateCreated": "2025-10-20T09:47:00Z",
+                            "dateModified": "2025-10-20T09:47:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9005",
+                                "booking_status": "success",
+                                "start_date": "2025-10-22"
+                            }
+                        },
+                        {
+                            "id": 109,
+                            "dateCreated": "2025-10-20T09:48:00Z",
+                            "dateModified": "2025-10-20T09:48:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9006",
+                                "booking_status": "success",
+                                "interest_rate": 0.07
+                            }
+                        },
+                        {
+                            "id": 110,
+                            "dateCreated": "2025-10-20T09:49:00Z",
+                            "dateModified": "2025-10-20T09:49:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "error": "CBS timeout",
+                                "duration_sec": 30
+                            }
+                        },
+                        {
+                            "id": 111,
+                            "dateCreated": "2025-10-20T09:50:00Z",
+                            "dateModified": "2025-10-20T09:50:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9007",
+                                "booking_status": "success",
+                                "transaction_ref": "TRX12345"
+                            }
+                        },
+                        {
+                            "id": 112,
+                            "dateCreated": "2025-10-20T09:51:00Z",
+                            "dateModified": "2025-10-20T09:51:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "status": "waiting for acknowledgement",
+                                "system_ack": "false"
+                            }
+                        },
+                        {
+                            "id": 113,
+                            "dateCreated": "2025-10-20T09:52:00Z",
+                            "dateModified": "2025-10-20T09:52:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9008",
+                                "booking_status": "success",
+                                "currency": "PLN"
+                            }
+                        },
+                        {
+                            "id": 114,
+                            "dateCreated": "2025-10-20T09:53:00Z",
+                            "dateModified": "2025-10-20T09:53:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9009",
+                                "booking_status": "success",
+                                "process_time_ms": 1500
+                            }
+                        },
+                        {
+                            "id": 115,
+                            "dateCreated": "2025-10-20T09:54:00Z",
+                            "dateModified": "2025-10-20T09:54:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "error": "Invalid account number in payload",
+                                "field": "payout_account"
+                            }
+                        },
+                        {
+                            "id": 116,
+                            "dateCreated": "2025-10-20T09:55:00Z",
+                            "dateModified": "2025-10-20T09:55:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9010",
+                                "booking_status": "success",
+                                "internal_code": "BC_200"
+                            }
+                        },
+                        {
+                            "id": 117,
+                            "dateCreated": "2025-10-20T09:56:00Z",
+                            "dateModified": "2025-10-20T09:56:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "status": "pending external confirmation",
+                                "external_ref": "EXT777"
+                            }
+                        },
+                        {
+                            "id": 118,
+                            "dateCreated": "2025-10-20T09:57:00Z",
+                            "dateModified": "2025-10-20T09:57:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9011",
+                                "booking_status": "success",
+                                "book_type": "automated"
+                            }
+                        },
+                        {
+                            "id": 119,
+                            "dateCreated": "2025-10-20T09:58:00Z",
+                            "dateModified": "2025-10-20T09:58:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9012",
+                                "booking_status": "success",
+                                "check_sum": "0a1b2c3d"
+                            }
+                        },
+                        {
+                            "id": 120,
+                            "dateCreated": "2025-10-20T09:59:00Z",
+                            "dateModified": "2025-10-20T09:59:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 6,
+                            "absProdCode": "PRD_BOOK_F",
+                            "stepUUID": "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "stepCode": "BOOKING",
+                            "payload": {
+                                "loan_id": "LN9013",
+                                "booking_status": "success",
+                                "next_step_uuid": "17c68bbd-8bf7-4967-9c2b-048a58483b49"
+                            }
+                        },
+                        {
+                            "id": 121,
+                            "dateCreated": "2025-10-20T10:00:00Z",
+                            "dateModified": "2025-10-20T10:00:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "amount_sent": 50000,
+                                "bank_ref": "BANKR_001"
+                            }
+                        },
+                        {
+                            "id": 122,
+                            "dateCreated": "2025-10-20T10:01:00Z",
+                            "dateModified": "2025-10-20T10:01:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "status": "awaiting payment gateway response",
+                                "gateway_id": "PGW001"
+                            }
+                        },
+                        {
+                            "id": 123,
+                            "dateCreated": "2025-10-20T10:02:00Z",
+                            "dateModified": "2025-10-20T10:02:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "amount_sent": 100000
+                            }
+                        },
+                        {
+                            "id": 124,
+                            "dateCreated": "2025-10-20T10:03:00Z",
+                            "dateModified": "2025-10-20T10:03:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "transaction_fee": 100
+                            }
+                        },
+                        {
+                            "id": 125,
+                            "dateCreated": "2025-10-20T10:04:00Z",
+                            "dateModified": "2025-10-20T10:04:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "error": "Recipient bank rejected payment",
+                                "reason_code": "BR01"
+                            }
+                        },
+                        {
+                            "id": 126,
+                            "dateCreated": "2025-10-20T10:05:00Z",
+                            "dateModified": "2025-10-20T10:05:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "transfer_type": "ELIXIR"
+                            }
+                        },
+                        {
+                            "id": 127,
+                            "dateCreated": "2025-10-20T10:06:00Z",
+                            "dateModified": "2025-10-20T10:06:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "status": "security checks running",
+                                "check_name": "Anti-Fraud"
+                            }
+                        },
+                        {
+                            "id": 128,
+                            "dateCreated": "2025-10-20T10:07:00Z",
+                            "dateModified": "2025-10-20T10:07:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "final_amount": 75000
+                            }
+                        },
+                        {
+                            "id": 129,
+                            "dateCreated": "2025-10-20T10:08:00Z",
+                            "dateModified": "2025-10-20T10:08:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "account_validated": "true"
+                            }
+                        },
+                        {
+                            "id": 130,
+                            "dateCreated": "2025-10-20T10:09:00Z",
+                            "dateModified": "2025-10-20T10:09:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "error": "Disbursement system internal error",
+                                "service_code": "DS_E10"
+                            }
+                        },
+                        {
+                            "id": 131,
+                            "dateCreated": "2025-10-20T10:10:00Z",
+                            "dateModified": "2025-10-20T10:10:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "batch_id": "BCH_005"
+                            }
+                        },
+                        {
+                            "id": 132,
+                            "dateCreated": "2025-10-20T10:11:00Z",
+                            "dateModified": "2025-10-20T10:11:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "status": "awaiting final authorization",
+                                "authorizer": "System_Auth"
+                            }
+                        },
+                        {
+                            "id": 133,
+                            "dateCreated": "2025-10-20T10:12:00Z",
+                            "dateModified": "2025-10-20T10:12:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "transfer_cost": 0
+                            }
+                        },
+                        {
+                            "id": 134,
+                            "dateCreated": "2025-10-20T10:13:00Z",
+                            "dateModified": "2025-10-20T10:13:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "message": "Funds sent"
+                            }
+                        },
+                        {
+                            "id": 135,
+                            "dateCreated": "2025-10-20T10:14:00Z",
+                            "dateModified": "2025-10-20T10:14:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "error": "Account blocked for security reasons",
+                                "security_flag": "BLOCKED"
+                            }
+                        },
+                        {
+                            "id": 136,
+                            "dateCreated": "2025-10-20T10:15:00Z",
+                            "dateModified": "2025-10-20T10:15:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "audit_trail": "completed"
+                            }
+                        },
+                        {
+                            "id": 137,
+                            "dateCreated": "2025-10-20T10:16:00Z",
+                            "dateModified": "2025-10-20T10:16:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "status": "monitoring transaction",
+                                "monitor_id": "MON123"
+                            }
+                        },
+                        {
+                            "id": 138,
+                            "dateCreated": "2025-10-20T10:17:00Z",
+                            "dateModified": "2025-10-20T10:17:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "reference_code": "REF456"
+                            }
+                        },
+                        {
+                            "id": 139,
+                            "dateCreated": "2025-10-20T10:18:00Z",
+                            "dateModified": "2025-10-20T10:18:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "notification_sent": "true"
+                            }
+                        },
+                        {
+                            "id": 140,
+                            "dateCreated": "2025-10-20T10:19:00Z",
+                            "dateModified": "2025-10-20T10:19:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 7,
+                            "absProdCode": "PRD_DISB_G",
+                            "stepUUID": "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "stepCode": "DISBURSEMENT",
+                            "payload": {
+                                "disbursement_status": "success",
+                                "next_step_uuid": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b"
+                            }
+                        },
+                        {
+                            "id": 141,
+                            "dateCreated": "2025-10-20T10:20:00Z",
+                            "dateModified": "2025-10-20T10:20:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "final_state": "DISBURSED"
+                            }
+                        },
+                        {
+                            "id": 142,
+                            "dateCreated": "2025-10-20T10:21:00Z",
+                            "dateModified": "2025-10-20T10:21:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "status": "archiving documents",
+                                "archive_system": "AS_01"
+                            }
+                        },
+                        {
+                            "id": 143,
+                            "dateCreated": "2025-10-20T10:22:00Z",
+                            "dateModified": "2025-10-20T10:22:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "duration_h": 2.2
+                            }
+                        },
+                        {
+                            "id": 144,
+                            "dateCreated": "2025-10-20T10:23:00Z",
+                            "dateModified": "2025-10-20T10:23:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "audit_check": "passed"
+                            }
+                        },
+                        {
+                            "id": 145,
+                            "dateCreated": "2025-10-20T10:24:00Z",
+                            "dateModified": "2025-10-20T10:24:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "error": "Failed to transfer to CRM",
+                                "crm_code": "CRM_E03"
+                            }
+                        },
+                        {
+                            "id": 146,
+                            "dateCreated": "2025-10-20T10:25:00Z",
+                            "dateModified": "2025-10-20T10:25:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "customer_notified": "true"
+                            }
+                        },
+                        {
+                            "id": 147,
+                            "dateCreated": "2025-10-20T10:26:00Z",
+                            "dateModified": "2025-10-20T10:26:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "status": "cleanup temporary files",
+                                "files_deleted": 8
+                            }
+                        },
+                        {
+                            "id": 148,
+                            "dateCreated": "2025-10-20T10:27:00Z",
+                            "dateModified": "2025-10-20T10:27:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "final_process_id": "FPID001"
+                            }
+                        },
+                        {
+                            "id": 149,
+                            "dateCreated": "2025-10-20T10:28:00Z",
+                            "dateModified": "2025-10-20T10:28:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "log_level": "INFO"
+                            }
+                        },
+                        {
+                            "id": 150,
+                            "dateCreated": "2025-10-20T10:29:00Z",
+                            "dateModified": "2025-10-20T10:29:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "error": "Final data mismatch",
+                                "checksum_fail": "true"
+                            }
+                        },
+                        {
+                            "id": 151,
+                            "dateCreated": "2025-10-20T10:30:00Z",
+                            "dateModified": "2025-10-20T10:30:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "system_lock": "removed"
+                            }
+                        },
+                        {
+                            "id": 152,
+                            "dateCreated": "2025-10-20T10:31:00Z",
+                            "dateModified": "2025-10-20T10:31:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "reporting": "generating final report",
+                                "report_id": "REP001"
+                            }
+                        },
+                        {
+                            "id": 153,
+                            "dateCreated": "2025-10-20T10:32:00Z",
+                            "dateModified": "2025-10-20T10:32:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "report_attached": "true"
+                            }
+                        },
+                        {
+                            "id": 154,
+                            "dateCreated": "2025-10-20T10:33:00Z",
+                            "dateModified": "2025-10-20T10:33:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "all_tasks": "finished"
+                            }
+                        },
+                        {
+                            "id": 155,
+                            "dateCreated": "2025-10-20T10:34:00Z",
+                            "dateModified": "2025-10-20T10:34:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "error": "Post-processing script failed",
+                                "script_name": "cleaner.py"
+                            }
+                        },
+                        {
+                            "id": 156,
+                            "dateCreated": "2025-10-20T10:35:00Z",
+                            "dateModified": "2025-10-20T10:35:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "final_update": "done"
+                            }
+                        },
+                        {
+                            "id": 157,
+                            "dateCreated": "2025-10-20T10:36:00Z",
+                            "dateModified": "2025-10-20T10:36:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "status": "running security cleanup",
+                                "task_id": "SC001"
+                            }
+                        },
+                        {
+                            "id": 158,
+                            "dateCreated": "2025-10-20T10:37:00Z",
+                            "dateModified": "2025-10-20T10:37:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "final_timestamp": "2025-10-20T10:37:00Z"
+                            }
+                        },
+                        {
+                            "id": 159,
+                            "dateCreated": "2025-10-20T10:38:00Z",
+                            "dateModified": "2025-10-20T10:38:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "closed_by": "System_C"
+                            }
+                        },
+                        {
+                            "id": 160,
+                            "dateCreated": "2025-10-20T10:39:00Z",
+                            "dateModified": "2025-10-20T10:39:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 8,
+                            "absProdCode": "PRD_CLOSURE_H",
+                            "stepUUID": "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "stepCode": "CLOSURE",
+                            "payload": {
+                                "application_status": "closed_success",
+                                "process_complete": "true",
+                                "next_step_uuid": "6bcb6599-1b72-444e-9a28-4078b52c6038"
+                            }
+                        },
+                        {
+                            "id": 161,
+                            "dateCreated": "2025-10-20T10:40:00Z",
+                            "dateModified": "2025-10-20T10:40:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "marketing_opt_in",
+                                "result": "success"
+                            }
+                        },
+                        {
+                            "id": 162,
+                            "dateCreated": "2025-10-20T10:41:00Z",
+                            "dateModified": "2025-10-20T10:41:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "status": "awaiting user feedback",
+                                "survey_link": "http://survey.co/10"
+                            }
+                        },
+                        {
+                            "id": 163,
+                            "dateCreated": "2025-10-20T10:42:00Z",
+                            "dateModified": "2025-10-20T10:42:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "upsell_product",
+                                "status": "offer_sent"
+                            }
+                        },
+                        {
+                            "id": 164,
+                            "dateCreated": "2025-10-20T10:43:00Z",
+                            "dateModified": "2025-10-20T10:43:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "document_download",
+                                "count": 5
+                            }
+                        },
+                        {
+                            "id": 165,
+                            "dateCreated": "2025-10-20T10:44:00Z",
+                            "dateModified": "2025-10-20T10:44:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "error": "Failed to generate marketing email",
+                                "template_error": "T001"
+                            }
+                        },
+                        {
+                            "id": 166,
+                            "dateCreated": "2025-10-20T10:45:00Z",
+                            "dateModified": "2025-10-20T10:45:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "post_disbursement_call",
+                                "status": "scheduled"
+                            }
+                        },
+                        {
+                            "id": 167,
+                            "dateCreated": "2025-10-20T10:46:00Z",
+                            "dateModified": "2025-10-20T10:46:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "status": "external data synchronization",
+                                "system": "Analytics_DB"
+                            }
+                        },
+                        {
+                            "id": 168,
+                            "dateCreated": "2025-10-20T10:47:00Z",
+                            "dateModified": "2025-10-20T10:47:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "survey_filled",
+                                "rating": 5
+                            }
+                        },
+                        {
+                            "id": 169,
+                            "dateCreated": "2025-10-20T10:48:00Z",
+                            "dateModified": "2025-10-20T10:48:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "CRM_update",
+                                "field_updated": "post_disbursement_flag"
+                            }
+                        },
+                        {
+                            "id": 170,
+                            "dateCreated": "2025-10-20T10:49:00Z",
+                            "dateModified": "2025-10-20T10:49:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "error": "User blocked from receiving further offers",
+                                "block_reason": "MAX_OFFERS"
+                            }
+                        },
+                        {
+                            "id": 171,
+                            "dateCreated": "2025-10-20T10:50:00Z",
+                            "dateModified": "2025-10-20T10:50:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "data_anonymization",
+                                "level": "partial"
+                            }
+                        },
+                        {
+                            "id": 172,
+                            "dateCreated": "2025-10-20T10:51:00Z",
+                            "dateModified": "2025-10-20T10:51:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "status": "preparing follow-up email",
+                                "template_id": "FUP_01"
+                            }
+                        },
+                        {
+                            "id": 173,
+                            "dateCreated": "2025-10-20T10:52:00Z",
+                            "dateModified": "2025-10-20T10:52:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "follow_up_email_sent",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "id": 174,
+                            "dateCreated": "2025-10-20T10:53:00Z",
+                            "dateModified": "2025-10-20T10:53:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "internal_metric_logged",
+                                "metric_name": "process_success_rate"
+                            }
+                        },
+                        {
+                            "id": 175,
+                            "dateCreated": "2025-10-20T10:54:00Z",
+                            "dateModified": "2025-10-20T10:54:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "error": "External system sync failed",
+                                "sync_system": "Marketing_Tool"
+                            }
+                        },
+                        {
+                            "id": 176,
+                            "dateCreated": "2025-10-20T10:55:00Z",
+                            "dateModified": "2025-10-20T10:55:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "data_cleansing",
+                                "records_cleaned": 5
+                            }
+                        },
+                        {
+                            "id": 177,
+                            "dateCreated": "2025-10-20T10:56:00Z",
+                            "dateModified": "2025-10-20T10:56:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "status": "running secondary risk model",
+                                "model_id": "RISK_B"
+                            }
+                        },
+                        {
+                            "id": 178,
+                            "dateCreated": "2025-10-20T10:57:00Z",
+                            "dateModified": "2025-10-20T10:57:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "secondary_risk_check",
+                                "result": "safe"
+                            }
+                        },
+                        {
+                            "id": 179,
+                            "dateCreated": "2025-10-20T10:58:00Z",
+                            "dateModified": "2025-10-20T10:58:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "user_profile_update",
+                                "field": "loan_count"
+                            }
+                        },
+                        {
+                            "id": 180,
+                            "dateCreated": "2025-10-20T10:59:00Z",
+                            "dateModified": "2025-10-20T10:59:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 9,
+                            "absProdCode": "PRD_OPT_I",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_1",
+                            "payload": {
+                                "action": "optional_step_finished",
+                                "next_step_uuid": "6bcb6599-1b72-444e-9a28-4078b52c6038"
+                            }
+                        },
+                        {
+                            "id": 181,
+                            "dateCreated": "2025-10-20T11:00:00Z",
+                            "dateModified": "2025-10-20T11:00:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "loyalty_points_granted",
+                                "points": 500
+                            }
+                        },
+                        {
+                            "id": 182,
+                            "dateCreated": "2025-10-20T11:01:00Z",
+                            "dateModified": "2025-10-20T11:01:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "status": "checking loyalty system availability",
+                                "system_ping": "success"
+                            }
+                        },
+                        {
+                            "id": 183,
+                            "dateCreated": "2025-10-20T11:02:00Z",
+                            "dateModified": "2025-10-20T11:02:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "welcome_call_logged",
+                                "employee_id": "E101"
+                            }
+                        },
+                        {
+                            "id": 184,
+                            "dateCreated": "2025-10-20T11:03:00Z",
+                            "dateModified": "2025-10-20T11:03:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "data_warehouse_sync",
+                                "sync_time_ms": 120
+                            }
+                        },
+                        {
+                            "id": 185,
+                            "dateCreated": "2025-10-20T11:04:00Z",
+                            "dateModified": "2025-10-20T11:04:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "error": "Loyalty system connection failed",
+                                "connection_attempt": 3
+                            }
+                        },
+                        {
+                            "id": 186,
+                            "dateCreated": "2025-10-20T11:05:00Z",
+                            "dateModified": "2025-10-20T11:05:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "final_email_sent",
+                                "template_version": "V2.0"
+                            }
+                        },
+                        {
+                            "id": 187,
+                            "dateCreated": "2025-10-20T11:06:00Z",
+                            "dateModified": "2025-10-20T11:06:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "status": "awaiting compliance sign-off",
+                                "compliance_id": "CPL007"
+                            }
+                        },
+                        {
+                            "id": 188,
+                            "dateCreated": "2025-10-20T11:07:00Z",
+                            "dateModified": "2025-10-20T11:07:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "compliance_approved",
+                                "approved_at": "2025-10-20T11:07:00Z"
+                            }
+                        },
+                        {
+                            "id": 189,
+                            "dateCreated": "2025-10-20T11:08:00Z",
+                            "dateModified": "2025-10-20T11:08:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "final_data_lock",
+                                "hash_locked": "z9y8x7w6"
+                            }
+                        },
+                        {
+                            "id": 190,
+                            "dateCreated": "2025-10-20T11:09:00Z",
+                            "dateModified": "2025-10-20T11:09:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "error": "Failed to update internal metrics",
+                                "metric_name": "uptime_log"
+                            }
+                        },
+                        {
+                            "id": 191,
+                            "dateCreated": "2025-10-20T11:10:00Z",
+                            "dateModified": "2025-10-20T11:10:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "archival_metadata_set",
+                                "location": "L01"
+                            }
+                        },
+                        {
+                            "id": 192,
+                            "dateCreated": "2025-10-20T11:11:00Z",
+                            "dateModified": "2025-10-20T11:11:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "status": "running final data integrity check",
+                                "check_id": "DIC_F"
+                            }
+                        },
+                        {
+                            "id": 193,
+                            "dateCreated": "2025-10-20T11:12:00Z",
+                            "dateModified": "2025-10-20T11:12:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "final_data_integrity_passed",
+                                "verification_time": 12
+                            }
+                        },
+                        {
+                            "id": 194,
+                            "dateCreated": "2025-10-20T11:13:00Z",
+                            "dateModified": "2025-10-20T11:13:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "internal_event_sent",
+                                "event_type": "PROCESS_END"
+                            }
+                        },
+                        {
+                            "id": 195,
+                            "dateCreated": "2025-10-20T11:14:00Z",
+                            "dateModified": "2025-10-20T11:14:00Z",
+                            "applicationId": 10,
+                            "stateCode": "FAILED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "error": "Audit log failure",
+                                "log_system": "LGS01"
+                            }
+                        },
+                        {
+                            "id": 196,
+                            "dateCreated": "2025-10-20T11:15:00Z",
+                            "dateModified": "2025-10-20T11:15:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "final_closure_record_created",
+                                "record_id": "FCR99"
+                            }
+                        },
+                        {
+                            "id": 197,
+                            "dateCreated": "2025-10-20T11:16:00Z",
+                            "dateModified": "2025-10-20T11:16:00Z",
+                            "applicationId": 10,
+                            "stateCode": "IN_PROGRESS",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "status": "preparing automated customer survey",
+                                "delivery_method": "SMS"
+                            }
+                        },
+                        {
+                            "id": 198,
+                            "dateCreated": "2025-10-20T11:17:00Z",
+                            "dateModified": "2025-10-20T11:17:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "survey_sent",
+                                "sent_time": "2025-10-20T11:17:00Z"
+                            }
+                        },
+                        {
+                            "id": 199,
+                            "dateCreated": "2025-10-20T11:18:00Z",
+                            "dateModified": "2025-10-20T11:18:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "process_fully_complete",
+                                "status": "archived"
+                            }
+                        },
+                        {
+                            "id": 200,
+                            "dateCreated": "2025-10-20T11:19:00Z",
+                            "dateModified": "2025-10-20T11:19:00Z",
+                            "applicationId": 10,
+                            "stateCode": "COMPLETED",
+                            "programTypeId": 10,
+                            "absProdCode": "PRD_FOLLOWUP_J",
+                            "stepUUID": "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "stepCode": "OPTIONAL_STEP_2",
+                            "payload": {
+                                "action": "END_OF_PROCESS",
+                                "system_shutdown": "true"
+                            }
+                        }
+                    ]
+
+                    }    
+                );
 
                 var dessertsData = Vue.ref(
                     {
@@ -480,10 +3530,10 @@
                     } finally {
                         this.isLoading = false;
 
-                        for(var i = 0; i < this.getRandomArbitrary(10, 20); i++ )
-                        this.searchData.referIDS.push(
-                            this.generateUUID()
-                        );
+                        for (var i = 0; i < this.getRandomArbitrary(10, 20); i++)
+                            this.searchData.referIDS.push(
+                                this.generateUUID()
+                            );
                         /*
                         this.searchData.referIDS = [
                             "31f197eb-3cac-4b83-b625-13855a859268",
@@ -641,7 +3691,7 @@
                 },
                 getRandomArbitrary(min, max) {
                     return Math.random() * (max - min) + min;
-                }   
+                }
 
             }
         })
