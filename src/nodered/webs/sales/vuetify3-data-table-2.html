@@ -80,12 +80,8 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="4" sm="4" ma="10">
-                            <v-text-field 
-                            v-model="searchData.applicationID" 
-                            label="Application ID" 
-                            type="text"
-                            @keypress="filterNumber(event)"
-                            placeholder="123456789" clearable></v-text-field>
+                            <v-text-field v-model="searchData.applicationID" label="Application ID" type="text"
+                                @keypress="filterNumber(event)" placeholder="123456789" clearable></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" ma="10">
                             <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID" color="green"
@@ -480,6 +476,12 @@
                         this.isLoading = false;
                     } finally {
                         this.isLoading = false;
+
+                        for(var i = 0; i < this.getRandomArbitrary(10, 20); i++ )
+                        this.searchData.referIDS.push(
+                            this.generateUUID()
+                        );
+                        /*
                         this.searchData.referIDS = [
                             "31f197eb-3cac-4b83-b625-13855a859268",
                             "3aa83506-b4df-46f8-8ae8-e93d99446bac",
@@ -492,6 +494,7 @@
                             "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
                             "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
                         ]
+                        */
                     }
                 },
 
@@ -619,6 +622,23 @@
                     //console.log("[getDebtStatusIconColor]", ret);
                     return ret;
                 },
+
+                generateUUID() { // Public Domain/MIT
+                    var d = new Date().getTime();
+                    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+                        d += performance.now(); //use high-precision timer if available
+                    }
+                    var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        var r = (d + Math.random() * 16) % 16 | 0;
+                        d = Math.floor(d / 16);
+                        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                    });
+
+                    return newGuid;
+                },
+                getRandomArbitrary(min, max) {
+                    return Math.random() * (max - min) + min;
+                }   
 
             }
         })
