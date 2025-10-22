@@ -132,8 +132,8 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
-                                v-model="dessertsData.selectedItems" :items="dessertsData.dessertsItems"
+                            <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
+                                v-model="dessertsData.selectedItems" :items="stepsData.stepdSimpleData"
                                 item-value="name" item-key="name" :search="searchData.searchText1" class="elevation-1"
                                 @click:row="dessertsDataHandleClick" show-select class="elevation-1">
 
@@ -280,13 +280,13 @@
 
                 var stepsData = Vue.ref(
                     {
-                    dessertsHeaders :  [
-                            { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
-                            { title: 'ApplicationId', subtitle: "Application ident", align: 'end', key: 'calories', class: 'my-header-style' },
-                            { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'fat', class: 'my-header-style' },
-                            { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'carbs', class: 'my-header-style' },
-                            { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'protein', class: 'my-header-style' },
-                            { title: 'StepCode', subtitle: "Step Code", align: 'end', key: 'iron', class: 'my-header-style' },
+                    stepsHeaders :  [
+                            { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
+                            { title: 'ApplicationId', subtitle: "Application ident", align: 'end', key: 'applicationId', class: 'my-header-style' },
+                            { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'stateCode', class: 'my-header-style' },
+                            { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'absProdCode', class: 'my-header-style' },
+                            { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'stepUUID', class: 'my-header-style' },
+                            { title: 'StepCode', subtitle: "Step Code", align: 'end', key: 'stepCode', class: 'my-header-style' },
                             { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
                         ],
@@ -3473,6 +3473,7 @@
 
                     , usersList
                     , dessertsData
+                    , stepsData
                     , dicts
                     , searchData
                     , menuActions
