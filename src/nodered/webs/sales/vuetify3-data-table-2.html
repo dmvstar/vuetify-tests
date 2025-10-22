@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vuetify Data table style example NG V3</title>
+    <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+
+    <style>
+        .v-data-table__tr:has(input[type='checkbox']:checked) {
+            background: #f5c17d70 !important;
+        }
+
+        .v-theme--light.v-data-table thead {
+            background-color: #bb996dc2;
+        }
+
+        .v-theme--light.v-data-table tbody tr:nth-child(even) {
+            background-color: #f4e1c8c2;
+        }
+
+        .v-theme--dark.v-data-table thead {
+            background-color: #101010c2;
+        }
+
+        .v-theme--dark.v-data-table tbody tr:nth-child(even) {
+            background-color: #363636c2;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <div id="app"></div>
+
+    <template id="app-template">
+        <!-- <v-card> -->
+        <v-layout>
+            <v-app-bar density="comfortable" class="text-white" color="green" prominent
+                image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                <v-app-bar-nav-icon variant="text"></v-app-bar-nav-icon>
+                <v-img class="mx-2" src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
+                    max-width="140" contain></v-img>
+                <v-toolbar-title>
+                    <v-card outlined color="transparent">
+                        <template v-slot:title>
+                            Data table example
+                        </template>
+                        <template v-slot:subtitle>
+                            {{appAuthor}} {{appVersion}}
+                        </template>
+                    </v-card>
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <template v-if="$vuetify.display.mdAndUp">
+                    <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                    <v-btn icon="mdi-filter" variant="text"></v-btn>
+                </template>
+                <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+                            @click="onBtnChangeTheme"></v-btn>
+                    </template>
+                    <span>Be on the dark side ...</span>
+                </v-tooltip>
+                <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+            </v-app-bar>
+            <v-main>
+                <div id="main" class="ma-3">
+                    <v-row ma="5">
+                        <v-card-title>
+                            Application Steps searcher...
+                        </v-card-title>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="4" sm="4" ma="10">
+                            <v-text-field 
+                            v-model="searchData.applicationID" 
+                            label="Application ID" 
+                            type="text"
+                            @keypress="filterNumber(event)"
+                            placeholder="123456789" clearable></v-text-field>
+                        </v-col>
+                        <v-col cols="2" sm="2" ma="10">
+                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID" color="green"
+                                @click="onBtnSearch" block>Search</v-btn>
+                        </v-col>
+                        <v-col cols="2" sm="2" ma="10">
+                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID"
+                                color="yellow" @click="onBtnClear" block>Clear</v-btn>
+                        </v-col>
+                        <v-col cols="4" sm="4" ma="10">
+                            <v-select label="Refer ID" v-model="searchData.referID" clearable
+                                :items=searchData.referIDS></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="2">
+                        <v-col cols="10">
+                            <v-card-text>
+                                VDataTable {{dessertsData.dessertsItems.length}} items
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="2" align="right">
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
+                                        Columns Order ...
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <!-- dessertsData.dessertsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
+                                    <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
+                                    <v-list-item v-for="({title, subtitle}, index) in dessertsData.dessertsHeaders"
+                                        :key="index" :title="title" :subtitle="subtitle" :value="title"
+                                        :disabled="checkReorderColumnsDisabled(index)" density="compact">
+                                        <template v-slot:append>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-up" variant="text"
+                                                @click="onReorderColumnsClick('UP', index)"></v-btn>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-down" variant="text"
+                                                @click="onReorderColumnsClick('DN', index)"></v-btn>
+                                        </template>
+                                        <!--v-icon icon="mdi-chevron-up"></v-icon>
+                                        <v-icon icon="mdi-chevron-down"></v-icon-->
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="12" sm="12" ma="10">
+
+                            <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
+                                v-model="dessertsData.selectedItems" :items="dessertsData.dessertsItems"
+                                item-value="name" item-key="name" :search="searchData.searchText1" class="elevation-1"
+                                @click:row="dessertsDataHandleClick" show-select class="elevation-1">
+
+                                <template v-slot:[`header.name`]="{ column }">
+                                    <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                </template>
+
+                                <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                    <!--span v-html=column.title></span-->
+                                    {{ getTitle(column) }}
+                                    {{ column.title }}
+                                    <template v-if="isSorted(column)">
+                                        <v-icon :icon="getSortIcon(column)"></v-icon>
+                                    </template>
+                                </template>
+
+                                <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                    {{ getTitle(column) }}
+                                    [{{ column.title }}]
+                                    <template v-if="isSorted(column)">
+                                        <v-icon :icon="getSortIcon(column)"></v-icon>
+                                    </template>
+                                </template>
+
+
+                                <template v-slot:item.name="{ item }">
+                                    <div style="white-space: pre-wrap;">{{ item.name }}</div>
+                                </template>
+                                <template v-slot:item.calories1="{ item }">
+                                    <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.calories="{ key, value, item }">
+                                    <div>
+                                        <v-chip :color="getDebtStatusIconColor(item)">
+                                            {{ value }}
+                                        </v-chip>
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.actions="{ item }">
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" :color="getDebtStatusIconColor(item)"
+                                        :icon="getDebtStatusIcon(item.fat)">
+                                    </v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue"
+                                        icon="mdi-file-document"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"></v-btn>
+                                </template>
+
+                                <template v-slot:item.operations="{ item }">
+                                    <!--v-btn block color="blue">Operations</v-btn-->
+                                    <v-menu transition="scale-transition">
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"
+                                                append-icon="mdi-chevron-down">
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item
+                                                v-for="([title, icon, action], index) in menuActions.actionsList"
+                                                :key="index" :prepend-icon="icon" :title="title" :value="title"
+                                                @click="onUserMenuClick(action, index)">
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </template>
+
+                            </v-data-table>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="12" sm="12" ma="10">
+                            <v-btn color="primary" @click="onButtonRefresh(event)" block>Refresh</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
+                    color="surface-light">
+                    <div class="flex-1-0-100 text-center mt-2">
+                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+                    </div>
+                </v-footer>
+            </v-main>
+
+        </v-layout>
+        <!-- </v-card> -->
+    </template>
+
+    <script setup>
+        const { createApp, ref, defineProps, reactive } = Vue;
+        const { createVuetify, useTheme, version } = Vuetify;
+
+
+        const vuetify = createVuetify({
+            /*
+            theme: {
+                defaultTheme: "dark",
+            },
+            */
+        });
+        const app = createApp({
+            template: "#app-template",
+            setup() {
+                const appVersion = "v. 0.0.34 (2025-04-03 22:03:07)";
+                const appAuthor = "StarDust";
+                const faceId = 10;
+                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
+
+                const usersList = {
+                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                };
+                var mainDrawer = Vue.ref(true);
+                var secondDrawer = Vue.ref(false);
+
+                var faceRailIcon = Vue.ref("mdi-chevron-right");
+
+
+                const searchData = Vue.reactive({
+                    applicationID: "",
+                    referIDS: [],
+                    referID: "",
+                    applicationID: "",
+
+                    selectedDateFrom1: "",
+                    selectedDateInto1: "",
+                    searchText1: "",
+                    searchText2: "",
+                    dateFromDateMenu: null,
+                    dateIntoDateMenu: null,
+                    selectedDateFromFull: null,
+                    selectedDateFrom: null,
+                    selectedDateFromInto: null,
+                    selectedDateInto: null,
+                    userMode: null,
+                    userState: null
+                });
+
+
+                var dessertsData = Vue.ref(
+                    {
+                        dessertsHeaders: [
+                            { title: 'Dessert (100g serving)', subtitle: "Dessert info", align: 'start', sortable: false, key: 'name', class: 'my-header-style' },
+                            { title: 'Calories\n(100g)', subtitle: "Total Calories", align: 'end', key: 'calories', class: 'my-header-style' },
+                            { title: 'Fat (g)', subtitle: "Fat in dessert", align: 'end', key: 'fat', class: 'my-header-style' },
+                            { title: 'Carbs (g)', subtitle: "Carbs in dessert", align: 'end', key: 'carbs', class: 'my-header-style' },
+                            { title: 'Protein (g)', subtitle: "Protein in dessert", align: 'end', key: 'protein', class: 'my-header-style' },
+                            { title: 'Iron (%)', subtitle: "Iron in dessert", align: 'end', key: 'iron', class: 'my-header-style' },
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
+                        ],
+                        selectedRows: [],
+                        selectedItems: [],
+                        dessertsItems: [
+                            {
+                                name: 'Frozen Yogurt',
+                                calories: 159,
+                                fat: 6.0,
+                                carbs: 24,
+                                protein: 4.0,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Natural Yogurt',
+                                calories: 59,
+                                fat: 6.0,
+                                carbs: 24,
+                                protein: 4.0,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Ice cream \nsand\nwich',
+                                calories: 237,
+                                fat: 9.0,
+                                carbs: 37,
+                                protein: 4.3,
+                                iron: 1,
+                            },
+                            {
+                                name: 'Eclair',
+                                calories: 262,
+                                fat: 16.0,
+                                carbs: 23,
+                                protein: 6.0,
+                                iron: 7,
+                            },
+                            {
+                                name: 'Cupcake',
+                                calories: 305,
+                                fat: 3.7,
+                                carbs: 67,
+                                protein: 4.3,
+                                iron: 8,
+                            },
+                            {
+                                name: 'Gingerbread',
+                                calories: 356,
+                                fat: 16.0,
+                                carbs: 49,
+                                protein: 3.9,
+                                iron: 16,
+                            },
+                            {
+                                name: 'Jelly bean',
+                                calories: 375,
+                                fat: 0.0,
+                                carbs: 94,
+                                protein: 0.0,
+                                iron: 0,
+                            },
+                            {
+                                name: 'Lollipop',
+                                calories: 392,
+                                fat: 0.2,
+                                carbs: 98,
+                                protein: 0,
+                                iron: 2,
+                            },
+                            {
+                                name: 'Honeycomb',
+                                calories: 408,
+                                fat: 3.2,
+                                carbs: 87,
+                                protein: 6.5,
+                                iron: 45,
+                            },
+                            {
+                                name: 'Donut',
+                                calories: 452,
+                                fat: 25.0,
+                                carbs: 51,
+                                protein: 4.9,
+                                iron: 22,
+                            },
+                            {
+                                name: 'KitKat',
+                                calories: 518,
+                                fat: 26.0,
+                                carbs: 65,
+                                protein: 7,
+                                iron: 6,
+                            },
+                        ]
+                    }
+                );
+
+                const menuActions = {
+                    userMenu: [
+                        ["Hide", "mdi-fire", "hide"],
+                        ["Logout", "mdi-logout", "logout"]
+                    ],
+                    actionsList: [
+                        ["Print Report", "mdi-printer", "print_rep"],
+                        ["Print Barcode", "mdi-barcode", "print_bar"],
+                        ["Print QRCode", "mdi-qrcode", "print_qr"]
+                    ]
+                };
+
+                const dicts = {
+                    debtStatus: [
+
+                    ]
+                };
+
+                const theme = ref('light');
+                const isDarkTheme = ref(false);
+                const isLoading = ref(false);
+
+                const isShowUserMenu = ref(false);
+
+                return {
+                    theme
+                    , isDarkTheme
+                    , isShowUserMenu
+                    , isLoading
+                    , appVersion, appAuthor
+                    , faceId
+                    , faceRailIcon
+                    , faceIdUrl
+
+                    , usersList
+                    , dessertsData
+                    , dicts
+                    , searchData
+                    , menuActions
+
+                }
+            },
+            created() {
+                console.log(version);
+            },
+            mounted() {
+                var dessertsHeaders = localStorage.getItem('dessertsHeaders');
+                if (dessertsHeaders) {
+                    this.dessertsData.dessertsHeaders = JSON.parse(dessertsHeaders);
+                }
+            },
+            watch: {
+
+            },
+            methods: {
+                formatDate(date) {
+                    if (!date) {
+                        return null
+                    }
+                    console.log(date);
+                    const [year, month, day] = date.toISOString().replace('T', '-').split('-');
+                    console.log(date.toISOString());
+                    var ret = `${day}-${month}-${year}`;
+                    console.log(ret);
+                    return ret;
+                },
+
+                onBtnChangeTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    this.isDarkTheme = !this.isDarkTheme;
+                    //console.log(this.$vuetify.theme);
+                    //console.log(this.$vuetify.theme.global);
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';
+                    var isDark = this.$vuetify.theme.global.current.dark;
+                    console.log(`isDark=${isDark}, isDarkTheme= ${this.isDarkTheme}`);
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                    isDark = !isDark;
+                    console.log('isDark', isDark);
+                    //this.$vuetify.theme.global.current.dark = isDark;
+                    this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                },
+
+                async onBtnSearch() {
+                    this.isLoading = true;;
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                    } catch (error) {
+                        this.isLoading = false;
+                    } finally {
+                        this.isLoading = false;
+                        this.searchData.referIDS = [
+                            "31f197eb-3cac-4b83-b625-13855a859268",
+                            "3aa83506-b4df-46f8-8ae8-e93d99446bac",
+                            "2f8914eb-e37f-45fb-9629-79034832eabc",
+                            "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
+                            "17c68bbd-8bf7-4967-9c2b-048a58483b49",
+                            "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
+                            "6bcb6599-1b72-444e-9a28-4078b52c6038",
+                            "735289fb-b363-4b2d-a095-6fc1aa6e4402",
+                            "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
+                            "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
+                        ]
+                    }
+                },
+
+                onBtnClear() {
+                    this.searchData.applicationID = "";
+                    this.searchData.referID = "";
+                    this.searchData.referIDS = [];
+                },
+
+                filterNumber(evt) {
+                    evt = (evt) ? evt : window.event;
+                    let expect = evt.target.value.toString() + evt.key.toString();
+                    if (!/^[-+]?[0-9]*\.?[0-9]*$/.test(expect)) {
+                        evt.preventDefault();
+                    } else {
+                        return true;
+                    }
+                },
+
+                checkReorderColumnsDisabled(index) {
+                    ret = false;
+                    var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
+                    ret = !isSortableCurr;
+                    //console.log(index,   this.dessertsData.dessertsHeaders[index].title, ret);
+                    return ret;
+                },
+                onReorderColumnsClick(where, index) {
+                    var isSortableCurr = this.dessertsData.dessertsHeaders[index].sortable;
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
+                    //console.log(where, index, this.dessertsData.dessertsHeaders[index].title, isSortableCurr, this.dessertsData.dessertsHeaders[index].sortable);
+                    if (where == 'UP' && index > 0 && isSortableCurr) {
+                        var isSortablePrev = this.dessertsData.dessertsHeaders[index - 1].sortable;
+                        if (isSortablePrev == undefined) { isSortablePrev = true; }
+                        if (isSortablePrev) {
+                            var element_old = this.dessertsData.dessertsHeaders[index - 1];
+                            var element_new = this.dessertsData.dessertsHeaders[index];
+                            this.dessertsData.dessertsHeaders[index] = element_old;
+                            this.dessertsData.dessertsHeaders[index - 1] = element_new;
+                        }
+                    }
+                    if (where == 'DN' && index < this.dessertsData.dessertsHeaders.length && isSortableCurr) {
+                        var isSortableNext = this.dessertsData.dessertsHeaders[index + 1].sortable;
+                        if (isSortableNext == undefined) { isSortableNext = true; }
+                        if (isSortableNext) {
+                            var element_old = this.dessertsData.dessertsHeaders[index + 1];
+                            var element_new = this.dessertsData.dessertsHeaders[index];
+                            this.dessertsData.dessertsHeaders[index] = element_old;
+                            this.dessertsData.dessertsHeaders[index + 1] = element_new;
+                        }
+                    }
+                    localStorage.setItem('dessertsHeaders', JSON.stringify(this.dessertsData.dessertsHeaders));
+                },
+
+                onOperationClick(event, index) {
+                    console.log(`[onOperationClick] ${event} ${index} ${this.dessertsData.selectedItems.length}`);
+                },
+
+                onButtonRefresh(event) {
+                    console.log(this.dessertsData.selectedItems.length);
+                    console.log(this.dessertsData.selectedItems);
+                },
+
+                onUserMenuClick(event, index) {
+                    switch (event) {
+                        case "logout":
+                            console.log(`Execute event ${event}`);
+                            break;
+                        case "hide":
+                            console.log(`Execute event ${event}`);
+                            this.mainDrawer = false;
+                            break;
+                        default:
+                            console.log(`Sorry, we are out of ${event}.`);
+                    }
+                },
+
+                dessertsDataHandleClick(event, row) {
+                    //https://codepen.io/Hexodus/pen/ExKGWBe
+                    let selectState = (row.isSelected()) ? false : true;
+                    console.log(`[dessertsDataHandleClick] event ${JSON.stringify(event)}`);
+                    console.log(`[dessertsDataHandleClick] row  ${JSON.stringify(row)}`);
+                    console.log(row);
+                    console.log(this.dessertsData.selectedItems.length);
+                    console.log(this.dessertsData.selectedItems);
+                    this.toggleSelection(row.item.name);
+                },
+
+                toggleSelection(keyID) {
+                    if (this.dessertsData.selectedItems.includes(keyID)) {
+                        this.dessertsData.selectedItems = this.dessertsData.selectedItems.filter(
+                            selectedKeyID => selectedKeyID !== keyID
+                        );
+                    } else {
+                        this.dessertsData.selectedItems.push(keyID);
+                    }
+                },
+
+                getDebtStatusIcon(debtstatus) {
+                    ret = "mdi-account";
+                    let item = this.dicts.debtStatus.find(x => x.status === ("" + debtstatus));
+                    if (item !== undefined) ret = item.icon;
+                    //console.log("[getDebtStatusIcon]", ret);
+                    return ret;
+                },
+
+                getTitle(column) {
+                    var ret = "";
+                    console.log("[getTitle]", column);
+                    return ret;
+                },
+
+                getDebtStatusIconColor(item) {
+                    //console.log("[getDebtStatusIconColor]", item);
+                    ret = "green";
+                    if (item.calories > 200 && item.calories < 300) {
+                        ret = "yellow";
+                    }
+                    if (item.calories > 300 && item.calories < 400) {
+                        ret = "pink";
+                    }
+                    if (item.calories > 400) {
+                        ret = "red";
+                    }
+                    //console.log("[getDebtStatusIconColor]", ret);
+                    return ret;
+                },
+
+            }
+        })
+            .use(vuetify)
+            .mount("#app");
+    </script>
+</body>
