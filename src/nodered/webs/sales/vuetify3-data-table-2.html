@@ -69,8 +69,68 @@
                     </template>
                     <span>Be on the dark side ...</span>
                 </v-tooltip>
-                <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+                <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
             </v-app-bar>
+            <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
+                <div id="second-driwer" class="ma-3">
+                    <!--v-list density="compact" nav-->
+                    <v-row ma="10">
+
+                        <v-col ma="10">
+                            <v-icon icon="mdi-radar"></v-icon>
+                            Filteres
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-text-field density="compact" v-model="searchData.searchText" label="Search text"
+                                prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateFrom"
+                                        label="Date From" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker @update:model-value="searchData.dateFromDateMenu = false"
+                                    v-model="searchData.selectedDateFromFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateInto"
+                                        label="Date Into" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <!--/v-list-->
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="green" block @click="onBtnApplyFilters">Apply</v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="orange" block @click="onBtnClearFilters">Clear</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+            </v-navigation-drawer>
+
             <v-main>
                 <div id="main" class="ma-3">
                     <v-row ma="5">
@@ -93,7 +153,8 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-select density="compact" label="Refer ID" v-model="searchData.referID" clearable
+                            <v-select density="compact" label="Refer ID" v-model="searchData.referID" 
+                                clearable
                                 :items=searchData.referIDS></v-select>
                         </v-col>
                     </v-row>
@@ -132,20 +193,54 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table :items-per-page="8" 
+                            <v-data-table 
+                                :items-per-page="8" 
                                 :headers="stepsData.stepsHeaders"
                                 v-model="stepsData.selectedItems" 
-                                :items="stepsData.stepsItemsData"
-                                item-value="id" item-key="id" 
-                                :search="searchData.searchText1" 
-                                class="elevation-1"                                
-                                show-select 
-                                @click:row="stepsDataHandleClick" 
-                            >
+                                :items="stepsData.stepsItemsData" item-value="id"
+                                item-key="id" 
+                                :search="searchData.searchText" 
+                                class="elevation-1" show-select
+                                @click:row="stepsDataHandleClick">
 
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                 </template>
+
+                                                                <!--HEADER SLOTS-->
+                                <template v-for="header in stepsData.stepsHeaders"
+                                    #[`header.${header.key}`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-card outlined color="transparent" variant="flat">
+                                        <template v-slot:title>
+                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">
+                                                <template v-if="column.sortable">
+                                                    <template v-if="isSorted(column)">
+                                                        <v-icon size="x-small"
+                                                            :icon="getSortIcon(column, toggleSort)"></v-icon>
+                                                    </template>
+                                                    <template v-else>
+                                                        <v-icon size="x-small" color="#808080" icon="mdi-sort"></v-icon>
+                                                    </template>
+                                                </template>
+                                                {{column.title}}
+                                                <template v-if="column.icon">
+                                                    <v-icon size="x-small"
+                                                        color="green-darken-2">{{column.icon}}</v-icon>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template v-slot:subtitle class="text-subtitle-2">
+                                            {{ column.subtitle }}
+
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+
+                                    </v-card>
+                                </template>
+
+
 
                                 <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
                                     <v-icon color="green-darken-2">mdi-mushroom</v-icon>
@@ -183,10 +278,9 @@
                                     </div>
                                 </template>
 
-                                <template v-slot:item.actions="{ item }">                                   
-                                    
-                                    <v-btn class="mr-1" density="comfortable" color="blue"
-                                        icon="mdi-eye"></v-btn>
+                                <template v-slot:item.actions="{ item }">
+
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"></v-btn>
@@ -246,7 +340,7 @@
         const app = createApp({
             template: "#app-template",
             setup() {
-                const appVersion = "v. 0.0.34 (2025-04-03 22:03:07)";
+                
                 const appAuthor = "StarDust";
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
@@ -285,13 +379,14 @@
                     {
                         stepsHeaders: [
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
+                            { title: 'Created', subtitle: "Date Created/updated", align: 'start', sortable: false, key: 'dateCreated', class: 'my-header-style' },
                             { title: 'ApplicationId', subtitle: "Application ident", align: 'end', key: 'applicationId', class: 'my-header-style' },
                             { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'stateCode', class: 'my-header-style' },
                             { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'absProdCode', class: 'my-header-style' },
                             { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'stepUUID', class: 'my-header-style' },
                             { title: 'StepCode', subtitle: "Step Code", align: 'end', key: 'stepCode', class: 'my-header-style' },
-                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '20%' },
-                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '5%' },
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '10%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
                         selectedRows: [],
                         selectedItems: [],
@@ -1110,6 +1205,8 @@
 
                 const isShowUserMenu = ref(false);
 
+                const appVersion = "v. 0.0.37 (2025-10-23 11:26:01)";
+
                 return {
                     theme
                     , isDarkTheme
@@ -1120,8 +1217,10 @@
                     , faceRailIcon
                     , faceIdUrl
 
+                    , secondDrawer
+
                     , usersList
-                    
+
                     , stepsData
                     , dicts
                     , searchData
@@ -1139,7 +1238,9 @@
                 }
             },
             watch: {
-
+                "searchData.referID" : function(newQuestion, oldQuestion) {
+                    this.searchData.searchText = this.searchData.referID;
+                }
             },
             methods: {
                 formatDate(date) {
@@ -1179,13 +1280,18 @@
                         this.isLoading = false;
                     } finally {
                         this.isLoading = false;
-                        
+
                         this.stepsData.stepsItemsData = this.stepsData.stepsSimpleData;
 
+                        this.searchData.referIDS = getUniqueStepUUIDs(this.stepsData.stepsItemsData);
+
+
+                        /*
                         for (var i = 0; i < this.getRandomArbitrary(10, 20); i++)
                             this.searchData.referIDS.push(
                                 this.generateUUID()
                             );
+                        */
                         /*
                         this.searchData.referIDS = [
                             "31f197eb-3cac-4b83-b625-13855a859268",
@@ -1224,7 +1330,7 @@
                     ret = false;
                     var isSortableCurr = this.stepsData.stepsHeaders[index].sortable;
                     if (isSortableCurr == undefined) { isSortableCurr = true; }
-                    ret = !isSortableCurr;                    
+                    ret = !isSortableCurr;
                     return ret;
                 },
 
@@ -1256,11 +1362,48 @@
                 },
 
                 onOperationClick(event, index) {
-                    
+
                 },
 
                 onButtonRefresh(event) {
-                    
+
+                },
+
+                onBtnApplyFilters() {
+                    this.saveFilters();
+                },
+                onBtnClearFilters() {
+                    for (var i in this.searchData) {
+                        this.searchData[i] = null;
+                    }
+                    this.saveFilters();
+                },
+
+                saveFilters() {
+                    console.log(this.searchData);
+                    localStorage.setItem('searchData', JSON.stringify(this.searchData));
+                },
+                loadFilters() {
+                    var searchData = localStorage.getItem('searchData');
+                    var searchDataObj = JSON.parse(searchData);
+                    console.log(`[loadFilters] ${searchData}`);
+                    console.log(searchDataObj);
+                    if (searchData) {
+                        var parDate = [];
+                        this.searchData.searchText = searchDataObj.searchText;
+
+                        this.searchData.selectedDateFrom = searchDataObj.selectedDateFrom;
+                        this.searchData.dateFromDateMenu = searchDataObj.dateFromDateMenu;
+                        this.searchData.selectedDateFromFull = this.parseDate(searchDataObj.selectedDateFrom);
+                        //parDate = searchDataObj.selectedDateFrom.split('-');
+                        //this.searchData.selectedDateFromFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+
+                        this.searchData.selectedDateInto = searchDataObj.selectedDateInto;
+                        this.searchData.dateIntoDateMenu = searchDataObj.dateIntoDateMenu;
+                        this.searchData.selectedDateIntoFull = this.parseDate(searchDataObj.selectedDateInto);
+                        //parDate = searchDataObj.selectedDateInto.split('-');
+                        //this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    }
                 },
 
                 onUserMenuClick(event, index) {
@@ -1350,4 +1493,14 @@
             .use(vuetify)
             .mount("#app");
     </script>
+    <script>
+        function getUniqueStepUUIDs(records) {
+            // 1. Użyj .map() do wyodrębnienia wszystkich wartości stepUUID
+            const allUUIDs = records.map(record => record.stepUUID);
+            // 2. Użyj new Set() do automatycznego usunięcia duplikatów
+            const uniqueUUIDsSet = new Set(allUUIDs);
+            // 3. Konwertuj Set z powrotem na Array i zwróć
+            return [...uniqueUUIDsSet];        }
+    </script>
+
 </body>
