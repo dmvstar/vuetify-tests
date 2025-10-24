@@ -140,16 +140,16 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="4" sm="4" ma="10">
-                            <v-text-field ref="applicationID" v-model="searchData.applicationID" label="Application ID"
+                            <v-text-field ref="appIdentifier" v-model="searchData.appIdentifier" label="Application ID"
                                 type="text" density="compact" @keypress="filterNumber(event)" placeholder="123456789"
                                 @keydown.enter="onBtnSearch" clearable></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" ma="10">
-                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID" color="green"
+                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.appIdentifier" color="green"
                                 @click="onBtnSearch" block>Search</v-btn>
                         </v-col>
                         <v-col cols="2" sm="2" ma="10">
-                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID"
+                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.appIdentifier"
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
@@ -252,37 +252,7 @@
                                         <v-icon :icon="getSortIcon(column)"></v-icon>
                                     </template>
                                 </template>
-
-                                <template v-slot:item.name="{ item }">
-                                    <div style="white-space: pre-wrap;">{{ item.name }}</div>
-                                </template>
-                                <template v-slot:item.calories1="{ item }">
-                                    <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
-                                    </div>
-                                </template>
-                                <template v-slot:item.calories="{ key, value, item }">
-                                    <div>
-                                        <v-chip :color="getDebtStatusIconColor(item)">
-                                            {{ value }}
-                                        </v-chip>
-                                    </div>
-                                </template>
-
-                                <template v-slot:item.dateCreated="{ key, value, item }">
-                                    <div>
-                                        <v-chip :color="getDebtStatusIconColor(item)">
-                                            {{ item.dateCreated }}
-                                        </v-chip>
-                                    </div>
-                                </template>
-
-                                <template v-slot:item.stepCode1="{ item }">
-                                    <div>
-                                        <v-chip :color="getDebtStatusIconColor(item)">
-                                            {{ item.stepCode }}
-                                        </v-chip>
-                                    </div>
-                                </template>
+                                <!--ITEMS SLOTS-->                              
 
                                 <template v-slot:item.stepCode="{ item }">
                                     <v-chip color="green">
@@ -295,10 +265,11 @@
                                         {{ item.id }}
                                     </v-chip>
                                 </template>
+
                                 <template v-slot:item.applicationId="{ item }">
-                                    <v-chip :color="getDebtStatusIconColor(item)">
-                                        {{ item.applicationId }}
-                                    </v-chip>
+                                    TEST-{{ item.applicationId }}
+                                    <!--v-chip :color="getDebtStatusIconColor(item)">                                        
+                                    </v-chip-->
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
@@ -371,37 +342,32 @@
                     firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
                     lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
                 };
-                var mainDrawer = Vue.ref(true);
+                var mainDrawer   = Vue.ref(true);
                 var secondDrawer = Vue.ref(false);
-
                 var faceRailIcon = Vue.ref("mdi-chevron-right");
 
                 const searchData = Vue.reactive({
-                    applicationID: "12345678",
+                    appIdentifier: "12345678",
                     referIDS: [],
                     referID: "",
 
                     selectedDateFrom1: "",
                     selectedDateInto1: "",
-                    searchText1: "",
-                    searchText2: "",
+                    
                     dateFromDateMenu: null,
                     dateIntoDateMenu: null,
                     selectedDateFromFull: null,
                     selectedDateFrom: null,
-                    selectedDateFromInto: null,
-                    selectedDateInto: null,
-                    userMode: null,
-                    userState: null
+                    
+                    selectedDateInto: null
                 });
-
 
                 var stepsData = Vue.ref(
                     {
                         stepsHeaders: [
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
                             { title: 'Created', subtitle: "Date Created/Updated", align: 'start', sortable: false, key: 'dateCreated', class: 'my-header-style' },
-                            { title: 'ApplicationId', subtitle: "Application ident", align: 'end', key: 'applicationId', class: 'my-header-style' },
+                            { title: 'AppIdentifier', subtitle: "Application ident", align: 'end', key: 'applicationId', class: 'my-header-style' },
                             { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'stateCode', class: 'my-header-style' },
                             { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'absProdCode', class: 'my-header-style' },
                             { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'stepUUID', class: 'my-header-style' },
@@ -414,7 +380,7 @@
                         stepsItemsData: [],
                         stepsSimpleData: [
                             // ===================================
-                            // applicationId: 1000001 (Records 1-20)
+                            // appIdentifier: 1000001 (Records 1-20)
                             // ===================================
                             {
                                 "id": 1,
@@ -495,7 +461,7 @@
                                 "id": 6,
                                 "dateCreated": "2023-10-20 08:50:30.667",
                                 "dateModified": "2023-10-20 08:50:30.667",
-                                "applicationId": 1000001,
+                                "appIdentifier": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 2,
                                 "absProdCode": "12.66.45.33.2",
@@ -530,13 +496,12 @@
                     ]
                 };
 
-                const theme = ref('light');
-                const isDarkTheme = ref(false);
+                const theme = ref('dark');
+                const isDarkTheme = ref(true);
                 const isLoading = ref(false);
-
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.37 (2025-10-23 11:26:01)";
+                const appVersion = "v. 0.0.39 (2025-10-24 11:09:21)";
 
                 return {
                     theme
@@ -576,7 +541,7 @@
             },
             methods: {
                 focusInput() {                    
-                    this.$refs.applicationID.focus();
+                    this.$refs.appIdentifier.focus();
                 },
 
                 formatDate(date) {
@@ -609,7 +574,7 @@
                 },
 
                 async onBtnSearch() {
-                    if (!this.searchData.applicationID) {
+                    if (!this.searchData.appIdentifier) {
                         return;
                     }
                     this.isLoading = true;
@@ -619,42 +584,22 @@
                         this.isLoading = false;
                     } finally {
                         this.isLoading = false;
-
                         this.stepsData.stepsItemsData = this.stepsData.stepsSimpleData;
-
                         this.searchData.referIDS = getUniqueStepUUIDs(this.stepsData.stepsItemsData);
-
-
                         /*
                         for (var i = 0; i < this.getRandomArbitrary(10, 20); i++)
                             this.searchData.referIDS.push(
                                 this.generateUUID()
                             );
                         */
-                        /*
-                        this.searchData.referIDS = [
-                            "31f197eb-3cac-4b83-b625-13855a859268",
-                            "3aa83506-b4df-46f8-8ae8-e93d99446bac",
-                            "2f8914eb-e37f-45fb-9629-79034832eabc",
-                            "0ef32301-034f-4b78-aeca-8cc45dbd3d1e",
-                            "17c68bbd-8bf7-4967-9c2b-048a58483b49",
-                            "b6cbffca-848e-4bd3-b973-57aebe0f1c4b",
-                            "6bcb6599-1b72-444e-9a28-4078b52c6038",
-                            "735289fb-b363-4b2d-a095-6fc1aa6e4402",
-                            "7cd92e64-0c29-46e8-9577-169aacf0f2d2",
-                            "bcec1584-5c83-4a9d-af84-4c0e47b58b41",
-                        ]
-                        */
                     }
                 },
-
                 onBtnClear() {
-                    this.searchData.applicationID = "";
+                    this.searchData.appIdentifier = "";
                     this.searchData.referID = "";
                     this.searchData.referIDS = [];
                     this.stepsItemsData = [];
                 },
-
                 filterNumber(evt) {
                     evt = (evt) ? evt : window.event;
                     let expect = evt.target.value.toString() + evt.key.toString();
@@ -664,7 +609,6 @@
                         return true;
                     }
                 },
-
                 checkReorderColumnsDisabled(index) {
                     ret = false;
                     var isSortableCurr = this.stepsData.stepsHeaders[index].sortable;
