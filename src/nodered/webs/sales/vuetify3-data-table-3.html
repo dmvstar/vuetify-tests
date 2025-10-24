@@ -7,7 +7,7 @@
     <link rel="shortcut icon" type="image/png"
         href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.css" rel="stylesheet" />
 
     <style>
         .v-data-table__tr:has(input[type='checkbox']:checked) {
@@ -34,9 +34,8 @@
 
 <body>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.0/dist/vuetify.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.js"></script>
+    
     <div id="app"></div>
 
     <template id="app-template">
@@ -254,9 +253,9 @@
                                 </template>
                                 <!--ITEMS SLOTS-->                              
 
-                                <template v-slot:item.stepCode="{ item }">
-                                    <v-chip color="green">
-                                        {{ item.stepCode }}
+                                <template v-slot:item.stepcode="{ item }">
+                                    <v-chip :color="getDebtStatusIconColor(item)">
+                                        {{ item.stepcode }}
                                     </v-chip>
                                 </template>
 
@@ -266,10 +265,16 @@
                                     </v-chip>
                                 </template>
 
-                                <template v-slot:item.applicationId="{ item }">
-                                    TEST-{{ item.applicationId }}
-                                    <!--v-chip :color="getDebtStatusIconColor(item)">                                        
-                                    </v-chip-->
+                                <template v-slot:item.datecreated="{ item }">
+                                    <div :color="getDebtStatusIconColor(item)">
+                                        C-{{ item.datecreated }}</br>U-{{ item.datemodified }}
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.applicationid="{ item }">                                    
+                                    <v-chip :color="getDebtStatusIconColor(item)">                                                                            
+                                    {{ item.applicationId }}
+                                    </v-chip>
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
@@ -366,12 +371,13 @@
                     {
                         stepsHeaders: [
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
-                            { title: 'Created', subtitle: "Date Created/Updated", align: 'start', sortable: false, key: 'dateCreated', class: 'my-header-style' },
-                            { title: 'AppIdentifier', subtitle: "Application ident", align: 'end', key: 'applicationId', class: 'my-header-style' },
+                            //{ title: 'Ref', subtitle: "Ref", align: 'start', sortable: false, key: 'ref', class: 'my-header-style' },
+                            { title: 'Created', subtitle: "Date Created/Updated", align: 'start', sortable: false, key: 'datecreated', class: 'my-header-style' },
+                            { title: 'AppIdentifier', subtitle: "Application ident", align: 'end', key: 'applicationid', class: 'my-header-style' },
                             { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'stateCode', class: 'my-header-style' },
                             { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'absProdCode', class: 'my-header-style' },
                             { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'stepUUID', class: 'my-header-style' },
-                            { title: 'StepCode', subtitle: "Step Code", align: 'end', key: 'stepCode', class: 'my-header-style' },
+                            { title: 'stepcode', subtitle: "Step Code", align: 'end', key: 'stepcode', class: 'my-header-style' },
                             { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '10%' },
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
@@ -384,14 +390,14 @@
                             // ===================================
                             {
                                 "id": 1,
-                                "dateCreated": "2023-10-15 09:12:34.123",
-                                "dateModified": "2023-10-15 09:12:34.123",
+                                "datecreated": "2023-10-15 09:12:34.123",
+                                "datemodified": "2023-10-15 09:12:34.123",
                                 "applicationId": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 1,
                                 "absProdCode": "12.66.45.33.1",
                                 "stepUUID": "a1b2c3d4-5e6f-40a8-8b0c-d1e2f3g4h5i6",
-                                "stepCode": "STEP_START",
+                                "stepcode": "STEP_START",
                                 "payload": {
                                     "userName": "user_a",
                                     "durationSec": 15
@@ -399,14 +405,15 @@
                             },
                             {
                                 "id": 2,
-                                "dateCreated": "2023-10-16 14:22:01.456",
-                                "dateModified": "2023-10-16 14:22:01.456",
+                                "ref": 1245,
+                                "datecreated": "2023-10-16 14:22:01.456",
+                                "datemodified": "2023-10-16 14:22:01.456",
                                 "applicationId": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 1,
                                 "absProdCode": "12.66.45.33.1",
                                 "stepUUID": "a1b2c3d4-5e6f-40a8-8b0c-d1e2f3g4h5i6",
-                                "stepCode": "STEP_VERIFY",
+                                "stepcode": "STEP_VERIFY",
                                 "payload": {
                                     "userName": "user_b",
                                     "durationSec": 45
@@ -414,14 +421,15 @@
                             },
                             {
                                 "id": 3,
-                                "dateCreated": "2023-10-17 10:05:55.789",
-                                "dateModified": "2023-10-17 10:05:55.789",
+                                "ref": 1247,
+                                "datecreated": "2023-10-17 10:05:55.789",
+                                "datemodified": "2023-10-17 10:05:55.789",
                                 "applicationId": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 1,
                                 "absProdCode": "12.66.45.33.1",
                                 "stepUUID": "a1b2c3d4-5e6f-40a8-8b0c-d1e2f3g4h5i6",
-                                "stepCode": "STEP_APPROVE",
+                                "stepcode": "STEP_APPROVE",
                                 "payload": {
                                     "userName": "user_c",
                                     "durationSec": 90
@@ -429,14 +437,14 @@
                             },
                             {
                                 "id": 4,
-                                "dateCreated": "2023-10-18 11:30:10.011",
-                                "dateModified": "2023-10-18 11:30:10.011",
+                                "datecreated": "2023-10-18 11:30:10.011",
+                                "datemodified": "2023-10-18 11:30:10.011",
                                 "applicationId": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 2,
                                 "absProdCode": "12.66.45.33.2",
                                 "stepUUID": "4c5d6e7f-8a9b-4c1d-9e2f-3a4b5c6d7e8f",
-                                "stepCode": "STEP_START",
+                                "stepcode": "STEP_START",
                                 "payload": {
                                     "userName": "user_d",
                                     "durationSec": 20
@@ -444,14 +452,14 @@
                             },
                             {
                                 "id": 5,
-                                "dateCreated": "2023-10-19 16:40:20.334",
-                                "dateModified": "2023-10-19 16:40:20.334",
+                                "datecreated": "2023-10-19 16:40:20.334",
+                                "datemodified": "2023-10-19 16:40:20.334",
                                 "applicationId": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 2,
                                 "absProdCode": "12.66.45.33.2",
                                 "stepUUID": "4c5d6e7f-8a9b-4c1d-9e2f-3a4b5c6d7e8f",
-                                "stepCode": "STEP_VERIFY",
+                                "stepcode": "STEP_VERIFY",
                                 "payload": {
                                     "userName": "user_e",
                                     "durationSec": 55
@@ -459,14 +467,14 @@
                             },
                             {
                                 "id": 6,
-                                "dateCreated": "2023-10-20 08:50:30.667",
-                                "dateModified": "2023-10-20 08:50:30.667",
-                                "appIdentifier": 1000001,
+                                "datecreated": "2023-10-20 08:50:30.667",
+                                "datemodified": "2023-10-20 08:50:30.667",
+                                "applicationId": 1000001,
                                 "stateCode": "2547887785",
                                 "programTypeId": 2,
                                 "absProdCode": "12.66.45.33.2",
                                 "stepUUID": "4c5d6e7f-8a9b-4c1d-9e2f-3a4b5c6d7e8f",
-                                "stepCode": "STEP_REJECT",
+                                "stepcode": "STEP_REJECT",
                                 "payload": {
                                     "userName": "user_f",
                                     "durationSec": 120
@@ -741,13 +749,13 @@
                 getDebtStatusIconColor(item) {
                     //console.log("[getDebtStatusIconColor]", item);
                     ret = "green";
-                    if (item.stepCode == "STEP_START") {
+                    if (item.stepcode == "STEP_START") {
                         ret = "yellow";
                     }
-                    if (item.stepCode == "STEP_VERIFY") {
+                    if (item.stepcode == "STEP_VERIFY") {
                         ret = "pink";
                     }
-                    if (item.stepCode == "STEP_REJECT") {
+                    if (item.stepcode == "STEP_REJECT") {
                         ret = "red";
                     }
                     //console.log("[getDebtStatusIconColor]", ret);
