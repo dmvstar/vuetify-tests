@@ -28,7 +28,7 @@ function formatDateByPattern(dateObj, pattern) {
     // Mappings for day and month names
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    
+
     // Replace the pattern tokens with the corresponding date values
     const replacements = {
         'yyyy': dateObj.getFullYear(),
@@ -53,7 +53,28 @@ function formatDateByPattern(dateObj, pattern) {
 
     return formattedString;
 }
-
+/**
+     * Gets the date of the next day from a given date string and formats it as 'yyyy-mm-dd'.
+     * @param {string} dateString - The input date string in 'yyyy-mm-dd' format.
+     * @returns {string} The formatted date of the next day.
+    */
+function getNextFormattedDate(dateString, count) {
+    // Create a new Date object from the input string.
+    // The 'T00:00:00' ensures the date is parsed in UTC to avoid timezone issues.
+    const inputDate = new Date(`${dateString}T00:00:00`);
+    if (isNaN(inputDate.getTime())) {
+        throw new Error("Invalid date string provided. Please use 'yyyy-mm-dd' format.");
+    }
+    inputDate.setDate(inputDate.getDate() + count || 1);
+    const year = inputDate.getFullYear();
+    // Months are 0-indexed, so we add 1.
+    // padStart(2, '0') ensures a two-digit month (e.g., '01' instead of '1').
+    const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+    // padStart(2, '0') ensures a two-digit day.
+    const day = String(inputDate.getDate()).padStart(2, '0');
+    // Return the date in the desired 'yyyy-mm-dd' format.
+    return `${year}-${month}-${day}`;
+}
 /**
  * Parses a date string into a Date object based on a provided pattern.
  * This is the reverse function for formatDateByPattern.
@@ -67,7 +88,7 @@ function parseDateFromPattern1(dateString, pattern) {
     const date = new Date();
     const offsetInMinutes = date.getTimezoneOffset();
     const offsetInHours = offsetInMinutes / 60
-    
+
     // Create a mapping of pattern parts to regex groups
     const patternRegexMap = {
         'yyyy': '(\\d{4})',
@@ -80,11 +101,11 @@ function parseDateFromPattern1(dateString, pattern) {
         'EEEE': '([a-zA-Z]+)', // Matches day names like 'Monday'
         'E': '([a-zA-Z]+)' // Matches abbreviated day names like 'Mon'
     };
-    
+
     // Get the order of the patterns
     const patternOrder = ['yyyy', 'MM', 'dd', 'HH', 'mm', 'ss', 'SSS'];
     const regexParts = [];
-    
+
     // Build the dynamic regex and capture the order of groups
     let regexString = escapedPattern;
     for (const key of patternOrder) {
@@ -93,7 +114,7 @@ function parseDateFromPattern1(dateString, pattern) {
             regexParts.push(key);
         }
     }
-    
+
     // Handle day names separately since they don't affect the Date constructor
     regexString = regexString.replace(/EEEE/g, patternRegexMap['EEEE']);
     regexString = regexString.replace(/E/g, patternRegexMap['E']);
@@ -107,25 +128,25 @@ function parseDateFromPattern1(dateString, pattern) {
     }
 
     // Extract values based on the order determined above
-    let year, month, day, hour=0, minute=0, second=0, millisecond=0;
+    let year, month, day, hour = 0, minute = 0, second = 0, millisecond = 0;
     for (let i = 0; i < regexParts.length; i++) {
         const value = parseInt(match[i + 1], 10);
         switch (regexParts[i]) {
-            case 'yyyy': year = value; console.error(value);   break;
+            case 'yyyy': year = value; console.error(value); break;
             case 'MM': month = value - 1; break; // Months are 0-indexed in JS
             case 'dd': day = value; break;
             case 'HH': hour = value; break;
             case 'mm': minute = value; break;
             case 'ss': second = value; break;
             case 'SSS': millisecond = value; break;
-            default :break;
+            default: break;
         }
     }
 
     // Return the new Date object    
     const str = `new Date (${year}, ${month}, ${day}, ${hour}, ${minute}, ${second}, ${millisecond})`
     console.log("   Original Date:", str);
-    const parsedDate = new Date(year, month, day, hour-offsetInHours, minute, second, millisecond);
+    const parsedDate = new Date(year, month, day, hour - offsetInHours, minute, second, millisecond);
 
     // Basic validation
     if (isNaN(parsedDate)) {
@@ -153,7 +174,7 @@ function parseDateFromPattern(dateString, pattern) {
     let regexString = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     dateString = dateString.slice(0, pattern.length);
-    console.log("dateString", dateString);
+    //console.log("dateString", dateString);
 
     for (const key in patternRegexMap) {
         if (regexString.includes(key)) {
@@ -165,7 +186,7 @@ function parseDateFromPattern(dateString, pattern) {
             }
         }
     }
-    
+
     // Sort keys by their index in the pattern string
     orderedKeys.sort((a, b) => a.index - b.index);
 
@@ -174,7 +195,7 @@ function parseDateFromPattern(dateString, pattern) {
         const regex = new RegExp(item.key, 'g');
         regexString = regexString.replace(regex, patternRegexMap[item.key]);
     }
-    
+
     const finalRegex = new RegExp(`^${regexString}$`);
     const match = finalRegex.exec(dateString);
 
@@ -184,7 +205,7 @@ function parseDateFromPattern(dateString, pattern) {
     }
 
     // Now, correctly map the captured values to date parts.
-    let year, month, day, hour=0, minute=0, second=0, millisecond=0;
+    let year, month, day, hour = 0, minute = 0, second = 0, millisecond = 0;
     for (let i = 0; i < orderedKeys.length; i++) {
         const value = parseInt(match[i + 1], 10);
         switch (orderedKeys[i].key) {
@@ -287,7 +308,6 @@ function stringSafeToDouble(str) {
     var result = parseFloat(cleanStr);
     return result;
 }
-
 /**
  * Sprawdza, czy ciąg znaków zawiera jakiekolwiek znaki inne niż cyfry (0-9), kropka (.),
  * przecinek (,) lub spacja (' ').
@@ -302,7 +322,7 @@ function isValidNumericString(str) {
     // Wyrażenie regularne: szuka jakiegokolwiek znaku, który NIE jest cyfrą (\d), kropką (\.),
     // przecinkiem (,) lub białym znakiem (\s).
     // Jeśli znajdzie cokolwiek spoza tej grupy, to znaczy, że zawiera "coś nienumerycznego".
-    return !/[^\d.,\s'`-]/.test( removeNonNumericSymbols(str) );
+    return !/[^\d.,\s'`-]/.test(removeNonNumericSymbols(str));
 }
 /**
  * Czyści ciąg znaków, usuwając separatory tysięcy (spacje, apostrofy),
@@ -335,85 +355,85 @@ function removeNonNumericSymbols(str) {
     //console.log(`removeNonNumericSymbols ${str} => ${ret}`);
     return ret;
 }
-
 function toLocalISOString(date) {
     // 1. Get the local time zone offset in minutes. getTimezoneOffset() returns
     //    a value that is positive if the local time is behind UTC and negative if ahead.
     const offsetMinutes = date.getTimezoneOffset();
-    
+
     // 2. Determine the sign for the offset string and calculate absolute hours/minutes.
     const sign = offsetMinutes > 0 ? '-' : '+'; // Invert the sign for the ISO string
     const absOffsetMinutes = Math.abs(offsetMinutes);
     const offsetHours = Math.floor(absOffsetMinutes / 60);
     const offsetMins = absOffsetMinutes % 60;
-    
+
     // 3. Format hours and minutes to be two digits (e.g., '02' or '30').
     const pad = (n) => String(n).padStart(2, '0');
-    
+
     // 4. Construct the timezone offset string (e.g., '+02:00').
     const timezoneOffsetString = `${sign}${pad(offsetHours)}:${pad(offsetMins)}`;
-    
+
     // 5. Adjust the date's internal UTC value to *fake* the local time being UTC.
     //    This ensures toISOString() uses the local hour/minute values.
     const adjustedDate = new Date(date.getTime() - (offsetMinutes * 60000));
-    
+
     // 6. Get the UTC ISO string, remove the 'Z', and append the local offset.
     return adjustedDate.toISOString().slice(0, -1) + timezoneOffsetString;
 }
-
 // --- Example Usage ---
 // Create a new Date object
+
 const myDate = new Date();
-const localISO = toLocalISOString(myDate);
+// const localISO = toLocalISOString(myDate);
 
-console.log(`Original toISOString: ${myDate.toISOString()}`);
-console.log(`Custom Local ISO:     ${localISO}`);
+//console.log(`Original toISOString: ${myDate.toISOString()}`);
+//console.log(`Custom Local ISO:     ${localISO}`);
 
-myDate.setFullYear(2023, 8, 25); // Set to September 25, 2023
-myDate.setHours(14, 30, 5, 123); // Set to 14:30:05.123
-console.log(`Original Date New:    ${toLocalISOString(myDate)}`);
+// myDate.setFullYear(2023, 8, 25); // Set to September 25, 2023
+// myDate.setHours(14, 30, 5, 123); // Set to 14:30:05.123
+
+//console.log(`Original Date New:    ${toLocalISOString(myDate)}`);
 
 // --- Example Usage for formatDateByPattern ---
 var patternsInto = [
-    {    
-        patternString : "yyyy-MM-dd HH:mm:ss.SSS"
+    {
+        patternString: "yyyy-MM-dd HH:mm:ss.SSS"
     },
-    {    
-        patternString : "EEEE, MMMM dd, yyyy"
+    {
+        patternString: "EEEE, MMMM dd, yyyy"
     },
-    {    
-        patternString : "yyyy-MM-dd"
+    {
+        patternString: "yyyy-MM-dd"
     },
-    {    
-        patternString : "dd.MM.yyyy HH:mm:ss"
+    {
+        patternString: "dd.MM.yyyy HH:mm:ss"
     },
-    {    
-        patternString : "dd.MM.yyyy"
+    {
+        patternString: "dd.MM.yyyy"
     },
 ];
 
-for(var o of patternsInto) {
-    o.formatDate = formatDateByPattern(myDate, o.patternString);
+for (var o of patternsInto) {
+    // o.formatDate = formatDateByPattern(myDate, o.patternString);
 }
 //\\ console.log(`patternsInto`, patternsInto);
 
 // --- Example Usage for parseDateFromPattern ---
 var patternsFrom = [
     {
-        dateString : "2024-03-10 09:05:45.000",
-        patternString : "yyyy-MM-dd HH:mm:ss.SSS"
+        dateString: "2024-03-10 09:05:45.000",
+        patternString: "yyyy-MM-dd HH:mm:ss.SSS"
     },
     {
-        dateString : "12/25/2023",
-        patternString : "MM/dd/yyyy"
+        dateString: "12/25/2023",
+        patternString: "MM/dd/yyyy"
     },
     {
-        dateString : "12.09.2025 56",
-        patternString : "dd.MM.yyyy"
+        dateString: "12.09.2025 56",
+        patternString: "dd.MM.yyyy"
     },
 ]
 
-for(var o of patternsFrom) {
+for (var o of patternsFrom) {
     o.parsedDate = parseDateFromPattern(o.dateString, o.patternString);
 }
 //\\ console.log(`patternsFrom`, patternsFrom);
@@ -439,6 +459,7 @@ test_str = [
     "-1`200,76 USD",    // Apostrof jako separator tysięcy, przecinek jako dziesiętny
     "1`200,76 USD",    // Apostrof jako separator tysięcy, przecinek jako dziesiętny
 ]
+/*
 console.log("--- Konwersja za pomocą stringToDouble ---");
 for (var o of test_str) {
     var res = stringSafeToDouble(o);
@@ -450,3 +471,98 @@ const now = new Date();
 const convertedNow = convertDateFormats(now);
 console.log("Current Date:", now.toISOString());
 console.log("Converted Current Date:", convertedNow);
+*/
+
+function convertFormattedDate (inputDate) { // dd.mm.yyyy -> yyyy-mm-dd
+        const year = inputDate.substring(6, 10);
+        const month = inputDate.substring(3, 5);
+        const day = inputDate.substring(0, 2);
+        // Return the date in the desired 'yyyy-mm-dd' format.
+        return `${year}-${month}-${day}`;
+}
+
+/**
+ * Converts a date range to a list of formatted dates and Unix timestamps.
+ * @param { string } startDateString - The start date in 'yyyy-mm-dd' format.
+ * @param { string } endDateString - The end date in 'yyyy-mm-dd' format.
+*/
+function convertDateRange(startDateString, endDateString, dateShiftDays = 1, dateShiftHours = 0) {
+    // Create Date objects for the start and end of the range.
+    // Using UTC to avoid issues with time zones and daylight saving changes.
+    const startDate = new Date(startDateString + 'T00:00:00Z');
+    const endDate   = new Date(endDateString   + 'T00:00:00Z');
+
+    const ret = [];
+
+    // --- Input Validation ---
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        console.error("Invalid date format. Please use 'yyyy-mm-dd'.");
+        return [];
+    }
+    if (startDate > endDate) {
+        console.error("The start date cannot be after the end date.");
+        return [];
+    }
+    console.log(`Processing date range from ${startDateString} to ${endDateString}`);
+    // --- End Validation ---
+
+    // Use a temporary date variable for the loop. Start with a copy of the initial date.
+    let currentDate = new Date(startDate);
+
+    // Loop through each day from the start date to the end date.
+    while (currentDate <= endDate) {
+        // 1. Create a copy of the current day to apply the shift without affecting the loop control.
+        const shiftedDate = new Date(currentDate);
+
+        // 2. Apply the shift (in hours) to the copied date.
+        // We use setUTCHours to modify the hour, handling day rollovers automatically.
+        shiftedDate.setUTCHours(shiftedDate.getUTCHours() + dateShiftHours);
+
+        // --- Calculate and Format Outputs ---
+        // Note: The mysterious 'secondsInThreeHours' and 'hoursToAdd' variables were removed
+        // as they seemed arbitrary and unrelated to the dateShiftHours argument.
+        // If they were intentional, you will need to re-add and justify their purpose.
+        
+        const unixTimestamp = Math.floor(shiftedDate.getTime() / 1000); // Unix timestamp in seconds
+        const dashTimestamp = Math.floor(unixTimestamp / 60); // Timestamp in minutes
+
+        const dayFrom  = String(shiftedDate.getUTCDate()).padStart(2, '0');
+        const month = String(shiftedDate.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const hours = String(shiftedDate.getUTCHours()).padStart(2, '0');
+        const year  = shiftedDate.getUTCFullYear();
+
+        // Formatted dates
+        const convertedDate = shiftedDate.toISOString(); // e.g., '2025-10-20T04:00:00.000Z'
+        const formattedDate = `${dayFrom}.${month}.${year}`;     // e.g., '20.10.2025'
+        const reformattedDate = `${year}-${month}-${dayFrom}`;
+        const reformatDateFrom = `${year}-${month}-${dayFrom} ${hours}:00`; // e.g., '2025-10-20 04:00'
+
+        const dayIntoDate = new Date(shiftedDate);
+        dayIntoDate.setUTCDate(shiftedDate.getUTCDate() + dateShiftDays);             
+        const dayInto  = String(dayIntoDate.getUTCDate()).padStart(2, '0');   
+        const monthInto = String(dayIntoDate.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const yearInto  = dayIntoDate.getUTCFullYear();
+        const reformatDateInto = `${yearInto}-${monthInto}-${dayInto} ${hours}:00`; // e.g., '2025-10-20 04:00'
+
+        // Add the result to the array
+        ret.push({
+            convertedDate: convertedDate,
+            formattedDate: formattedDate,
+            reFormatDate:  reformattedDate,
+            reFormatDateFrom: reformatDateFrom,
+            reFormatDateInto: reformatDateInto,
+            unixTimestamp: unixTimestamp,
+            dashTimestamp: dashTimestamp
+        });
+        // 3. Increment the **loop control date** by one day for the next iteration.
+        // This MUST be done AFTER all processing for the current day is finished.
+        currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+    }
+
+    console.log("Date range conversion complete.");
+    return ret;
+}
+
+console.log("Converted Date Range:", convertDateRange('2025-10-01', '2025-10-03', 1, -2));
+
+console.log("Converted Date Range:", convertDateRange('2025-10-01', '2025-10-03'));
