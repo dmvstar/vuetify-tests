@@ -83,7 +83,7 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col ma="10">
-                            <v-text-field density="compact" v-model="searchData.searchText" label="Search text"
+                            <v-text-field density="compact" v-model="searchData.searchText" label="Search data"
                                 prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
                             </v-text-field>
                         </v-col>
@@ -140,9 +140,9 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="4" sm="4" ma="10">
-                            <v-text-field v-model="searchData.applicationID" label="Application ID" type="text"
-                                density="compact" @keypress="filterNumber(event)" placeholder="123456789"
-                                clearable></v-text-field>
+                            <v-text-field ref="applicationID" v-model="searchData.applicationID" label="Application ID"
+                                type="text" density="compact" @keypress="filterNumber(event)" placeholder="123456789"
+                                @keydown.enter="onBtnSearch" clearable></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" ma="10">
                             <v-btn :loading="isLoading" :disabled="isLoading || !searchData.applicationID" color="green"
@@ -153,8 +153,7 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-select density="compact" label="Refer ID" v-model="searchData.referID" 
-                                clearable
+                            <v-select density="compact" label="Refer ID" v-model="searchData.referID" clearable
                                 :items=searchData.referIDS></v-select>
                         </v-col>
                     </v-row>
@@ -193,21 +192,16 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table 
-                                :items-per-page="8" 
-                                :headers="stepsData.stepsHeaders"
-                                v-model="stepsData.selectedItems" 
-                                :items="stepsData.stepsItemsData" item-value="id"
-                                item-key="id" 
-                                :search="searchData.searchText" 
-                                class="elevation-1" show-select
+                            <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
+                                v-model="stepsData.selectedItems" :items="stepsData.stepsItemsData" item-value="id"
+                                item-key="id" :search="searchData.searchText" class="elevation-1" show-select
                                 @click:row="stepsDataHandleClick">
 
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                 </template>
 
-                                                                <!--HEADER SLOTS-->
+                                <!--HEADER SLOTS-->
                                 <template v-for="header in stepsData.stepsHeaders"
                                     #[`header.${header.key}`]="{ column, isSorted, getSortIcon, toggleSort }">
                                     <v-card outlined color="transparent" variant="flat">
@@ -240,8 +234,6 @@
                                     </v-card>
                                 </template>
 
-
-
                                 <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
                                     <v-icon color="green-darken-2">mdi-mushroom</v-icon>
                                     <!--span v-html=column.title></span-->
@@ -261,7 +253,6 @@
                                     </template>
                                 </template>
 
-
                                 <template v-slot:item.name="{ item }">
                                     <div style="white-space: pre-wrap;">{{ item.name }}</div>
                                 </template>
@@ -269,7 +260,6 @@
                                     <div style="white-space: pre-wrap;">{{ item.calories }}<br>({{ item.fat }})
                                     </div>
                                 </template>
-
                                 <template v-slot:item.calories="{ key, value, item }">
                                     <div>
                                         <v-chip :color="getDebtStatusIconColor(item)">
@@ -278,8 +268,29 @@
                                     </div>
                                 </template>
 
-                                <template v-slot:item.actions="{ item }">
+                                <template v-slot:item.dateCreated="{ key, value, item }">
+                                    <div>
+                                        <v-chip :color="getDebtStatusIconColor(item)">
+                                            {{ item.dateCreated }}
+                                        </v-chip>
+                                    </div>
+                                </template>
 
+                                <template v-slot:item.stepCode1="{ item }">
+                                    <div>
+                                        <v-chip :color="getDebtStatusIconColor(item)">
+                                            {{ item.stepCode }}
+                                        </v-chip>
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.stepCode="{ item }">
+                                    <v-chip :color="getDebtStatusIconColor(item)">
+                                        {{ item.stepCode }}
+                                    </v-chip>
+                                </template>
+
+                                <template v-slot:item.actions="{ item }">
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
@@ -340,7 +351,7 @@
         const app = createApp({
             template: "#app-template",
             setup() {
-                
+
                 const appAuthor = "StarDust";
                 const faceId = 10;
                 const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
@@ -355,10 +366,9 @@
                 var faceRailIcon = Vue.ref("mdi-chevron-right");
 
                 const searchData = Vue.reactive({
-                    applicationID: "",
+                    applicationID: "12345678",
                     referIDS: [],
                     referID: "",
-                    applicationID: "",
 
                     selectedDateFrom1: "",
                     selectedDateInto1: "",
@@ -379,7 +389,7 @@
                     {
                         stepsHeaders: [
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
-                            { title: 'Created', subtitle: "Date Created/updated", align: 'start', sortable: false, key: 'dateCreated', class: 'my-header-style' },
+                            { title: 'Created', subtitle: "Date Created/Updated", align: 'start', sortable: false, key: 'dateCreated', class: 'my-header-style' },
                             { title: 'ApplicationId', subtitle: "Application ident", align: 'end', key: 'applicationId', class: 'my-header-style' },
                             { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'stateCode', class: 'my-header-style' },
                             { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'absProdCode', class: 'my-header-style' },
@@ -999,7 +1009,7 @@
                                 }
                             },
                             // ... (ciąg dalszy rekordów 41-200)
-                            // Wzór: Każde kolejne 20 rekordów dotyczy kolejnego applicationId (1000003 do 1000010). 
+                            // Wzór: Każde kolejne 20 rekordów dotyczy kolejnego applicationId (1000003 do 1000010).
                             // applicationId 1000003: id 41-60
                             // applicationId 1000004: id 61-80
                             // applicationId 1000005: id 81-100
@@ -1236,13 +1246,18 @@
                 if (stepsHeaders) {
                     this.stepsData.stepsHeaders = JSON.parse(stepsHeaders);
                 }
+                this.focusInput();
             },
             watch: {
-                "searchData.referID" : function(newQuestion, oldQuestion) {
+                "searchData.referID": function (newQuestion, oldQuestion) {
                     this.searchData.searchText = this.searchData.referID;
                 }
             },
             methods: {
+                focusInput() {                    
+                    this.$refs.applicationID.focus();
+                },
+
                 formatDate(date) {
                     if (!date) {
                         return null
@@ -1273,7 +1288,10 @@
                 },
 
                 async onBtnSearch() {
-                    this.isLoading = true;;
+                    if (!this.searchData.applicationID) {
+                        return;
+                    }
+                    this.isLoading = true;
                     try {
                         await new Promise(resolve => setTimeout(resolve, 1500));
                     } catch (error) {
@@ -1456,18 +1474,18 @@
                 },
 
                 getDebtStatusIconColor(item) {
-                    //console.log("[getDebtStatusIconColor]", item);
+                    console.log("[getDebtStatusIconColor]", item);
                     ret = "green";
-                    if (item.calories > 200 && item.calories < 300) {
+                    if (item.stepCode == "STEP_START") {
                         ret = "yellow";
                     }
-                    if (item.calories > 300 && item.calories < 400) {
+                    if (item.stepCode == "STEP_VERIFY") {
                         ret = "pink";
                     }
-                    if (item.calories > 400) {
+                    if (item.stepCode == "STEP_REJECT") {
                         ret = "red";
                     }
-                    //console.log("[getDebtStatusIconColor]", ret);
+                    console.log("[getDebtStatusIconColor]", ret);
                     return ret;
                 },
 
@@ -1500,7 +1518,8 @@
             // 2. Użyj new Set() do automatycznego usunięcia duplikatów
             const uniqueUUIDsSet = new Set(allUUIDs);
             // 3. Konwertuj Set z powrotem na Array i zwróć
-            return [...uniqueUUIDsSet];        }
+            return [...uniqueUUIDsSet];
+        }
     </script>
 
 </body>
