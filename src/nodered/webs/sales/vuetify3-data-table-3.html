@@ -35,7 +35,7 @@
 <body>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.js"></script>
-    
+
     <div id="app"></div>
 
     <template id="app-template">
@@ -251,7 +251,7 @@
                                         <v-icon :icon="getSortIcon(column)"></v-icon>
                                     </template>
                                 </template>
-                                <!--ITEMS SLOTS-->                              
+                                <!--ITEMS SLOTS-->
 
                                 <template v-slot:item.stepcode="{ item }">
                                     <v-chip :color="getDebtStatusIconColor(item)">
@@ -271,8 +271,8 @@
                                     </div>
                                 </template>
 
-                                <template v-slot:item.applicationid="{ item }">                                    
-                                    <v-chip :color="getDebtStatusIconColor(item)">                                                                            
+                                <template v-slot:item.applicationid="{ item }">
+                                    <v-chip :color="getDebtStatusIconColor(item)">
                                     {{ item.applicationId }}
                                     </v-chip>
                                 </template>
@@ -358,12 +358,12 @@
 
                     selectedDateFrom1: "",
                     selectedDateInto1: "",
-                    
+
                     dateFromDateMenu: null,
                     dateIntoDateMenu: null,
                     selectedDateFromFull: null,
                     selectedDateFrom: null,
-                    
+
                     selectedDateInto: null
                 });
 
@@ -480,7 +480,7 @@
                                     "durationSec": 120
                                 }
                             },
-                            
+
                         ]
 
                     }
@@ -548,7 +548,7 @@
                 }
             },
             methods: {
-                focusInput() {                    
+                focusInput() {
                     this.$refs.appIdentifier.focus();
                 },
 
