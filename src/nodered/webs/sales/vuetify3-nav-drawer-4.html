@@ -469,12 +469,21 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table :items-per-page="8" :headers="dessertsData.dessertsHeaders"
-                                density="comfortable" v-model="dessertsData.selectedItems" show-expand
+                            <v-data-table 
+                                :items-per-page="8" 
+                                :headers="dessertsData.dessertsHeaders"
                                 :items="dessertsData.dessertsItems" item-value="name" item-key="name"
-                                :search="searchData.searchText" class="elevation-1" sort-asc-icon="mdi-sort-ascending"
-                                sort-desc-icon="mdi-sort-descending" @click:row="handleDessertsDataSingleClick"
-                                @dblclick:row="handleDessertsDataDoubleClick" show-select>
+                                :search="searchData.searchText"
+                                v-model="dessertsData.selectedItems"
+                                density="comfortable"  
+                                show-expand
+                                show-select
+                                class="elevation-1" 
+                                sort-asc-icon="mdi-sort-ascending"
+                                sort-desc-icon="mdi-sort-descending" 
+                                @click:row="handleDessertsDataSingleClick"
+                                @dblclick:row="handleDessertsDataDoubleClick"
+                            >
 
                                 <template v-slot:expanded-row="{ columns, item }">
                                     <td :colspan="columns.length" class="ma-4">

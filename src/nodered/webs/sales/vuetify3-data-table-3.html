@@ -191,11 +191,17 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
-                                v-model="stepsData.selectedItems" :items="stepsData.stepsItemsData" item-value="id"
-                                item-key="id" :search="searchData.searchText" class="elevation-1" show-select
-                                @click:row="stepsDataHandleClick">
-
+                            <v-data-table 
+                                :items-per-page="8" 
+                                :headers="stepsData.stepsHeaders"
+                                :items="stepsData.stepsItemsData" item-value="id" item-key="id"
+                                :search="searchData.searchText"
+                                v-model="stepsData.selectedItems"   
+                                density="comfortable"  
+                                class="elevation-1" 
+                                show-select
+                                @click:row="stepsDataHandleClick"
+                            >
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                 </template>
@@ -278,10 +284,10 @@
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"    @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil" @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                 </template>
 
                                 <template v-slot:item.operations="{ item }">
@@ -369,6 +375,7 @@
 
                 var stepsData = Vue.ref(
                     {
+                        isTableDataHandleClick : true,
                         stepsHeaders: [
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
                             //{ title: 'Ref', subtitle: "Ref", align: 'start', sortable: false, key: 'ref', class: 'my-header-style' },
@@ -509,7 +516,7 @@
                 const isLoading = ref(false);
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.39 (2025-10-24 11:09:21)";
+                const appVersion = "v. 0.0.41 (2025-10-25 10:01:32)";
 
                 return {
                     theme
@@ -669,6 +676,10 @@
                     }
                     this.saveFilters();
                 },
+                onBtnActionsStubClick(item, column) {
+                    console.log(`[onBtnActionsStubClick] ${JSON.stringify(item)}, ${column}`);
+                    this.stepsData.isTableDataHandleClick = false;
+                },
 
                 saveFilters() {
                     console.log(this.searchData);
@@ -717,6 +728,10 @@
                     //console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
                     //console.log(`[stepsDataHandleClick] row  ${JSON.stringify(row)}`);
                     //console.log(row);
+                    if(!this.stepsData.isTableDataHandleClick){
+                        this.stepsData.isTableDataHandleClick = !this.stepsData.isTableDataHandleClick;
+                        return;
+                    }
                     console.log('[stepsDataHandleClick]', this.stepsData.selectedItems.length);
                     console.log('[stepsDataHandleClick]', this.stepsData.selectedItems);
                     this.toggleSelection(row.item.id);
