@@ -285,9 +285,11 @@
 
                                 <template v-slot:item.actions="{ item }">
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"    @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-alarm"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="green-darken-2" icon="mdi-alarm"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <!--
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil" @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    -->
                                 </template>
 
                                 <template v-slot:item.operations="{ item }">
@@ -335,11 +337,11 @@
 
 
         const vuetify = createVuetify({
-            /*
+            
             theme: {
                 defaultTheme: "dark",
             },
-            */
+            
         });
         const app = createApp({
             template: "#app-template",
@@ -380,12 +382,12 @@
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
                             //{ title: 'Ref', subtitle: "Ref", align: 'start', sortable: false, key: 'ref', class: 'my-header-style' },
                             { title: 'Created', subtitle: "Date Created/Updated", align: 'start', sortable: false, key: 'datecreated', class: 'my-header-style' },
-                            { title: 'AppIdentifier', subtitle: "Application ident", align: 'end', key: 'applicationid', class: 'my-header-style' },
+                            { title: 'AppIdentifier', subtitle: "Application ident", align: 'end', key: 'applicationid', class: 'my-header-style', width: '10%' },
                             { title: 'StateCode', subtitle: "Client StateCode", align: 'end', key: 'stateCode', class: 'my-header-style' },
                             { title: 'AbsProdCode', subtitle: "ABS prod code", align: 'end', key: 'absProdCode', class: 'my-header-style' },
                             { title: 'StepUUID', subtitle: "UUID", align: 'end', key: 'stepUUID', class: 'my-header-style' },
                             { title: 'stepcode', subtitle: "Step Code", align: 'end', key: 'stepcode', class: 'my-header-style' },
-                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '10%' },
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '8%' },
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
                         selectedRows: [],
