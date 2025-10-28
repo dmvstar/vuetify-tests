@@ -191,14 +191,14 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table 
-                                :items-per-page="8" 
+                            <v-data-table
+                                :items-per-page="8"
                                 :headers="stepsData.stepsHeaders"
                                 :items="stepsData.stepsItemsData" item-value="id" item-key="id"
                                 :search="searchData.searchText"
-                                v-model="stepsData.selectedItems"   
-                                density="comfortable"  
-                                class="elevation-1" 
+                                v-model="stepsData.selectedItems"
+                                density="comfortable"
+                                class="elevation-1"
                                 show-select
                                 @click:row="stepsDataHandleClick"
                             >
@@ -337,11 +337,11 @@
 
 
         const vuetify = createVuetify({
-            
+
             theme: {
                 defaultTheme: "dark",
             },
-            
+
         });
         const app = createApp({
             template: "#app-template",
@@ -709,7 +709,6 @@
                         //this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
                     }
                 },
-
                 onUserMenuClick(event, index) {
                     switch (event) {
                         case "logout":
@@ -723,22 +722,24 @@
                             console.log(`Sorry, we are out of ${event}.`);
                     }
                 },
-
                 stepsDataHandleClick(event, row) {
                     //https://codepen.io/Hexodus/pen/ExKGWBe
                     let selectState = (row.isSelected()) ? false : true;
-                    //console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
+                    console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
+                    console.log(`[stepsDataHandleClick] event`,event);
                     //console.log(`[stepsDataHandleClick] row  ${JSON.stringify(row)}`);
                     //console.log(row);
                     if(!this.stepsData.isTableDataHandleClick){
                         this.stepsData.isTableDataHandleClick = !this.stepsData.isTableDataHandleClick;
                         return;
                     }
+                    if(!event.ctrlKey && !event.shiftKey){
+                        //return;
+                    }
                     console.log('[stepsDataHandleClick]', this.stepsData.selectedItems.length);
                     console.log('[stepsDataHandleClick]', this.stepsData.selectedItems);
                     this.toggleSelection(row.item.id);
                 },
-
                 toggleSelection(keyID) {
                     if (this.stepsData.selectedItems.includes(keyID)) {
                         this.stepsData.selectedItems = this.stepsData.selectedItems.filter(
@@ -748,7 +749,6 @@
                         this.stepsData.selectedItems.push(keyID);
                     }
                 },
-
                 getDebtStatusIcon(debtstatus) {
                     ret = "mdi-account";
                     let item = this.dicts.debtStatus.find(x => x.status === ("" + debtstatus));
