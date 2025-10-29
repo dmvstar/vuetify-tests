@@ -27,6 +27,9 @@ console.log(numerologySum("abc123xyz45")); // Output: 6 (usuwa litery, 1+2+3+4+5
 console.log(numerologySum(""));        // Output: 0
 console.log(numerologySum("---"));     // Output: 0
 */
-console.log(numerologySum("09.11.1970"));
-console.log(numerologySum("10.04.1982"));
+let dta = "09.11.1970"
+console.log(dta, numerologySum(dta));
+dta = "1982-10-04"
+console.log(dta, numerologySum(dta));
+
 
