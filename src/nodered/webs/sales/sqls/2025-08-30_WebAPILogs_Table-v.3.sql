@@ -1,8 +1,8 @@
 /** 
 * @WHAT Table for WEB API Logging
 * @VERSION v.0.0.3
-* @WHERE src/nodered/webs/sales/sqls/2025-08-30_WebAPILogs_Table-v.1.sql
-* @DATE 2025-09-16 09:21:54
+* @WHERE src/nodered/webs/sales/sqls/2025-08-30_WebAPILogs_Table-v.3.sql
+* @DATE 2025-10-28 09:21:54
 */
 
 -- Utworzenie typów ENUM dla standaryzacji danych
@@ -25,11 +25,11 @@ CREATE TABLE sysCallApiLog (
     request_id varchar(256) NOT NULL,
     source_host varchar(128) NOT NULL,
     --process    
-    process_status e_status NULL,
-    process_id varchar(128) NOT NULL, -- additional id for group calls 
+    process_status e_status NULL,   
+
     process_name varchar(64) NOT NULL,
-    process_status e_status NULL,
-    process_id varchar(128) NOT NULL, -- additional id for group calls 
+    process_step varchar(32) NOT NULL,
+    process_info varchar(128) NOT NULL, -- additional id for group calls 
 
     direction e_direction NOT NULL,
     
@@ -45,8 +45,8 @@ CREATE TABLE sysCallApiLog (
 
     -- Nagłówki i treść zapytania
     headers JSONB NULL,
-	content_text TEXT NULL,
-	content_body JSONB NULL,
+	content_text TEXT NULL, -- request or response
+	content_body JSONB NULL,-- request or response
 
     -- Informacje o błędach
     exception_message text NULL,
@@ -77,9 +77,7 @@ EXECUTE FUNCTION set_date_modified();
 
 /*
 -- DEMO_TEST_DS.dbo.WebAPiLog definition
-
 -- Drop table
-
 -- DROP TABLE DEMO_TEST_DS.dbo.WebAPiLog;
 
 CREATE TABLE DEMO_TEST_DS.dbo.WebAPiLog (
