@@ -154,12 +154,10 @@
                         <v-col cols="4" sm="4" ma="10">
                             <v-autocomplete multiple density="compact" label="Refer ID" v-model="searchData.referID"
                                 :items="searchData.referIDS" clearable attach>
-                                <template v-slot:selection="{ item, index }">
-
-                                    {{ truncateText(item.title, 40) }}
-
+                                <template v-slot:selection="{ item, index }">                                    
+                                    {{ truncateText(item.title, 40, index) }}
                                     <span v-if="index === 1 && searchData.referID.length > 2"
-                                        class="text-caption text-grey ml-1">
+                                        class="text-caption text-grey ml-1">                                                                                
                                         (+{{ searchData.referID.length - 2 }} więcej)
                                     </span>
 
@@ -499,6 +497,51 @@
                                     "durationSec": 120
                                 }
                             },
+                            {
+                                "id": 7,
+                                "datecreated": "2023-10-18 11:30:10.011",
+                                "datemodified": "2023-10-18 11:30:10.011",
+                                "applicationId": 1000001,
+                                "stateCode": "2547887785",
+                                "programTypeId": 2,
+                                "absProdCode": "12.66.45.33.2",
+                                "stepUUID": "775d6e7f-8a9b-4c1d-9e2f-3a4b5c6d7e8f",
+                                "stepcode": "STEP_START",
+                                "payload": {
+                                    "userName": "user_d",
+                                    "durationSec": 20
+                                }
+                            },
+                            {
+                                "id": 8,
+                                "datecreated": "2023-10-19 16:40:20.334",
+                                "datemodified": "2023-10-19 16:43:20.334",
+                                "applicationId": 1000001,
+                                "stateCode": "2547887785",
+                                "programTypeId": 2,
+                                "absProdCode": "12.66.45.33.2",
+                                "stepUUID": "775d6e7f-8a9b-4c1d-9e2f-3a4b5c6d7e8f",
+                                "stepcode": "STEP_VERIFY",
+                                "payload": {
+                                    "userName": "user_e",
+                                    "durationSec": 55
+                                }
+                            },
+                            {
+                                "id": 9,
+                                "datecreated": "2023-10-20 08:50:30.667",
+                                "datemodified": "2023-10-20 08:50:30.667",
+                                "applicationId": 1000001,
+                                "stateCode": "2547887785",
+                                "programTypeId": 2,
+                                "absProdCode": "12.66.45.33.2",
+                                "stepUUID": "775d6e7f-8a9b-4c1d-9e2f-3a4b5c6d7e8f",
+                                "stepcode": "STEP_REJECT",
+                                "payload": {
+                                    "userName": "user_f",
+                                    "durationSec": 120
+                                }
+                            },
 
                         ]
 
@@ -577,8 +620,9 @@
                         val => val !== valueToRemove
                     );
                 },
-                truncateText(text, maxLength) {
-                    if (!text) return '';
+                truncateText(text, maxLength, index) {
+                    console.log(index, text);
+                    if (!text || index>1) return '';
                     return text.length > maxLength
                         ? text.substring(0, maxLength) + '...'
                         : text;
