@@ -152,8 +152,26 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-select density="compact" label="Refer ID" v-model="searchData.referID" clearable
-                                :items=searchData.referIDS></v-select>
+                            <v-select density="compact"
+                                label="Refer ID"
+                                v-model="searchData.referID"
+                                :items=searchData.referIDS
+                                clearable
+                                attach>
+                                <!--https://stackoverflow.com/questions/73021183/how-to-search-charged-option-in-a-v-select-->
+                                <template v-slot:prepend-item>
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-text-field
+                                                v-model="searchData.referSelect"
+                                                placeholder="Search"
+                                                @input="searchReferID">
+                                            </v-text-field>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-divider class="mt-2"></v-divider>
+                                </template>
+                            </v-select>
                         </v-col>
                     </v-row>
                     <v-row ma="2">
@@ -191,17 +209,10 @@
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
 
-                            <v-data-table
-                                :items-per-page="8"
-                                :headers="stepsData.stepsHeaders"
+                            <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
                                 :items="stepsData.stepsItemsData" item-value="id" item-key="id"
-                                :search="searchData.searchText"
-                                v-model="stepsData.selectedItems"
-                                density="comfortable"
-                                class="elevation-1"
-                                show-select
-                                @click:row="stepsDataHandleClick"
-                            >
+                                :search="searchData.searchText" v-model="stepsData.selectedItems" density="comfortable"
+                                class="elevation-1" show-select @click:row="stepsDataHandleClick">
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                 </template>
@@ -279,13 +290,15 @@
 
                                 <template v-slot:item.applicationid="{ item }">
                                     <v-chip :color="getDebtStatusIconColor(item)">
-                                    {{ item.applicationId }}
+                                        {{ item.applicationId }}
                                     </v-chip>
                                 </template>
 
                                 <template v-slot:item.actions="{ item }">
-                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"    @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
-                                    <v-btn class="mr-1" density="comfortable" color="green-darken-2" icon="mdi-alarm"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="green-darken-2" icon="mdi-alarm"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                     <!--
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil" @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
@@ -355,14 +368,16 @@
                     firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
                     lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
                 };
-                var mainDrawer   = Vue.ref(true);
+                var mainDrawer = Vue.ref(true);
                 var secondDrawer = Vue.ref(false);
                 var faceRailIcon = Vue.ref("mdi-chevron-right");
 
                 const searchData = Vue.reactive({
                     appIdentifier: "1000001",
                     referIDS: [],
+                    referIDSCopy: [],
                     referID: "",
+                    referSelect: "b2",
 
                     selectedDateFrom1: "",
                     selectedDateInto1: "",
@@ -377,7 +392,7 @@
 
                 var stepsData = Vue.ref(
                     {
-                        isTableDataHandleClick : true,
+                        isTableDataHandleClick: true,
                         stepsHeaders: [
                             { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style' },
                             //{ title: 'Ref', subtitle: "Ref", align: 'start', sortable: false, key: 'ref', class: 'my-header-style' },
@@ -561,6 +576,20 @@
                     this.$refs.appIdentifier.focus();
                 },
 
+                searchReferID(e) {
+
+                    if (!this.searchData.referID) {
+                        this.searchData.referIDS = this.searchData.referIDSCopy;
+                    }
+
+                    /*
+                    this.searchData.referIDS = this.searchData.referIDSCopy.filter((UUID) => {
+                        return fruit.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+                    });
+                    */
+                   return this.searchData.referID;
+                },
+
                 formatDate(date) {
                     if (!date) {
                         return null
@@ -603,6 +632,7 @@
                         this.isLoading = false;
                         this.stepsData.stepsItemsData = this.stepsData.stepsSimpleData;
                         this.searchData.referIDS = getUniqueStepUUIDs(this.stepsData.stepsItemsData);
+                        this.searchData.referIDSCopy = this.searchData.referIDS;
                         /*
                         for (var i = 0; i < this.getRandomArbitrary(10, 20); i++)
                             this.searchData.referIDS.push(
@@ -726,14 +756,14 @@
                     //https://codepen.io/Hexodus/pen/ExKGWBe
                     let selectState = (row.isSelected()) ? false : true;
                     console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
-                    console.log(`[stepsDataHandleClick] event`,event);
+                    console.log(`[stepsDataHandleClick] event`, event);
                     //console.log(`[stepsDataHandleClick] row  ${JSON.stringify(row)}`);
                     //console.log(row);
-                    if(!this.stepsData.isTableDataHandleClick){
+                    if (!this.stepsData.isTableDataHandleClick) {
                         this.stepsData.isTableDataHandleClick = !this.stepsData.isTableDataHandleClick;
                         return;
                     }
-                    if(!event.ctrlKey && !event.shiftKey){
+                    if (!event.ctrlKey && !event.shiftKey) {
                         //return;
                     }
                     console.log('[stepsDataHandleClick]', this.stepsData.selectedItems.length);
