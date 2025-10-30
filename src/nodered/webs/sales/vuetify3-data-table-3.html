@@ -153,12 +153,18 @@
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
                             <v-autocomplete multiple density="compact" label="Refer ID" v-model="searchData.referID"
-                                :items=searchData.referIDS clearable attach>
-                                <!--https://stackoverflow.com/questions/73021183/how-to-search-charged-option-in-a-v-select-->
-                                <template v-slot:prepend-item>
-                                    
-                                <v-divider class="mt-2"></v-divider>
+                                :items="searchData.referIDS" clearable attach>
+                                <template v-slot:selection="{ item, index }">
+
+                                    {{ truncateText(item.title, 40) }}
+
+                                    <span v-if="index === 1 && searchData.referID.length > 2"
+                                        class="text-caption text-grey ml-1">
+                                        (+{{ searchData.referID.length - 2 }} więcej)
+                                    </span>
+
                                 </template>
+
                             </v-autocomplete>
                         </v-col>
                     </v-row>
@@ -199,11 +205,9 @@
 
                             <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
                                 :items="stepsData.stepsItemsData" item-value="id" item-key="id"
-                                :search="searchData.searchText" 
-                                :custom-filter="filterByMultipleCriteria"
-                                v-model="stepsData.selectedItems" 
-                                density="comfortable"
-                                class="elevation-1" show-select @click:row="stepsDataHandleClick">
+                                :search="searchData.searchText" :custom-filter="filterByMultipleCriteria"
+                                v-model="stepsData.selectedItems" density="comfortable" class="elevation-1" show-select
+                                @click:row="stepsDataHandleClick">
                                 <template v-slot:[`header.name`]="{ column }">
                                     <div style="white-space: pre-wrap;">{{ column.title }}</div>
                                 </template>
@@ -566,10 +570,55 @@
                 focusInput() {
                     this.$refs.appIdentifier.focus();
                 },
+                removeItem(itemToRemove) {
+                    // Użyj item.value, jeśli items jest tablicą obiektów (recommended Vuetify 3)
+                    const valueToRemove = itemToRemove.value;
+                    this.searchData.referID = this.searchData.referID.filter(
+                        val => val !== valueToRemove
+                    );
+                },
+                truncateText(text, maxLength) {
+                    if (!text) return '';
+                    return text.length > maxLength
+                        ? text.substring(0, maxLength) + '...'
+                        : text;
+                },
 
-                filterByMultipleCriteria(value, search, item){
-
+                filterByMultipleCriteria(value, search, item) {
+                    // 1. Odbieranie i czyszczenie kryteriów wyszukiwania
+                    // search: ['wartość_z_pola_1', 'wartość_z_pola_2', ...]
                     return true;
+                    /*
+                    const criteria = search;
+
+                    if (!criteria || criteria.length === 0) {
+                        // Jeśli nie ma kryteriów wyszukiwania, wyświetl wszystkie wiersze
+                        return true;
+                    }
+
+                    // 2. Definicja kryteriów wyszukiwania AND
+                    const search1 = criteria[0] ? criteria[0].toLowerCase() : ''; // np. '1000001'
+                    const search2 = criteria[1] ? criteria[1].toLowerCase() : ''; // np. 'step_start'
+
+                    // Sprawdzanie: Czy wiersz spełnia OBA kryteria?
+                    let matchesCriteria1 = true;
+                    let matchesCriteria2 = true;
+
+                    // Kryterium 1: Dopasowanie do Application ID (lub innego pola)
+                    if (search1) {
+                        const appId = item.columns.applicationId.toString().toLowerCase();
+                        matchesCriteria1 = appId.includes(search1);
+                    }
+
+                    // Kryterium 2: Dopasowanie do Step Code (lub innego pola)
+                    if (search2) {
+                        const stepCode = item.columns.stepCode.toLowerCase();
+                        matchesCriteria2 = stepCode.includes(search2);
+                    }
+
+                    // Zwróć true tylko, jeśli OBA warunki są spełnione (logika AND)
+                    return matchesCriteria1 && matchesCriteria2;
+                    */
                 },
                 searchReferID(e) {
                     if (!this.searchData.referID) {
