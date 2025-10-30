@@ -152,22 +152,17 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-select density="compact"
-                                label="Refer ID"
-                                v-model="searchData.referID"
-                                :items=searchData.referIDS
-                                clearable
-                                attach>
+                            <v-select density="compact" label="Refer ID" v-model="searchData.referID"
+                                :items=searchData.referIDS clearable attach>
                                 <!--https://stackoverflow.com/questions/73021183/how-to-search-charged-option-in-a-v-select-->
                                 <template v-slot:prepend-item>
                                     <v-list-item>
-                                        <v-list-item-content>
-                                            <v-text-field
-                                                v-model="searchData.referSelect"
-                                                placeholder="Search"
+                                        <v-list-item-title>
+                                            <v-text-field v-model="searchData.referSelect" placeholder="Search"
+                                                @click.stop @keydown.stop
                                                 @input="searchReferID">
                                             </v-text-field>
-                                        </v-list-item-content>
+                                        </v-list-item-title>
                                     </v-list-item>
                                     <v-divider class="mt-2"></v-divider>
                                 </template>
@@ -587,7 +582,7 @@
                         return fruit.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
                     });
                     */
-                   return this.searchData.referID;
+                    return this.searchData.referID;
                 },
 
                 formatDate(date) {
