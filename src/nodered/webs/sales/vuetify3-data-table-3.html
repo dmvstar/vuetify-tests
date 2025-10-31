@@ -152,10 +152,9 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-autocomplete multiple density="compact" 
-                                label="Refer ID" 
+                            <v-autocomplete multiple density="compact" label="Refer ID" 
                                 v-model="searchData.referID"
-                                :items="searchData.referIDS" clearable attach>
+                                :items="searchData.referIDS" clearable @click:clear="handleClearReferOverride" attach>
                                 <template v-slot:selection="{ item, index }">
                                     {{ truncateText(item.title, 40, index) }}
                                     <span v-if="index === 1 && searchData.referID.length > 2"
@@ -667,10 +666,10 @@
                 },
                 truncateText(text, maxLength, index) {
                     console.log(index, text);
-                    if (!text || index>1) return '';
+                    if (!text || index > 1) return '';
                     return text.length > maxLength
-                        ? '['+text.substring(0, maxLength) + ']...'
-                        : '['+text+']';
+                        ? '[' + text.substring(0, maxLength) + ']...'
+                        : '[' + text + ']';
                 },
 
                 filterByMultipleCriteria(value, search, item) {
@@ -843,6 +842,18 @@
                     this.stepsData.isTableDataHandleClick = false;
                 },
 
+                handleClearReferOverride(event) {
+                    // 1. STOP THE DEFAULT BEHAVIOR
+                    // This is the CRUCIAL step. Vuetify's clear icon click event bubbles up 
+                    // and causes the default nulling of the v-model. 
+                    // You need to stop this propagation.
+                    event.stopPropagation();
+                    // 2. RUN YOUR CUSTOM LOGIC
+                    console.log('Default clear prevented! Running custom logic.');
+                    // Example: Instead of nulling the model, set it to a default value                    
+                    this.searchData.referIDSCopy = [];
+                },
+
                 saveFilters() {
                     console.log(this.searchData);
                     localStorage.setItem('searchData', JSON.stringify(this.searchData));
@@ -973,3 +984,5 @@
     </script>
 
 </body>
+
+</html>
