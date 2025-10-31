@@ -2,7 +2,7 @@
 * @WHAT Table for WEB API Logging
 * @VERSION v.0.0.3
 * @WHERE src/nodered/webs/sales/sqls/2025-08-30_WebAPILogs_Table-v.3.sql
-* @DATE 2025-10-28 09:21:54
+* @DATE 2025-10-31 17:24:35
 */
 
 -- Utworzenie typów ENUM dla standaryzacji danych
@@ -58,15 +58,15 @@ CREATE TABLE app_sys_apilog (
     duration_ms integer DEFAULT 0 NOT NULL
 );
 -- Dodanie indeksów dla lepszej wydajności wyszukiwania
-CREATE INDEX idx_sys_api_log_request_id ON sysCallApiLog(request_id);
-CREATE INDEX idx_sys_api_log_created_at ON sysCallApiLog(created DESC);
---CREATE INDEX idx_sys_api_log_uri ON sysCallApiLog(uri);
---CREATE INDEX idx_sys_api_log_status ON sysCallApiLog(status);
---COMMENT ON TABLE public.sysCallApiLog IS 'sysCallApiLog';
---DELETE FROM public.sysCallApiLog;
---SELECT * FROM public.sysCallApiLog;
+CREATE INDEX idx_sys_api_log_request_id ON app_sys_apilog(request_id);
+CREATE INDEX idx_sys_api_log_created_at ON app_sys_apilog(created DESC);
+--CREATE INDEX idx_sys_api_log_uri ON app_sys_apilog(uri);
+--CREATE INDEX idx_sys_api_log_status ON app_sys_apilog(status);
+--COMMENT ON TABLE public.sysCallApiLog IS 'app_sys_apilog';
+--DELETE FROM public.app_sys_apilog;
+--SELECT * FROM public.app_sys_apilog;
 
--- Trigger for sysCallApiLog table
+-- Trigger for app_sys_apilog table
 -- Function to update the dateModified column
 CREATE OR REPLACE FUNCTION set_date_modified()
 RETURNS TRIGGER AS $$
@@ -76,7 +76,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_sysapilog_dateModified
-BEFORE UPDATE ON sysCallApiLog
+BEFORE UPDATE ON app_sys_apilog
 FOR EACH ROW
 EXECUTE FUNCTION set_date_modified();
 
