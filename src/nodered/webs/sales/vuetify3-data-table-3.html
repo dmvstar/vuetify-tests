@@ -158,7 +158,7 @@
                                 clearable @click:clear="handleClearReferOverride" 
                                 attach>
                                 <template v-slot:selection="{ item, index }">
-                                    {{ truncateText(item.title, 40, index) }}
+                                    {{truncateText(item.title, 40, index)}}                                    
                                     <span v-if="index === 1 && searchData.referID.length > 2"
                                         class="text-caption text-grey ml-1">
                                         (+{{ searchData.referID.length - 2 }} more)
@@ -318,6 +318,11 @@
                                 </template>
 
                             </v-data-table>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="12" sm="12" ma="10">
+                            referID={{searchData.referID}}                            
                         </v-col>
                     </v-row>
                     <v-row ma="10">
@@ -667,11 +672,12 @@
                     );
                 },
                 truncateText(text, maxLength, index) {
-                    console.log(index, text);
-                    if (!text || index > 1) return '';
+                    console.log("[truncateText]",index, text);
+                    if (!text || index > 1) return null;
                     return text.length > maxLength
-                        ? '[' + text.substring(0, maxLength) + ']...'
-                        : '[' + text + ']';
+                        ? (text.substring(0, maxLength) + ' ...')
+                        : text;
+                    
                 },
 
                 filterByMultipleCriteria(value, search, item) {
@@ -845,15 +851,16 @@
                 },
 
                 handleClearReferOverride(event) {
+                    //console.log("[handleClearReferOverride]", event);
                     // 1. STOP THE DEFAULT BEHAVIOR
                     // This is the CRUCIAL step. Vuetify's clear icon click event bubbles up 
                     // and causes the default nulling of the v-model. 
                     // You need to stop this propagation.
                     event.stopPropagation();
                     // 2. RUN YOUR CUSTOM LOGIC
-                    console.log('Default clear prevented! Running custom logic.');
+                    //console.log('Default clear prevented! Running custom logic.');
                     // Example: Instead of nulling the model, set it to a default value                    
-                    this.searchData.referIDSCopy = [];
+                    this.searchData.referID = "";
                 },
 
                 saveFilters() {
