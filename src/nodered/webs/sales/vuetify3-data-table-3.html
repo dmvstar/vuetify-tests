@@ -620,7 +620,7 @@
                 const isLoading = ref(false);
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.51 (2025-10-31 08:45:13)";
+                const appVersion = "v. 0.0.57 (2025-11-04 11:15:18)";
 
                 return {
                     theme
@@ -787,8 +787,7 @@
                     this.searchData.appIdentifier = "";
                     this.searchData.referID = [''];
                     this.searchData.referIDS = [];
-                    this.stepsItemsData = [];
-                    console.log('onBtnClear',this.stepsItemsData.length);
+                    this.stepsData.stepsItemsData = [];                                       
                 },
                 filterNumber(evt) {
                     evt = (evt) ? evt : window.event;
