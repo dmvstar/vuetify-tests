@@ -152,13 +152,10 @@
                                 color="yellow" @click="onBtnClear" block>Clear</v-btn>
                         </v-col>
                         <v-col cols="4" sm="4" ma="10">
-                            <v-autocomplete multiple density="compact" label="Refer ID" 
-                                v-model="searchData.referID"
-                                :items="searchData.referIDS" 
-                                clearable @click:clear="handleClearReferOverride" 
-                                attach>
+                            <v-autocomplete multiple density="compact" label="Refer ID" v-model="searchData.referID"
+                                :items="searchData.referIDS" clearable @click:clear="handleClearReferOverride" attach>
                                 <template v-slot:selection="{ item, index }">
-                                    {{truncateText(item.title, 40, index)}}                                    
+                                    {{truncateText(item.title, 40, index)}}
                                     <span v-if="index === 1 && searchData.referID.length > 2"
                                         class="text-caption text-grey ml-1">
                                         (+{{ searchData.referID.length - 2 }} more)
@@ -201,10 +198,10 @@
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
-
+                            <!-- :search="searchData.searchText" -->
                             <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
                                 :items="stepsData.stepsItemsData" item-value="id" item-key="id"
-                                :search="searchData.searchText" :custom-filter="filterByMultipleCriteria"
+                                :custom-filter="filterByMultipleCriteria" :search="filterString"
                                 v-model="stepsData.selectedItems" density="comfortable" class="elevation-1" show-select
                                 @click:row="stepsDataHandleClick">
                                 <template v-slot:[`header.name`]="{ column }">
@@ -320,10 +317,11 @@
                             </v-data-table>
                         </v-col>
                     </v-row>
-                    <v-row ma="10">
-                        <v-col cols="12" sm="12" ma="10">
-                            referID={{searchData.referID}}                            
-                        </v-col>
+                    <v-row ma="10" id="debugInfo">
+                        <!--v-col cols="12" sm="12" ma="10">
+                            referID={{searchData.referID}}, searchText={{searchData.searchText}},
+                            selectedItems={{stepsData.selectedItems}}
+                        </v-col-->
                     </v-row>
                     <v-row ma="10">
                         <v-col cols="12" sm="12" ma="10">
@@ -375,7 +373,7 @@
                     appIdentifier: "1000001",
                     referIDS: [],
                     referIDSCopy: [],
-                    referID: "",
+                    referID: [''],
                     referSelect: "b2",
 
                     selectedDateFrom1: "",
@@ -660,6 +658,21 @@
                     //this.searchData.searchText = this.searchData.referID;
                 }
             },
+            computed: {
+                filterString() {
+                    // Najpierw upewnij się, że masz tablicę i przefiltruj puste wartości
+                    const validCriteria = this.searchData.referID.filter(c => c && String(c).trim() !== '');
+
+                    // Zwróć pojedynczy String. Pusty String, jeśli brak kryteriów.
+                    if (validCriteria.length === 0) {
+                        return '';
+                    }
+
+                    // Złącz elementy w jeden ciąg, np. z użyciem przecinka.
+                    // Jeśli widzisz, że błąd nadal występuje, spróbuj innego separatora.
+                    return validCriteria.join(',');
+                }
+            },
             methods: {
                 focusInput() {
                     this.$refs.appIdentifier.focus();
@@ -672,50 +685,42 @@
                     );
                 },
                 truncateText(text, maxLength, index) {
-                    console.log("[truncateText]",index, text);
+                    //console.log("[truncateText]",index, text);
                     if (!text || index > 1) return null;
                     return text.length > maxLength
                         ? (text.substring(0, maxLength) + ' ...')
                         : text;
-                    
+
                 },
 
                 filterByMultipleCriteria(value, search, item) {
                     // 1. Odbieranie i czyszczenie kryteriów wyszukiwania
                     // search: ['wartość_z_pola_1', 'wartość_z_pola_2', ...]
-                    return true;
-                    /*
-                    const criteria = search;
-
-                    if (!criteria || criteria.length === 0) {
-                        // Jeśli nie ma kryteriów wyszukiwania, wyświetl wszystkie wiersze
+                    //console.log('[filterByMultipleCriteria]', value, search, item.columns.stepUUID);
+                    if (!search || typeof search !== 'string' || search.trim() === '') {
+                        // Jeśli nie ma kryteriów, wyświetl wszystko
                         return true;
                     }
+                    // Rozbij String na tablicę za pomocą separatora (np. przecinka)
+                    const criteriaArray = search.toLowerCase().split(',').filter(c => c.trim() !== '');
+                    // Logika AND: Przyjmuje się, że element musi pasować do KAŻDEGO kryterium 
+                    // z tablicy criteriaArray (jeśli tak została zaimplementowana).
+                    // Logika OR: Przyjmuje się, że element musi pasować do CO NAJMNIEJ JEDNEGO kryterium.
+                    // Implementacja Logiki OR (pasuje, jeśli którykolwiek UUID jest znaleziony):
+                    const itemUUID = item.columns.stepUUID.toLowerCase(); // Przykład pola, które filtrujesz
+                    // Sprawdź, czy którykolwiek z UUID w tablicy kryteriów (criteriaArray) 
+                    // jest równy UUID w wierszu (itemUUID)
+                    const isMatch = criteriaArray.some(criterion => {
+                        // Jeśli tablica zawiera puste stringi (co robimy z filter), to pomiń
+                        if (!criterion) return false;
 
-                    // 2. Definicja kryteriów wyszukiwania AND
-                    const search1 = criteria[0] ? criteria[0].toLowerCase() : ''; // np. '1000001'
-                    const search2 = criteria[1] ? criteria[1].toLowerCase() : ''; // np. 'step_start'
-
-                    // Sprawdzanie: Czy wiersz spełnia OBA kryteria?
-                    let matchesCriteria1 = true;
-                    let matchesCriteria2 = true;
-
-                    // Kryterium 1: Dopasowanie do Application ID (lub innego pola)
-                    if (search1) {
-                        const appId = item.columns.applicationId.toString().toLowerCase();
-                        matchesCriteria1 = appId.includes(search1);
-                    }
-
-                    // Kryterium 2: Dopasowanie do Step Code (lub innego pola)
-                    if (search2) {
-                        const stepCode = item.columns.stepCode.toLowerCase();
-                        matchesCriteria2 = stepCode.includes(search2);
-                    }
-
-                    // Zwróć true tylko, jeśli OBA warunki są spełnione (logika AND)
-                    return matchesCriteria1 && matchesCriteria2;
-                    */
+                        // Użyj .includes() jeśli to jest wyszukiwanie częściowe
+                        // Użyj === jeśli szukasz dokładnego dopasowania
+                        return itemUUID.includes(criterion.trim());
+                    });
+                    return isMatch;
                 },
+
                 searchReferID(e) {
                     if (!this.searchData.referID) {
                         this.searchData.referIDS = this.searchData.referIDSCopy;
@@ -851,16 +856,16 @@
                 },
 
                 handleClearReferOverride(event) {
-                    //console.log("[handleClearReferOverride]", event);
+                    console.log("[handleClearReferOverride]", event);
                     // 1. STOP THE DEFAULT BEHAVIOR
-                    // This is the CRUCIAL step. Vuetify's clear icon click event bubbles up 
-                    // and causes the default nulling of the v-model. 
+                    // This is the CRUCIAL step. Vuetify's clear icon click event bubbles up
+                    // and causes the default nulling of the v-model.
                     // You need to stop this propagation.
                     event.stopPropagation();
                     // 2. RUN YOUR CUSTOM LOGIC
                     //console.log('Default clear prevented! Running custom logic.');
-                    // Example: Instead of nulling the model, set it to a default value                    
-                    this.searchData.referID = "";
+                    // Example: Instead of nulling the model, set it to a default value
+                    this.searchData.referID = [""];
                 },
 
                 saveFilters() {
@@ -905,8 +910,8 @@
                 stepsDataHandleClick(event, row) {
                     //https://codepen.io/Hexodus/pen/ExKGWBe
                     let selectState = (row.isSelected()) ? false : true;
-                    console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
-                    console.log(`[stepsDataHandleClick] event`, event);
+                    ////console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
+                    ////console.log(`[stepsDataHandleClick] event`, event);
                     //console.log(`[stepsDataHandleClick] row  ${JSON.stringify(row)}`);
                     //console.log(row);
                     if (!this.stepsData.isTableDataHandleClick) {
