@@ -785,9 +785,10 @@
                 },
                 onBtnClear() {
                     this.searchData.appIdentifier = "";
-                    this.searchData.referID = "";
+                    this.searchData.referID = [''];
                     this.searchData.referIDS = [];
                     this.stepsItemsData = [];
+                    console.log('onBtnClear',this.stepsItemsData.length);
                 },
                 filterNumber(evt) {
                     evt = (evt) ? evt : window.event;
