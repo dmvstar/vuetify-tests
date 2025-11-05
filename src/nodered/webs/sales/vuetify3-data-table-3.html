@@ -426,13 +426,14 @@
                         </div>
                     </v-card-title>
                     <v-divider class="border-opacity-100"></v-divider>
+
                     <v-card-title>
-                        <v-container>
-                            <v-row ma="20" sm="12">
+                        <v-container>                           
+                            <v-row my-2 ma="20" sm="12" justify="center">
                                 <div id="timer-container"
-                                    class="text-center bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg text-center border-4 border-red-500">
-                                    <div id="time-display" style="font-size: 4rem;" class="clock-font-stopper">
-                                        00:20
+                                    class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg border-4 border-red-500 my-4">
+                                    <div id="time-display" style="font-size: 4rem;" class="clock-font-stopper" :class="timeDisplayClasses">
+                                        {{formattedTime}}
                                     </div>
                                 </div>
                             </v-row>
@@ -440,25 +441,36 @@
                     </v-card-title>
                     <v-card-actions>
                         <v-row ma="20" sm="12">
-                            <v-col cols="12" sm="12" ma="10">
-                                <v-btn :loading="isLoading" 
-                                    :disabled="isLoading"
-                                    @click="onBtnStartStopTime"
-                                    :color="clock.timerButtonColor" 
-                                    block>
+                            <v-col cols="6" sm="6" ma="20">
+                                <v-btn :loading="isLoading" :disabled="isLoading" @click="onBtnStartStopTime"
+                                    :color="clock.timerButtonColor" block>
                                     {{clock.timerMode?'START':'STOP'}}
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="6" sm="6" ma="20">
+                                <v-btn :loading="isLoading" :disabled="isLoading" @click="onBtnClearTime"
+                                    :color="clock.timerButtonColor" block>
+                                    RESET
                                 </v-btn>
                             </v-col>
                         </v-row>
                     </v-card-actions>
                     <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
-                            Cancel
-                        </v-btn>
-                        <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
-                            Save
-                        </v-btn>
+                       
+                        <v-row ma="20" sm="12">
+                            <v-col cols="6" sm="6" ma="20">
+                                <v-btn block color="blue-darken-1" variant="text"
+                                    @click="dialogs.editItemDialog = false">
+                                    Cancel
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="6" sm="6" ma="20">
+                                <v-btn block color="blue-darken-1" variant="text"
+                                    @click="dialogs.editItemDialog = false">
+                                    Save
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -747,15 +759,22 @@
 
                     ]
                 };
+                const INITIAL_SECONDS_DEFAULT = 5;
 
                 var clock = Vue.reactive(
                     {
                         time: '15:05:34',
-                        date: '2025-08-06 WED',                        
-                        timer : 20,
+                        date: '2025-08-06 WED',
+                        timer: 20,
                         timerButtonColor: "green",
-                        timerMode: true
+                        timerMode: true,
+                        initialSeconds: INITIAL_SECONDS_DEFAULT, // Czas ustawiony w inpucie
+                        totalSeconds: INITIAL_SECONDS_DEFAULT, // Aktualny czas odliczania                        
+                        isRunning: false, // Czy minutnik działa
+                        timerID: null, // ID dla setInterval
+                        message: "" // Komunikat (np. "KONIEC CZASU!")
                     });
+                //clock.totalSeconds = clock.initialSeconds.value;
 
                 /*
                 updateTime();
@@ -767,7 +786,16 @@
                     //console.log(`clock.time = ${clock.time}`)
                 };
 
-                function zeroPadding(num, digit) {
+                var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                var timerID = setInterval(updateTime, 1000);
+
+                // --- ZMIENNE REAKTYWNE (STATE) ---                
+
+                // --- FUNKCJE POMOCNICZE ---
+                function zeroPadding(num, length) {
+                    return String(num).padStart(length, '0');
+                }
+                function zeroPadding0(num, digit) {
                     var zero = '';
                     for (var i = 0; i < digit; i++) {
                         zero += '0';
@@ -775,15 +803,20 @@
                     return (zero + num).slice(-digit);
                 }
 
-                var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-                var timerID = setInterval(updateTime, 1000);
+                /*
+                function formatTime(secs) {
+                    const minutes = Math.floor(secs / 60);
+                    const seconds = secs % 60;
+                    return `${zeroPadding(minutes, 2)}:${zeroPadding(seconds, 2)}`;
+                }
+                */
 
                 const theme = ref('dark');
                 const isDarkTheme = ref(true);
                 const isLoading = ref(false);
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.57 (2025-11-04 11:15:18)";
+                const appVersion = "v. 0.0.65 (2025-11-05 20:54:26)";
 
                 return {
                     theme
@@ -825,6 +858,25 @@
                 }
             },
             computed: {
+
+                formattedTime() {
+                    //return this.formatTime(this.clock.totalSeconds.value);
+                    //console.log('formattedTime',JSON.stringify(this.clock));
+                    return this.formatTime(this.clock.totalSeconds); //'00:77'; //
+                },
+
+                timeDisplayClasses() {
+                    ret = 'text-red-300'; // Domyślny kolor                    
+                    if (this.clock.totalSeconds <= 0) {
+                        ret = 'alarm'; // Animacja pulsująca
+                    }
+                    if (this.clock.totalSeconds < 3) {
+                        ret = 'text-yellow-400'; // Ostrzeżenie
+                    }
+                    //console.log('timeDisplayClasses', this.clock.totalSeconds, ret);
+                    return ret;
+                },
+
                 filterString() {
                     // Najpierw upewnij się, że masz tablicę i przefiltruj puste wartości
                     const validCriteria = this.searchData.referID.filter(c => c && String(c).trim() !== '');
@@ -840,6 +892,14 @@
                 }
             },
             methods: {
+                zeroPadding(num, length) {
+                    return String(num).padStart(length, '0');
+                },
+                formatTime(secs) {
+                    const minutes = Math.floor(secs / 60);
+                    const seconds = secs % 60;
+                    return `${this.zeroPadding(minutes, 2)}:${this.zeroPadding(seconds, 2)}`;
+                },
                 focusInput() {
                     this.$refs.appIdentifier.focus();
                 },
@@ -949,13 +1009,38 @@
                         */
                     }
                 },
-                onBtnStartStopTime(){
-                    this.clock.timerMode = !this.clock.timerMode; 
-                    if(!this.clock.timerMode) {
-                        this.clock.timerButtonColor = "red" 
+                onBtnStartStopTime() {
+                    //console.log('[onBtnStartStopTime]', this.clock.timerMode)
+                    this.clock.timerMode = !this.clock.timerMode;
+                    if (!this.clock.timerMode) {
+                        this.clock.timerButtonColor = "red"
+                        this.clock.isRunning = true;
+                        this.clock.timerID = setInterval(this.updateStoper, 1000);
                     } else {
-                        this.clock.timerButtonColor = "green" 
+                        this.clock.timerButtonColor = "green"
+                        clearInterval(this.clock.timerID);
+                        this.clock.value = false;
                     }
+                },
+                onBtnClearTime() {
+                    this.clock.totalSeconds = this.clock.initialSeconds;
+                    this.clock.isRunning = false;
+                    this.clock.timerMode = true;
+                    clearInterval(this.clock.timerID);
+                    this.clock.timerButtonColor = "green";
+                },
+                updateStoper() {
+                    //console.log('[updateStoper]', this.clock.totalSeconds, this.clock.timerID);
+                    if (this.clock.totalSeconds <= 0) {
+                        this.clock.timerMode = false;
+                        // Koniec odliczania
+                        clearInterval(this.clock.timerID);
+                        this.clock.isRunning = false;
+                        this.clock.message = "KONIEC CZASU!";
+                        return;
+                    }
+                    // Dekrementacja
+                    this.clock.totalSeconds--;
                 },
                 onBtnClear() {
                     this.searchData.appIdentifier = "";

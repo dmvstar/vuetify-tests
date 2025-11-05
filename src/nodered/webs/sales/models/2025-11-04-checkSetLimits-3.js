@@ -1,8 +1,27 @@
 /**
  * Функція, що генерує тему та тіло електронного листа на основі даних JSON про помилки.
- * * @param {object} jsonData - Об'єкт JSON, що містить дані, включаючи масив 'errors' та дату 'cur_date'.
+ * @param {object} jsonData - Об'єкт JSON, що містить дані, включаючи масив 'errors' та дату 'cur_date'.
  * @returns {{subject: string, body: string}} - Об'єкт із готовою темою та текстом повідомлення.
+ * @WHERE src/nodered/webs/sales/models/2025-11-04-checkSetLimits-3.js
  */
+
+var MODE_WORK_LOCAL = true;
+
+if (typeof msg != "undefined") {
+    MODE_WORK_LOCAL = false;
+    //alert(`1 ${MODE_WORK_LOCAL}`);
+}
+
+function alert(message){    
+    if(MODE_WORK_LOCAL){
+        console.log(message);
+    } else {
+        node.error(message);
+    }    
+}
+
+alert(`2 ${MODE_WORK_LOCAL}`);
+
 function generateErrorMailContent(jsonData) {
     // 1. Визначення констант полів та заголовків
     const ERROR_COUNT = jsonData.count_no;
@@ -154,56 +173,35 @@ function generateErrorMailContent(jsonData) {
 
 // --- ПРИКЛАД ВИКОРИСТАННЯ (симуляція вхідних даних) ---
 
-const sampleJsonData = require('./2025-11-04-checkSetLimits-1.json')
+var payload;
 
-const sampleJsonDataI = {
-    "result": "ok",
-    "code": 1200,
-    "time": "Work time is: 3697.605 sec.",
-    "has_error": true,
-    "min_date": "2025-07-04T19:24:03.866Z",
-    "cur_date": "2025-11-04T20:24:03.866Z",
-    "count_total": 55605,
-    "count_ok": 55582,
-    "count_no": 23, // Кількість помилок для включення в тему
-    "count_er": 0,
-    "errors": [
-        {
-            "decID": "29597184970",
-            "queueID": "29597194118",
-            "externalId": "NR_29597184970",
-            "debtorData": {
-                "lastName": "Ветєв",
-                "birthDate": "1994-06-27",
-                "firstName": "Олег",
-                "identCode": "3451115976",
-                "middleName": "Володимирович",
-            }
-        },
-        {
-            "decID": "29640960623",
-            "queueID": "29640966976",
-            "externalId": "NR_29640960623",
-            "debtorData": {
-                "lastName": "Григоренко",
-                "birthDate": "1985-07-21",
-                "firstName": "Юрій",
-                "identCode": "3124820692",
-                "middleName": "Станіславович",
-            }
-        },
-        // У скороченому прикладі решта записів пропущена.
-    ]
-    // ... решта 21 запису в оригінальному JSON ...
-};
+alert(`3 ${MODE_WORK_LOCAL}`)
 
+if (MODE_WORK_LOCAL) {
+    payload = require('./2025-11-04-checkSetLimits-1.json');
+} else {
+    payload = msg.payload;
+}
 
-const mailContent = generateErrorMailContent(sampleJsonData);
+var mailContent = generateErrorMailContent(payload);
+if(payload.count_no == 0){
+    mailContent.hasMail = false;    
+} else {
+    mailContent.hasMail = true;
+}
+    
 
-console.log("------------------------------------------");
-console.log("ТЕМА (SUBJECT):");
-console.log(mailContent.subject);
-console.log("------------------------------------------");
-console.log("ТІЛО (BODY):");
-console.log(mailContent.body);
-console.log("------------------------------------------");
+alert(mailContent);
+
+if (MODE_WORK_LOCAL) {
+    console.log("------------------------------------------");
+    console.log("ТЕМА (SUBJECT):");
+    console.log(mailContent.subject);
+    console.log("------------------------------------------");
+    console.log("ТІЛО (BODY):");
+    console.log(mailContent.body);
+    console.log("------------------------------------------");
+} else {
+    msg.payload = mailContent;
+    return msg;
+}
