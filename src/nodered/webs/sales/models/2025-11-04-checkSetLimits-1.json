@@ -1,0 +1,360 @@
+
+{
+    "result": "ok",
+    "code": 1200,
+    "time": "Work time is: 3697.605 sec.",
+    "has_error": true,
+    "min_date": "2025-07-04T19:24:03.866Z",
+    "cur_date": "2025-11-04T20:24:03.866Z",
+    "count_total": 55605,
+    "count_ok": 55582,
+    "count_no": 23,
+    "count_er": 0,
+    "errors": [
+        {
+            "decID": "29597184970",
+            "queueID": "29597194118",
+            "externalId": "NR_29597184970",
+            "debtorData": {
+                "lastName": "Ветєв",
+                "birthDate": "1994-06-27",
+                "firstName": "Олег",
+                "identCode": "3451115976",
+                "middleName": "Володимирович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29640960623",
+            "queueID": "29640966976",
+            "externalId": "NR_29640960623",
+            "debtorData": {
+                "lastName": "Григоренко",
+                "birthDate": "1985-07-21",
+                "firstName": "Юрій",
+                "identCode": "3124820692",
+                "middleName": "Станіславович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29774797693",
+            "queueID": "29774827095",
+            "externalId": "NR_29774797693",
+            "debtorData": {
+                "lastName": "Резнік",
+                "birthDate": "1985-03-14",
+                "firstName": "Валерій",
+                "identCode": "3111925397",
+                "middleName": "Васильович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29774822618",
+            "queueID": "29774828783",
+            "externalId": "NR_29774822618",
+            "debtorData": {
+                "lastName": "Кошелевська",
+                "birthDate": "1961-06-25",
+                "firstName": "Катерина",
+                "identCode": "2245604949",
+                "middleName": "Миколаївна",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29774814605",
+            "queueID": "29774829720",
+            "externalId": "NR_29774814605",
+            "debtorData": {
+                "lastName": "Майор",
+                "birthDate": "1999-06-12",
+                "firstName": "Мар`ян",
+                "identCode": "3632208790",
+                "middleName": "Любомирович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29821529097",
+            "queueID": "29821538730",
+            "externalId": "NR_29821529097",
+            "debtorData": {
+                "lastName": "Мельник",
+                "birthDate": "2000-03-08",
+                "firstName": "Олександр",
+                "identCode": "3659209531",
+                "middleName": "Миколайович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29835591822",
+            "queueID": "29835599402",
+            "externalId": "NR_29835591822",
+            "debtorData": {
+                "lastName": "Вініченко",
+                "birthDate": "2000-07-23",
+                "firstName": "Антон",
+                "identCode": "3672905992",
+                "middleName": "Олександрович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29922725645",
+            "queueID": "29922735655",
+            "externalId": "NR_29922725645",
+            "debtorData": {
+                "lastName": "Парафієнко",
+                "birthDate": "1984-06-02",
+                "firstName": "Тетяна",
+                "identCode": "3083424720",
+                "middleName": "Володимирівна",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29943853000",
+            "queueID": "29943860684",
+            "externalId": "NR_29943853000",
+            "debtorData": {
+                "lastName": "Корпанець",
+                "birthDate": "1995-09-23",
+                "firstName": "Юлія",
+                "identCode": "3496411667",
+                "middleName": "Михайлівна",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29956242103",
+            "queueID": "29956264083",
+            "externalId": "NR_29956242103",
+            "debtorData": {
+                "lastName": "Линник",
+                "birthDate": "1961-10-07",
+                "firstName": "Леонід",
+                "identCode": "2256003596",
+                "middleName": "Іванович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29962101197",
+            "queueID": "29962109976",
+            "externalId": "NR_29962101197",
+            "debtorData": {
+                "lastName": "Шилофост",
+                "birthDate": "1973-10-10",
+                "firstName": "Раїса",
+                "identCode": "2694607680",
+                "middleName": "Анатоліївна",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29968767705",
+            "queueID": "29968776735",
+            "externalId": "NR_29968767705",
+            "debtorData": {
+                "lastName": "Орлов",
+                "birthDate": "1980-07-03",
+                "firstName": "Микита",
+                "identCode": "2940413430",
+                "middleName": "Олегович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "29973503903",
+            "queueID": "29973507981",
+            "externalId": "NR_29973503903",
+            "debtorData": {
+                "lastName": "Горбан",
+                "birthDate": "1990-09-17",
+                "firstName": "Владислав",
+                "identCode": "3313215777",
+                "middleName": "Вікторович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30035833283",
+            "queueID": "30035846191",
+            "externalId": "NR_30035833283",
+            "debtorData": {
+                "lastName": "Третяк",
+                "birthDate": "1983-12-24",
+                "firstName": "Олександр",
+                "identCode": "3067305776",
+                "middleName": "Олександрович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30074928327",
+            "queueID": "30074934434",
+            "externalId": "NR_30074928327",
+            "debtorData": {
+                "lastName": "Михайленко",
+                "birthDate": "2002-10-02",
+                "firstName": "Микита",
+                "identCode": "3753005837",
+                "middleName": "Романович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30087141351",
+            "queueID": "30087148361",
+            "externalId": "NR_30087141351",
+            "debtorData": {
+                "lastName": "Нагуляк",
+                "birthDate": "2001-09-30",
+                "firstName": "Андрій",
+                "identCode": "3716307952",
+                "middleName": "Богданович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30144196854",
+            "queueID": "30144207273",
+            "externalId": "NR_30144196854",
+            "debtorData": {
+                "lastName": "Цурлай",
+                "birthDate": "1980-03-18",
+                "firstName": "Олександр",
+                "identCode": "2929719870",
+                "middleName": "Васильович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30203267796",
+            "queueID": "30203273737",
+            "externalId": "NR_30203267796",
+            "debtorData": {
+                "lastName": "Грищенко",
+                "birthDate": "1967-09-06",
+                "firstName": "Олег",
+                "identCode": "2472018479",
+                "middleName": "Леонідович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30270559739",
+            "queueID": "30270566514",
+            "externalId": "NR_30270559739",
+            "debtorData": {
+                "lastName": "Барчак",
+                "birthDate": "2000-07-27",
+                "firstName": "Владислав",
+                "identCode": "3673300595",
+                "middleName": "Володимирович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30280798297",
+            "queueID": "30280804154",
+            "externalId": "NR_30280798297",
+            "debtorData": {
+                "lastName": "Задерей",
+                "birthDate": "1997-12-17",
+                "firstName": "Олег",
+                "identCode": "3578009276",
+                "middleName": "Олександрович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30342032376",
+            "queueID": "30342061323",
+            "externalId": "NR_30342032376",
+            "debtorData": {
+                "lastName": "Мельник",
+                "birthDate": "1992-06-02",
+                "firstName": "Олександр",
+                "identCode": "3375612791",
+                "middleName": "Васильович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30376569011",
+            "queueID": "30376573334",
+            "externalId": "NR_30376569011",
+            "debtorData": {
+                "lastName": "Саєнко",
+                "birthDate": "1986-10-31",
+                "firstName": "Дмитро",
+                "identCode": "3171509631",
+                "middleName": "Валерійович",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        },
+        {
+            "decID": "30386819008",
+            "queueID": "30386827713",
+            "externalId": "NR_30386819008",
+            "debtorData": {
+                "lastName": "Пушавер",
+                "birthDate": "2004-11-26",
+                "firstName": "Софія",
+                "identCode": "3831607803",
+                "middleName": "Мирославівна",
+                "idCardNumber": null,
+                "passportNumber": null,
+                "passportSeries": null
+            }
+        }
+    ]
+}
