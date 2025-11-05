@@ -37,6 +37,7 @@
 
         .clock-font-stopper {
             font-family: 'Orbitron', sans-serif;
+            text-align: center;
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
         }
 
@@ -425,18 +426,31 @@
                         </div>
                     </v-card-title>
                     <v-divider class="border-opacity-100"></v-divider>
-                    <v-card-title class="text-h6">
-                        <v-container>                            
-                            <v-row class="text-h6">
+                    <v-card-title>
+                        <v-container>
+                            <v-row ma="20" sm="12">
                                 <div id="timer-container"
-                                    class="text-h6 bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg text-center border-4 border-red-500">
-                                    <div id="time-display" class="text-h6 clock-font-stopper">
+                                    class="text-center bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg text-center border-4 border-red-500">
+                                    <div id="time-display" style="font-size: 4rem;" class="clock-font-stopper">
                                         00:20
                                     </div>
                                 </div>
                             </v-row>
                         </v-container>
                     </v-card-title>
+                    <v-card-actions>
+                        <v-row ma="20" sm="12">
+                            <v-col cols="12" sm="12" ma="10">
+                                <v-btn :loading="isLoading" 
+                                    :disabled="isLoading"
+                                    @click="onBtnStartStopTime"
+                                    :color="clock.timerButtonColor" 
+                                    block>
+                                    {{clock.timerMode?'START':'STOP'}}
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-actions>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
@@ -737,7 +751,10 @@
                 var clock = Vue.reactive(
                     {
                         time: '15:05:34',
-                        date: '2025-08-06 WED'
+                        date: '2025-08-06 WED',                        
+                        timer : 20,
+                        timerButtonColor: "green",
+                        timerMode: true
                     });
 
                 /*
@@ -930,6 +947,14 @@
                                 this.generateUUID()
                             );
                         */
+                    }
+                },
+                onBtnStartStopTime(){
+                    this.clock.timerMode = !this.clock.timerMode; 
+                    if(!this.clock.timerMode) {
+                        this.clock.timerButtonColor = "red" 
+                    } else {
+                        this.clock.timerButtonColor = "green" 
                     }
                 },
                 onBtnClear() {
