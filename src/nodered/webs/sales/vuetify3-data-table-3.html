@@ -287,9 +287,9 @@
 
                                 <template v-slot:item.actions="{ item }">
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS','VIEW')"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="green-darken-2" icon="mdi-alarm"
-                                        @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS','EDIT')"></v-btn>
                                     <!--
                                     <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil" @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
                                     <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
@@ -336,6 +336,51 @@
                     </div>
                 </v-footer>
             </v-main>
+
+            <v-dialog v-model="dialogs.editItemDialog" max-width="500px">
+            <v-card density="compact" border="border-thin">
+                <v-card-title>
+                    <div>
+                        [EDIT] Operations for [{{this.stepsData.selectedItem.id}}] item.
+                    </div>
+                </v-card-title>
+                <v-divider class="border-opacity-100"></v-divider>
+                <v-card-text>
+                    <div>
+                        EDIT
+                    </div>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" md="12" sm="6">
+                                MESS                                
+                            </v-col>
+                        </v-row>
+                        <!--v-list v-model:selected="dessertsData.settingsSelection" lines="three" select-strategy="leaf">
+                            <v-list-subheader>General</v-list-subheader>
+                            <v-list-item v-for="item in dessertsData.settingsItems" :key="item.value"
+                                :subtitle="item.subtitle" :title="item.title" :value="item.value"
+                                active-class="text-pink">
+                                <template v-slot:prepend="{ isSelected, select }">
+                                    <v-list-item-action start>
+                                        <v-checkbox-btn :model-value="isSelected"
+                                            @update:model-value="select"></v-checkbox-btn>
+                                    </v-list-item-action>
+                                </template>
+                            </v-list-item>
+                        </v-list-->
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
 
         </v-layout>
         <!-- </v-card> -->
@@ -387,6 +432,12 @@
                     selectedDateInto: null
                 });
 
+                var dialogs = Vue.ref(
+                    {
+                        editItemDialog : false
+                    }                        
+                );
+
                 var stepsData = Vue.ref(
                     {
                         isTableDataHandleClick: true,
@@ -403,6 +454,7 @@
                             { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
                         ],
                         selectedRows: [],
+                        selectedItem: {},
                         selectedItems: [],
                         stepsItemsData: [],
                         stepsSimpleData: [
@@ -632,6 +684,8 @@
                     , faceRailIcon
                     , faceIdUrl
 
+
+                    , dialogs
                     , secondDrawer
 
                     , usersList
@@ -840,7 +894,6 @@
                 onButtonRefresh(event) {
 
                 },
-
                 onBtnApplyFilters() {
                     this.saveFilters();
                 },
@@ -850,9 +903,21 @@
                     }
                     this.saveFilters();
                 },
-                onBtnActionsStubClick(item, column) {
-                    console.log(`[onBtnActionsStubClick] ${JSON.stringify(item)}, ${column}`);
+
+                onBtnActionsStubClick(item, column, task) {
+                    console.log(`[onBtnActionsStubClick] ${column}, ${task}, ${JSON.stringify(item)}`);
                     this.stepsData.isTableDataHandleClick = false;
+                    switch (task) {
+                        case 'EDIT': this.actionsEditClick(item, column, task);
+                             break;
+                        default:   
+                            break;  
+                    }
+                },    
+
+                actionsEditClick(item, column, task) {
+                    this.stepsData.selectedItem = item;
+                    this.dialogs.editItemDialog = true;
                 },
 
                 handleClearReferOverride(event) {

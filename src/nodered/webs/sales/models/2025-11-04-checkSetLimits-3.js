@@ -7,12 +7,12 @@ function generateErrorMailContent(jsonData) {
     // 1. Визначення констант полів та заголовків
     const ERROR_COUNT = jsonData.count_no;
     const RAW_DATE = jsonData.cur_date;
-    
+
     // Поля з головного об'єкта помилки (Використовуємо ukraińskie nagłówki dla lepszej czytelności w treści maila)
     const rootFields = ["Ідентифікатор рішення", "Ідентифікатор черги", "Зовнішній ID"];
     // Поля із вкладеного об'єкта debtorData (Wartości kluczy pozostają angielskie, але etykiety w nagłówku są ukraińskie)
     const debtorFields = ["Ідент. код", "Прізвище", "Ім'я", "По батькові", "Дата народження"];
-    
+
     // Nazwy kluczy w danych JSON (używane do ekstrakcji даних z obiektu)
     const rootKeys = ["decID", "queueID", "externalId"];
     const debtorKeys = ["identCode", "lastName", "firstName", "middleName", "birthDate"];
@@ -33,20 +33,20 @@ function generateErrorMailContent(jsonData) {
     // Оновлення максимальної довжини на основі даних у рядках
     errors.forEach(error => {
         const debtorData = error.debtorData || {};
-        
+
         // Вилучення всіх значень для цього рядка
         const rowValues = [
             ...rootKeys.map(key => error[key] || ''),
             ...debtorKeys.map(key => debtorData[key] || '')
         ];
-        
+
         // Оновлення maxWidths
         rowValues.forEach((value, i) => {
-            var len = String(value).length; 
+            var len = String(value).length;
             if (len > maxWidths[i]) {
                 maxWidths[i] = len;
             }
-            len = keys[i].length; 
+            len = keys[i].length;
             if (len > maxWidths[i]) {
                 maxWidths[i] = len;
             }
@@ -56,36 +56,47 @@ function generateErrorMailContent(jsonData) {
     // Хелпер для вирівнювання вмісту
     const padContent = (content, width) => {
         // Заповнює рядок пробілами до заданої ширини (вирівнювання по лівому краю)
-        return String(content).padEnd(width, ' '); 
+        return String(content).padEnd(width, ' ');
     };
-    
+
     // 3. Форматування дати для теми
     let formattedDate = '';
+    let minFormattedDate = '';
+    let intoFormattedDate = '';
+    const RAW_MIN_DATE = jsonData.min_date; // Отримання сирої min_date
+
     try {
-        // Дата у форматі ISO: "2025-11-04T20:24:03.866Z"
-        const dateObj = new Date(RAW_DATE);
-        
-        // Форматування у читабельний вигляд (наприклад, 04.11.2025 20:24 UTC)
-        formattedDate = dateObj.toLocaleDateString('uk-UA', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        }) + ' ' + dateObj.toLocaleTimeString('uk-UA', {
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'UTC',
-            timeZoneName: 'short'
-        }).replace('GMT', 'UTC'); // Уніфікація часового поясу
+        // Функція для форматування дати
+        const formatDateTime = (rawDate) => {
+            if (!rawDate) return 'Недоступно';
+            const dateObj = new Date(rawDate);
+            // Форматування у читабельний вигляд (наприклад, 04.11.2025 20:24 UTC)
+            return dateObj.toLocaleDateString('uk-UA', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }) + ' ' + dateObj.toLocaleTimeString('uk-UA', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'UTC',
+                timeZoneName: 'short'
+            }).replace('GMT', 'UTC'); // Уніфікація часового поясу
+        };
+
+        // Форматування поточної дати (cur_date)
+        formattedDate = formatDateTime(RAW_DATE);
+        // Форматування мінімальної дати (min_date)
+        minFormattedDate = formatDateTime(RAW_MIN_DATE);
     } catch (e) {
-        // У разі помилки розбору дати використовуйте сире значення
-        formattedDate = RAW_DATE;
+        // У разі помилки розбору дати використовуйте сирі значення
+        formattedDate = RAW_DATE || 'Недоступно';
+        minFormattedDate = RAW_MIN_DATE || 'Недоступно';
         console.error("Помилка розбору дати:", e);
     }
-    
     const subject = `Звіт про помилки: ${ERROR_COUNT} необроблених записів (станом на ${formattedDate})`;
 
     // 4. Генерація рядків Markdown таблиці з вирівнюванням
-    
+
     // 4.1. Заголовок Markdown таблиці (з вирівнюванням)
     const paddedHeaders = headers.map((header, i) => padContent(header, maxWidths[i]));
     const allFieldsHeader = '| ' + paddedHeaders.join(' | ') + ' |';
@@ -95,13 +106,13 @@ function generateErrorMailContent(jsonData) {
     // 4.2. Рядок розділювача Markdown ( | ----- | ------- | ... | )
     // Використовуємо '-'.repeat(width) для заповнення всієї ширини стовпця
     const mdSeparatorParts = maxWidths.map(width => ' ' + '-'.repeat(width) + ' ');
-    const mdSeparator = '|' + mdSeparatorParts.join('|') + '|'; 
+    const mdSeparator = '|' + mdSeparatorParts.join('|') + '|';
 
 
     // 4.3. Рядки даних Markdown таблиці
     const dataRows = errors.map(error => {
         const debtorData = error.debtorData || {};
-        
+
         // Збір сирих даних
         const rawValues = [
             ...rootKeys.map(key => error[key] || ''),
@@ -110,7 +121,7 @@ function generateErrorMailContent(jsonData) {
 
         // Вирівнювання даних
         const paddedValues = rawValues.map((value, i) => padContent(value, maxWidths[i]));
-        
+
         // Об'єднання в рядок MD
         return '| ' + paddedValues.join(' | ') + ' |';
     });
@@ -120,6 +131,7 @@ function generateErrorMailContent(jsonData) {
     const bodyContent = [
         `Звіт про помилки: Знайдено ${ERROR_COUNT} необроблених записів.`,
         `Час операції: ${jsonData.time}`,
+        `Період звіту: з ${minFormattedDate} по ${formattedDate}`, // Додано період звіту
         ``,
         `Нижче наведено список записів, які вимагали втручання, з ключовими даними:`,
         ``,
@@ -142,7 +154,9 @@ function generateErrorMailContent(jsonData) {
 
 // --- ПРИКЛАД ВИКОРИСТАННЯ (симуляція вхідних даних) ---
 
-const sampleJsonData = {
+const sampleJsonData = require('./2025-11-04-checkSetLimits-1.json')
+
+const sampleJsonDataI = {
     "result": "ok",
     "code": 1200,
     "time": "Work time is: 3697.605 sec.",
