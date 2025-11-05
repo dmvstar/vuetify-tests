@@ -30,6 +30,45 @@
             background-color: #363636c2;
         }
     </style>
+
+    <style>
+        .clock_font {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;
+            text-shadow: rgb(162, 253, 193) 1px 0 10px;
+        }
+
+        #clock {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #daf6ff;
+            text-shadow: 0 0 20px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+
+            .date {
+                letter-spacing: 0.1em;
+                font-size: 12px;
+            }
+
+            .time {
+                letter-spacing: 0.05em;
+                font-size: 32px;
+                padding: 5px 0;
+            }
+
+            .text {
+                letter-spacing: 0.1em;
+                font-size: 12px;
+                padding: 20px 0 0;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -57,18 +96,35 @@
                     </v-card>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <template v-if="$vuetify.display.mdAndUp">
-                    <v-btn icon="mdi-magnify" variant="text"></v-btn>
-                    <v-btn icon="mdi-filter" variant="text"></v-btn>
-                </template>
-                <v-tooltip top>
-                    <template v-slot:activator="{ props }">
-                        <v-btn v-bind="props" :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
-                            @click="onBtnChangeTheme"></v-btn>
+
+                <v-spacer></v-spacer>
+                <template v-slot:append>
+
+                    <v-card outlined color="transparent" variant="text">
+                        <template v-slot:title>
+                            <p class="clock_font">{{ clock.time }}</p>
+                        </template>
+                        <template v-slot:subtitle>
+                            <p class="clock_font">{{ clock.date }}</p>
+                        </template>
+                    </v-card>
+
+
+                    <template v-if="$vuetify.display.mdAndUp">
+                        <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                        <v-btn icon="mdi-filter" variant="text"></v-btn>
                     </template>
-                    <span>Be on the dark side ...</span>
-                </v-tooltip>
-                <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-btn v-bind="props"
+                                :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+                                @click="onBtnChangeTheme"></v-btn>
+                        </template>
+                        <span>Be on the dark side ...</span>
+                    </v-tooltip>
+                    <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
+                </template>
+
             </v-app-bar>
             <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
                 <div id="second-driwer" class="ma-3">
@@ -338,24 +394,29 @@
             </v-main>
 
             <v-dialog v-model="dialogs.editItemDialog" max-width="500px">
-            <v-card density="compact" border="border-thin">
-                <v-card-title>
-                    <div>
-                        [EDIT] Operations for [{{this.stepsData.selectedItem.id}}] item.
-                    </div>
-                </v-card-title>
-                <v-divider class="border-opacity-100"></v-divider>
-                <v-card-text>
-                    <div>
-                        EDIT
-                    </div>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" md="12" sm="6">
-                                MESS                                
-                            </v-col>
-                        </v-row>
-                        <!--v-list v-model:selected="dessertsData.settingsSelection" lines="three" select-strategy="leaf">
+                <v-card density="compact" border="border-thin">
+                    <v-card-title>
+                        <div>
+                            [EDIT] Operations for [{{this.stepsData.selectedItem.id}}] item.
+                        </div>
+                    </v-card-title>
+                    <v-divider class="border-opacity-100"></v-divider>
+                    <v-card-text>
+                        <div>
+                            EDIT
+                        </div>
+                        <v-container>
+                            <v-row>
+                                <v-card outlined color="transparent" variant="text">
+                                    <template v-slot:title>
+                                        <p class="clock_font">{{ clock.time }}</p>
+                                    </template>
+                                    <template v-slot:subtitle>
+                                        <p class="clock_font">{{ clock.date }}</p>
+                                    </template>
+                                </v-card>
+                            </v-row>
+                            <!--v-list v-model:selected="dessertsData.settingsSelection" lines="three" select-strategy="leaf">
                             <v-list-subheader>General</v-list-subheader>
                             <v-list-item v-for="item in dessertsData.settingsItems" :key="item.value"
                                 :subtitle="item.subtitle" :title="item.title" :value="item.value"
@@ -368,19 +429,19 @@
                                 </template>
                             </v-list-item>
                         </v-list-->
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
-                        Cancel
-                    </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
-                        Save
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
+                            Cancel
+                        </v-btn>
+                        <v-btn color="blue-darken-1" variant="text" @click="dialogs.editItemDialog = false">
+                            Save
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
 
         </v-layout>
         <!-- </v-card> -->
@@ -434,8 +495,8 @@
 
                 var dialogs = Vue.ref(
                     {
-                        editItemDialog : false
-                    }                        
+                        editItemDialog: false
+                    }
                 );
 
                 var stepsData = Vue.ref(
@@ -667,6 +728,33 @@
                     ]
                 };
 
+                var clock = Vue.reactive(
+                    {
+                        time: '15:05:34',
+                        date: '2025-08-06 WED'
+                    });
+
+                /*
+                updateTime();
+                */
+                function updateTime() {
+                    var cd = new Date();
+                    clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
+                    clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth() + 1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
+                    //console.log(`clock.time = ${clock.time}`)
+                };
+
+                function zeroPadding(num, digit) {
+                    var zero = '';
+                    for (var i = 0; i < digit; i++) {
+                        zero += '0';
+                    }
+                    return (zero + num).slice(-digit);
+                }
+
+                var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                var timerID = setInterval(updateTime, 1000);
+
                 const theme = ref('dark');
                 const isDarkTheme = ref(true);
                 const isLoading = ref(false);
@@ -683,6 +771,7 @@
                     , faceId
                     , faceRailIcon
                     , faceIdUrl
+                    , clock
 
 
                     , dialogs
@@ -841,7 +930,7 @@
                     this.searchData.appIdentifier = "";
                     this.searchData.referID = [''];
                     this.searchData.referIDS = [];
-                    this.stepsData.stepsItemsData = [];                                       
+                    this.stepsData.stepsItemsData = [];
                 },
                 filterNumber(evt) {
                     evt = (evt) ? evt : window.event;
@@ -909,11 +998,11 @@
                     this.stepsData.isTableDataHandleClick = false;
                     switch (task) {
                         case 'EDIT': this.actionsEditClick(item, column, task);
-                             break;
-                        default:   
-                            break;  
+                            break;
+                        default:
+                            break;
                     }
-                },    
+                },
 
                 actionsEditClick(item, column, task) {
                     this.stepsData.selectedItem = item;
@@ -1060,6 +1149,7 @@
             // 3. Konwertuj Set z powrotem na Array i zwróć
             return [...uniqueUUIDsSet];
         }
+
     </script>
 
 </body>
