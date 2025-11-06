@@ -34,9 +34,12 @@
     <style>
         /* Użycie niestandardowej czcionki dla wyglądu cyfrowego zegara */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/seven-segment');
+
 
         .clock-font-stopper {
-            font-family: 'Orbitron', sans-serif;
+            /*font-family: 'Orbitron', sans-serif;*/
+            font-family: 'Seven Segment', sans-serif;
             text-align: center;
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
         }
@@ -99,7 +102,8 @@
 <body>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.js"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <div id="app"></div>
 
     <template id="app-template">
@@ -432,7 +436,10 @@
                             <v-row my-2 ma="20" sm="12" justify="center">
                                 <div id="timer-container"
                                     class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg border-4 border-red-500 my-4">
-                                    <div id="time-display" style="font-size: 4rem;" class="clock-font-stopper" :class="timeDisplayClasses">
+                                    <div id="time-display" style="font-size: 4rem;" 
+                                    class="clock-font-stopper" 
+                                    class="text-yellow-400"
+                                    :class="timeDisplayClasses">
                                         {{formattedTime}}
                                     </div>
                                 </div>
