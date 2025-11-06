@@ -869,10 +869,12 @@
                     return ret;
                 },
 
-                parseDate(dateStrDDMMYYYY) {
+                parseDate( dateStrDDMMYYYY ) {                    
                     var ret = new Date();
-                    var parDate = dateStrDDMMYYYY.split('-');
-                    ret = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    if(dateStrDDMMYYYY) {
+                        var parDate = dateStrDDMMYYYY.split('-');
+                        ret = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    }
                     console.log(ret);
                     return ret;
                 },
