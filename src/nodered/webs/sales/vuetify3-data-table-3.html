@@ -435,7 +435,7 @@
                         <v-container>                           
                             <v-row my-2 ma="20" sm="12" justify="center">
                                 <div id="timer-container"
-                                    class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg border-4 border-red-500 my-4">
+                                    class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg  my-4">
                                     <div id="time-display" style="font-size: 4rem;" 
                                     class="clock-font-stopper" 
                                     class="text-yellow-400"
@@ -873,14 +873,14 @@
                 },
 
                 timeDisplayClasses() {
-                    ret = 'text-red-300'; // Domyślny kolor                    
+                    ret = 'text-green-300'; // Domyślny kolor                    
                     if (this.clock.totalSeconds <= 0) {
                         ret = 'alarm'; // Animacja pulsująca
-                    }
+                    } else 
                     if (this.clock.totalSeconds < 3) {
                         ret = 'text-yellow-400'; // Ostrzeżenie
                     }
-                    //console.log('timeDisplayClasses', this.clock.totalSeconds, ret);
+                    console.log('timeDisplayClasses', this.clock.totalSeconds, ret);
                     return ret;
                 },
 
@@ -1037,7 +1037,7 @@
                     this.clock.timerButtonColor = "green";
                 },
                 updateStoper() {
-                    //console.log('[updateStoper]', this.clock.totalSeconds, this.clock.timerID);
+                    console.log('[updateStoper]', this.clock.totalSeconds, this.clock.timerID);
                     if (this.clock.totalSeconds <= 0) {
                         this.clock.timerMode = false;
                         // Koniec odliczania
