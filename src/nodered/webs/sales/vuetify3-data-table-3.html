@@ -436,7 +436,7 @@
                             <v-row my-2 ma="20" sm="12" justify="center">
                                 <div id="timer-container"
                                     class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg  my-4">
-                                    <div id="time-display" style="font-size: 4rem;" 
+                                    <div id="time-display" style="font-size: 5rem;" 
                                     class="clock-font-stopper" 
                                     class="text-yellow-400"
                                     :class="timeDisplayClasses">
@@ -1039,10 +1039,11 @@
                 updateStoper() {
                     console.log('[updateStoper]', this.clock.totalSeconds, this.clock.timerID);
                     if (this.clock.totalSeconds <= 0) {
-                        this.clock.timerMode = false;
+                        this.clock.timerMode = true;
+                        this.clock.isRunning = false;
+                        this.clock.timerButtonColor = "green";
                         // Koniec odliczania
                         clearInterval(this.clock.timerID);
-                        this.clock.isRunning = false;
                         this.clock.message = "KONIEC CZASU!";
                         return;
                     }
