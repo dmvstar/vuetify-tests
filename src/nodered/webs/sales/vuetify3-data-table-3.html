@@ -103,7 +103,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <div id="app"></div>
 
     <template id="app-template">
@@ -432,14 +432,12 @@
                     <v-divider class="border-opacity-100"></v-divider>
 
                     <v-card-title>
-                        <v-container>                           
+                        <v-container>
                             <v-row my-2 ma="20" sm="12" justify="center">
                                 <div id="timer-container"
                                     class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg  my-4">
-                                    <div id="time-display" style="font-size: 5rem;" 
-                                    class="clock-font-stopper" 
-                                    class="text-yellow-400"
-                                    :class="timeDisplayClasses">
+                                    <div id="time-display" style="font-size: 5rem;" class="clock-font-stopper"
+                                        class="text-yellow-400" :class="timeDisplayClasses">
                                         {{formattedTime}}
                                     </div>
                                 </div>
@@ -463,10 +461,8 @@
                         </v-row>
                     </v-card-actions>
                     <v-card-actions>
-                       
                         <v-row ma="20" sm="12">
-                            <v-col  
-  class="d-flex justify-center">
+                            <v-col class="d-flex justify-center">
                                 <v-btn block color="blue-darken-1" variant="text"
                                     @click="dialogs.editItemDialog = false">
                                     Close
@@ -871,10 +867,10 @@
                     ret = 'text-green-300'; // Domyślny kolor                    
                     if (this.clock.totalSeconds <= 0) {
                         ret = 'alarm'; // Animacja pulsująca
-                    } else 
-                    if (this.clock.totalSeconds < 3) {
-                        ret = 'text-yellow-400'; // Ostrzeżenie
-                    }
+                    } else
+                        if (this.clock.totalSeconds < 3) {
+                            ret = 'text-yellow-400'; // Ostrzeżenie
+                        }
                     console.log('timeDisplayClasses', this.clock.totalSeconds, ret);
                     return ret;
                 },
