@@ -47,7 +47,10 @@ CREATE TABLE
 CREATE INDEX ad_applicationId_idx ON appsDecisions (applicationId);  	
 CREATE INDEX ad_dateCreated_idx ON appsDecisions (dateCreated);  	
 CREATE INDEX ad_decissionDate_idx ON appsDecisions (decissionDate);  	
-      
+
+-- Replace YourTableName with your table's name
+ALTER TABLE YourTableName
+DROP CONSTRAINT applicationIdStateProduct_idx;      
       
 -- DROP TABLE appsErrors      
 CREATE TABLE
