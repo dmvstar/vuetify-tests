@@ -66,12 +66,14 @@
             text-align: end;
             text-shadow: rgb(162, 253, 193) 1px 0 10px;
         }
+
         .clock_font_big {
             font-family: 'Share Tech Mono', monospace;
             color: #ffffff;
             text-align: end;
             text-shadow: rgb(162, 253, 193) 1px 0 10px;
         }
+
         #clock {
             font-family: 'Share Tech Mono', monospace;
             color: #ffffff;
@@ -257,8 +259,8 @@
 
                     <v-row ma="10" id="Kafelki">
                         <v-col cols="2" sm="2" ma="0">
-                            <v-card class="mx-auto" color="surface-variant" variant="text" >
-                                <template v-slot:title>                                    
+                            <v-card height="92" class="mx-auto" >
+                                <template v-slot:title>
                                     <p class="text-h4 clock_font">{{ clock.time }}</p>
                                 </template>
                                 <template v-slot:subtitle>
@@ -268,25 +270,29 @@
                         </v-col>
 
                         <v-col cols="3" sm="3" ma="0">
-                            <v-card append-icon="mdi-open-in-new" class="mx-auto"
-                                href="https://github.com/vuetifyjs/vuetify/"  prepend-icon="mdi-github"
-                                rel="noopener" subtitle="Check out the official repository" target="_blank"
+                            <v-card height="92" append-icon="mdi-open-in-new" class="mx-auto"
+                                href="https://github.com/vuetifyjs/vuetify/" prepend-icon="mdi-github" rel="noopener"
+                                subtitle="Check out the official repository" target="_blank"
                                 title="Vuetify on GitHub"></v-card>
                         </v-col>
                         <v-col cols="4" sm="4" ma="0">
-                            <v-card class="mx-auto" color="surface-variant"
-                                image="https://cdn.vuetifyjs.com/docs/images/cards/dark-beach.jpg" 
+                            <v-card height="92" class="mx-auto" color="surface-variant"
+                                image="https://cdn.vuetifyjs.com/docs/images/cards/dark-beach.jpg"
                                 subtitle="Take a walk down the beach" title="Evening sunset">
                             </v-card>
                         </v-col>
                         <v-col cols="3" sm="3" ma="0">
-                            <v-card class="mx-auto" color="surface-variant"  title="Evening sunset"
-                                subtitle="Take a walk down the beach">
+                            <v-card height="92" class="mx-auto">
+                                <v-card-text>
+                                    <div class="text-h6  ">OTDL: 10%</div>
+                                    <v-progress-linear bg-color="surface-variant" class="mb-6" color="primary"
+                                        height="10" model-value="10" rounded="pill"></v-progress-linear>
+                                </v-card-text>
                             </v-card>
-                        </v-col>                      
+                        </v-col>
 
                     </v-row>
-                                        <v-row ma="2">
+                    <v-row ma="2">
                         <v-col cols="10">
                             <v-card-text>
                                 VDataTable {{stepsData.stepsItemsData.length}} items
@@ -804,7 +810,7 @@
                         timerButtonColor: "green",
                         timerMode: true,
                         initialSeconds: INITIAL_SECONDS_DEFAULT, // Czas ustawiony w inpucie
-                        totalSeconds: INITIAL_SECONDS_DEFAULT, // Aktualny czas odliczania                        
+                        totalSeconds: INITIAL_SECONDS_DEFAULT, // Aktualny czas odliczania
                         isRunning: false, // Czy minutnik działa
                         timerID: null, // ID dla setInterval
                         message: "" // Komunikat (np. "KONIEC CZASU!")
@@ -824,7 +830,7 @@
                 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
                 var timerID = setInterval(updateTime, 1000);
 
-                // --- ZMIENNE REAKTYWNE (STATE) ---                
+                // --- ZMIENNE REAKTYWNE (STATE) ---
 
                 // --- FUNKCJE POMOCNICZE ---
                 function zeroPadding(num, length) {
@@ -901,7 +907,7 @@
                 },
 
                 timeDisplayClasses() {
-                    ret = 'text-green-300'; // Domyślny kolor                    
+                    ret = 'text-green-300'; // Domyślny kolor
                     if (this.clock.totalSeconds <= 0) {
                         ret = 'alarm'; // Animacja pulsująca
                     } else
@@ -964,12 +970,12 @@
                     }
                     // Rozbij String na tablicę za pomocą separatora (np. przecinka)
                     const criteriaArray = search.toLowerCase().split(',').filter(c => c.trim() !== '');
-                    // Logika AND: Przyjmuje się, że element musi pasować do KAŻDEGO kryterium 
+                    // Logika AND: Przyjmuje się, że element musi pasować do KAŻDEGO kryterium
                     // z tablicy criteriaArray (jeśli tak została zaimplementowana).
                     // Logika OR: Przyjmuje się, że element musi pasować do CO NAJMNIEJ JEDNEGO kryterium.
                     // Implementacja Logiki OR (pasuje, jeśli którykolwiek UUID jest znaleziony):
                     const itemUUID = item.columns.stepUUID.toLowerCase(); // Przykład pola, które filtrujesz
-                    // Sprawdź, czy którykolwiek z UUID w tablicy kryteriów (criteriaArray) 
+                    // Sprawdź, czy którykolwiek z UUID w tablicy kryteriów (criteriaArray)
                     // jest równy UUID w wierszu (itemUUID)
                     const isMatch = criteriaArray.some(criterion => {
                         // Jeśli tablica zawiera puste stringi (co robimy z filter), to pomiń
