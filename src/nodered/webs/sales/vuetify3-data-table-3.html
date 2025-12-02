@@ -66,7 +66,12 @@
             text-align: end;
             text-shadow: rgb(162, 253, 193) 1px 0 10px;
         }
-
+        .clock_font_big {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;
+            text-shadow: rgb(162, 253, 193) 1px 0 10px;
+        }
         #clock {
             font-family: 'Share Tech Mono', monospace;
             color: #ffffff;
@@ -249,7 +254,39 @@
                             </v-autocomplete>
                         </v-col>
                     </v-row>
-                    <v-row ma="2">
+
+                    <v-row ma="10" id="Kafelki">
+                        <v-col cols="2" sm="2" ma="0">
+                            <v-card class="mx-auto" color="surface-variant" variant="text" >
+                                <template v-slot:title>                                    
+                                    <p class="text-h4 clock_font">{{ clock.time }}</p>
+                                </template>
+                                <template v-slot:subtitle>
+                                    <p class="clock_font">{{ clock.date }}</p>
+                                </template>
+                            </v-card>
+                        </v-col>
+
+                        <v-col cols="3" sm="3" ma="0">
+                            <v-card append-icon="mdi-open-in-new" class="mx-auto"
+                                href="https://github.com/vuetifyjs/vuetify/"  prepend-icon="mdi-github"
+                                rel="noopener" subtitle="Check out the official repository" target="_blank"
+                                title="Vuetify on GitHub"></v-card>
+                        </v-col>
+                        <v-col cols="4" sm="4" ma="0">
+                            <v-card class="mx-auto" color="surface-variant"
+                                image="https://cdn.vuetifyjs.com/docs/images/cards/dark-beach.jpg" 
+                                subtitle="Take a walk down the beach" title="Evening sunset">
+                            </v-card>
+                        </v-col>
+                        <v-col cols="3" sm="3" ma="0">
+                            <v-card class="mx-auto" color="surface-variant"  title="Evening sunset"
+                                subtitle="Take a walk down the beach">
+                            </v-card>
+                        </v-col>                      
+
+                    </v-row>
+                                        <v-row ma="2">
                         <v-col cols="10">
                             <v-card-text>
                                 VDataTable {{stepsData.stepsItemsData.length}} items
@@ -281,7 +318,7 @@
                             </v-menu>
                         </v-col>
                     </v-row>
-                    <v-row ma="10">
+                    <v-row ma="10" id="DataTable">
                         <v-col cols="12" sm="12" ma="10">
                             <!-- :search="searchData.searchText" -->
                             <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
@@ -814,7 +851,7 @@
                 const isLoading = ref(false);
                 const isShowUserMenu = ref(false);
 
-                const appVersion = "v. 0.0.65 (2025-11-05 20:54:26)";
+                const appVersion = "v. 0.0.71 (2025-12-02 12:41:02)";
 
                 return {
                     theme
