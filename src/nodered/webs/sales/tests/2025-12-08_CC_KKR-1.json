@@ -1,0 +1,65 @@
+[
+    {
+        "applicationId": 1024186,
+        "phone": "+380685325250",
+        "stateCode": 3399113067,
+        "status": "Preappr TP Approved cash",
+        "absProdCode": "10.6.06.030.00.",
+        "name": "КРИСТИНА",
+        "surname": "БАГАЧ",
+        "patronymicName": "ОЛЕКСАНДРІВНА",
+        "docTypeId": 10,
+        "docSeries": "GB",
+        "docNumber": "066296",
+        "docIssueDate": "2021-08-30T00:00",
+        "birthDay": "1993-01-23T00:00",
+        "rate": 55,
+        "Finclass": 2,
+        "decissionDate": "2026-01-05T00:00",
+        "liveRegionId": null,
+        "jobRegionId": null,
+        "ownerType": 1,
+        "viewed": false
+    },
+    {
+        "result": "ok",
+        "message": "Дані оброблено",
+        "data": {
+            "check": "error",
+            "checkinfo": {
+                "checkPhone": "success",
+                "checkPIB": "success",
+                "checkDoc": "error"
+            },
+            "applicationId": 1024186,
+            "difference": {
+                "applicationId": 1024186,
+                "phone": "+380685325250",
+                "stateCode": "3399113067",
+                "status": "Preappr TP Approved cash",
+                "absProdCode": "10.6.06.030.00.",
+                "name": "КРИСТИНА",
+                "surname": "БАГАЧ",
+                "patronymicName": "ОЛЕКСАНДРІВНА",
+                "docTypeId": 10,
+                "docSeries": "GB",
+                "docNumber": "066296",
+                "docIssueDate": "2021-08-30T00:00",
+                "birthDay": "1993-01-23T00:00",
+                "rate": 55,
+                "decissionDate": "2026-01-05T00:00",
+                "liveRegionId": null,
+                "jobRegionId": null,
+                "ownerType": 1,
+                "viewed": false,
+                "finclass": "2"
+            },
+            "card": {
+                "id": "1991",
+                "name": "Cash_credo"
+            },
+            "ownerType": 1,
+            "viewed": false
+        }
+    }
+]
