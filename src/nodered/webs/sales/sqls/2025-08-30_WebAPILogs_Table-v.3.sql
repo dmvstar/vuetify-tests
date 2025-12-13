@@ -16,8 +16,8 @@ CREATE TYPE e_level AS ENUM ('INFO', 'ERROR', 'WARNING');
 
 
 -- Utworzenie tabeli logów
--- DROP TABLE appsapilog;
-CREATE TABLE appsapilog (
+-- DROP TABLE syscallapilog;
+CREATE TABLE syscallapilog (
     id bigserial PRIMARY KEY,
     created timestamp DEFAULT NOW() NOT NULL,
     updated timestamp DEFAULT NOW() NOT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE appsapilog (
     duration_ms integer DEFAULT 0 NOT NULL
 );
 -- Dodanie indeksów dla lepszej wydajności wyszukiwania
-CREATE INDEX idx_sys_api_log_request_id ON appsapilog(request_id);
-CREATE INDEX idx_sys_api_log_created_at ON appsapilog(created DESC);
+CREATE INDEX idx_sys_api_log_request_id ON syscallapilog(request_id);
+CREATE INDEX idx_sys_api_log_created_at ON syscallapilog(created DESC);
 --CREATE INDEX idx_sys_api_log_uri ON app_sys_apilog(uri);
 --CREATE INDEX idx_sys_api_log_status ON app_sys_apilog(status);
 --COMMENT ON TABLE public.sysCallApiLog IS 'app_sys_apilog';
@@ -75,8 +75,8 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-CREATE TRIGGER trg_appsapilog_dateModified
-BEFORE UPDATE ON appsapilog
+CREATE TRIGGER trg_syscallapilog_dateModified
+BEFORE UPDATE ON syscallapilog
 FOR EACH ROW
 EXECUTE FUNCTION set_date_modified();
 
