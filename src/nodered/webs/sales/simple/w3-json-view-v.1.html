@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vuetify 3 JSON Highlighting (CDN)</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.4.10/dist/vuetify.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        /* Стиль для контейнера кода внутри карточки */
+        .code-container {
+            /* Устанавливаем черный или темно-серый фон для соответствия теме Highlight.js */
+            background-color: #282c34 !important;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto; /* Позволяет прокручивать длинные строки */
+        }
+        /* Стиль для самого тега <code> */
+        .code-container code {
+            /* Важно для сохранения переносов строк и отступов */
+            white-space: pre; 
+            font-family: monospace;
+            display: block; /* Занимает всю ширину контейнера */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <v-app>
+            <v-main>
+                <v-container>
+                    <v-card class="pa-4 mt-8" elevation="6" max-width="800">
+                        <v-card-title class="text-h5">
+                            <v-icon icon="mdi-code-json" color="deep-purple-accent-4" class="mr-2"></v-icon>
+                            Ответ API (JSON)
+                        </v-card-title>
+                        <v-divider class="mb-4"></v-divider>
+                        
+                        <div class="code-container">
+                            <highlight-code lang="json">
+{{ jsonCode }}
+                            </highlight-code>
+                        </div>
+                        
+                    </v-card>
+                </v-container>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="https://unpkg.com/vue@3.3.11/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.10/dist/vuetify.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <script>
+        
+        // --- Шаг 1: Ручной компонент подсветки для Vue 3 ---
+        const HighlightCode = {
+            // Vue 3 синтаксис для получения содержимого слота
+            template: `<code class="hljs" v-html="highlightedCode"></code>`,
+            props: {
+                lang: String
+            },
+            data() {
+                return {
+                    highlightedCode: ''
+                };
+            },
+            methods: {
+                highlight() {
+                    // Получаем содержимое из слота по умолчанию
+                    let code = this.$slots.default ? this.$slots.default()[0].children : '';
+                    if (typeof code !== 'string') code = String(code); 
+
+                    let result;
+                    // Highlight.js доступен глобально как hljs
+                    if (this.lang) {
+                        result = hljs.highlight(code, {language: this.lang});
+                    } else {
+                        result = hljs.highlightAuto(code);
+                    }
+                    this.highlightedCode = result.value;
+                }
+            },
+            // Запускаем подсветку при монтировании и при обновлении данных
+            mounted() { this.highlight(); },
+            updated() { this.highlight(); }
+        };
+
+
+        // --- Шаг 2: Инициализация Vue и Vuetify ---
+        const { createApp, computed } = Vue;
+        const { createVuetify } = Vuetify;
+
+        // Создаем Vuetify instance
+        const vuetify = createVuetify();
+
+        // Создаем Vue App
+        createApp({
+            data() {
+                return {
+                    dataObject: {
+                        status: "success",
+                        code: 200,
+                        client: {
+                            id: 123456,
+                            name: "Иванов Иван",
+                            is_active: true,
+                            accounts: [
+                                { type: "checking", balance: 15000.55 },
+                                { type: "deposit", balance: 500000.00 }
+                            ],
+                            last_login: null
+                        },
+                        timestamp: new Date().toISOString()
+                    }
+                };
+            },
+            computed: {
+                // Возвращаем красиво отформатированную строку JSON
+                jsonCode() {
+                    return JSON.stringify(this.dataObject, null, 2);
+                }
+            }
+        })
+        .use(vuetify)
+        // Регистрируем наш самодельный компонент
+        .component('highlight-code', HighlightCode)
+        .mount('#app');
+    </script>
+</body>
+</html>

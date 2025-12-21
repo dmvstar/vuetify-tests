@@ -7,6 +7,12 @@
 
 -- Utworzenie typów ENUM dla standaryzacji danych
 -- e_http_method: dla metod HTTP
+/*
+DROP TYPE e_http_method;
+DROP TYPE e_direction;
+DROP TYPE e_status;
+DROP TYPE e_level;
+*/
 CREATE TYPE e_http_method AS ENUM ('CALL', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS');
 -- e_direction: dla kierunku wywołania (przychodzące, wychodzące)
 CREATE TYPE e_direction AS ENUM ('REQUEST', 'RESPONSE', 'INTERNAL');
@@ -24,7 +30,7 @@ CREATE TABLE syscallapilog (
 
     -- Informacje o wywołaniu
     request_id varchar(256) NOT NULL, -- UUID 
-    source_host varchar(128) NOT NULL,-- from
+    --source_host varchar(128) NULL,-- from
 
     --process    
     process_status e_status NULL,   
