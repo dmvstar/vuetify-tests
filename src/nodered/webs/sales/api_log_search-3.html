@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vuetify Data table style example NG V3</title>
+    <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.css" rel="stylesheet" />
+
+    <style>
+        .v-data-table__tr:has(input[type='checkbox']:checked) {
+            background: #f5c17d70 !important;
+        }
+
+        .v-theme--light.v-data-table thead {
+            background-color: #bb996dc2;
+        }
+
+        .v-theme--light.v-data-table tbody tr:nth-child(even) {
+            background-color: #f4e1c8c2;
+        }
+
+        .v-theme--dark.v-data-table thead {
+            background-color: #101010c2;
+        }
+
+        .v-theme--dark.v-data-table tbody tr:nth-child(even) {
+            background-color: #363636c2;
+        }
+    </style>
+
+    <style>
+        /* Użycie niestandardowej czcionki dla wyglądu cyfrowego zegara */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/seven-segment');
+
+
+        .clock-font-stopper {
+            /*font-family: 'Orbitron', sans-serif;*/
+            font-family: 'Seven Segment', sans-serif;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .alarm {
+            animation: pulse-red 1s infinite alternate;
+        }
+
+        @keyframes pulse-red {
+            from {
+                text-shadow: 0 0 5px #f87171, 0 0 10px #ef4444;
+            }
+
+            to {
+                text-shadow: 0 0 20px #dc2626, 0 0 40px #b91c1c;
+            }
+        }
+    </style>
+
+    <style>
+        .clock_font {
+            font-family: 'Share Tech Mono', monospace;
+            color: #f58fec;
+            text-align: end;
+            text-shadow: rgb(162, 253, 193) 1px 0 10px;
+        }
+
+        .clock_font_big {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;
+            text-shadow: rgb(162, 253, 193) 1px 0 10px;
+        }
+
+        #clock {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            text-align: end;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #daf6ff;
+            text-shadow: 0 0 20px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+
+            .date {
+                letter-spacing: 0.1em;
+                font-size: 12px;
+            }
+
+            .time {
+                letter-spacing: 0.05em;
+                font-size: 32px;
+                padding: 5px 0;
+            }
+
+            .text {
+                letter-spacing: 0.1em;
+                font-size: 12px;
+                padding: 20px 0 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <div id="app"></div>
+
+    <template id="app-template">
+        <!-- <v-card> -->
+        <v-layout>
+            <v-app-bar density="comfortable" class="text-white" color="green" prominent
+                image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+                <v-app-bar-nav-icon variant="text"></v-app-bar-nav-icon>
+                <v-img class="mx-2" src="https://cdn.vuetifyjs.com/docs/images/one/logos/vuetify-logo-dark.png"
+                    max-width="140" contain></v-img>
+                <v-toolbar-title>
+                    <v-card outlined color="transparent">
+                        <template v-slot:title>
+                            Data table example
+                        </template>
+                        <template v-slot:subtitle>
+                            {{appAuthor}} {{appVersion}}
+                        </template>
+                    </v-card>
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+
+                <v-spacer></v-spacer>
+                <template v-slot:append>
+
+                    <v-card outlined color="transparent" variant="text">
+                        <template v-slot:title>
+                            <p class="clock_font">{{ clock.time }}</p>
+                        </template>
+                        <template v-slot:subtitle>
+                            <p class="clock_font">{{ clock.date }}</p>
+                        </template>
+                    </v-card>
+
+
+                    <template v-if="$vuetify.display.mdAndUp">
+                        <v-btn icon="mdi-magnify" variant="text"></v-btn>
+                        <v-btn icon="mdi-filter" variant="text"></v-btn>
+                    </template>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                            <v-btn v-bind="props"
+                                :icon="isDarkTheme == false ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+                                @click="onBtnChangeTheme"></v-btn>
+                        </template>
+                        <span>Be on the dark side ...</span>
+                    </v-tooltip>
+                    <v-btn icon="mdi-dots-vertical" variant="text" @click.stop="secondDrawer = !secondDrawer"></v-btn>
+                </template>
+
+            </v-app-bar>
+            <v-navigation-drawer :width="325" temporary expand-on-hover rall location="right" v-model="secondDrawer">
+                <div id="second-driwer" class="ma-3">
+                    <!--v-list density="compact" nav-->
+                    <v-row ma="10">
+
+                        <v-col ma="10">
+                            <v-icon icon="mdi-radar"></v-icon>
+                            Filteres
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-text-field density="compact" v-model="searchData.searchText" label="Search data"
+                                prepend-icon="mdi-search-web" clearable clear-icon="mdi-backspace">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateFrom"
+                                        label="Date From" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker @update:model-value="searchData.dateFromDateMenu = false"
+                                    v-model="searchData.selectedDateFromFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateInto"
+                                        label="Date Into" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <!--/v-list-->
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="green" block @click="onBtnApplyFilters">Apply</v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col ma="10">
+                            <v-btn color="orange" block @click="onBtnClearFilters">Clear</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+            </v-navigation-drawer>
+
+            <v-main>
+                <div id="main" class="ma-3">
+                    <v-row ma="5">
+                        <v-card-title>
+                            Application Steps searcher...
+                        </v-card-title>
+                    </v-row>
+                    <v-row ma="10">
+
+                        <v-col cols="2" sm="2" ma="10">
+                            <v-menu density="compact" v-model="searchData.dateFromDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateFrom"
+                                        label="Date From" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker @update:model-value="searchData.dateFromDateMenu = false"
+                                    v-model="searchData.selectedDateFromFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                        <v-col cols="2" sm="2" ma="10">
+                            <v-menu density="compact" v-model="searchData.dateIntoDateMenu"
+                                :close-on-content-click="false" :close-on-click="true">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field density="compact" v-model="searchData.selectedDateInto"
+                                        label="Date Into" prepend-icon="mdi-calendar" clearable
+                                        clear-icon="mdi-backspace" v-bind="props">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker @update:model-value="searchData.dateIntoDateMenu = false"
+                                    v-model="searchData.selectedDateIntoFull"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+
+
+
+                        <!--v-col cols="4" sm="4" ma="10">
+                            <v-text-field ref="appIdentifier" v-model="searchData.appIdentifier" label="Application ID"
+                                type="text" density="compact" @keypress="filterNumber(event)" placeholder="1000001"
+                                @keydown.enter="onBtnSearch" clearable></v-text-field>
+                        </v-col-->
+
+                        <v-col cols="2" sm="2" ma="10">
+                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.selectedDateFrom"
+                                color="green" @click="onBtnSearch" block>Search</v-btn>
+                        </v-col>
+                        <v-col cols="2" sm="2" ma="10">
+                            <v-btn :loading="isLoading" :disabled="isLoading || !searchData.selectedDateFrom"
+                                color="yellow" @click="onBtnClear" block>Clear</v-btn>
+                        </v-col>
+                        <v-col cols="4" sm="4" ma="10">
+                            <v-autocomplete multiple density="compact" label="Refer ID" v-model="searchData.referID"
+                                :items="searchData.referIDS" clearable @click:clear="handleClearReferOverride" attach>
+                                <template v-slot:selection="{ item, index }">
+                                    {{truncateText(item.title, 40, index)}}
+                                    <span v-if="index === 1 && searchData.referID.length > 2"
+                                        class="text-caption text-grey ml-1">
+                                        (+{{ searchData.referID.length - 2 }} more)
+                                    </span>
+                                </template>
+                            </v-autocomplete>
+                        </v-col>
+                    </v-row>
+
+                    <v-row ma="2">
+                        <v-col cols="10">
+                            <v-card-text>
+                                VDataTable {{stepsData.stepsItemsData.length}} items
+                                ({{searchData.selectedDateFrom}}-{{searchData.selectedDateInto}})
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="2" align="right">
+                            <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
+                                        Columns Order ...
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <!-- stepsData.stepsHeaders  @click="onUserMenuClick(action, index)"  :prepend-icon="icon"   -->
+                                    <!--v-list-item v-for="([title, icon, action], index) in menuActions.actionsList"-->
+                                    <v-list-item v-for="({title, subtitle}, index) in stepsData.stepsHeaders"
+                                        :key="index" :title="title" :subtitle="subtitle" :value="title"
+                                        :disabled="checkReorderColumnsDisabled(index)" density="compact">
+                                        <template v-slot:append>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-up" variant="text"
+                                                @click="onReorderColumnsClick('UP', index)"></v-btn>
+                                            <v-btn color="grey-lighten-1" icon="mdi-chevron-down" variant="text"
+                                                @click="onReorderColumnsClick('DN', index)"></v-btn>
+                                        </template>
+                                        <!--v-icon icon="mdi-chevron-up"></v-icon>
+                                        <v-icon icon="mdi-chevron-down"></v-icon-->
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10" id="DataTable">
+                        <v-col cols="12" sm="12" ma="10">
+                            <!-- :search="searchData.searchText" -->
+                            <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders"
+                                :items="stepsData.stepsItemsData" item-value="id" item-key="id"
+                                :custom-filter="filterByMultipleCriteria" :search="filterString"
+                                v-model="stepsData.selectedItems" density="comfortable" class="elevation-1" show-select
+                                @click:row="stepsDataHandleClick">
+                                <template v-slot:[`header.name`]="{ column }">
+                                    <div style="white-space: pre-wrap;">{{ column.title }}</div>
+                                </template>
+
+                                <!--HEADER SLOTS-->
+                                <template v-for="header in stepsData.stepsHeaders"
+                                    #[`header.${header.key}`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-card outlined color="transparent" variant="flat">
+                                        <template v-slot:title>
+                                            <div class="text-subtitle-1" style="white-space: pre-wrap;">
+                                                <template v-if="column.sortable">
+                                                    <template v-if="isSorted(column)">
+                                                        <v-icon size="x-small"
+                                                            :icon="getSortIcon(column, toggleSort)"></v-icon>
+                                                    </template>
+                                                    <template v-else>
+                                                        <v-icon size="x-small" color="#808080" icon="mdi-sort"></v-icon>
+                                                    </template>
+                                                </template>
+                                                {{column.title}}
+                                                <template v-if="column.icon">
+                                                    <v-icon size="x-small"
+                                                        color="green-darken-2">{{column.icon}}</v-icon>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template v-slot:subtitle class="text-subtitle-2">
+                                            {{ column.subtitle }}
+
+                                        </template>
+                                        <v-tooltip activator="parent" location="top">
+                                            {{ column.hint }}
+                                        </v-tooltip>
+
+                                    </v-card>
+                                </template>
+
+                                <template v-slot:[`header.calories`]="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                    <!--span v-html=column.title></span-->
+                                    {{ getTitle(column) }}
+                                    {{ column.title }}
+                                    <template v-if="isSorted(column)">
+                                        <v-icon :icon="getSortIcon(column)"></v-icon>
+                                    </template>
+                                </template>
+
+                                <template v-slot:header.calories1="{ column, isSorted, getSortIcon, toggleSort }">
+                                    <v-icon color="green-darken-2">mdi-mushroom</v-icon>
+                                    {{ getTitle(column) }}
+                                    [{{ column.title }}]
+                                    <template v-if="isSorted(column)">
+                                        <v-icon :icon="getSortIcon(column)"></v-icon>
+                                    </template>
+                                </template>
+                                <!--ITEMS SLOTS-->
+
+                                <template v-slot:item.stepcode="{ item }">
+                                    <v-chip :color="getDebtStatusIconColor(item)">
+                                        {{ item.stepcode }}
+                                    </v-chip>
+                                </template>
+
+                                <template v-slot:item.id="{ item }">
+                                    <v-chip :color="getDebtStatusIconColor(item)">
+                                        {{ item.id }}
+                                    </v-chip>
+                                </template>
+
+                                <template v-slot:item.datecreated="{ item }">
+                                    <div :color="getDebtStatusIconColor(item)">
+                                        C-{{ item.datecreated }}</br>U-{{ item.datemodified }}
+                                    </div>
+                                </template>
+
+                                <template v-slot:item.applicationid="{ item }">
+                                    <v-chip :color="getDebtStatusIconColor(item)">
+                                        {{ item.applicationId }}
+                                    </v-chip>
+                                </template>
+
+                                <template v-slot:item.actions="{ item }">
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-eye"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS','VIEW')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="green-darken-2" icon="mdi-alarm"
+                                        @click="onBtnActionsStubClick(item, 'ACTIONS','EDIT')"></v-btn>
+                                    <!--
+                                    <v-btn class="mr-1" density="comfortable" color="blue" icon="mdi-pencil" @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    <v-btn class="mr-1" density="comfortable" color="red" icon="mdi-delete"  @click="onBtnActionsStubClick(item, 'ACTIONS')"></v-btn>
+                                    -->
+                                </template>
+
+                                <template v-slot:item.operations="{ item }">
+                                    <!--v-btn block color="blue">Operations</v-btn-->
+                                    <v-menu transition="scale-transition">
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn color="primary" v-bind="props" prepend-icon="mdi-settings"
+                                                append-icon="mdi-chevron-down">
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item
+                                                v-for="([title, icon, action], index) in menuActions.actionsList"
+                                                :key="index" :prepend-icon="icon" :title="title" :value="title"
+                                                @click="onUserMenuClick(action, index)">
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </template>
+
+                            </v-data-table>
+                        </v-col>
+                    </v-row>
+                    <v-row ma="10" id="debugInfo">
+                        <!--v-col cols="12" sm="12" ma="10">
+                            referID={{searchData.referID}}, searchText={{searchData.searchText}},
+                            selectedItems={{stepsData.selectedItems}}
+                        </v-col-->
+                    </v-row>
+                    <v-row ma="10">
+                        <v-col cols="12" sm="12" ma="10">
+                            <v-btn color="primary" @click="onButtonRefresh(event)" block>Refresh</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+                <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
+                    color="surface-light">
+                    <div class="flex-1-0-100 text-center mt-2">
+                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+                    </div>
+                </v-footer>
+            </v-main>
+
+            <v-dialog v-model="dialogs.editItemDialog" max-width="500px">
+                <v-card density="compact" border="border-thin">
+                    <v-card-title>
+                        <div>
+                            [EDIT] Operations for [{{this.stepsData.selectedItem.id}}] item.
+                        </div>
+                    </v-card-title>
+                    <v-divider class="border-opacity-100"></v-divider>
+
+                    <v-card-title>
+                        <v-container>
+                            <v-row my-2 ma="20" sm="12" justify="center">
+                                <div id="timer-container"
+                                    class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg  my-4">
+                                    <div id="time-display" style="font-size: 5rem;" class="clock-font-stopper"
+                                        class="text-yellow-400" :class="timeDisplayClasses">
+                                        {{formattedTime}}
+                                    </div>
+                                </div>
+                            </v-row>
+                        </v-container>
+                    </v-card-title>
+                    <v-card-actions>
+                        <v-row ma="20" sm="12">
+                            <v-col cols="6" sm="6" ma="20">
+                                <v-btn :loading="isLoading" :disabled="isLoading" @click="onBtnStartStopTime"
+                                    :color="clock.timerButtonColor" block>
+                                    {{clock.timerMode?'START':'STOP'}}
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="6" sm="6" ma="20">
+                                <v-btn :loading="isLoading" :disabled="isLoading" @click="onBtnClearTime"
+                                    :color="clock.timerButtonColor" block>
+                                    RESET
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-actions>
+                    <v-card-actions>
+                        <v-row ma="20" sm="12">
+                            <v-col class="d-flex justify-center">
+                                <v-btn block color="blue-darken-1" variant="text"
+                                    @click="dialogs.editItemDialog = false">
+                                    Close
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+        </v-layout>
+        <!-- </v-card> -->
+    </template>
+
+    <script setup>
+        const { createApp, ref, defineProps, reactive } = Vue;
+        const { createVuetify, useTheme, version } = Vuetify;
+
+
+        const vuetify = createVuetify({
+
+            theme: {
+                defaultTheme: "dark",
+            },
+
+        });
+        const app = createApp({
+            template: "#app-template",
+            setup() {
+
+                const appAuthor = "StarDust";
+                const faceId = 10;
+                const faceIdUrl = "https://randomuser.me/api/portraits/men/22.jpg";
+
+                const usersList = {
+                    firstNames: ["Pedros", "Ped", "Huanos", "Domingo", "Aloisos"],
+                    lastNames: ["Awataros", "Gudrios", "Aliende", "Boliwaro"]
+                };
+                var mainDrawer = Vue.ref(true);
+                var secondDrawer = Vue.ref(false);
+                var faceRailIcon = Vue.ref("mdi-chevron-right");
+
+                const searchData = Vue.reactive({
+                    appIdentifier: "1000001",
+                    referIDS: [],
+                    referIDSCopy: [],
+                    referID: [''],
+                    referSelect: "b2",
+
+                    dateFromDateMenu: null,
+                    dateIntoDateMenu: null,
+                    selectedDateFromFull: null,
+                    selectedDateFrom: '2025-12-25',
+
+                    selectedDateInto: null
+                });
+
+                var dialogs = Vue.ref(
+                    {
+                        editItemDialog: false
+                    }
+                );
+
+                var stepsData = Vue.ref(
+                    {
+                        isTableDataHandleClick: true,
+                        stepsHeaders: [
+                            { title: 'ID', subtitle: "Ident", align: 'start', sortable: false, key: 'id', class: 'my-header-style', width: '10%' },
+                            { title: 'UUID', subtitle: "UUID", align: 'center', key: 'uuid', class: 'my-header-style' },
+                            { title: 'Created', subtitle: "Date Created/Updated", align: 'start', sortable: false, key: 'datecreated', class: 'my-header-style' },
+                            { title: 'Api', subtitle: "Api ident", align: 'end', key: 'api_source', class: 'my-header-style'  },
+                            { title: 'Status', subtitle: "Status", align: 'end', key: 'process_status', class: 'my-header-style' },
+                            { title: 'Direction', subtitle: "Direction of request", align: 'end', key: 'direction', class: 'my-header-style' },
+                            
+                            { title: 'Actions', subtitle: "Actions buttons", align: 'center', key: 'actions', sortable: false, width: '8%' },
+                            { title: 'Operations', subtitle: "Operation for item", align: 'center', key: 'operations', sortable: false, width: '10%' },
+                        ],
+                        selectedRows: [],
+                        selectedItem: {},
+                        selectedItems: [],
+                        stepsItemsData: [],
+                        stepsSimpleData: [
+                            // ===================================
+                            // appIdentifier: 1000001 (Records 1-20)
+                            // ===================================
+                            {
+                                "id": 1,
+                                "datecreated": "2023-10-15 09:12:34.123",
+                                "datemodified": "2023-10-15 09:12:44.123",
+                                "uuid": "a1b2c3d4-5e6f-40a8-8b0c-d1e2f3g4h5i6",
+                                "api_source" : "WebPlatform/api/v3/scrooge/treaty/openPacket",
+                                "process_status": "SUCCESS",
+                                "direction": "RESPONSE",
+                                "payload": {
+                                    "userName": "user_a",
+                                    "durationSec": 15
+                                }
+                            }                            ,
+                            {
+                                "id": 1,
+                                "datecreated": "2023-10-15 09:12:34.123",
+                                "datemodified": "2023-10-15 09:12:44.123",
+                                "uuid": "47830994-60b2-4276-907f-f361477f5bdb",
+                                "api_source" : "WebPlatform/api/v3/scrooge/treaty/openTreaty",
+                                "process_status": "FAILED",
+                                "direction": "RESPONSE",
+                                "payload": {
+                                    "userName": "user_a",
+                                    "durationSec": 15
+                                }
+                            }
+                        ]
+
+                    }
+                );
+
+                const menuActions = {
+                    userMenu: [
+                        ["Hide", "mdi-fire", "hide"],
+                        ["Logout", "mdi-logout", "logout"]
+                    ],
+                    actionsList: [
+                        ["Print Report", "mdi-printer", "print_rep"],
+                        ["Print Barcode", "mdi-barcode", "print_bar"],
+                        ["Print QRCode", "mdi-qrcode", "print_qr"]
+                    ]
+                };
+
+                const dicts = {
+                    debtStatus: [
+
+                    ]
+                };
+                const INITIAL_SECONDS_DEFAULT = 5;
+
+                var clock = Vue.reactive(
+                    {
+                        time: '15:05:34',
+                        date: '2025-08-06 WED',
+                        timer: 20,
+                        timerButtonColor: "green",
+                        timerMode: true,
+                        initialSeconds: INITIAL_SECONDS_DEFAULT, // Czas ustawiony w inpucie
+                        totalSeconds: INITIAL_SECONDS_DEFAULT, // Aktualny czas odliczania
+                        isRunning: false, // Czy minutnik działa
+                        timerID: null, // ID dla setInterval
+                        message: "" // Komunikat (np. "KONIEC CZASU!")
+                    });
+                //clock.totalSeconds = clock.initialSeconds.value;
+
+                /*
+                updateTime();
+                */
+                function updateTime() {
+                    var cd = new Date();
+                    clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
+                    clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth() + 1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
+                    //console.log(`clock.time = ${clock.time}`)
+                };
+
+                var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                var timerID = setInterval(updateTime, 1000);
+
+                // --- ZMIENNE REAKTYWNE (STATE) ---
+
+                // --- FUNKCJE POMOCNICZE ---
+                function zeroPadding(num, length) {
+                    return String(num).padStart(length, '0');
+                }
+                function zeroPadding0(num, digit) {
+                    var zero = '';
+                    for (var i = 0; i < digit; i++) {
+                        zero += '0';
+                    }
+                    return (zero + num).slice(-digit);
+                }
+
+                /*
+                function formatTime(secs) {
+                    const minutes = Math.floor(secs / 60);
+                    const seconds = secs % 60;
+                    return `${zeroPadding(minutes, 2)}:${zeroPadding(seconds, 2)}`;
+                }
+                */
+
+                const theme = ref('dark');
+                const isDarkTheme = ref(true);
+                const isLoading = ref(false);
+                const isShowUserMenu = ref(false);
+
+                const appVersion = "v. 0.0.75 (2025-12-24 20:50:10)";
+
+                return {
+                    theme
+                    , isDarkTheme
+                    , isShowUserMenu
+                    , isLoading
+                    , appVersion, appAuthor
+                    , faceId
+                    , faceRailIcon
+                    , faceIdUrl
+                    , clock
+
+
+                    , dialogs
+                    , secondDrawer
+
+                    , usersList
+
+                    , stepsData
+                    , dicts
+                    , searchData
+                    , menuActions
+
+                }
+            },
+            created() {
+                console.log(version);
+            },
+            mounted() {
+                var stepsHeaders = localStorage.getItem('stepsHeaders');
+                if (stepsHeaders) {
+                    this.stepsData.stepsHeaders = JSON.parse(stepsHeaders);
+                }
+                this.focusInput();
+            },
+            watch: {
+                "searchData.referID": function (newQuestion, oldQuestion) {
+                    //this.searchData.searchText = this.searchData.referID;
+                },
+                "searchData.selectedDateFromFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.searchData.selectedDateFrom = this.formatDate(newQuestion);
+                    this.searchData.dateFromDateMenu = false;
+                    this.searchData.dateIntoDateMenu = false;
+                },
+                "searchData.selectedDateIntoFull": function (newQuestion, oldQuestion) {
+                    //alert(newQuestion);
+                    this.searchData.selectedDateInto = this.formatDate(newQuestion);
+                    this.searchData.dateFromDateMenu = false;
+                    this.searchData.dateIntoDateMenu = false;
+                },
+                "searchData.referID": function (newQuestion, oldQuestion) {
+                    this.loadDatabyUUIDS(newQuestion);
+                }
+            },
+            computed: {
+
+                formattedTime() {
+                    //return this.formatTime(this.clock.totalSeconds.value);
+                    //console.log('formattedTime',JSON.stringify(this.clock));
+                    return this.formatTime(this.clock.totalSeconds); //'00:77'; //
+                },
+
+                timeDisplayClasses() {
+                    ret = 'text-green-300'; // Domyślny kolor
+                    if (this.clock.totalSeconds <= 0) {
+                        ret = 'alarm'; // Animacja pulsująca
+                    } else
+                        if (this.clock.totalSeconds < 3) {
+                            ret = 'text-yellow-400'; // Ostrzeżenie
+                        }
+                    console.log('timeDisplayClasses', this.clock.totalSeconds, ret);
+                    return ret;
+                },
+
+                filterString() {
+                    // Najpierw upewnij się, że masz tablicę i przefiltruj puste wartości
+                    const validCriteria = this.searchData.referID.filter(c => c && String(c).trim() !== '');
+
+                    // Zwróć pojedynczy String. Pusty String, jeśli brak kryteriów.
+                    if (validCriteria.length === 0) {
+                        return '';
+                    }
+
+                    // Złącz elementy w jeden ciąg, np. z użyciem przecinka.
+                    // Jeśli widzisz, że błąd nadal występuje, spróbuj innego separatora.
+                    return validCriteria.join(',');
+                }
+            },
+            methods: {
+                zeroPadding(num, length) {
+                    return String(num).padStart(length, '0');
+                },
+                formatTime(secs) {
+                    const minutes = Math.floor(secs / 60);
+                    const seconds = secs % 60;
+                    return `${this.zeroPadding(minutes, 2)}:${this.zeroPadding(seconds, 2)}`;
+                },
+                focusInput() {
+                    //this.$refs.appIdentifier.focus();
+                },
+                removeItem(itemToRemove) {
+                    // Użyj item.value, jeśli items jest tablicą obiektów (recommended Vuetify 3)
+                    const valueToRemove = itemToRemove.value;
+                    this.searchData.referID = this.searchData.referID.filter(
+                        val => val !== valueToRemove
+                    );
+                },
+                truncateText(text, maxLength, index) {
+                    //console.log("[truncateText]",index, text);
+                    if (!text || index > 1) return null;
+                    return text.length > maxLength
+                        ? (text.substring(0, maxLength) + ' ...')
+                        : text;
+
+                },
+
+                filterByMultipleCriteria(value, search, item) {
+                    // 1. Odbieranie i czyszczenie kryteriów wyszukiwania
+                    // search: ['wartość_z_pola_1', 'wartość_z_pola_2', ...]
+                    //console.log('[filterByMultipleCriteria]', value, search, item.columns.uuid);
+                    if (!search || typeof search !== 'string' || search.trim() === '') {
+                        // Jeśli nie ma kryteriów, wyświetl wszystko
+                        return true;
+                    }
+                    // Rozbij String na tablicę za pomocą separatora (np. przecinka)
+                    const criteriaArray = search.toLowerCase().split(',').filter(c => c.trim() !== '');
+                    // Logika AND: Przyjmuje się, że element musi pasować do KAŻDEGO kryterium
+                    // z tablicy criteriaArray (jeśli tak została zaimplementowana).
+                    // Logika OR: Przyjmuje się, że element musi pasować do CO NAJMNIEJ JEDNEGO kryterium.
+                    // Implementacja Logiki OR (pasuje, jeśli którykolwiek UUID jest znaleziony):
+                    const itemUUID = item.columns.uuid.toLowerCase(); // Przykład pola, które filtrujesz
+                    // Sprawdź, czy którykolwiek z UUID w tablicy kryteriów (criteriaArray)
+                    // jest równy UUID w wierszu (itemUUID)
+                    const isMatch = criteriaArray.some(criterion => {
+                        // Jeśli tablica zawiera puste stringi (co robimy z filter), to pomiń
+                        if (!criterion) return false;
+
+                        // Użyj .includes() jeśli to jest wyszukiwanie częściowe
+                        // Użyj === jeśli szukasz dokładnego dopasowania
+                        return itemUUID.includes(criterion.trim());
+                    });
+                    return isMatch;
+                },
+
+                searchReferID(e) {
+                    if (!this.searchData.referID) {
+                        this.searchData.referIDS = this.searchData.referIDSCopy;
+                    }
+                    /*
+                    this.searchData.referIDS = this.searchData.referIDSCopy.filter((UUID) => {
+                        return fruit.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+                    });
+                    */
+                },
+
+                formatDate(date) {
+                    if (!date) {
+                        return null;
+                    }
+
+                    // Extract local components
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                    const year = date.getFullYear();
+
+                    return `${day}-${month}-${year}`;
+                },
+
+                onBtnChangeTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    this.isDarkTheme = !this.isDarkTheme;
+                    //console.log(this.$vuetify.theme);
+                    //console.log(this.$vuetify.theme.global);
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+                    //this.$vuetify.theme.dark = !this.$vuetify.theme.dark ? 'light' : 'dark';
+                    var isDark = this.$vuetify.theme.global.current.dark;
+                    console.log(`isDark=${isDark}, isDarkTheme= ${this.isDarkTheme}`);
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                    isDark = !isDark;
+                    console.log('isDark', isDark);
+                    //this.$vuetify.theme.global.current.dark = isDark;
+                    this.$vuetify.theme.global.name = isDark ? 'dark' : 'light';
+                    console.log('dark', this.$vuetify.theme.global.current.dark, 'name', this.$vuetify.theme.global.name);
+                },
+
+                async loadDatabyUUIDS() {
+                    this.isLoading = true;
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (error) {
+                        this.isLoading = false;
+                    } finally {
+                        this.isLoading = false;
+                        this.stepsData.stepsItemsData = this.stepsData.stepsSimpleData;
+                    }
+                },
+                async onBtnSearch() {
+                    if (!this.searchData.appIdentifier) {
+                        return;
+                    }
+                    this.isLoading = true;
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (error) {
+                        this.isLoading = false;
+                    } finally {
+                        this.isLoading = false;
+                        //this.stepsData.stepsItemsData = this.stepsData.stepsSimpleData;
+                        this.searchData.referIDS = ['a1b2c3d4-5e6f-40a8-8b0c-d1e2f3g4h5i6','47830994-60b2-4276-907f-f361477f5bdb']
+                        //getUniqueuuids(this.stepsData.stepsItemsData);
+                        this.searchData.referIDSCopy = this.searchData.referIDS;
+                        /*
+                        for (var i = 0; i < this.getRandomArbitrary(10, 20); i++)
+                            this.searchData.referIDS.push(
+                                this.generateUUID()
+                            );
+                        */
+                    }
+                },
+                onBtnStartStopTime() {
+                    //console.log('[onBtnStartStopTime]', this.clock.timerMode)
+                    this.clock.timerMode = !this.clock.timerMode;
+                    if (!this.clock.timerMode) {
+                        this.clock.timerButtonColor = "red"
+                        this.clock.isRunning = true;
+                        this.clock.timerID = setInterval(this.updateStoper, 1000);
+                    } else {
+                        this.clock.timerButtonColor = "green"
+                        clearInterval(this.clock.timerID);
+                        this.clock.value = false;
+                    }
+                },
+                onBtnClearTime() {
+                    this.clock.totalSeconds = this.clock.initialSeconds;
+                    this.clock.isRunning = false;
+                    this.clock.timerMode = true;
+                    clearInterval(this.clock.timerID);
+                    this.clock.timerButtonColor = "green";
+                },
+                updateStoper() {
+                    console.log('[updateStoper]', this.clock.totalSeconds, this.clock.timerID);
+                    if (this.clock.totalSeconds <= 0) {
+                        this.clock.timerMode = true;
+                        this.clock.isRunning = false;
+                        this.clock.timerButtonColor = "green";
+                        // Koniec odliczania
+                        clearInterval(this.clock.timerID);
+                        this.clock.message = "KONIEC CZASU!";
+                        return;
+                    }
+                    // Dekrementacja
+                    this.clock.totalSeconds--;
+                },
+                onBtnClear() {
+                    this.searchData.appIdentifier = "";
+                    this.searchData.referID = [''];
+                    this.searchData.referIDS = [];
+                    this.stepsData.stepsItemsData = [];
+                },
+                filterNumber(evt) {
+                    evt = (evt) ? evt : window.event;
+                    let expect = evt.target.value.toString() + evt.key.toString();
+                    if (!/^[-+]?[0-9]*\.?[0-9]*$/.test(expect)) {
+                        evt.preventDefault();
+                    } else {
+                        return true;
+                    }
+                },
+                checkReorderColumnsDisabled(index) {
+                    ret = false;
+                    var isSortableCurr = this.stepsData.stepsHeaders[index].sortable;
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
+                    ret = !isSortableCurr;
+                    return ret;
+                },
+
+                onReorderColumnsClick(where, index) {
+                    var isSortableCurr = this.stepsData.stepsHeaders[index].sortable;
+                    if (isSortableCurr == undefined) { isSortableCurr = true; }
+                    //console.log(where, index, this.stepsData.stepsHeaders[index].title, isSortableCurr, this.stepsData.stepsHeaders[index].sortable);
+                    if (where == 'UP' && index > 0 && isSortableCurr) {
+                        var isSortablePrev = this.stepsData.stepsHeaders[index - 1].sortable;
+                        if (isSortablePrev == undefined) { isSortablePrev = true; }
+                        if (isSortablePrev) {
+                            var element_old = this.stepsData.stepsHeaders[index - 1];
+                            var element_new = this.stepsData.stepsHeaders[index];
+                            this.stepsData.stepsHeaders[index] = element_old;
+                            this.stepsData.stepsHeaders[index - 1] = element_new;
+                        }
+                    }
+                    if (where == 'DN' && index < this.stepsData.stepsHeaders.length && isSortableCurr) {
+                        var isSortableNext = this.stepsData.stepsHeaders[index + 1].sortable;
+                        if (isSortableNext == undefined) { isSortableNext = true; }
+                        if (isSortableNext) {
+                            var element_old = this.stepsData.stepsHeaders[index + 1];
+                            var element_new = this.stepsData.stepsHeaders[index];
+                            this.stepsData.stepsHeaders[index] = element_old;
+                            this.stepsData.stepsHeaders[index + 1] = element_new;
+                        }
+                    }
+                    localStorage.setItem('stepsHeaders', JSON.stringify(this.stepsData.stepsHeaders));
+                },
+
+                onOperationClick(event, index) {
+
+                },
+
+                onButtonRefresh(event) {
+
+                },
+                onBtnApplyFilters() {
+                    this.saveFilters();
+                },
+                onBtnClearFilters() {
+                    for (var i in this.searchData) {
+                        this.searchData[i] = null;
+                    }
+                    this.saveFilters();
+                },
+
+                onBtnActionsStubClick(item, column, task) {
+                    console.log(`[onBtnActionsStubClick] ${column}, ${task}, ${JSON.stringify(item)}`);
+                    this.stepsData.isTableDataHandleClick = false;
+                    switch (task) {
+                        case 'EDIT': this.actionsEditClick(item, column, task);
+                            break;
+                        default:
+                            break;
+                    }
+                },
+
+                actionsEditClick(item, column, task) {
+                    this.stepsData.selectedItem = item;
+                    this.dialogs.editItemDialog = true;
+                },
+
+                handleClearReferOverride(event) {
+                    console.log("[handleClearReferOverride]", event);
+                    // 1. STOP THE DEFAULT BEHAVIOR
+                    // This is the CRUCIAL step. Vuetify's clear icon click event bubbles up
+                    // and causes the default nulling of the v-model.
+                    // You need to stop this propagation.
+                    event.stopPropagation();
+                    // 2. RUN YOUR CUSTOM LOGIC
+                    //console.log('Default clear prevented! Running custom logic.');
+                    // Example: Instead of nulling the model, set it to a default value
+                    this.searchData.referID = [""];
+                },
+
+                saveFilters() {
+                    console.log(this.searchData);
+                    localStorage.setItem('searchData', JSON.stringify(this.searchData));
+                },
+                loadFilters() {
+                    var searchData = localStorage.getItem('searchData');
+                    var searchDataObj = JSON.parse(searchData);
+                    console.log(`[loadFilters] ${searchData}`);
+                    console.log(searchDataObj);
+                    if (searchData) {
+                        var parDate = [];
+                        this.searchData.searchText = searchDataObj.searchText;
+
+                        this.searchData.selectedDateFrom = searchDataObj.selectedDateFrom;
+                        this.searchData.dateFromDateMenu = searchDataObj.dateFromDateMenu;
+                        this.searchData.selectedDateFromFull = this.parseDate(searchDataObj.selectedDateFrom);
+                        //parDate = searchDataObj.selectedDateFrom.split('-');
+                        //this.searchData.selectedDateFromFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+
+                        this.searchData.selectedDateInto = searchDataObj.selectedDateInto;
+                        this.searchData.dateIntoDateMenu = searchDataObj.dateIntoDateMenu;
+                        this.searchData.selectedDateIntoFull = this.parseDate(searchDataObj.selectedDateInto);
+                        //parDate = searchDataObj.selectedDateInto.split('-');
+                        //this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
+                    }
+                },
+                onUserMenuClick(event, index) {
+                    switch (event) {
+                        case "logout":
+                            console.log(`Execute event ${event}`);
+                            break;
+                        case "hide":
+                            console.log(`Execute event ${event}`);
+                            this.mainDrawer = false;
+                            break;
+                        default:
+                            console.log(`Sorry, we are out of ${event}.`);
+                    }
+                },
+                stepsDataHandleClick(event, row) {
+                    //https://codepen.io/Hexodus/pen/ExKGWBe
+                    let selectState = (row.isSelected()) ? false : true;
+                    ////console.log(`[stepsDataHandleClick] event ${JSON.stringify(event)}`);
+                    ////console.log(`[stepsDataHandleClick] event`, event);
+                    //console.log(`[stepsDataHandleClick] row  ${JSON.stringify(row)}`);
+                    //console.log(row);
+                    if (!this.stepsData.isTableDataHandleClick) {
+                        this.stepsData.isTableDataHandleClick = !this.stepsData.isTableDataHandleClick;
+                        return;
+                    }
+                    if (!event.ctrlKey && !event.shiftKey) {
+                        //return;
+                    }
+                    console.log('[stepsDataHandleClick]', this.stepsData.selectedItems.length);
+                    console.log('[stepsDataHandleClick]', this.stepsData.selectedItems);
+                    this.toggleSelection(row.item.id);
+                },
+                toggleSelection(keyID) {
+                    if (this.stepsData.selectedItems.includes(keyID)) {
+                        this.stepsData.selectedItems = this.stepsData.selectedItems.filter(
+                            selectedKeyID => selectedKeyID !== keyID
+                        );
+                    } else {
+                        this.stepsData.selectedItems.push(keyID);
+                    }
+                },
+                getDebtStatusIcon(debtstatus) {
+                    ret = "mdi-account";
+                    let item = this.dicts.debtStatus.find(x => x.status === ("" + debtstatus));
+                    if (item !== undefined) ret = item.icon;
+                    //console.log("[getDebtStatusIcon]", ret);
+                    return ret;
+                },
+
+                getTitle(column) {
+                    var ret = "";
+                    console.log("[getTitle]", column);
+                    return ret;
+                },
+
+                getDebtStatusIconColor(item) {
+                    //console.log("[getDebtStatusIconColor]", item);
+                    ret = "green";
+                    if (item.stepcode == "STEP_START") {
+                        ret = "yellow";
+                    }
+                    if (item.stepcode == "STEP_VERIFY") {
+                        ret = "pink";
+                    }
+                    if (item.stepcode == "STEP_REJECT") {
+                        ret = "red";
+                    }
+                    //console.log("[getDebtStatusIconColor]", ret);
+                    return ret;
+                },
+
+                generateUUID() { // Public Domain/MIT
+                    var d = new Date().getTime();
+                    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+                        d += performance.now(); //use high-precision timer if available
+                    }
+                    var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        var r = (d + Math.random() * 16) % 16 | 0;
+                        d = Math.floor(d / 16);
+                        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                    });
+
+                    return newGuid;
+                },
+                getRandomArbitrary(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+            }
+        })
+            .use(vuetify)
+            .mount("#app");
+    </script>
+    <script>
+        function getUniqueuuids(records) {
+            // 1. Użyj .map() do wyodrębnienia wszystkich wartości uuid
+            const allUUIDs = records.map(record => record.uuid);
+            // 2. Użyj new Set() do automatycznego usunięcia duplikatów
+            const uniqueUUIDsSet = new Set(allUUIDs);
+            // 3. Konwertuj Set z powrotem na Array i zwróć
+            return [...uniqueUUIDsSet];
+        }
+
+    </script>
+
+</body>
+
+</html>

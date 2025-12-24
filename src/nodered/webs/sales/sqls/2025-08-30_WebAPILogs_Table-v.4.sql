@@ -79,17 +79,41 @@ CREATE INDEX idx_sys_api_log_created_at ON sys_api_logs(created DESC);
 
 -- Trigger for app_sys_apilog table
 -- Function to update the dateModified column
+
 CREATE OR REPLACE FUNCTION set_date_modified()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.datemodified = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION set_date_updated_logs()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated = NOW();
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-CREATE TRIGGER trg_sys_api_logs_dateModified
+-- 1. Remove the old trigger
+DROP TRIGGER IF EXISTS trg_sys_api_logs_datemodified ON sys_api_logs;
+-- 2. Create the updated version
+CREATE TRIGGER trg_sys_api_logs_datemodified
 BEFORE UPDATE ON sys_api_logs
 FOR EACH ROW
-EXECUTE FUNCTION set_date_modified();
+EXECUTE FUNCTION set_date_updated_logs();
+
+CREATE OR REPLACE FUNCTION set_date_modified()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.datemodified = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 SELECT * FROM sys_api_logs;
 
