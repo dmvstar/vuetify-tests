@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/vue-json-pretty@2.4.0/lib/styles.css">
 
     <style>
         .v-data-table__tr:has(input[type='checkbox']:checked) {
@@ -109,6 +110,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue-json-pretty@2.4.0/lib/vue-json-pretty.js"></script>
 
     <div id="app"></div>
 
@@ -490,11 +492,20 @@
 
                         <v-divider class="mb-4"></v-divider>
 
-                        <v-sheet border rounded class="pa-4 bg-shades-black" style="max-height: 400px; overflow: auto;">
+                        <v-sheet border rounded class="pa-4 bg-grey-darken-4" style="max-height: 400px; overflow: auto;">
+                            <vue-json-pretty 
+                            :breakpoints="{}"
+                            :data="stepsData.selectedItem.content_body" 
+                            :show-line="false"
+                            :show-icon="true"
+                            :show-line-number="true"
+                            theme="dark" />
+                        </v-sheet>
+                        <!--v-sheet border rounded class="pa-4 bg-shades-black" style="max-height: 400px; overflow: auto;">
                             <pre style="color: #64FFDA; font-size: 0.85rem; white-space: pre;">
 {{ JSON.stringify(stepsData.selectedItem.content_body, null, 2) }}
                             </pre>
-                        </v-sheet>
+                        </v-sheet-->
                     </v-card-text>
 
                     <v-divider class="border-opacity-100"></v-divider>
@@ -802,7 +813,7 @@
                     }
                 });
 
-                const appVersion = "v. 0.0.95 (2025-12-27 09:48:10)";
+                const appVersion = "v. 0.0.101 (2025-12-28 14:26:43)";
 
                 return {
                     theme
@@ -1450,9 +1461,11 @@
                 }
 
             }
-        })
-            .use(vuetify)
-            .mount("#app");
+        });
+        //    .use(vuetify)
+        //    .mount("#app");
+        app.component('vue-json-pretty', VueJsonPretty.default);
+        app.use(vuetify).mount('#app');        
     </script>
     <script>
         function getUniqueuuids(records) {

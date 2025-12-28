@@ -89,7 +89,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
 CREATE OR REPLACE FUNCTION set_date_updated_logs()
 RETURNS TRIGGER AS $$
 BEGIN
