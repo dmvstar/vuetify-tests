@@ -506,7 +506,7 @@
 
                     <v-divider class="border-opacity-100"></v-divider>
 
-                    <v-card-text style="height: 600px;">
+                    <v-card-text style="height: 800px;">
                         <div class="mb-4">
                             API Source: {{this.stepsData.selectedItem.api_source}}<br>
                             API Result: {{this.stepsData.selectedItem.api_result}}<br>
@@ -534,12 +534,9 @@
                             style="max-height: 400px; overflow: auto;">
                             <v-card-text>
                                 {{stepsData.selectedItem.content_text}}
-                            </v-card-text>                            
+                            </v-card-text>
                         </v-sheet>
                     </v-card-text>
-
-                    <v-divider class="border-opacity-100"></v-divider>
-                    
 
                     <v-card-actions>
                         <v-btn block color="blue-darken-1" variant="text" @click="dialogs.viewItemDetails = false">
@@ -844,7 +841,7 @@
                     }
                 });
 
-                const appVersion = "v. 0.0.26-17 (2026-03-08 10:51:57)";
+                const appVersion = "v. 0.0.26-19 (2026-03-08 12:29:50)";
 
                 return {
                     theme
@@ -1074,6 +1071,46 @@
                     }
                 },
 
+                async processLoadDataByID(item) {
+                    this.isLoading = true;
+                    var pathTo = "api/v1/commons/log/apilog/content/{{id}}/get";
+                    var headers = this.request.headers;
+                    var hostName = this.hostInfo.hostName;//  "https://nr-card-credo-ws.mb-stage.ukrgasbank.com/"
+                    var realUrl = `${hostName}${pathTo.replace('{{id}}', item.id)}`;
+                    var result = {};
+                    const requestOptions = {
+                        method: "GET",
+                        headers: headers,
+                    };
+                    // alert(realUrl);
+                    await fetch(realUrl, requestOptions)
+                        .then(async response => {
+                            const result = await response.text();
+                            this.isLoading = false;
+                            const data = JSON.parse(result);
+                            console.log("processLoadDataByID", data.data[0]);
+                            
+                            // this.stepsData.stepsItemsData = data.data;
+                            this.stepsData.selectedItem = data.data[0];
+                            console.log("processLoadDataByID", this.stepsData.selectedItem);
+
+                            if (!response.ok) {
+                                this.isLoading = false;
+                                // get error message from body or default to response statusText
+                                const error = (data && data.message) || response.statusText;
+                                this.error = error;
+                                alert('E1 fetch [' + realUrl + '] \n' + JSON.stringify(response, null, ' ') + ' ');
+                                return Promise.reject(error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error;
+                            alert("E2 fetch [" + realUrl + "] \n" + error);
+                        });
+
+
+                },
                 async processLoadDataByUUIDS() {
                     // if (this.searchData.referID.length < 2) {
                     //     return;
@@ -1326,8 +1363,9 @@
                 },
                 actionsViewClick(item, column, task) {
                     this.stepsData.selectedItem = item;
-                    // @TODO make a load content async 
+                    // @TODO make a load content async
                     this.dialogs.viewItemDetails = true;
+                    this.processLoadDataByID(item);
                 },
 
                 handleClearReferOverride(event) {
@@ -1497,7 +1535,7 @@
         //    .use(vuetify)
         //    .mount("#app");
         app.component('vue-json-pretty', VueJsonPretty.default);
-        app.use(vuetify).mount('#app');        
+        app.use(vuetify).mount('#app');
     </script>
     <script>
         function getUniqueuuids(records) {
