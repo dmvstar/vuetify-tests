@@ -4,7 +4,8 @@
 <head>
     <title>Vuetify Logs Data searcher NG V3</title>
     <!--link rel="shortcut icon" type="image/png" href="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png" /-->
-    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/dmvstar/vuetify-tests/main/src/nodered/webs/sales/assets/vuetifyjs-128x128-v.2.png" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/vue-json-pretty@2.4.0/lib/styles.css">
@@ -294,17 +295,41 @@
                     </v-row>
 
                     <v-row ma="2">
-                        <v-col cols="10">
-                            <v-card-text>
-                                VDataTable {{stepsData.stepsItemsData.length}} items {{searchData.referIDS.length}}
-                                ({{searchData.selectedDateFrom}}-{{searchData.selectedDateInto}})
-                            </v-card-text>
+                        <v-col cols="2">
+                            <v-row>
+                                <v-card-text>
+                                    Count {{searchData.referIDS.length}} of {{stepsData.stepsItemsData.length}}
+                                    ({{searchData.selectedDateFrom}}-{{searchData.selectedDateInto}})
+                                </v-card-text>
+                            </v-row>
                         </v-col>
-                        <v-col cols="2" align="right">
+                        <v-col cols="9">
+                            <v-row>
+                                <v-col cols="1">
+                                    <v-checkbox-btn density="compact" v-model="searchData.isSimpleQuery"
+                                        label="Mode"></v-checkbox-btn>
+                                </v-col>
+                                <v-col cols="1">
+                                    <v-combobox density="compact" v-model="searchData.columnName"
+                                        :items="['id', 'name', 'uuid']" label="Column"></v-combobox>
+                                </v-col>
+                                <v-col cols="1">
+                                    <v-combobox density="compact" v-model="searchData.queryOperator"
+                                        :items="['=', '<>', '>', '<', '~']" label="Operator"></v-combobox>
+                                </v-col>
+                                <v-col cols="9">
+                                    <v-text-field density="compact" v-model="searchData.searchQuery"
+                                        label="Search query" prepend-icon="mdi-search-web" clearable
+                                        clear-icon="mdi-backspace">
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="1" align="right">
                             <v-menu density="compact" transition="scale-transition" :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                     <v-btn color="green" v-bind="props" append-icon="mdi-chevron-down">
-                                        Columns Order ...
+                                        Order ...
                                     </v-btn>
                                 </template>
                                 <v-list>
@@ -492,23 +517,29 @@
 
                         <v-divider class="mb-4"></v-divider>
 
-                        <v-sheet border rounded class="pa-4 bg-grey-darken-4" style="max-height: 400px; overflow: auto;">
-                            <vue-json-pretty 
-                            :breakpoints="{}"
-                            :data="stepsData.selectedItem.content_body" 
-                            :show-line="false"
-                            :show-icon="true"
-                            :show-line-number="true"
-                            theme="dark" />
+                        <v-sheet border rounded class="pa-4 bg-grey-darken-4"
+                            style="max-height: 400px; overflow: auto;">
+                            <vue-json-pretty :breakpoints="{}" :data="stepsData.selectedItem.content_body"
+                                :show-line="false" :show-icon="true" :show-line-number="true" theme="dark" />
                         </v-sheet>
                         <!--v-sheet border rounded class="pa-4 bg-shades-black" style="max-height: 400px; overflow: auto;">
                             <pre style="color: #64FFDA; font-size: 0.85rem; white-space: pre;">
 {{ JSON.stringify(stepsData.selectedItem.content_body, null, 2) }}
                             </pre>
                         </v-sheet-->
+
+                        <v-divider class="mb-4"></v-divider>
+
+                        <v-sheet border rounded class="pa-4 bg-grey-darken-4"
+                            style="max-height: 400px; overflow: auto;">
+                            <v-card-text>
+                                {{stepsData.selectedItem.content_text}}
+                            </v-card-text>                            
+                        </v-sheet>
                     </v-card-text>
 
                     <v-divider class="border-opacity-100"></v-divider>
+                    
 
                     <v-card-actions>
                         <v-btn block color="blue-darken-1" variant="text" @click="dialogs.viewItemDetails = false">
@@ -813,7 +844,7 @@
                     }
                 });
 
-                const appVersion = "v. 0.0.26-15 (2026-01-07 15:06:22)";
+                const appVersion = "v. 0.0.26-17 (2026-03-08 10:51:57)";
 
                 return {
                     theme
@@ -1295,6 +1326,7 @@
                 },
                 actionsViewClick(item, column, task) {
                     this.stepsData.selectedItem = item;
+                    // @TODO make a load content async 
                     this.dialogs.viewItemDetails = true;
                 },
 
@@ -1341,9 +1373,9 @@
                         //this.searchData.selectedDateIntoFull = new Date(`${parDate[2]}-${parDate[1]}-${parDate[0]}`);
                     }
                 },
-                parseDate( dateStrYYYYMMDD ) {
+                parseDate(dateStrYYYYMMDD) {
                     var ret = new Date();
-                    if(dateStrYYYYMMDD) {
+                    if (dateStrYYYYMMDD) {
                         var parDate = dateStrYYYYMMDD.split('-');
                         ret = new Date(`${parDate[0]}-${parDate[1]}-${parDate[2]}`);
                     }
