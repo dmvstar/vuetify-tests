@@ -87,7 +87,7 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
+Оператор, обработка счетовОператор, обработка счетов
 
 CREATE OR REPLACE FUNCTION set_date_updated_logs()
 RETURNS TRIGGER AS $$
