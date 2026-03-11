@@ -305,19 +305,19 @@
                         </v-col>
                         <v-col cols="9">
                             <v-row>
-                                <v-col cols="1">
+                                <!--v-col cols="1">
                                     <v-checkbox-btn density="compact" v-model="searchData.isSimpleQuery"
                                         label="Mode"></v-checkbox-btn>
-                                </v-col>
-                                <v-col cols="1">
+                                </v-col-->
+                                <v-col cols="2">
                                     <v-combobox density="compact" v-model="searchData.columnName"
-                                        :items="['id', 'name', 'uuid']" label="Column"></v-combobox>
+                                        :items="['id', 'name', 'uuid', 'payload']" label="Column"></v-combobox>
                                 </v-col>
-                                <v-col cols="1">
+                                <v-col cols="2">
                                     <v-combobox density="compact" v-model="searchData.queryOperator"
                                         :items="['=', '<>', '>', '<', '~']" label="Operator"></v-combobox>
                                 </v-col>
-                                <v-col cols="9">
+                                <v-col cols="8">
                                     <v-text-field density="compact" v-model="searchData.searchQuery"
                                         label="Search query" prepend-icon="mdi-search-web" clearable
                                         clear-icon="mdi-backspace">
@@ -642,6 +642,9 @@
                     selectedDateFrom: null,
 
                     selectedDateInto: null
+                    , columnName : null
+                    , queryOperator : null  
+                    , searchQuery : null
                 });
 
                 var dialogs = Vue.ref(
@@ -841,7 +844,7 @@
                     }
                 });
 
-                const appVersion = "v. 0.0.26-19 (2026-03-08 12:29:50)";
+                const appVersion = "v. 0.0.26-21 (2026-03-11 08:27:22)";
 
                 return {
                     theme
@@ -977,7 +980,6 @@
                         : text;
 
                 },
-
 
                 filterByMultipleCriteria(value, search, item) {
                     // 1. Prepare criteria
@@ -1123,12 +1125,21 @@
                     var hostName = this.hostInfo.hostName;//  "https://nr-card-credo-ws.mb-stage.ukrgasbank.com/"
                     var realUrl = `${hostName}${pathTo}`;
                     var result = {};
+                    var query = {};
+                    if(this.searchData.columnName && this.searchData.queryOperator && this.searchData.searchQuery) {
+                        query = {
+                            searchQuery : this.searchData.columnName
+                            , queryOperator : this.searchData.queryOperator
+                            , searchQuery : this.searchData.searchQuery
+                        };                        
+                    }
                     var request = {
                         referID: cleanedArray,
                         dateFrom: this.searchData.selectedDateFrom
                         , dateInto: this.searchData.selectedDateInto || this.formatDate(new (Date), 1, 1)
+                        , query : query
                     };
-                    //alert(JSON.stringify(request));
+                    alert(JSON.stringify(request));
                     const requestOptions = {
                         method: "POST",
                         headers: headers,
