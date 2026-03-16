@@ -38,7 +38,7 @@
 
             <v-card-actions class="mt-4">
               <v-btn color="primary" variant="elevated" prepend-icon="mdi-pencil" @click="openDialog">
-                Edit Data
+                Edit Data (Sorted Grid)
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -53,32 +53,15 @@
               <v-card-text class="pt-6">
                 <v-form>
                   <v-row dense>
-                    <v-col 
-                      v-for="(field, index) in editableFields" 
-                      :key="'edit-'+index"
-                      :cols="field.type === 'text' ? 12 : 6"
-                    >
-                      <v-textarea
-                        v-if="field.type === 'text'"
-                        v-model="field.value"
-                        :label="field.name.toUpperCase()"
-                        variant="outlined"
-                        rows="2"
-                        auto-grow
-                        hide-details="auto"
-                        class="mb-2"
-                      ></v-textarea>
+                    <v-col v-for="(field, index) in sortedEditableFields" :key="'edit-'+index"
+                      :cols="field.type === 'text' ? 12 : 6">
+                      
+                      <v-textarea v-if="field.type === 'text'" v-model="field.value" :label="field.name.toUpperCase()"
+                        variant="outlined" rows="2" auto-grow hide-details="auto" class="mb-2"></v-textarea>
 
-                      <v-text-field 
-                        v-else
-                        v-model="field.value"
-                        :label="field.name.toUpperCase()" 
-                        variant="outlined"
-                        :disabled="field.name === 'id'" 
-                        hide-details="auto" 
-                        class="mb-2"
-                        :type="field.type === 'int' ? 'number' : 'text'"
-                      ></v-text-field>
+                      <v-text-field v-else v-model="field.value" :label="field.name.toUpperCase()" variant="outlined"
+                        :disabled="field.name === 'id'" hide-details="auto" class="mb-2"
+                        :type="field.type === 'int' ? 'number' : 'text'"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-form>
@@ -103,7 +86,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.js"></script>
 
   <script>
-    const { createApp, ref, onMounted } = Vue;
+    const { createApp, ref, onMounted, computed } = Vue;
     const { createVuetify } = Vuetify;
 
     const vuetify = createVuetify();
@@ -117,21 +100,36 @@
           { name: "id", value: 1, type: "int" },
           { name: "code", value: "ARC", type: "varchar(32)" },
           { name: "info", value: "Archive data", type: "text" },
+          { name: "api", value: "/api/v1/test/api", type: "varchar(32)" },
           { name: "url", value: "www.google.com", type: "text" },
           { name: "ver", value: "1.0", type: "varchar(10)" },
+          { name: "date", value: "2026-03-15", type: "varchar(10)" },
           { name: "count", value: 5, type: "int" }
         ]);
 
         const editableFields = ref([]);
 
+        // TWOJE ALGORYTM: Sortowanie pól w dialogu
+        const sortedEditableFields = computed(() => {
+          if (!editableFields.value.length) return [];
+
+          // Rozdzielamy na szerokie (12 cols) i wąskie (6 cols)
+          const fullWidth = editableFields.value.filter(f => f.type === 'text');
+          const halfWidth = editableFields.value.filter(f => f.type !== 'text');
+
+          // Najpierw małe pola (żeby wypełniały wiersze parzyście), potem duże
+          return [...halfWidth, ...fullWidth];
+        });
+
         const openDialog = () => {
-          if (originalData.value) {
-            editableFields.value = JSON.parse(JSON.stringify(originalData.value));
-            dialog.value = true;
-          }
+          // Kopiujemy dane do edycji
+          editableFields.value = JSON.parse(JSON.stringify(originalData.value));
+          dialog.value = true;
         };
 
         const saveChanges = () => {
+          // Przy zapisie musimy zachować oryginale dane, 
+          // ale zaktualizowane o wartości z editableFields
           originalData.value = JSON.parse(JSON.stringify(editableFields.value));
           dialog.value = false;
         };
@@ -145,6 +143,7 @@
           dialog,
           originalData,
           editableFields,
+          sortedEditableFields, // Udostępniamy posortowane pole
           openDialog,
           saveChanges
         }
