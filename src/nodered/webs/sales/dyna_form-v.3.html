@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vuetify Dynamic Schema Mapper</title>
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <v-app v-if="isReady">
+      <v-main class="bg-grey-lighten-4">
+        <v-container class="mt-10">
+
+          <v-card class="mx-auto pa-6" max-width="800">
+            <v-card-title class="text-h5 mb-4">Record Data (mapped from desc)</v-card-title>
+
+            <!--v-table v-if="displayData.length" density="compact">
+              <thead>
+                <tr>
+                  <th class="text-left">Description</th>
+                  <th class="text-left">Field</th>
+                  <th class="text-left">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in displayData" :key="index">
+                  <td>{{ item.description }}</td>
+                  <td><v-chip size="x-small" variant="tonal">{{ item.name }}</v-chip></td>
+                  <td><strong>{{ item.value }}</strong></td>
+                </tr>
+              </tbody>
+            </v-table-->
+
+            <v-card-actions class="mt-4">
+              <v-btn color="primary" variant="elevated" prepend-icon="mdi-pencil" @click="openDialog">
+                Edit Record
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+
+          <v-dialog v-model="dialog" max-width="800px" persistent>
+            <v-card v-if="dialog">
+              <v-card-title class="bg-primary text-white">
+                <v-icon start>mdi-form-select</v-icon> Form Editor
+              </v-card-title>
+
+              <v-card-text class="pt-6">
+                <v-form>
+                  <v-row dense>
+                    <v-col v-for="(field, index) in sortedEditableFields" :key="'edit-'+index"
+                      :cols="field.isWide ? 12 : 6">
+                      
+                      <v-select v-if="field.options && field.options.length"
+                        v-model="field.value"
+                        :items="field.options"
+                        :label="field.description"
+                        variant="outlined"
+                        hide-details="auto"
+                        class="mb-4"
+                      ></v-select>
+
+                      <v-textarea v-else-if="field.isWide" v-model="field.value" 
+                        :label="field.description" variant="outlined" 
+                        rows="2" auto-grow hide-details="auto" class="mb-4"></v-textarea>
+
+                      <v-text-field v-else v-model="field.value" 
+                        :label="field.description" variant="outlined"
+                        :disabled="field.name === 'id' || field.name === 'date'" 
+                        hide-details="auto" class="mb-4"
+                        :type="field.type === 'int' ? 'number' : 'text'"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-card-text>
+
+              <v-divider></v-divider>
+
+              <v-card-actions class="pa-4">
+                <v-spacer></v-spacer>
+                <v-btn variant="text" color="error" @click="dialog = false">Cancel</v-btn>
+                <v-btn variant="elevated" color="success" @click="saveChanges">Save Changes</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.js"></script>
+
+  <script>
+    const { createApp, ref, onMounted, computed } = Vue;
+    const { createVuetify } = Vuetify;
+
+    const app = createApp({
+      setup() {
+        const isReady = ref(false);
+        const dialog = ref(false);
+
+        const schemaData = [
+          { column_name: "id", description: "Ідентифікатор", udt_name: "int8", character_maximum_length: null },
+          { column_name: "date", description: "Створено", udt_name: "timestamp", character_maximum_length: null },
+          { column_name: "task", description: "Задача", udt_name: "varchar", character_maximum_length: 34 },
+          { column_name: "code", description: "Код реквізиту", udt_name: "varchar", character_maximum_length: 64 },
+          { column_name: "info", description: "Опис реквізиту", udt_name: "varchar", character_maximum_length: 128 },
+          { column_name: "status", description: "Статус", udt_name: "int4", character_maximum_length: null },
+          { column_name: "kind", description: "Тип реквізиту", udt_name: "gl_var_data_kind", character_maximum_length: null, 
+            enums: ["int", "double", "string", "text"] 
+          },
+        ];
+
+        const rowData = {
+          "id": "1",
+          "date": "2024-05-31T11:01:12.191Z",
+          "task": "EMA",
+          "code": "CHECK_LAST_5MIN",
+          "info": "Признак работы воркера (run|stop)",
+          "status": 1,
+          "kind": "int"
+        };
+
+        const displayData = ref([]);
+        const editableFields = ref([]);
+
+        const initialize = () => {
+          displayData.value = schemaData.map(s => ({
+            name: s.column_name,
+            description: s.description,
+            value: rowData[s.column_name],
+            type: s.udt_name.includes('int') ? 'int' : 'string',
+            isWide: (s.character_maximum_length || 0) > 100,
+            options: s.enums || null // Capture the enum values here
+          }));
+        };
+
+        const sortedEditableFields = computed(() => {
+          if (!editableFields.value.length) return [];
+          // Keeping your logic: half-width first, full-width last
+          const full = editableFields.value.filter(f => f.isWide);
+          const half = editableFields.value.filter(f => !f.isWide);
+          return [...half, ...full];
+        });
+
+        const openDialog = () => {
+          editableFields.value = JSON.parse(JSON.stringify(displayData.value));
+          dialog.value = true;
+        };
+
+        const saveChanges = () => {
+          displayData.value = JSON.parse(JSON.stringify(editableFields.value));
+          dialog.value = false;
+        };
+
+        onMounted(() => {
+          initialize();
+          isReady.value = true;
+        });
+
+        return {
+          isReady, dialog, displayData, editableFields,
+          sortedEditableFields, openDialog, saveChanges
+        }
+      }
+    });
+
+    app.use(createVuetify()).mount('#app');
+  </script>
+</body>
+</html>
