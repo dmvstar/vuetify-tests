@@ -26,3 +26,19 @@ var intoDate = new Date(fromDate.getFullYear(), fromDate.getMonth()+1 , 0);
 console.log(fromDate.toISOString().slice(0,10), intoDate.toISOString().slice(0,10));
 //new Date(fromDate.getFullYear(), getMonth() , 0).toISOString().slice(0,10)
 
+
+function getUsingSplit(str) {
+  const parts = str.split('_');
+  
+  // If length is > 2, there is more than one underscore
+  if (parts.length > 2) {
+    // Grab the first two pieces and put the underscore back between them
+    return parts[0] + '_' + parts[1]; 
+  }
+  
+  return str;
+}
+
+console.log(getUsingSplit("TOBO_3453_77734645")); 
+console.log(getUsingSplit("TOBO_5544")); 
+console.log(getUsingSplit("BRANCHID")); 
