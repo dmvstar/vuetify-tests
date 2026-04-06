@@ -1,0 +1,104 @@
+<!--
+crete for me full vuetify 3 html 
+with 2 dropdown list
+1 - months with selected current month
+2 - years from 2020 to 2030 with selected current year 
+dark mode by default 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vuetify 3 Date Selectors</title>
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container class="fill-height" fluid>
+          <v-row justify="center">
+            <v-col cols="12" sm="8" md="4">
+              
+              <v-card class="pa-5" elevation="8">
+                <v-card-title class="text-h5 mb-4">Select Date</v-card-title>
+                
+                <v-card-text>
+                  <v-select
+                    v-model="selectedMonth"
+                    :items="months"
+                    label="Month"
+                    prepend-inner-icon="mdi-calendar-month"
+                    variant="outlined"
+                    class="mb-4"
+                  ></v-select>
+
+                  <v-select
+                    v-model="selectedYear"
+                    :items="years"
+                    label="Year"
+                    prepend-inner-icon="mdi-calendar-range"
+                    variant="outlined"
+                  ></v-select>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" variant="tonal">
+                    Confirm: {{ selectedMonth }} {{ selectedYear }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.js"></script>
+
+  <script>
+    const { createApp, ref, onMounted } = Vue;
+    const { createVuetify } = Vuetify;
+
+    const vuetify = createVuetify({
+      theme: {
+        defaultTheme: 'dark' // Dark mode enabled by default
+      }
+    });
+
+    const app = createApp({
+      setup() {
+        const months = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        // Generate years from 2020 to 2030
+        const years = Array.from({ length: 11 }, (v, i) => 2020 + i);
+
+        // Get current date details
+        const currentDate = new Date();
+        const selectedMonth = ref(months[currentDate.getMonth()]);
+        const selectedYear = ref(currentDate.getFullYear());
+
+        return {
+          months,
+          years,
+          selectedMonth,
+          selectedYear
+        };
+      }
+    });
+
+    app.use(vuetify).mount('#app');
+  </script>
+</body>
+</html>
+
