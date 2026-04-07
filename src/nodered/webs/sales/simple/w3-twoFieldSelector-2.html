@@ -4,14 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vuetify 3 API Post</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"
-      rel="stylesheet"
-    />
+    <link rel="icon" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/svg/book-open-variant.svg" type="image/svg+xml">
+    
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet" />
+    
+    <style>
+      /* Background Image Setup */
+      .v-main {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=2000');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+      
+      /* Subtle blur effect for the card to pop against the books */
+      .glass-card {
+        background: rgba(30, 30, 30, 0.85) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -20,10 +34,11 @@
           <v-container class="fill-height" fluid>
             <v-row justify="center">
               <v-col cols="12" sm="8" md="4">
-                <v-card class="pa-5" elevation="8">
-                  <v-card-title class="text-h5 mb-4"
-                    >Report Definition</v-card-title
-                  >
+                <v-card class="pa-5 glass-card" elevation="24">
+                  <v-card-title class="text-h5 mb-4 d-flex align-center">
+                    <v-icon icon="mdi-book-open-page-variant" color="primary" class="me-3"></v-icon>
+                    Report Definition
+                  </v-card-title>
 
                   <v-card-text>
                     <v-select
@@ -52,8 +67,10 @@
                       :loading="loading"
                       @click="submitData"
                       block
+                      size="large"
+                      :prepend-icon="loading ? '' : 'mdi-file-find'"
                     >
-                      Generate Report {{ selectedMonth }} {{ selectedYear }}
+                      Generate Report
                     </v-btn>
                   </v-card-actions>
 
@@ -78,145 +95,65 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-            const { createApp, ref } = Vue;
-            const { createVuetify } = Vuetify;
+      const { createApp, ref } = Vue;
+      const { createVuetify } = Vuetify;
 
-            const vuetify = createVuetify({
-              theme: { defaultTheme: "dark" },
-            });
+      const vuetify = createVuetify({
+        theme: { defaultTheme: "dark" },
+      });
 
-            const app = createApp({
-              setup() {
-                const months = [
-                  "January",
-                  "February",
-                  "March",
-                  "April",
-                  "May",
-                  "June",
-                  "July",
-                  "August",
-                  "September",
-                  "October",
-                  "November",
-                  "December",
-                ];
-                const years = Array.from({ length: 11 }, (v, i) => 2020 + i);
+      const app = createApp({
+        setup() {
+          const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          const years = Array.from({ length: 11 }, (v, i) => 2020 + i);
 
-                const currentDate = new Date();
-                const selectedMonth = ref(months[currentDate.getMonth()]);
-                const selectedYear = ref(currentDate.getFullYear());
+          const currentDate = new Date();
+          const selectedMonth = ref(months[currentDate.getMonth()]);
+          const selectedYear = ref(currentDate.getFullYear());
 
-                // UI State
-                const loading = ref(false);
-                const responseMsg = ref("");
-                const responseStatus = ref("success");
+          const loading = ref(false);
+          const responseMsg = ref("");
+          const responseStatus = ref("success");
 
-                  let host = "http://localhost:1880/";
-                  let path = "api/v1/aswp/reports/account/definition";
-                  let fullUrl = host + path;
+          let host = "http://localhost:1880/";
+          let path = "api/v1/aswp/reports/account/definition";
+          let fullUrl = host + path;
 
+          // Combined Logic: Open in new tab and handle as HTML
+          const submitData = async () => {
+            loading.value = true;
+            try {
+              // Appending query params so Node-RED knows which month/year to generate
+              const urlWithParams = `${fullUrl}?month=${selectedMonth.value}&year=${selectedYear.value}`;
+              
+              // We use window.open directly. 
+              // Note: Ensure Node-RED sends 'Content-Type: text/html' and 'Content-Disposition: inline'
+              window.open(urlWithParams, "_blank");
+              
+              responseStatus.value = "success";
+              responseMsg.value = "Report tab opened.";
+            } catch (error) {
+              responseStatus.value = "error";
+              responseMsg.value = "Failed to open report.";
+            } finally {
+              loading.value = false;
+            }
+          };
 
-                /*
-                const gotoLink​() {
-      ​             window​.​open​(​'https://workingunittests.com'​, ​'​_blank​'​);
-                };
-                */
+          return {
+            months,
+            years,
+            selectedMonth,
+            selectedYear,
+            loading,
+            submitData,
+            responseMsg,
+            responseStatus,
+          };
+        },
+      });
 
-                const submitData = async () => {
-                  window.open(fullUrl, "_blank");                  
-                };
-
-                const submitData0 = async () => {
-                  loading.value = true;
-                  responseMsg.value = "";
-
-                  const payload = {
-                    month: selectedMonth.value,
-                    year: selectedYear.value,
-                  };
-                  /*
-                try {
-                  const response = await axios.post(fullUrl, payload);
-                  responseStatus.value = 'success';
-                  responseMsg.value = 'Report requested successfully!';
-                  console.log('Success:', response.data);
-                } catch (error) {
-                  responseStatus.value = 'error';
-                  responseMsg.value = error.response?.data?.message || 'Error connecting to the server ' + fullUrl;
-                  console.error('API Error:', error);
-                } finally {
-                  loading.value = false;
-                }
-                */
-                  try {
-                    const response = await fetch(fullUrl, {
-                      method: "GET",
-                      // mode: "cors", // Explicitly setting CORS mode
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      //, body: JSON.stringify(payload),
-                    });
-
-                    if (!response.ok) {
-                      // Handle non-200 responses
-                      const errorData = await response.json().catch(() => ({}));
-                      throw new Error(
-                        errorData.message || `Server error: ${response.status}`,
-                      );
-                    }
-
-                    const data = await response.text();
-
-                    // --- NEW CODE STARTS HERE ---
-                    // 1. Create a Blob from the HTML string
-                    const blob = new Blob([data], { type: "text/html",
-                      name: "Report.html"
-                     });
-
-                    // 2. Create a temporary URL for the Blob
-                    const url = URL.createObjectURL(blob);
-
-                    // 3. Open the URL in a new tab
-                    window.open(url, "_blank");
-
-                    // 4. (Optional) Cleanup the URL memory after a short delay
-                    setTimeout(() => URL.revokeObjectURL(url), 10000);
-                    // --- NEW CODE ENDS HERE ---
-
-                    responseStatus.value = "success";
-                    responseMsg.value = "Report requested successfully!";
-                    console.log("Success:", data);
-                  } catch (error) {
-                    responseStatus.value = "error";
-                    // Custom message for CORS issues
-                    if (error.message.includes("Failed to fetch")) {
-                      responseMsg.value =
-                        "CORS Error: The server at localhost blocked the request. Check API headers.";
-                    } else {
-                      responseMsg.value = error.message;
-                    }
-                    console.error("Fetch Error:", error);
-                  } finally {
-                    loading.value = false;
-                  }
-                };
-
-                return {
-                  months,
-                  years,
-                  selectedMonth,
-                  selectedYear,
-                  loading,
-                  submitData,
-                  responseMsg,
-                  responseStatus,
-                };
-              },
-            });
-
-            app.use(vuetify).mount("#app");
+      app.use(vuetify).mount("#app");
     </script>
   </body>
 </html>
