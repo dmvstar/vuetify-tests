@@ -3,27 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vuetify 3 API Post</title>
-    <link rel="icon" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/svg/book-open-variant.svg" type="image/svg+xml">
-    
+    <title>Vuetify 3 ACCS Report</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/svg/book-open-variant.svg" type="image/svg+xml" />
+
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet" />
-    
+
     <style>
-      /* Background Image Setup */
       .v-main {
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                    url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=2000');
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=2000");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
       }
-      
-      /* Subtle blur effect for the card to pop against the books */
+
       .glass-card {
-        background: rgba(30, 30, 30, 0.85) !important;
-        backdrop-filter: blur(10px);
+        background: rgba(33, 33, 33, 0.9) !important;
+        backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .debug-section {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 10px;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .debug-text {
+        font-family: 'Fira Code', monospace;
+        color: #80cbc4;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
       }
     </style>
   </head>
@@ -32,10 +45,11 @@
       <v-app>
         <v-main>
           <v-container class="fill-height" fluid>
-            <v-row justify="center">
+            <v-row justify="center" align="center" style="flex-direction: column;">
+              
               <v-col cols="12" sm="8" md="4">
                 <v-card class="pa-5 glass-card" elevation="24">
-                  <v-card-title class="text-h5 mb-4 d-flex align-center">
+                  <v-card-title class="text-h5 mb-4 d-flex align-center text-white">
                     <v-icon icon="mdi-book-open-page-variant" color="primary" class="me-3"></v-icon>
                     Report Definition
                   </v-card-title>
@@ -44,7 +58,7 @@
                     <v-select
                       v-model="selectedMonth"
                       :items="months"
-                      label="Month"
+                      label="Select Month"
                       prepend-inner-icon="mdi-calendar-month"
                       variant="outlined"
                       class="mb-4"
@@ -53,7 +67,7 @@
                     <v-select
                       v-model="selectedYear"
                       :items="years"
-                      label="Year"
+                      label="Select Year"
                       prepend-inner-icon="mdi-calendar-range"
                       variant="outlined"
                     ></v-select>
@@ -68,22 +82,39 @@
                       @click="submitData"
                       block
                       size="large"
-                      :prepend-icon="loading ? '' : 'mdi-file-find'"
+                      prepend-icon="mdi-file-find"
                     >
                       Generate Report
                     </v-btn>
                   </v-card-actions>
 
-                  <v-alert
-                    v-if="responseMsg"
-                    :type="responseStatus"
-                    class="mt-4"
-                    closable
-                  >
+                  <v-alert v-if="responseMsg" :type="responseStatus" class="mt-4" closable>
                     {{ responseMsg }}
                   </v-alert>
                 </v-card>
               </v-col>
+
+              <v-col cols="12" sm="8" md="6">
+                <v-row justify="center" class="mt-2">
+                  <v-col cols="auto" class="debug-section text-center">
+                    <div class="mb-2">
+                      <v-chip size="small" variant="flat" color="indigo-darken-3" class="ma-1">
+                        <v-icon start icon="mdi-calendar-check"></v-icon>
+                        Year: {{selectedYear}}
+                      </v-chip>
+                      <v-chip size="small" variant="flat" color="teal-darken-3" class="ma-1">
+                        <v-icon start icon="mdi-clock-outline"></v-icon>
+                        Month: {{selectedMonth}}
+                      </v-chip>
+                    </div>
+                    <div class="debug-text">
+                      <v-icon size="small" icon="mdi-link-variant" class="me-1"></v-icon>
+                      Target URL: {{fullUrl}}?repoDate={{selectedYear}}-{{selectedMonth.split('-')[0]}}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-col>
+
             </v-row>
           </v-container>
         </v-main>
@@ -92,10 +123,9 @@
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.5.2/dist/vuetify.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-      const { createApp, ref } = Vue;
+      const { createApp, ref, computed } = Vue;
       const { createVuetify } = Vuetify;
 
       const vuetify = createVuetify({
@@ -104,7 +134,11 @@
 
       const app = createApp({
         setup() {
-          const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          const months = [
+            "01-January", "02-February", "03-March", "04-April", 
+            "05-May", "06-June", "07-July", "08-August", 
+            "09-September", "10-October", "11-November", "12-December"
+          ];
           const years = Array.from({ length: 11 }, (v, i) => 2020 + i);
 
           const currentDate = new Date();
@@ -115,42 +149,48 @@
           const responseMsg = ref("");
           const responseStatus = ref("success");
 
-          let host = "http://localhost:1880/";
-          let path = "api/v1/aswp/reports/account/definition";
-          let fullUrl = host + path;
+          const hostInfo = ref({
+            host: "http://localhost:1880",
+            path: "/api/v1/aswp/reports/account/definition"
+          });
 
-          // Combined Logic: Open in new tab and handle as HTML
-          const submitData = async () => {
-            loading.value = true;
-            try {
-              // Appending query params so Node-RED knows which month/year to generate
-              const urlWithParams = `${fullUrl}?month=${selectedMonth.value}&year=${selectedYear.value}`;
-              
-              // We use window.open directly. 
-              // Note: Ensure Node-RED sends 'Content-Type: text/html' and 'Content-Disposition: inline'
-              window.open(urlWithParams, "_blank");
-              
-              responseStatus.value = "success";
-              responseMsg.value = "Report tab opened.";
-            } catch (error) {
-              responseStatus.value = "error";
-              responseMsg.value = "Failed to open report.";
-            } finally {
-              loading.value = false;
-            }
-          };
+          const fullUrl = computed(() => {
+            const base = hostInfo.value.host.endsWith('/') ? hostInfo.value.host : hostInfo.value.host + '/';
+            const route = hostInfo.value.path.startsWith('/') ? hostInfo.value.path.substring(1) : hostInfo.value.path;
+            return base + route;
+          });
 
           return {
-            months,
-            years,
-            selectedMonth,
-            selectedYear,
-            loading,
-            submitData,
-            responseMsg,
-            responseStatus,
+            months, years, selectedMonth, selectedYear,
+            loading, responseMsg, responseStatus,
+            hostInfo, fullUrl
           };
         },
+
+        mounted() {
+          if (document.URL.includes("http")) {
+            const currentUrl = new URL(document.URL);
+            this.hostInfo.host = `${currentUrl.protocol}//${currentUrl.host}`;
+          }
+        },
+
+        methods: {
+          async submitData() {
+            this.loading = true;
+            try {
+              const monthPart = this.selectedMonth.split("-")[0];
+              const finalEndpoint = `${this.fullUrl}?repoDate=${this.selectedYear}-${monthPart}`;
+              window.open(finalEndpoint, "_blank");
+              this.responseStatus = "success";
+              this.responseMsg = "Request dispatched.";
+            } catch (error) {
+              this.responseStatus = "error";
+              this.responseMsg = "Error opening report.";
+            } finally {
+              this.loading = false;
+            }
+          }
+        }
       });
 
       app.use(vuetify).mount("#app");

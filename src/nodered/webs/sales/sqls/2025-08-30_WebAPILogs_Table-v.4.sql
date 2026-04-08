@@ -198,4 +198,4 @@ CREATE TABLE sys_proc_steps (
 	CONSTRAINT sys_proc_steps_pkey PRIMARY KEY (id)
 );
 CREATE INDEX sps_datecreated_idx ON public.sys_proc_steps USING btree (datecreated);
-CREATE INDEX sps_uuid_idx ON public.sys_proc_steps USING btree (uuid);
+CREATE INDEX sps_uuid_idx ON public.sys_proc_steps USING btree (uuid);accepted_requests accepted_requests accepted_requests 
