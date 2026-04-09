@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment[pl_PL]=
+Comment=
+Exec=/home/sdv/bin/cplogin.py
+GenericName[pl_PL]=
+GenericName=
+Icon=im-user-away
+MimeType=
+Name[pl_PL]=SNX
+Name=SNX
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=

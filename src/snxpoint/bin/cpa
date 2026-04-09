@@ -1,0 +1,17 @@
+#!/bin/bash
+[ $# -eq 0 ] && { 
+    echo "Usage cpa start | stop"
+    exit 1; 
+} 
+
+[ $1 == 'start' ] && {
+    echo "Start CP"
+    echo "3264"
+    echo "snx -g -s 91.208.198.207 -u dstarzhynskyi"
+    snx -g -s 91.208.198.207 -u dstarzhynskyi
+}
+
+[ $1 == 'stop' ] && {
+    echo "Stop CP"
+    snx -d
+}

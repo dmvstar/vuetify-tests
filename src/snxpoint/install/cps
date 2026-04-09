@@ -1,0 +1,3 @@
+echo "3264"
+echo "snx -g -s 91.208.198.207 -u dstarzhynskyi"
+snx -g -s 91.208.198.207 -u dstarzhynskyi

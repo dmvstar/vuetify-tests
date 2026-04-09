@@ -1,0 +1,1 @@
+sudo apt-get install libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386 libnss3-tools   

@@ -1,0 +1,28 @@
+Для роботи необхідно :
+
+1. Виконати інсталяцію пакетів:                        libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
+
+sudo apt-get install libnss3-tools openssl xterm bzip2 libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
+
+2. Перейти в папку з розміщенням файлу snx_install_linux30.sh  та виконати -> sudo bash ./snx_install_linux30.sh  (файл snx_install_linux30.sh, інструкція та дані Васко окремим листом).
+Для підключення до VPN необхідно :
+1.  Виконати snx -s 91.208.198.207 -u  імя користувача
+2.  Ввести пароль та OTP з додатка Digipass.
+3.  При успішному підключенні статус  SNX -connected.
+
+Для відключення від VPN виконати: snx -d
+
+Облікові дані:
+https://cyberark.ukrgasbank.com/PasswordVault/     
+D1000131905
+VES0534438
+12691582933679717826
+
+3264
+
+dstarzhynskyi
+ukrgas
+
+
+
+
