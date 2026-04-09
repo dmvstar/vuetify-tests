@@ -2,32 +2,25 @@ const fs = require('fs');
 const path = require('path');
 
 // 1. Read filename from argument or default
-let inputFilePath = process.argv[2] || '/home/sdv/Downloads/CC_flows-1.json'; 
+var flowName = '/home/sdv/Downloads/flows_nr-digitals-scapi.mb-stage.ukrgasbank.com.json'
+let inputFilePath = process.argv[2] || flowName; 
 
 if (!inputFilePath || !fs.existsSync(inputFilePath)) {
     console.error("Please provide a valid file path.");
     process.exit(1);
 }
 
-/**
- * Sanitizes strings for Markdown or HTML tables
- */
 function makeCellSafe(str, isHtml = false) {
     if (!str) return "N/A";
-    
     let cleaned = str.toString();
-
     if (isHtml) {
         return cleaned
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
-            // Zamiana \n na <br/> po ucieczce znaków specjalnych, 
-            // aby tag <br/> pozostał aktywnym kodem HTML
             .replace(/\r?\n|\r/g, "<br/>");
     } else {
-        // Dla trybu tekstowego (np. do Markdown/Tabel) usuwamy entery
         return cleaned
             .replace(/\r?\n|\r/g, " ")
             .trim()
@@ -88,12 +81,11 @@ function parseFlowFile(filePath) {
 const data = parseFlowFile(inputFilePath);
 const fileNameOnly = path.basename(inputFilePath);
 
-// 3. Construct Markdown
+// Nagłówki zgodne z Twoim wzorem
 let mdOutput = `# Flow Analysis: ${fileNameOnly}\n\n`;
-mdOutput += "| # | Tab | API | Num | Type | External | Data |\n";
-mdOutput += "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n";
+mdOutput += "| # | Tab | ## | API | Num | Type | External | Data |\n";
+mdOutput += "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n";
 
-// 4. Construct HTML
 let htmlOutput = `
 <html>
 <head>
@@ -115,36 +107,49 @@ let htmlOutput = `
     <div class="table-container">
         <table>
             <thead>
-                <tr><th>#</th><th>Tab</th><th>API</th><th>Num</th><th>Type</th><th>External</th><th>Data</th></tr>
+                <tr><th>#</th><th>Tab</th><th>##</th><th>API</th><th>Num</th><th>Type</th><th>External</th><th>Data</th></tr>
             </thead>
             <tbody>`;
 
-const pathCounter = {};
-let totalCounter = 0;
+const pathCounter = {};      // Licznik Num wewnątrz danego API
+const apiUniqueMap = {};     // Mapa do przechowywania unikalnego numeru (##) dla adresu API
+let apiUniqueCounter = 0;    // Globalny licznik unikalnych adresów API
+let totalCounter = 0;        // Licznik wszystkich wierszy (#)
 let lastPath = "";
 let useColorA = true;
 
 data.forEach(r => {
-    totalCounter++; // Global increment
+    totalCounter++; 
     const currentPath = r.entryPath || "unknown";
     
+    // Zmiana koloru wierszy przy zmianie API
     if (currentPath !== lastPath) {
         useColorA = !useColorA;
         lastPath = currentPath;
     }
+
+    // Obsługa kolumny ## (Unikalny numer adresu API)
+    if (apiUniqueMap[currentPath] === undefined) {
+        apiUniqueCounter++;
+        apiUniqueMap[currentPath] = apiUniqueCounter;
+    }
     
+    // Obsługa kolumny Num (Kolejne wystąpienie wewnątrz tego samego API)
     pathCounter[currentPath] = (pathCounter[currentPath] || 0) + 1;
-    const apiNum = pathCounter[currentPath];
+    
+    const apiUID = apiUniqueMap[currentPath]; // Kolumna ##
+    const apiNum = pathCounter[currentPath];   // Kolumna Num
     const rowClass = useColorA ? 'color-a' : 'color-b';
 
     // Append Markdown Row
-    mdOutput += `| ${totalCounter} | ${makeCellSafe(r.tab)} | ${makeCellSafe(r.entryPath)} | ${apiNum} | ${makeCellSafe(r.type)} | ${makeCellSafe(r.targetName)} | ${makeCellSafe(r.requestData)} |\n`;
+    mdOutput += `| ${totalCounter} | ${makeCellSafe(r.tab)} | ${apiUID} | ${makeCellSafe(r.entryPath)} | ${apiNum} | ${makeCellSafe(r.type)} | ${makeCellSafe(r.targetName)} | ${makeCellSafe(r.requestData)} |\n`;
 
     // Append HTML Row
     htmlOutput += `
             <tr class="${rowClass}">
                 <td>${totalCounter}</td>
                 <td>${makeCellSafe(r.tab, true)}</td>
+                <td><strong>${apiUID}</strong></td>
                 <td><strong>${makeCellSafe(r.entryPath, true)}</strong></td>
                 <td>${apiNum}</td>
                 <td><code>${makeCellSafe(r.type, true)}</code></td>
@@ -155,7 +160,6 @@ data.forEach(r => {
 
 htmlOutput += `</tbody></table></div></body></html>`;
 
-// 5. Save Files
 const parsedPath = path.parse(inputFilePath);
 const mdFile = path.join(parsedPath.dir, parsedPath.name + ".md");
 const htmlFile = path.join(parsedPath.dir, parsedPath.name + ".html");
