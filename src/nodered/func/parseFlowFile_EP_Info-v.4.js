@@ -3,6 +3,7 @@ const path = require('path');
 
 // 1. Read filename from argument or default
 var flowName = '/home/sdv/Downloads/flows_nr-digitals-scapi.mb-stage.ukrgasbank.com.json'
+flowName = '/home/sdv/Downloads/nr-identification.mb-stage.ukrgasbank.com-flows.json'
 let inputFilePath = process.argv[2] || flowName; 
 
 if (!inputFilePath || !fs.existsSync(inputFilePath)) {

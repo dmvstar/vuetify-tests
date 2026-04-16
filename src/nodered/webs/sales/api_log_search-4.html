@@ -297,10 +297,13 @@
                     <v-row ma="2">
                         <v-col cols="2">
                             <v-row>
+                                
                                 <v-card-text>
-                                    Count {{searchData.referIDS.length}} of {{stepsData.stepsItemsData.length}}
-                                    ({{searchData.selectedDateFrom}}-{{searchData.selectedDateInto}})
+                                    Count: {{stepsData.stepsItemsData.length}} rows, {{searchData.referIDS.length}} uuids
+                                    for ({{searchData.selectedDateFrom}}-{{searchData.selectedDateInto}})
+                                    </br>Duration: {{searchData.callTime}} ms.
                                 </v-card-text>
+                                
                             </v-row>
                         </v-col>
                         <v-col cols="9">
@@ -310,12 +313,12 @@
                                         label="Mode"></v-checkbox-btn>
                                 </v-col-->
                                 <v-col cols="2">
-                                    <v-combobox density="compact" v-model="searchData.columnName"
-                                        :items="['id', 'name', 'uuid', 'payload']" label="Column"></v-combobox>
+                                    <v-select clearable density="compact" v-model="searchData.columnName"
+                                        :items="['id', 'uuid', 'process_name', 'api_source', 'payload']" label="Column"></v-select>
                                 </v-col>
                                 <v-col cols="2">
-                                    <v-combobox density="compact" v-model="searchData.queryOperator"
-                                        :items="['=', '<>', '>', '<', '~']" label="Operator"></v-combobox>
+                                    <v-select clearable density="compact" v-model="searchData.queryOperator"
+                                        :items="['=', '<>', '>', '<', '~']" label="Operator"></v-select>
                                 </v-col>
                                 <v-col cols="8">
                                     <v-text-field density="compact" v-model="searchData.searchQuery"
@@ -354,7 +357,7 @@
                     <v-row ma="10" id="DataTable">
                         <v-col cols="12" sm="12" ma="10">
                             <!-- :search="searchData.searchText" :search="filterString" -->
-                            <v-data-table :items-per-page="8" :headers="stepsData.stepsHeaders" :search="filterString"
+                            <v-data-table :items-per-page="25" :headers="stepsData.stepsHeaders" :search="filterString"
                                 :items="stepsData.stepsItemsData" item-value="id" item-key="id"
                                 :custom-filter="filterByMultipleCriteria" v-model="stepsData.selectedItems"
                                 density="comfortable" class="elevation-1" show-select @click:row="stepsDataHandleClick">
@@ -491,7 +494,7 @@
                 <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" :app="true"
                     color="surface-light">
                     <div class="flex-1-0-100 text-center mt-2">
-                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+                        {{ new Date().getFullYear() }} — <strong>Vuetify</strong> — {{appVersion}}
                     </div>
                 </v-footer>
             </v-main>
@@ -640,6 +643,7 @@
                     dateIntoDateMenu: null,
                     selectedDateFromFull: null,
                     selectedDateFrom: null,
+                    callTime: 0,
 
                     selectedDateInto: null
                     , columnName : null
@@ -844,7 +848,7 @@
                     }
                 });
 
-                const appVersion = "v. 0.0.26-21 (2026-03-11 08:27:22)";
+                const appVersion = "v. 0.0.26-25 (2026-04-14 21:48:38)";
 
                 return {
                     theme
@@ -857,7 +861,6 @@
                     , faceIdUrl
                     , clock
                     , hostInfo
-
 
                     , dialogs
                     , secondDrawer
@@ -1126,9 +1129,10 @@
                     var realUrl = `${hostName}${pathTo}`;
                     var result = {};
                     var query = {};
+                // alert(this.searchData.columnName);
                     if(this.searchData.columnName && this.searchData.queryOperator && this.searchData.searchQuery) {
                         query = {
-                            searchQuery : this.searchData.columnName
+                            columnName : this.searchData.columnName
                             , queryOperator : this.searchData.queryOperator
                             , searchQuery : this.searchData.searchQuery
                         };                        
@@ -1138,14 +1142,15 @@
                         dateFrom: this.searchData.selectedDateFrom
                         , dateInto: this.searchData.selectedDateInto || this.formatDate(new (Date), 1, 1)
                         , query : query
-                    };
-                    alert(JSON.stringify(request));
+                    };                
+                // alert(JSON.stringify(request));
                     const requestOptions = {
                         method: "POST",
                         headers: headers,
                         body: JSON.stringify(request)
                     };
-                    //alert(realUrl);
+                //alert(realUrl);
+                    let startCall = new Date().getTime();
                     await fetch(realUrl, requestOptions)
                         .then(async response => {
                             const result = await response.text();
@@ -1155,9 +1160,12 @@
 
                             //this.stepsData.stepsItemsData = this.stepsData.stepsSimpleData;
                             this.stepsData.stepsItemsData = data.data;
+                            this.searchData.callTime = (new Date().getTime()) - startCall; 
+
                             console.log("processLoadDataByUUIDS", this.stepsData.stepsItemsData);
 
-                            if (!response.ok) {
+                            if (!response.ok) {                                
+                                
                                 this.isLoading = false;
                                 // get error message from body or default to response statusText
                                 const error = (data && data.message) || response.statusText;
