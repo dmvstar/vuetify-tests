@@ -3,6 +3,7 @@ const path = require('path');
 
 // 1. Read filename from argument or default
 let inputFilePath = process.argv[2] || '/home/sdv/Downloads/nr-identification.mb-stage.ukrgasbank.com-flows.json'; 
+inputFilePath = '/home/sdv/Downloads/CC_flows.json'; 
 
 if (!inputFilePath || !fs.existsSync(inputFilePath)) {
     console.error("Please provide a valid file path.");
