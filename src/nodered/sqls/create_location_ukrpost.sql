@@ -1,3 +1,6 @@
+-- Enable trigram extension for efficient substring searching
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 -- DROP TABLE location_ukrpost
 CREATE TABLE location_ukrpost (
     id BIGSERIAL PRIMARY KEY,
@@ -19,6 +22,9 @@ CREATE INDEX idx_ukrpost_new_district ON location_ukrpost (new_administrative_di
 -- Index for filtering by the Settlement name (clear version)
 CREATE INDEX idx_ukrpost_settlement_clear ON location_ukrpost (settlement_name_clear);
 
+-- Trigram index for LIKE '%substring%' searches
+CREATE INDEX idx_ukrpost_settlement_trgm ON location_ukrpost USING gin (settlement_name_clear gin_trgm_ops);
+
 GRANT ALL PRIVILEGES ON DATABASE dijaworks TO dbmanager;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dbmanager;
 GRANT ALL PRIVILEGES ON SEQUENCE location_ukrpost_id_seq TO dbmanager;
@@ -37,6 +43,3 @@ SELECT 	*
 FROM 	location_ukrpost lu
 WHERE 	1 = 1
 AND lu.settlement_name_clear LIKE '%чівськ%'
-
-
-
